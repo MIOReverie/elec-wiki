@@ -4,7 +4,7 @@ title: 25 · 触发器与时序电路
 
 # 25 · 触发器与时序电路
 
-> ⚠️ 本章已并入[数字电路课](../../digital/index.md)，新版见 [05 · 触发器](../../digital/flip-flops.md) 与 [06 · 计数器与寄存器](../../digital/counters.md)。本页仅保留以兼容旧引用。
+> 📎 **教材下册速览**：本章是《电工学》下册第 25 章的压缩版。完整版见数字电路课 [05 · 触发器](../../digital/flip-flops.md) 与 [06 · 计数器与寄存器](../../digital/counters.md)。
 
 <Meta time="25 min" level="了解" note="核心：状态方程 + 时序图" />
 
