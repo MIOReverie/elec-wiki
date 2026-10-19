@@ -1,0 +1,60 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # lastUpdated 与首页「最近更新」都读 git 历史，浅克隆拿不到
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint content
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+        env:
+          # 用户站点（<user>.github.io）用根路径，项目页用 /<仓库名>/
+          DOCS_BASE: ${{ endsWith(github.repository, '.github.io') && '/' || format('/{0}/', github.event.repository.name) }}
+          SITE_URL: ${{ endsWith(github.repository, '.github.io') && format('https://{0}/', github.repository) || format('https://{0}.github.io/{1}/', github.repository_owner, github.event.repository.name) }}
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/.vitepress/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

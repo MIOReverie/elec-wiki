@@ -1,0 +1,32 @@
+{
+  "name": "elec-wiki",
+  "version": "1.0.0",
+  "private": true,
+  "description": "速通 Wiki · 电工学 / 数字电路 / 模拟电子 / 嵌入式开发的学习站点",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "lint": "node tools/lint.mjs",
+    "build": "node tools/lint.mjs && vitepress build docs",
+    "check": "node tools/lint.mjs && vitepress build docs --outDir docs/.vitepress/dist-check",
+    "preview": "vitepress preview docs",
+    "serve": "node tools/serve.mjs docs/.vitepress/dist 4174",
+    "crawl": "node tools/crawl.mjs http://localhost:4174 docs/.vitepress/dist",
+    "clean": "node -e \"const fs=require('fs');for(const p of ['docs/.vitepress/dist','docs/.vitepress/cache','docs/.vitepress/dist-check','docs/.vitepress/dist-base'])fs.rmSync(p,{recursive:true,force:true})\""
+  },
+  "dependencies": {
+    "katex": "^0.16.11",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3"
+  },
+  "optionalDependencies": {
+    "@esbuild/win32-x64": "^0.28.2",
+    "@rollup/rollup-win32-x64-msvc": "^4.64.5"
+  }
+}

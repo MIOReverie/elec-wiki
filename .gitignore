@@ -1,0 +1,11 @@
+node_modules
+docs/.vitepress/dist
+docs/.vitepress/dist-check
+docs/.vitepress/dist-base
+docs/.vitepress/cache
+docs/.vitepress/.temp
+docs/.vitepress/config.mts.timestamp-*.mjs
+Temp/
+.DS_Store
+*.log
+.vercel

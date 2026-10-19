@@ -1,0 +1,9 @@
+# 统一换行符：源码与文档用 LF（CI/Linux 构建一致），批处理用 CRLF
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.woff2 binary
