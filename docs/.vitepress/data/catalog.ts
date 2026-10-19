@@ -295,6 +295,11 @@ export function getRecent(limit = 8): RecentItem[] {
       stdio: ['ignore', 'pipe', 'ignore'],
       maxBuffer: 8 * 1024 * 1024
     })
+    // 只有一个提交（刚导入仓库）时，所有文件「同样新」，
+    // 列出来只会造成误导：宁可整块不显示，等真的有第二次改动再出现。
+    const commits = (out.match(/^@@/gm) || []).length
+    if (commits <= 1) return []
+
     const seen = new Set<string>()
     const items: RecentItem[] = []
     let date = ''
