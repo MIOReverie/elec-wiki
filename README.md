@@ -21,6 +21,21 @@ npm run check      # CI 用：lint + 构建到独立目录，不覆盖 dist
 
 Windows 下也可以双击 `start.bat`（自动找 node、缺依赖时自动安装、启动后打开浏览器），`stop.bat` 关闭本地服务。
 
+### 上线前自检
+
+```bash
+npm run build
+npm run serve      # 用「GitHub Pages 语义」托管构建产物：http://localhost:4174
+npm run crawl      # 另开一个终端：爬全站，报死链与没有任何入口的孤儿页
+```
+
+`crawl` 从首页广度遍历，校验每个站内链接返回 200，并列出没被任何页面链接到的页面（当前只允许 `/404`）。子路径部署自检：
+
+```bash
+SITE_URL=https://<用户名>.github.io/<仓库名>/ DOCS_BASE=/<仓库名>/ npm run build
+```
+
+
 ## 目录
 
 ```
@@ -55,12 +70,7 @@ docs/
 
 静态产物在 `docs/.vitepress/dist`，丢到任何静态托管即可。
 
-**GitHub Pages**：推送到 `main` 后会跑 `.github/workflows/deploy.yml`。子路径部署需要两个环境变量（工作流已自动推导）：
-
-```bash
-SITE_URL=https://<用户名>.github.io/<仓库名>/ DOCS_BASE=/<仓库名>/ npm run build
-```
-
+**GitHub Pages**：推送到 `main` 后会跑 `.github/workflows/deploy.yml`，`DOCS_BASE` 与 `SITE_URL` 由工作流按仓库名自动推导（用户站点与项目页都适用），通常不需要改。
 `SITE_URL` 只影响 sitemap 与 canonical；不设置就不输出这两样，避免写出错的绝对地址。
 
 **Vercel**：导入仓库，Build Command `npm run build`，Output Directory `docs/.vitepress/dist`，环境变量同上（根站点不需要 `DOCS_BASE`）。
