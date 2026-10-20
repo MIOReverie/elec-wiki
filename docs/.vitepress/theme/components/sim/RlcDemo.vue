@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useCanvas, TC, SIG } from '../../lib/canvas'
+import { useReducedMotion } from '../../composables/useReducedMotion'
 import { poly, dot, label, arrow } from '../../lib/plot'
 
 const U = ref(220)
@@ -35,9 +36,25 @@ const calc = computed(() => {
   }
 })
 
+function reset() {
+  U.value = 220
+  f.value = 50
+  R.value = 30
+  L.value = 100
+  C.value = 20
+}
+
+const cvLabel = computed(() => {
+  const c = calc.value
+  return `RLC 串联相量图与波形：U=${U.value} V、f=${f.value} Hz、R=${R.value} Ω、L=${L.value} mH、C=${C.value} µF。` +
+    `感抗 ${c.Xl.toFixed(1)} Ω，容抗 ${c.Xc.toFixed(1)} Ω，阻抗 ${c.Zm.toFixed(1)} Ω，` +
+    `阻抗角 ${((c.phi * 180) / Math.PI).toFixed(1)}°，电流 ${c.I.toFixed(3)} A，` +
+    `有功 ${c.P.toFixed(1)} W、无功 ${c.Q.toFixed(1)} var、视在 ${c.S.toFixed(1)} VA。`
+})
+
 const cv = ref<HTMLCanvasElement | null>(null)
 
-useCanvas(
+const anim = useCanvas(
   cv,
   ({ ctx, w, h, t }) => {
     const c = calc.value
@@ -112,6 +129,8 @@ useCanvas(
   },
   { animate: true }
 )
+
+const reducedMotion = useReducedMotion().reduced
 </script>
 
 <template>
@@ -123,7 +142,17 @@ useCanvas(
       <Ctrl label="电感 L" v-model="L" :min="1" :max="500" :step="1" unit="mH" :fixed="0" />
       <Ctrl label="电容 C" v-model="C" :min="1" :max="500" :step="1" unit="µF" :fixed="0" />
     </div>
-    <canvas ref="cv" class="rl-cv" />
+    <canvas ref="cv" class="rl-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
+    <button
+      type="button"
+      class="rl-reset"
+      aria-label="重置 RLC 串联演示：把电压、频率、R、L、C 恢复到默认值"
+      @click="reset"
+    >重置</button>
+    <button class="rl-play" type="button" @click="anim.togglePlay()">
+      {{ anim.playing.value ? '⏸ 暂停' : '▶ 播放' }}<template v-if="reducedMotion && !anim.playing.value">（已按系统设置减少动态效果）</template>
+    </button>
     <div class="rl-out">
       <span>X_L = <b>{{ calc.Xl.toFixed(1) }}</b> Ω</span>
       <span>X_C = <b>{{ calc.Xc.toFixed(1) }}</b> Ω</span>
@@ -145,6 +174,30 @@ useCanvas(
 .rl { display: flex; flex-direction: column; gap: 8px; }
 .rl-ctrls { display: flex; flex-direction: column; gap: 1px; }
 .rl-cv { width: 100%; height: 330px; border: 1px solid var(--vp-c-divider); border-radius: 10px; background: var(--vp-c-bg); }
+.rl-play {
+  align-self: flex-start;
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  font-family: inherit;
+}
+.rl-play:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
+.rl-reset {
+  align-self: flex-start;
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  font-family: inherit;
+}
+.rl-reset:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .rl-out { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--vp-c-text-2); }
 .rl-out b { color: var(--vp-c-text-1); font-family: var(--vp-font-family-mono); }
 .rl-note { margin: 0; font-size: 12.5px; color: var(--vp-c-text-3); line-height: 1.65; }

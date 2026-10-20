@@ -18,7 +18,22 @@ const calc = computed(() => {
   return { I, U: I * rl, PL: I * I * rl, PE: e * I, eta: rl / (r0 + rl), isc: e / r0 }
 })
 
+const DEFAULT = { E: 12, R0: 1, RL: 10, state: 'normal' as const }
+function reset() {
+  E.value = DEFAULT.E
+  R0.value = DEFAULT.R0
+  RL.value = DEFAULT.RL
+  state.value = DEFAULT.state
+}
+
 const cv = ref<HTMLCanvasElement | null>(null)
+
+const cvLabel = computed(() => {
+  const stateName = { normal: '有载', open: '开路', short: '短路' }[state.value]
+  return `电源外特性演示：电动势 ${E.value} V、内阻 ${R0} Ω、负载 ${RL} Ω，状态${stateName}。` +
+    `电流 ${calc.value.I.toFixed(3)} A，负载端电压 ${calc.value.U.toFixed(2)} V，` +
+    `负载功率 ${calc.value.PL.toFixed(2)} W，效率 ${(calc.value.eta * 100).toFixed(1)} %。`
+})
 
 useCanvas(cv, ({ ctx, w, h }) => {
   // 左：电路图
@@ -99,8 +114,15 @@ useCanvas(cv, ({ ctx, w, h }) => {
           { value: 'short', label: '短路' }
         ]"
       />
+      <button
+        type="button"
+        class="o-reset"
+        aria-label="重置欧姆定律演示：把电动势、内阻、负载与状态恢复到默认值"
+        @click="reset"
+      >重置</button>
     </div>
-    <canvas ref="cv" class="o-cv" />
+    <canvas ref="cv" class="o-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
     <div class="o-out">
       <span>I = <b>{{ calc.I.toFixed(3) }}</b> A</span>
       <span>U<sub>负载</sub> = <b>{{ calc.U.toFixed(2) }}</b> V</span>
@@ -117,5 +139,18 @@ useCanvas(cv, ({ ctx, w, h }) => {
 .o-ctrls { display: flex; flex-direction: column; gap: 1px; }
 .o-cv { width: 100%; height: 280px; border: 1px solid var(--vp-c-divider); border-radius: 10px; background: var(--vp-c-bg); }
 .o-out { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--vp-c-text-2); }
+.o-reset {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+}
+.o-reset:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .o-out b { color: var(--vp-c-text-1); font-family: var(--vp-font-family-mono); }
 </style>

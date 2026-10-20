@@ -32,6 +32,13 @@ const calc = computed(() => {
   }
 })
 
+const cvLabel = computed(() => {
+  const c = calc.value
+  return `无功补偿相量图：有功功率 ${P.value} kW、电压 ${U.value} V、频率 ${f.value} Hz，` +
+    `补偿前 cosφ₁=${cos1.value}（${((c.p1 * 180) / Math.PI).toFixed(1)}°），目标 cosφ₂=${cos2.value}（${((c.p2 * 180) / Math.PI).toFixed(1)}°）。` +
+    `线路电流由 ${c.I1.toFixed(2)} A 降到 ${c.I2.toFixed(2)} A，需并联电容 ${c.C.toFixed(2)} µF、电容电流 ${c.Ic.toFixed(2)} A。`
+})
+
 const cv = ref<HTMLCanvasElement | null>(null)
 
 useCanvas(cv, ({ ctx, w, h }) => {
@@ -91,7 +98,8 @@ useCanvas(cv, ({ ctx, w, h }) => {
       <Ctrl label="补偿前 cosφ₁" v-model="cos1" :min="0.4" :max="0.95" :step="0.01" />
       <Ctrl label="目标 cosφ₂" v-model="cos2" :min="0.8" :max="1" :step="0.01" />
     </div>
-    <canvas ref="cv" class="pf-cv" />
+    <canvas ref="cv" class="pf-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
     <div class="pf-out">
       <span>I₁ = <b>{{ calc.I1.toFixed(2) }}</b> A</span>
       <span>I₂ = <b>{{ calc.I2.toFixed(2) }}</b> A</span>

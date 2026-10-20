@@ -17,6 +17,13 @@ const calc = computed(() => {
   return { k, V2, I2, I1, Zin: k * k * RL.value, P: V2 * I2 }
 })
 
+const cvLabel = computed(() =>
+  `理想变压器演示：原边 ${N1.value} 匝、副边 ${N2.value} 匝，原边电压 ${V1.value} V，负载 ${RL.value} Ω。` +
+  `变比 k=${calc.value.k.toFixed(3)}，副边电压 ${calc.value.V2.toFixed(2)} V，` +
+  `副边电流 ${calc.value.I2.toFixed(3)} A，原边电流 ${calc.value.I1.toFixed(3)} A，` +
+  `折算到原边的阻抗 ${calc.value.Zin.toFixed(1)} Ω，输出功率 ${calc.value.P.toFixed(2)} W。`
+)
+
 const cv = ref<HTMLCanvasElement | null>(null)
 
 useCanvas(cv, ({ ctx, w, h, t }) => {
@@ -114,7 +121,8 @@ useCanvas(cv, ({ ctx, w, h, t }) => {
       <Ctrl label="原边电压 U₁" v-model="V1" :min="5" :max="380" :step="1" unit="V" :fixed="0" />
       <Ctrl label="负载 R_L" v-model="RL" :min="1" :max="500" :step="1" unit="Ω" :log="true" :fixed="0" />
     </div>
-    <canvas ref="cv" class="tf-cv" />
+    <canvas ref="cv" class="tf-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
     <div class="tf-out">
       <span>k = <b>{{ calc.k.toFixed(3) }}</b></span>
       <span>U₂ = <b>{{ calc.V2.toFixed(2) }}</b> V</span>

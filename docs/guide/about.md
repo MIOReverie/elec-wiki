@@ -11,7 +11,7 @@ description: 速通 Wiki 的维护者、内容来源、授权方式、引用格�
 
 一个个人维护的电学学习 Wiki，非官方、非商业、与任何出版社或学校无关。所有正文是学习笔记的整理，演示是浏览器里现算的，没有后端，也没有埋点与广告。
 
-- **维护者**：[kongjianguan](https://github.com/kongjianguan)
+- **维护者**：[MIOREverie](https://github.com/MIOREverie)
 - **技术栈**：VitePress 1.6 + Vue 3 + KaTeX；图形与仿真全部手写 Canvas / SVG，不依赖图表库
 - **构建**：每次提交由 GitHub Actions 跑内容检查、死链检查与静态构建
 
@@ -45,7 +45,7 @@ https://<站点域名>/<章节路径>
 
 发现错误时，**指出章节 + 原句 + 你认为正确的说法**，比「这里不对」有用得多。优先渠道：
 
-1. 在 [GitHub](https://github.com/kongjianguan) 提 issue；
+1. 在 [GitHub](https://github.com/MIOREverie) 提 issue；
 2. 如果你是从朋友那里拿到这个站的，直接把章节链接和截图发回去。
 
 确认后会改正文、补说明，并在页脚保留 git 更新时间——这个站点没有「版本号」，只有提交历史。

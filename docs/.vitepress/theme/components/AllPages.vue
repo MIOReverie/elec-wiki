@@ -10,6 +10,8 @@ const guides = [
   { title: '关于与版权', route: '/guide/about' },
   { title: '内容状态与成熟度', route: '/guide/status' },
   { title: '写作与贡献指南', route: '/guide/contributing' },
+  { title: '更新日志', route: '/guide/changelog' },
+  { title: '隐私与免责', route: '/guide/privacy' },
   { title: '术语与前置知识索引', route: '/guide/glossary' },
   { title: '公式速查表', route: '/shared/cheatsheet' },
   { title: '知识依赖图谱', route: '/ee/graph' }

@@ -6,6 +6,8 @@
 
 :root {
   --vp-c-brand-1: #2563eb;
+  /* 弱化文本：原为 #929295（浅色仅 3.10:1，不达 AA），改为 #5f6368 */
+  --vp-c-text-3: #5f6368;
   --vp-c-brand-2: #3b82f6;
   --vp-c-brand-3: #1d4ed8;
   --vp-c-brand-soft: rgb(37 99 235 / 0.1);
@@ -13,13 +15,54 @@
     'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   --wiki-radius: 10px;
   --wiki-hairline: 1px solid var(--vp-c-divider);
+  /* 图解标签底色：原为 #0d9488（白字仅 3.74:1），改为 #0f766e（白字 5.47:1） */
+  --wiki-fig-tag-bg: #0f766e;
+
+  /* ---- 设计 token：圆角 ---- */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-pill: 999px;
+
+  /* ---- 设计 token：字号 ---- */
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 15.5px;
+  --text-lg: 17px;
+
+  /* ---- 设计 token：阴影 ---- */
+  --shadow-1: 0 1px 3px rgb(0 0 0 / 0.06);
+  --shadow-2: 0 8px 24px rgb(0 0 0 / 0.08);
+
+  /* ---- 设计 token：语义档位色（亮色）----
+     归纳自 Meta.vue / CourseRoadmap.vue 原有硬编码 */
+  --lv-core-fg: #b42318;
+  --lv-core-bg: rgb(220 85 69 / 0.12);
+  --lv-know-fg: #92620a;
+  --lv-know-bg: rgb(201 138 23 / 0.14);
+  --lv-skip-fg: #1c7a56;
+  --lv-skip-bg: rgb(42 157 111 / 0.13);
+  --lv-guide-fg: var(--vp-c-brand-1);
+  --lv-guide-bg: var(--vp-c-brand-soft);
 }
 
 .dark {
   --vp-c-brand-1: #60a5fa;
+  /* 弱化文本：原为 #6a6a71（深色仅 2.99:1，不达 AA），改为 #8b8b93 */
+  --vp-c-text-3: #8b8b93;
   --vp-c-brand-2: #3b82f6;
   --vp-c-brand-3: #2563eb;
   --vp-c-brand-soft: rgb(96 165 250 / 0.14);
+
+  /* ---- 语义档位色（暗色覆写）---- */
+  --lv-core-fg: #ff9a8f;
+  --lv-core-bg: rgb(220 85 69 / 0.18);
+  --lv-know-fg: #f2c06a;
+  --lv-know-bg: rgb(201 138 23 / 0.18);
+  --lv-skip-fg: #6fd3a8;
+  --lv-skip-bg: rgb(42 157 111 / 0.18);
+  --lv-guide-fg: var(--vp-c-brand-1);
+  --lv-guide-bg: var(--vp-c-brand-soft);
 }
 
 ::selection {
@@ -29,7 +72,21 @@
 :focus-visible {
   outline: 2px solid var(--vp-c-brand-1);
   outline-offset: 2px;
-  border-radius: 3px;
+  border-radius: var(--r-sm);
+}
+
+/* ---------- 输入框焦点环 ----------
+   VitePress 基础样式里的 `input:focus { outline: none }` 特异性是 (0,1,1)，
+   高于全局的 `:focus-visible` (0,1,0)，把所有 <input> 的焦点环都清掉了。
+   这里用 `html input:focus-visible`（特异性 (0,1,2)）把焦点环补回来，
+   滑块（range）也一并覆盖，保证纯键盘用户看得见焦点。 */
+html input:focus-visible,
+html textarea:focus-visible,
+html select:focus-visible,
+html input[type='range']:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1) !important;
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
 }
 
 /* ---------- 正文排版 ---------- */
@@ -67,7 +124,8 @@
 
 .vp-doc h4 {
   margin-top: 24px;
-  font-size: 15.5px;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .vp-doc p,
@@ -79,7 +137,7 @@
 .vp-doc blockquote {
   border-left: 3px solid var(--vp-c-brand-1);
   background: var(--vp-c-bg-soft);
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 var(--r-md) var(--r-md) 0;
   padding: 4px 16px;
   color: var(--vp-c-text-2);
 }
@@ -89,7 +147,7 @@
 /* 表格：默认主题已是 display:block + 横向滚动，这里只调整观感 */
 .vp-doc table {
   font-size: 13.5px;
-  border-radius: 8px;
+  border-radius: var(--r-md);
 }
 .vp-doc th {
   font-weight: 600;
@@ -150,7 +208,7 @@
 .vp-doc :not(pre) > code {
   font-size: 0.88em;
   padding: 2px 5px;
-  border-radius: 5px;
+  border-radius: var(--r-sm);
   background: var(--vp-c-bg-alt);
   border: 1px solid var(--vp-c-divider);
 }
@@ -163,7 +221,7 @@ kbd {
   font-family: var(--vp-font-family-mono);
   border: 1px solid var(--vp-c-divider);
   border-bottom-width: 2px;
-  border-radius: 5px;
+  border-radius: var(--r-sm);
   background: var(--vp-c-bg-alt);
   color: var(--vp-c-text-2);
 }
@@ -174,7 +232,7 @@ kbd {
   align-items: center;
   gap: 3px;
   padding: 0 8px;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   border: 1px solid var(--vp-c-brand-1);
   background: var(--vp-c-brand-soft);
   color: var(--vp-c-brand-1);

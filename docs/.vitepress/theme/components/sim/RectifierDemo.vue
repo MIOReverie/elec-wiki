@@ -44,6 +44,14 @@ const sim = computed(() => {
   return { out, rect, inp, dt, vdc, vr: vmax - vmin, vmax, vmin, total }
 })
 
+const MODE_NAME = { half: '半波整流', bridge: '桥式全波整流', filtered: '全波整流加电容滤波' } as const
+const cvLabel = computed(() => {
+  const s = sim.value
+  return `整流滤波波形（${MODE_NAME[mode.value]}）：峰值 ${Vm.value} V、频率 ${f.value} Hz、` +
+    `负载电阻 ${R.value} Ω${mode.value === 'filtered' ? `、滤波电容 ${C.value} µF` : ''}。` +
+    `直流输出 ${s.vdc.toFixed(2)} V，纹波 ${s.vr.toFixed(3)} V，纹波系数 ${((s.vr / Math.max(s.vdc, 1e-6)) * 100).toFixed(2)} %。`
+})
+
 const cv = ref<HTMLCanvasElement | null>(null)
 
 useCanvas(cv, ({ ctx, w, h, t }) => {
@@ -107,7 +115,8 @@ useCanvas(cv, ({ ctx, w, h, t }) => {
       <Ctrl label="负载 R" v-model="R" :min="10" :max="5000" :step="10" unit="Ω" :log="true" :fixed="0" />
       <Ctrl v-if="mode === 'filtered'" label="滤波电容 C" v-model="C" :min="1" :max="4700" :step="10" unit="µF" :log="true" :fixed="0" />
     </div>
-    <canvas ref="cv" class="rc-cv" />
+    <canvas ref="cv" class="rc-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
     <div class="rc-out">
       <span>U_dc = <b>{{ sim.vdc.toFixed(2) }}</b> V</span>
       <span>纹波 ΔU = <b>{{ sim.vr.toFixed(3) }}</b> V</span>

@@ -138,13 +138,14 @@ watch(prereqOpen, async (open) => {
   background: var(--vp-c-bg-soft);
 }
 .pd-headline { display: flex; gap: 8px; align-items: center; }
+/* 白字底色用 brand-3（深色阶梯）：浅色 #1d4ed8 → 6.70:1，暗色 #2563eb → 5.17:1，均 ≥4.5 */
 .pd-kind {
   font-size: 11px;
   letter-spacing: 0.06em;
   padding: 1px 7px;
   border-radius: 4px;
   color: #fff;
-  background: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-3);
 }
 .pd-group { font-size: 11px; color: var(--vp-c-text-3); }
 .pd-title { margin: 6px 0 0; font-size: 17px; font-weight: 700; }

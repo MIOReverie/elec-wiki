@@ -18,7 +18,10 @@ const emit = defineEmits<{ 'update:modelValue': [number] }>()
 
 function onInput(e: Event) {
   const raw = parseFloat((e.target as HTMLInputElement).value)
+  // NaN 兜底：解析失败时不动模型值（保持上次有效值），避免 NaN 传染到计算与绘制
+  if (Number.isNaN(raw)) return
   const v = props.log ? Math.pow(10, raw) : raw
+  if (!Number.isFinite(v)) return
   emit('update:modelValue', v)
 }
 const sliderVal = computed(() => (props.log ? Math.log10(props.modelValue) : props.modelValue))
@@ -31,6 +34,7 @@ const shown = computed(() => {
   if (Math.abs(v) >= 1000 || (Math.abs(v) < 0.01 && v !== 0)) return v.toExponential(1)
   return String(parseFloat(v.toFixed(props.fixed)))
 })
+const valueText = computed(() => (props.unit ? `${shown.value} ${props.unit}` : shown.value))
 </script>
 
 <template>
@@ -39,6 +43,8 @@ const shown = computed(() => {
     <input
       class="c-range"
       type="range"
+      :aria-label="label"
+      :aria-valuetext="valueText"
       :min="sliderMin"
       :max="sliderMax"
       :step="sliderStep"

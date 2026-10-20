@@ -37,7 +37,7 @@ const lvlClass = computed(() => {
   gap: 6px 12px;
   margin: 0 0 20px;
   padding: 9px 12px;
-  border-radius: 9px;
+  border-radius: var(--r-md);
   background: var(--vp-c-bg-alt);
   border: 1px solid var(--vp-c-divider);
   font-size: 12.5px;
@@ -46,40 +46,36 @@ const lvlClass = computed(() => {
 .mb-lvl {
   flex: none;
   padding: 1px 9px;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   font-weight: 700;
   letter-spacing: 0.02em;
   border: 1px solid transparent;
 }
 .is-core {
-  color: #b42318;
-  background: rgb(220 85 69 / 0.1);
-  border-color: rgb(220 85 69 / 0.25);
+  color: var(--lv-core-fg);
+  background: var(--lv-core-bg);
+  border-color: var(--lv-core-fg);
 }
 .is-key {
-  color: #92620a;
-  background: rgb(201 138 23 / 0.12);
-  border-color: rgb(201 138 23 / 0.3);
+  color: var(--lv-know-fg);
+  background: var(--lv-know-bg);
+  border-color: var(--lv-know-fg);
 }
 .is-know {
-  color: #1d4ed8;
-  background: rgb(59 130 246 / 0.1);
-  border-color: rgb(59 130 246 / 0.25);
+  color: var(--lv-guide-fg);
+  background: var(--lv-guide-bg);
+  border-color: var(--lv-guide-fg);
 }
 .is-skip {
-  color: #1c7a56;
-  background: rgb(42 157 111 / 0.12);
-  border-color: rgb(42 157 111 / 0.28);
+  color: var(--lv-skip-fg);
+  background: var(--lv-skip-bg);
+  border-color: var(--lv-skip-fg);
 }
 .is-guide {
-  color: var(--vp-c-brand-1);
-  background: var(--vp-c-brand-soft);
-  border-color: var(--vp-c-brand-1);
+  color: var(--lv-guide-fg);
+  background: var(--lv-guide-bg);
+  border-color: var(--lv-guide-fg);
 }
-.dark .is-core { color: #ff9a8f; }
-.dark .is-key { color: #f2c06a; }
-.dark .is-know { color: #8ab4ff; }
-.dark .is-skip { color: #6fd3a8; }
 .mb-time {
   display: inline-flex;
   align-items: center;

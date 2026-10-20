@@ -1,0 +1,48 @@
+name: PR preview build
+
+# 只做两件事：验证 PR 能构建、把构建产物作为 artifact 供人下载预览。
+# 刻意不部署、不评论 —— 评论与部署交给部署类工作流，这里保持只读。
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    name: Build preview artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint content
+        run: npm run lint
+
+      - name: Build site
+        run: npx vitepress build docs --outDir dist
+
+      - name: Check build output
+        run: node tools/check-dist.mjs dist
+
+      - name: Upload preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-sha
+          path: dist
+          retention-days: 14
+          if-no-files-found: error

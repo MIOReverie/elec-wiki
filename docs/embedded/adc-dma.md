@@ -6,6 +6,8 @@ title: 10 · ADC 与 DMA
 
 <Meta time="40 min" level="核心" note="把连续世界接进数字世界；DMA 让数据搬运不再占用 CPU" />
 
+DMA 的搬运模式与缓存一致性问题的完整说明见 <Prereq id="dma-cache" />。
+
 ## 结论先行
 
 1. **ADC 把模拟电压变成数字码**：$\text{code} = \dfrac{V_{in}}{V_{ref}} \times (2^n - 1)$，反算电压则除以同样比例。
@@ -76,6 +78,8 @@ $$T_{conv} = \frac{\text{采样周期} + 12.5}{f_{ADC}}$$
 :::
 
 ## 三、为什么要配 DMA
+
+DMA 搬运的边界、以及带 D-Cache 芯片上必须显式维护缓存的问题，见 <Prereq id="dma-cache" />。
 
 **DMA**（Direct Memory Access，直接存储器访问）是一个独立于 CPU 的搬运工：外设（ADC、UART、SPI）数据准备好后，DMA 自动把它搬到内存（或反向），**全程不需要 CPU 参与**。
 

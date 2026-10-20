@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   workflow_dispatch:
 
 permissions:
@@ -42,6 +42,13 @@ jobs:
           # 用户站点（<user>.github.io）用根路径，项目页用 /<仓库名>/
           DOCS_BASE: ${{ endsWith(github.repository, '.github.io') && '/' || format('/{0}/', github.event.repository.name) }}
           SITE_URL: ${{ endsWith(github.repository, '.github.io') && format('https://{0}/', github.repository) || format('https://{0}.github.io/{1}/', github.repository_owner, github.event.repository.name) }}
+
+      - name: Assert sitemap exists
+        run: |
+          if [ ! -f docs/.vitepress/dist/sitemap.xml ]; then
+            echo "::error::docs/.vitepress/dist/sitemap.xml 不存在。sitemap 只在设置了 SITE_URL 时输出，请检查 deploy 环境变量推导是否生效。"
+            exit 1
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

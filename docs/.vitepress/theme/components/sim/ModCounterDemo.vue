@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useCanvas, TC, SIG } from '../../lib/canvas'
+import { useReducedMotion } from '../../composables/useReducedMotion'
 import { poly, label } from '../../lib/plot'
 import Ctrl from '../Ctrl.vue'
 
@@ -8,7 +9,13 @@ const N = ref(10) // 模数（2~16）
 const speed = ref(1)
 const cv = ref<HTMLCanvasElement | null>(null)
 
-useCanvas(
+const cvLabel = computed(
+  () =>
+    `模 N 计数器波形演示：模数 N=${N.value}（二进制 ${N.value.toString(2).padStart(4, '0')}），速度 ${speed.value} 倍。` +
+    `计到 N 时异步清零，因此只循环 0 到 N−1，构成 N 进制。`
+)
+
+const anim = useCanvas(
   cv,
   ({ ctx, w, h, t }) => {
     const n = N.value
@@ -73,6 +80,8 @@ useCanvas(
   },
   { animate: true }
 )
+
+const reducedMotion = useReducedMotion().reduced
 </script>
 
 <template>
@@ -81,7 +90,11 @@ useCanvas(
       <Ctrl label="模数 N" v-model="N" :min="2" :max="16" :step="1" :fixed="0" />
       <Ctrl label="速度" v-model="speed" :min="0.25" :max="3" :step="0.25" unit="×" />
     </div>
-    <canvas ref="cv" class="mc-cv" />
+    <canvas ref="cv" class="mc-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
+    <button class="mc-play" type="button" @click="anim.togglePlay()">
+      {{ anim.playing.value ? '⏸ 暂停' : '▶ 播放' }}<template v-if="reducedMotion && !anim.playing.value">（已按系统设置减少动态效果）</template>
+    </button>
     <p class="mc-note">
       这就是<b>异步清零法</b>：计数器自由跑 0 → N−1，一旦出现 N（二进制 1010 对十进制）立刻被 ̄RD 拉回 0，于是只循环 0~N−1，构成 <b>N 进制</b>。把 N 改成 6、12 看看循环长度怎么变。
     </p>
@@ -92,6 +105,18 @@ useCanvas(
 .mc { display: flex; flex-direction: column; gap: 8px; }
 .mc-bar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
 .mc-cv { width: 100%; height: 240px; border: 1px solid var(--vp-c-divider); border-radius: 10px; background: var(--vp-c-bg); }
+.mc-play {
+  align-self: flex-start;
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  font-family: inherit;
+}
+.mc-play:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .mc-note { margin: 0; font-size: 12.5px; color: var(--vp-c-text-3); line-height: 1.65; }
 .mc-note b { color: var(--vp-c-text-2); }
 </style>

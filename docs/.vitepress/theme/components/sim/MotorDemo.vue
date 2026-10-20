@@ -28,6 +28,13 @@ const calc = computed(() => {
   }
 })
 
+const cvLabel = computed(() => {
+  const c = calc.value
+  return `异步电动机机械特性曲线：定子电压 ${U1.value} V、频率 ${f.value} Hz、极对数 p=${pole.value}、转子电阻标度 ${R2.value}、当前转速 ${n.value} r/min。` +
+    `同步转速 ${c.n0.toFixed(0)} r/min，转差率 ${c.slipPct.toFixed(2)} %，电磁转矩 ${c.T.toFixed(2)} N·m，` +
+    `起动转矩 ${c.Tst.toFixed(2)} N·m，最大转矩 ${c.Tmax.toFixed(2)} N·m。`
+})
+
 const cv = ref<HTMLCanvasElement | null>(null)
 
 useCanvas(cv, ({ ctx, w, h }) => {
@@ -94,7 +101,8 @@ useCanvas(cv, ({ ctx, w, h }) => {
       <Ctrl label="转子电阻 R₂" v-model="R2" :min="0.05" :max="1" :step="0.01" :log="true" />
       <Ctrl label="转速 n" v-model="n" :min="0" :max="3000" :step="5" unit="r/min" :fixed="0" />
     </div>
-    <canvas ref="cv" class="mt-cv" />
+    <canvas ref="cv" class="mt-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
     <div class="mt-out">
       <span>n₀ = <b>{{ calc.n0.toFixed(0) }}</b> r/min</span>
       <span>s = <b>{{ calc.slipPct.toFixed(2) }}</b> %</span>

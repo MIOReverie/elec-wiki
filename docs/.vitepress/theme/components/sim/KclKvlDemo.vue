@@ -20,6 +20,14 @@ const R3 = ref(2)
 const Ik = computed(() => E.value / (R1.value + R2.value + R3.value))
 const drops = computed(() => [Ik.value * R1.value, Ik.value * R2.value, Ik.value * R3.value])
 
+const cvLabel = computed(() =>
+  mode.value === 'KCL'
+    ? `KCL 节点电流演示：流入电流 I₁=${i1.value.toFixed(2)} A、I₂=${i2.value.toFixed(2)} A、I₃=${i3.value.toFixed(2)} A，` +
+        `流出电流 I₄=${i4.value.toFixed(2)} A，流入之和等于流出之和。`
+    : `KVL 回路电压演示：电动势 ${E.value} V，电阻 R₁=${R1.value} Ω、R₂=${R2.value} Ω、R₃=${R3.value} Ω，` +
+        `回路电流 ${Ik.value.toFixed(3)} A，各段压降 ${drops.value.map((d) => d.toFixed(2) + ' V').join('、')}，代数和为零。`
+)
+
 const cv = ref<HTMLCanvasElement | null>(null)
 
 useCanvas(cv, ({ ctx, w, h }) => {
@@ -147,7 +155,8 @@ useCanvas(cv, ({ ctx, w, h }) => {
       <Ctrl label="R₂" v-model="R2" :min="1" :max="20" :step="0.5" unit="Ω" />
       <Ctrl label="R₃" v-model="R3" :min="1" :max="20" :step="0.5" unit="Ω" />
     </div>
-    <canvas ref="cv" class="kk-cv" />
+    <canvas ref="cv" class="kk-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
   </div>
 </template>
 

@@ -17,7 +17,7 @@ title: 13 · 三相功率与测量
 
 ## 一、从瞬时功率出发：为什么是 $\dfrac32$
 
-<Prereq id="rms" /> 单相时 $p(t) = u(t)i(t)$ 以两倍频率脉动，平均值 $P = UI\cos\varphi$。三相则完全不同 —— 第 12 章那张图已经看过：三个错开 120° 的脉动功率相加，脉动正好抵消：
+<Prereq id="rms" /> 单相时 $p(t) = u(t)i(t)$ 以两倍频率脉动，平均值 $P = UI\cos\varphi$。三相则完全不同 —— [第 12 章 · 三相电路](circuit.md)那张图已经看过：三个错开 120° 的脉动功率相加，脉动正好抵消：
 
 $$
 p(t) = p_A+p_B+p_C = \frac32\,U_pI_p\cos\varphi = \text{常量}

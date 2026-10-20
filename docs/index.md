@@ -1,10 +1,14 @@
 ---
 layout: home
+description: 速通 Wiki 首页：电工学、数字电路、模拟电子与嵌入式开发四门课的入口，结论先行、公式可查、演示可拖，每节标注核心程度与预计耗时。
 
 hero:
   name: 速通 Wiki
   text: 四门电学课
   tagline: 电工学、数字电路、模拟电子与嵌入式开发。结论先行、公式可查、演示可拖——每节标注「核心 / 了解 / 可跳过」与预计耗时，先读该读的那部分。
+  image:
+    src: /hero.svg
+    alt: 速通 Wiki 概念图：结论先行的正文、参数可拖的演示卡与公式速查卡
   actions:
     - theme: brand
       text: 从电工学开始
@@ -17,19 +21,33 @@ hero:
       link: /shared/cheatsheet
 
 features:
-  - icon: ⚡
-    title: 29 个可拖参数的交互演示
+  - icon:
+      src: /feature-icons/bolt.svg
+      width: 24
+      height: 24
+    title: 交互演示
     details: 相量旋转、RLC 阻抗三角形、三相中性点位移、RC/RL 暂态、电机 T-n 曲线、卡诺图、PWM 波形……参数拖动即时重算，结论自己验证。
-  - icon: 🔖
-    title: 每个概念都能就地展开
+  - icon:
+      src: /feature-icons/bookmark.svg
+      width: 24
+      height: 24
+    title: 概念就地展开
     details: 正文里的前置知识是胶囊按钮，点开右侧抽屉看卡片，读完按 Esc 回到原处，不打断阅读、不丢位置。
-  - icon: 🧭
+  - icon:
+      src: /feature-icons/compass.svg
+      width: 24
+      height: 24
     title: 标注档位与耗时
     details: 每节都有「核心 / 了解 / 可跳过」和预计分钟数，并给出三条学习路径。时间有限时，按标注跳过是有依据的。
-  - icon: 📐
-    title: 公式、单位、符号有据可查
+  - icon:
+      src: /feature-icons/ruler.svg
+      width: 24
+      height: 24
+    title: 公式有据可查
     details: 全部公式集中在速查表；依赖顺序画成图谱；内容成熟度由构建脚本扫描正文生成，不写漂亮话。
 ---
+
+<HomeStats />
 
 ## 课程
 

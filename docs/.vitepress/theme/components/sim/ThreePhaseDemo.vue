@@ -45,6 +45,18 @@ const loadV = computed(() => {
   }
 })
 
+const cvLabel = computed(() => {
+  const v = loadV.value
+  if (view.value === 'phasor') {
+    return `三相相量图：相电压 ${Up.value} V，线电压 ${(Math.sqrt(3) * Up.value).toFixed(1)} V（${showLine.value ? '已画出线电压相量' : '未画线电压相量'}），三相依次相差 120°。`
+  }
+  if (view.value === 'wave') {
+    return `三相波形：三条正弦波依次相差 120°，频率对应相电压 ${Up.value} V，瞬时值之和恒为零，中性线电流为零。`
+  }
+  return `三相中性点位移：${v.msg} A 相负载 ${Ra.value} Ω、B 相 ${Rb.value} Ω、C 相 ${Rc.value} Ω，` +
+    `各相电压 ${cAbs(v.VA).toFixed(1)} V / ${cAbs(v.VB).toFixed(1)} V / ${cAbs(v.VC).toFixed(1)} V。`
+})
+
 const cv = ref<HTMLCanvasElement | null>(null)
 
 useCanvas(
@@ -169,7 +181,8 @@ useCanvas(
         ]"
       />
     </div>
-    <canvas ref="cv" class="tp-cv" />
+    <canvas ref="cv" class="tp-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
     <p v-if="view === 'neutral'" class="tp-note">
       中性线的作用就是<b>把中性点钉死在 0 电位</b>。一旦断开且三相负载不对称，中性点就会漂移，导致"某相电压飙升烧坏设备、某相电压不足"。所以<b>中性线上严禁装开关和熔断器</b>。
     </p>

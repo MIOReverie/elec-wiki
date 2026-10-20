@@ -100,10 +100,14 @@ const magCurve = computed(() => {
       </div>
       <div class="fb-ctl">
         <span class="fb-lab">开环增益 A</span>
-        <input v-model.number="A" type="range" min="100" max="1000000" step="100" class="fb-slider" />
+        <input
+          v-model.number="A" type="range" min="100" max="1000000" step="100" class="fb-slider"
+          aria-label="开环增益 A" :aria-valuetext="(20 * Math.log10(A)).toFixed(0) + ' dB（A = ' + A + '）'" />
         <span class="fb-val">{{ (20 * Math.log10(A)).toFixed(0) }} dB</span>
         <span class="fb-lab">反馈系数 F</span>
-        <input v-model.number="F" type="range" min="0.001" max="0.5" step="0.001" class="fb-slider" />
+        <input
+          v-model.number="F" type="range" min="0.001" max="0.5" step="0.001" class="fb-slider"
+          aria-label="反馈系数 F" :aria-valuetext="'F = ' + F" />
         <span class="fb-val">{{ F }}</span>
       </div>
 
@@ -130,10 +134,14 @@ const magCurve = computed(() => {
     <template v-else>
       <div class="fb-ctl">
         <span class="fb-lab">每级极点 f_p</span>
-        <input v-model.number="fp" type="range" min="10000" max="500000" step="10000" class="fb-slider" />
+        <input
+          v-model.number="fp" type="range" min="10000" max="500000" step="10000" class="fb-slider"
+          aria-label="每级极点频率 f_p" :aria-valuetext="(fp / 1000).toFixed(0) + ' 千赫'" />
         <span class="fb-val">{{ (fp / 1000).toFixed(0) }} kHz</span>
         <span class="fb-lab">反馈系数 F</span>
-        <input v-model.number="Fs" type="range" min="0.0001" max="0.1" step="0.0001" class="fb-slider" />
+        <input
+          v-model.number="Fs" type="range" min="0.0001" max="0.1" step="0.0001" class="fb-slider"
+          aria-label="反馈系数 F" :aria-valuetext="'F = ' + Fs" />
         <span class="fb-val">{{ Fs }}</span>
       </div>
 

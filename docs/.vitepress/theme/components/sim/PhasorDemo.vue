@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useCanvas, TC, SIG } from '../../lib/canvas'
+import { useReducedMotion } from '../../composables/useReducedMotion'
 import { poly, dot, label, arrow } from '../../lib/plot'
 
 const Um = ref(6)
@@ -8,6 +9,14 @@ const Im = ref(3)
 const f = ref(0.6)
 const psi = ref(30)
 const phi = ref(45) // u 超前 i 的角度
+
+function reset() {
+  Um.value = 6
+  Im.value = 3
+  f.value = 0.6
+  psi.value = 30
+  phi.value = 45
+}
 
 const cv = ref<HTMLCanvasElement | null>(null)
 const W = 2 // 画 2 个周期
@@ -20,7 +29,15 @@ const info = computed(() => ({
   lead: phi.value >= 0 ? '电压超前电流' : '电压滞后电流'
 }))
 
-useCanvas(
+const cvLabel = computed(
+  () =>
+    `正弦量相量与波形演示：电压峰值 ${Um.value} V、电流峰值 ${Im.value} A、频率 ${f.value} Hz、` +
+    `初相 ${psi.value}°、相位差 ${phi.value}°（${info.value.lead}）。` +
+    `有效值 U=${info.value.U.toFixed(2)} V、I=${info.value.I.toFixed(2)} A，` +
+    `角频率 ω=${info.value.w.toFixed(2)} rad/s，周期 T=${info.value.T.toFixed(2)} s。`
+)
+
+const anim = useCanvas(
   cv,
   ({ ctx, w, h, t }) => {
     const cy = h * 0.5
@@ -109,6 +126,8 @@ useCanvas(
   },
   { animate: true }
 )
+
+const reducedMotion = useReducedMotion().reduced
 </script>
 
 <template>
@@ -120,7 +139,17 @@ useCanvas(
       <Ctrl label="初相 ψ" v-model="psi" :min="0" :max="360" :step="5" unit="°" :fixed="0" />
       <Ctrl label="相位差 φ" v-model="phi" :min="-180" :max="180" :step="5" unit="°" :fixed="0" />
     </div>
-    <canvas ref="cv" class="ph-cv" />
+    <canvas ref="cv" class="ph-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
+    <button
+      type="button"
+      class="ph-reset"
+      aria-label="重置相量演示：把峰值、频率、初相与相位差恢复到默认值"
+      @click="reset"
+    >重置</button>
+    <button class="ph-play" type="button" @click="anim.togglePlay()">
+      {{ anim.playing.value ? '⏸ 暂停' : '▶ 播放' }}<template v-if="reducedMotion && !anim.playing.value">（已按系统设置减少动态效果）</template>
+    </button>
     <div class="ph-out">
       <span>有效值 U = <b>{{ info.U.toFixed(2) }}</b> V</span>
       <span>有效值 I = <b>{{ info.I.toFixed(2) }}</b> A</span>
@@ -135,6 +164,30 @@ useCanvas(
 .ph { display: flex; flex-direction: column; gap: 8px; }
 .ph-ctrls { display: flex; flex-direction: column; gap: 1px; }
 .ph-cv { width: 100%; height: 300px; border: 1px solid var(--vp-c-divider); border-radius: 10px; background: var(--vp-c-bg); }
+.ph-play {
+  align-self: flex-start;
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  font-family: inherit;
+}
+.ph-play:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
+.ph-reset {
+  align-self: flex-start;
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  font-family: inherit;
+}
+.ph-reset:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .ph-out { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--vp-c-text-2); }
 .ph-out b { color: var(--vp-c-text-1); font-family: var(--vp-font-family-mono); }
 </style>

@@ -19,6 +19,17 @@ const calc = computed(() => {
   return { f0, w0, Q, BW, f1: f0 - BW / 2, f2: f0 + BW / 2 }
 })
 
+const cvLabel = computed(() => {
+  const c = calc.value
+  const Lh = L.value / 1000, Cf = C.value * 1e-6
+  const ff = Math.min(Math.max(f.value, 1), 2000)
+  const X = 2 * Math.PI * ff * Lh - 1 / (2 * Math.PI * ff * Cf)
+  const Ic = U.value / Math.hypot(R.value, X)
+  return `串联谐振曲线：U=${U.value} V、R=${R.value} Ω、L=${L.value} mH、C=${C.value} µF。` +
+    `谐振频率 ${c.f0.toFixed(2)} Hz，品质因数 Q=${c.Q.toFixed(2)}，通频带 ${c.BW.toFixed(2)} Hz。` +
+    `当前游标 ${ff.toFixed(0)} Hz 处电流 ${Ic.toFixed(2)} A。`
+})
+
 const cv = ref<HTMLCanvasElement | null>(null)
 
 useCanvas(cv, ({ ctx, w, h }) => {
@@ -102,7 +113,8 @@ useCanvas(cv, ({ ctx, w, h }) => {
       <Ctrl label="电容 C" v-model="C" :min="1" :max="500" :step="1" unit="µF" :fixed="0" />
       <Ctrl label="当前 f" v-model="f" :min="1" :max="2000" :step="1" unit="Hz" :fixed="0" />
     </div>
-    <canvas ref="cv" class="rs-cv" />
+    <canvas ref="cv" class="rs-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
     <div class="rs-out">
       <span>f₀ = <b>{{ calc.f0.toFixed(2) }}</b> Hz</span>
       <span>Q = <b>{{ calc.Q.toFixed(2) }}</b></span>

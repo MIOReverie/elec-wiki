@@ -29,3 +29,26 @@ jobs:
 
       - name: Build (dead links fail the build)
         run: npx vitepress build docs --outDir docs/.vitepress/dist-check
+
+      - name: Perf budget check
+        run: node tools/perf-budget.mjs docs/.vitepress/dist-check
+
+      - name: Crawl self-check
+        run: |
+          node tools/serve.mjs docs/.vitepress/dist-check 4174 &
+          SERVER_PID=$!
+          # 等服务就绪，最多 30 次
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:4174/ > /dev/null; then break; fi
+            sleep 1
+          done
+          curl -sf http://localhost:4174/ > /dev/null || { echo "::error::本地服务未就绪"; kill $SERVER_PID; exit 1; }
+          node tools/crawl.mjs http://localhost:4174 docs/.vitepress/dist-check
+          CRAWL=$?
+          kill $SERVER_PID
+          exit $CRAWL
+
+      - name: Assert build artifacts
+        run: |
+          test -f docs/.vitepress/dist-check/index.html || { echo "::error::缺少 index.html"; exit 1; }
+          test -d docs/.vitepress/dist-check/assets || { echo "::error::缺少 assets 目录"; exit 1; }

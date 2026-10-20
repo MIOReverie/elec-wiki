@@ -13,6 +13,13 @@ const U0 = computed(() => (E.value * R2.value) / (R1.value + R2.value)) // 空�
 const Uout = computed(() => (E.value * par.value) / (R1.value + par.value))
 const dev = computed(() => Math.abs(Uout.value - U0.value) / U0.value)
 
+const cvLabel = computed(
+  () =>
+    `分压器负载效应曲线：电源 ${E.value} V，上臂 R₁=${R1.value} Ω、下臂 R₂=${R2.value} Ω、负载 R_L=${RL.value} Ω。` +
+    `空载输出 ${U0.value.toFixed(3)} V，带载输出 ${Uout.value.toFixed(3)} V，` +
+    `并联值 ${par.value.toFixed(2)} Ω，偏差 ${(dev.value * 100).toFixed(1)} %。`
+)
+
 const cv = ref<HTMLCanvasElement | null>(null)
 
 useCanvas(cv, ({ ctx, w, h }) => {
@@ -48,7 +55,8 @@ useCanvas(cv, ({ ctx, w, h }) => {
       <Ctrl label="R₂ 下臂" v-model="R2" :min="1" :max="100" :step="1" unit="Ω" />
       <Ctrl label="负载 R_L" v-model="RL" :min="1" :max="100" :step="1" unit="Ω" />
     </div>
-    <canvas ref="cv" class="dl-cv" />
+    <canvas ref="cv" class="dl-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
     <div class="dl-out">
       <span>空载 U₀ = <b>{{ U0.toFixed(3) }}</b> V</span>
       <span>带载 U_out = <b>{{ Uout.toFixed(3) }}</b> V</span>

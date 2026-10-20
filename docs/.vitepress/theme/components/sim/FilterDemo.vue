@@ -102,13 +102,19 @@ const compOut = computed(() => {
     <template v-if="tab === 'int'">
       <div class="fd-ctl">
         <span class="fd-lab">输入频率</span>
-        <input v-model.number="fIn" type="range" min="100" max="2000" step="50" class="fd-slider" />
+        <input
+          v-model.number="fIn" type="range" min="100" max="2000" step="50" class="fd-slider"
+          aria-label="输入方波频率" :aria-valuetext="fIn + ' 赫兹'" />
         <span class="fd-val">{{ fIn }} Hz</span>
         <span class="fd-lab">R</span>
-        <input v-model.number="R" type="range" min="1000" max="100000" step="1000" class="fd-slider" />
+        <input
+          v-model.number="R" type="range" min="1000" max="100000" step="1000" class="fd-slider"
+          aria-label="积分电阻 R" :aria-valuetext="(R / 1000).toFixed(0) + ' 千欧'" />
         <span class="fd-val">{{ (R / 1000).toFixed(0) }} kΩ</span>
         <span class="fd-lab">C</span>
-        <input v-model.number="C" type="range" min="0.01" max="1" step="0.01" class="fd-slider" />
+        <input
+          v-model.number="C" type="range" min="0.01" max="1" step="0.01" class="fd-slider"
+          aria-label="积分电容 C" :aria-valuetext="(C * 1e6).toFixed(2) + ' 微法'" />
         <span class="fd-val">{{ (C * 1e6).toFixed(2) }} μF</span>
       </div>
       <svg viewBox="0 0 460 120" class="fd-svg">
@@ -128,10 +134,14 @@ const compOut = computed(() => {
         <span class="fd-lab">阶数</span>
         <Seg v-model="order" :options="[{ value: 1, label: '一阶' }, { value: 2, label: '二阶' }]" />
         <span class="fd-lab">特征频率 f₀</span>
-        <input v-model.number="f0" type="range" min="200" max="10000" step="10" class="fd-slider" />
+        <input
+          v-model.number="f0" type="range" min="200" max="10000" step="10" class="fd-slider"
+          aria-label="特征频率 f₀" :aria-valuetext="(f0 / 1000).toFixed(2) + ' 千赫'" />
         <span class="fd-val">{{ (f0 / 1000).toFixed(2) }} kHz</span>
         <span v-if="order === 2" class="fd-lab">Q</span>
-        <input v-if="order === 2" v-model.number="Q" type="range" min="0.5" max="5" step="0.1" class="fd-slider" />
+        <input
+          v-if="order === 2" v-model.number="Q" type="range" min="0.5" max="5" step="0.1" class="fd-slider"
+          aria-label="品质因数 Q" :aria-valuetext="'Q = ' + Q.toFixed(1)" />
         <span v-if="order === 2" class="fd-val">{{ Q.toFixed(1) }}</span>
       </div>
       <svg viewBox="0 0 460 160" class="fd-svg">
@@ -153,13 +163,19 @@ const compOut = computed(() => {
     <template v-else>
       <div class="fd-ctl">
         <span class="fd-lab">稳压值 ±Uz</span>
-        <input v-model.number="Uz" type="range" min="2" max="12" step="0.5" class="fd-slider" />
+        <input
+          v-model.number="Uz" type="range" min="2" max="12" step="0.5" class="fd-slider"
+          aria-label="稳压值 ±Uz" :aria-valuetext="'±' + Uz + ' 伏特'" />
         <span class="fd-val">±{{ Uz }} V</span>
         <span class="fd-lab">R₁（下）</span>
-        <input v-model.number="R1c" type="range" min="1000" max="50000" step="1000" class="fd-slider" />
+        <input
+          v-model.number="R1c" type="range" min="1000" max="50000" step="1000" class="fd-slider"
+          aria-label="分压电阻 R₁" :aria-valuetext="(R1c / 1000).toFixed(0) + ' 千欧'" />
         <span class="fd-val">{{ (R1c / 1000).toFixed(0) }} kΩ</span>
         <span class="fd-lab">R₂（反馈）</span>
-        <input v-model.number="R2c" type="range" min="1000" max="100000" step="1000" class="fd-slider" />
+        <input
+          v-model.number="R2c" type="range" min="1000" max="100000" step="1000" class="fd-slider"
+          aria-label="反馈电阻 R₂" :aria-valuetext="(R2c / 1000).toFixed(0) + ' 千欧'" />
         <span class="fd-val">{{ (R2c / 1000).toFixed(0) }} kΩ</span>
       </div>
       <svg viewBox="0 0 460 200" class="fd-svg">

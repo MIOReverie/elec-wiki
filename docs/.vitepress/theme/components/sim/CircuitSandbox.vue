@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
 import { useCanvas, TC, SIG } from '../../lib/canvas'
+import { useReducedMotion } from '../../composables/useReducedMotion'
 import { arrow, label } from '../../lib/plot'
 
 type Kind = 'R' | 'V' | 'I' | 'LAMP' | 'SW' | 'GND' | 'W' | 'DEL'
@@ -82,7 +83,7 @@ function load(i: number) {
 }
 
 /* ---------- 求解：改进结点法 MNA ---------- */
-interface Res { ok: boolean; msg?: string; volt: Map<string, number>; cur: Map<number, number> }
+interface Res { ok: boolean; msg?: string; volt: Map<string, number>; cur: Map<number, number>; root?: (k: string) => string }
 
 function solve(): Res {
   const cs = comps.value
@@ -188,10 +189,37 @@ function solve(): Res {
       cur.set(c.id, c.value)
     }
   }
-  return { ok: true, volt, cur }
+  return { ok: true, volt, cur, root: find }
 }
 
 const nodeVolt = (k: string, r: Res) => r.volt.get(k) ?? 0
+
+/** 求解结果的 DOM 兜底文本：canvas 里画了同样的信息，但读屏与「复制文字」要能拿到 */
+const readout = computed<{ ok: boolean; msg: string }>(() => {
+  const r = solve()
+  if (!r.ok) return { ok: false, msg: r.msg || '电路无法求解' }
+  const parts: string[] = [`已放置 ${comps.value.length} 个元件`]
+  for (const c of comps.value) {
+    if (c.type === 'GND') continue
+    const va = nodeVolt(r.root!(c.a), r)
+    const vb = nodeVolt(r.root!(c.b), r)
+    const I = r.cur.get(c.id) ?? 0
+    const name = { R: `电阻 ${c.value} Ω`, LAMP: `灯泡 ${c.value} Ω`, V: `电压源 ${c.value} V`, I: `电流源 ${c.value} A`, SW: c.on ? '开关（闭合）' : '开关（断开）', W: '导线' }[c.type]
+    parts.push(`${name}：${va.toFixed(2)} V 到 ${vb.toFixed(2)} V，电流 ${I.toFixed(3)} A`)
+  }
+  return { ok: true, msg: parts.join('；') }
+})
+/** readout 依赖 comps / selected，做浅层依赖即可（solve 每次重算是纯函数） */
+
+const cursor = ref({ x: 2, y: 2 })
+const toolIndex = computed(() => Math.max(0, TOOLS.findIndex((t) => t.v === mode.value)))
+
+const cvLabel = computed(() => {
+  const head =
+    `电路搭建沙盒：当前工具 ${TOOLS[toolIndex.value]?.t ?? '电阻 R'}，` +
+    `光标在第 ${cursor.value.y + 1} 行第 ${cursor.value.x + 1} 列。`
+  return readout.value.ok ? `${head}${readout.value.msg}。` : `${head}${readout.value.msg}`
+})
 
 /* ---------- 绘制 ---------- */
 function px(gx: number, gy: number, w: number, h: number): [number, number] {
@@ -222,7 +250,13 @@ function hitTest(mx: number, my: number, w: number, h: number): Comp | null {
   return null
 }
 
-useCanvas(
+/** 键盘光标命中的元件：从光标向左右各延伸半格再测一次，等价于鼠标点在格点上 */
+function kbHit(gx: number, gy: number, w: number, h: number): Comp | null {
+  const [cx, cy] = px(gx, gy, w, h)
+  return hitTest(cx, cy, w, h)
+}
+
+const anim = useCanvas(
   cv,
   ({ ctx, w, h, t }) => {
     const cols = Math.floor(w / GRID)
@@ -397,6 +431,16 @@ useCanvas(
       ctx.setLineDash([])
     }
 
+    // 键盘光标（只画焦点框，不改电路）
+    {
+      const [kx, ky] = P(cursor.value.x, cursor.value.y)
+      ctx.setLineDash([3, 3])
+      ctx.strokeStyle = SIG.q
+      ctx.lineWidth = 1.5
+      ctx.strokeRect(kx - GRID / 2 + 1, ky - GRID / 2 + 1, GRID - 2, GRID - 2)
+      ctx.setLineDash([])
+    }
+
     // 节点电位
     if (res.ok) {
       const seen = new Set<string>()
@@ -419,6 +463,8 @@ useCanvas(
   { animate: true }
 )
 
+const reducedMotion = useReducedMotion().reduced
+
 /* ---------- 交互 ---------- */
 function gridAt(e: PointerEvent) {
   const c = cv.value!
@@ -436,6 +482,8 @@ function onDown(e: PointerEvent) {
   if (!c) return
   const r = c.getBoundingClientRect()
   const g = gridAt(e)
+  // 触屏：抓住指针，手指滑出画布仍继续收到 pointermove
+  try { c.setPointerCapture(e.pointerId) } catch { /* 某些浏览器在鼠标上会抛，忽略 */ }
   const hit = hitTest(e.clientX - r.left, e.clientY - r.top, r.width, r.height)
 
   if (mode.value === 'DEL') {
@@ -489,6 +537,63 @@ function delSel() {
   comps.value = comps.value.filter((c) => c.id !== selected.value)
   selected.value = null
 }
+
+/* ---------- 键盘操作 ---------- */
+function onKey(e: KeyboardEvent) {
+  const c = cv.value
+  if (!c) return
+  const r = c.getBoundingClientRect()
+  const cols = Math.max(1, Math.floor(r.width / GRID))
+  const rows = Math.max(1, Math.floor(r.height / GRID))
+  const k = e.key
+  let handled = true
+
+  if (k === 'ArrowLeft') cursor.value = { x: Math.max(0, cursor.value.x - 1), y: cursor.value.y }
+  else if (k === 'ArrowRight') cursor.value = { x: Math.min(cols - 1, cursor.value.x + 1), y: cursor.value.y }
+  else if (k === 'ArrowUp') cursor.value = { x: cursor.value.x, y: Math.max(0, cursor.value.y - 1) }
+  else if (k === 'ArrowDown') cursor.value = { x: cursor.value.x, y: Math.min(rows - 1, cursor.value.y + 1) }
+  else if (k === '[' || k === ']') {
+    const i = toolIndex.value
+    const n = TOOLS.length
+    mode.value = TOOLS[((k === '[' ? i - 1 : i + 1) + n) % n].v
+  } else if (k === 'Enter' || k === ' ') {
+    // Enter = 放置 / 选中（复用与鼠标一致的 place 逻辑）
+    const hit = kbHit(cursor.value.x, cursor.value.y, r.width, r.height)
+    if (mode.value === 'DEL') {
+      if (hit) comps.value = comps.value.filter((x) => x.id !== hit.id)
+    } else if (hit && hit.type === 'SW') {
+      comps.value = comps.value.map((x) => (x.id === hit.id ? { ...x, on: !x.on } : x))
+    } else if (hit) {
+      selected.value = hit.id
+      pending.value = null
+    } else if (mode.value === 'GND') {
+      comps.value = [...comps.value.filter((x) => x.type !== 'GND'), { id: uid++, type: 'GND', a: `${cursor.value.x},${cursor.value.y}`, b: `${cursor.value.x},${cursor.value.y}`, value: 0, on: true }]
+    } else if (!pending.value) {
+      pending.value = { ...cursor.value }
+    } else {
+      const p = pending.value
+      pending.value = null
+      if (p.x !== cursor.value.x || p.y !== cursor.value.y) {
+        const horiz = Math.abs(cursor.value.x - p.x) >= Math.abs(cursor.value.y - p.y)
+        const end = horiz ? `${cursor.value.x},${p.y}` : `${p.x},${cursor.value.y}`
+        comps.value = [
+          ...comps.value,
+          { id: uid++, type: mode.value, a: `${p.x},${p.y}`, b: end, value: mode.value === 'R' || mode.value === 'LAMP' ? 10 : mode.value === 'V' ? 12 : 1, on: true }
+        ]
+        selected.value = comps.value[comps.value.length - 1].id
+      }
+    }
+  } else if (k === 'Delete' || k === 'Backspace') {
+    if (selected.value !== null) delSel()
+  } else {
+    handled = false
+  }
+
+  if (handled) {
+    e.preventDefault()
+    hover.value = { ...cursor.value }
+  }
+}
 </script>
 
 <template>
@@ -507,10 +612,20 @@ function delSel() {
     <canvas
       ref="cv"
       class="sb-canvas"
+      role="application"
+      tabindex="0"
+      :aria-label="cvLabel"
       @pointerdown="onDown"
       @pointermove="onMove"
       @pointerleave="hover = null"
+      @pointerup="cursor = { ...gridAt($event) }"
+      @keydown="onKey"
     />
+    <p class="sr-only sb-sr" role="status">{{ readout.msg }}</p>
+
+    <button class="sb-play" type="button" @click="anim.togglePlay()">
+      {{ anim.playing.value ? '⏸ 暂停动画' : '▶ 播放动画' }}<template v-if="reducedMotion && !anim.playing.value">（已按系统设置减少动态效果）</template>
+    </button>
 
     <div class="sb-bar">
       <span class="sb-tip">① 选工具 → ② 点起点 → ③ 点终点（自动对齐横/竖）· 点开关可切换通断</span>
@@ -565,6 +680,18 @@ function delSel() {
   touch-action: none;
   cursor: crosshair;
 }
+.sb-play {
+  align-self: flex-start;
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  font-family: inherit;
+}
+.sb-play:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .sb-bar {
   display: flex;
   flex-wrap: wrap;

@@ -10,13 +10,14 @@ const emit = defineEmits<{ 'update:modelValue': [any] }>()
 <template>
   <div class="seg">
     <span v-if="label" class="seg-label">{{ label }}</span>
-    <div class="seg-group">
+    <div class="seg-group" role="group" :aria-label="label || '选项切换'">
       <button
         v-for="o in options"
         :key="String(o.value)"
         type="button"
         class="seg-btn"
         :class="{ on: o.value === props.modelValue }"
+        :aria-pressed="o.value === props.modelValue"
         @click="emit('update:modelValue', o.value)"
       >
         {{ o.label }}
@@ -32,19 +33,20 @@ const emit = defineEmits<{ 'update:modelValue': [any] }>()
   display: inline-flex;
   padding: 2px;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: var(--r-md);
   background: var(--vp-c-bg);
 }
 .seg-btn {
   padding: 4px 11px;
   font-size: 12.5px;
   border: 0;
-  border-radius: 6px;
+  border-radius: var(--r-sm);
   background: transparent;
   color: var(--vp-c-text-2);
   cursor: pointer;
   font-family: inherit;
 }
 .seg-btn:hover { color: var(--vp-c-text-1); }
-.seg-btn.on { background: var(--vp-c-brand-1); color: #fff; font-weight: 600; }
+/* 选中底用 brand-3（深色阶梯）：白字浅色 6.70:1 / 暗色 5.17:1，均 ≥4.5 */
+.seg-btn.on { background: var(--vp-c-brand-3); color: #fff; font-weight: 600; }
 </style>

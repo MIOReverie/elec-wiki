@@ -163,12 +163,16 @@ function fmt(f: number): string {
       <div class="osc-row">
         <label class="osc-slider">
           <span>放大倍数 A（同相放大器 1+R<sub>f</sub>/R₁）</span>
-          <input type="range" min="1" max="4.5" step="0.1" v-model.number="A" />
+          <input
+            type="range" min="1" max="4.5" step="0.1" v-model.number="A"
+            aria-label="同相放大器放大倍数 A" :aria-valuetext="'A = ' + A.toFixed(1)" />
           <b>{{ A.toFixed(1) }}</b>
         </label>
         <label class="osc-slider">
           <span>R（选频电阻，C = 0.01 μF）</span>
-          <input type="range" min="3" max="30" step="1" v-model.number="Rw" />
+          <input
+            type="range" min="3" max="30" step="1" v-model.number="Rw"
+            aria-label="文氏桥选频电阻 R" :aria-valuetext="Rw + ' 千欧'" />
           <b>{{ Rw }} kΩ</b>
         </label>
       </div>
@@ -206,12 +210,16 @@ function fmt(f: number): string {
       <div class="osc-row">
         <label class="osc-slider">
           <span>R₂/R₁（决定三角波峰值）</span>
-          <input type="range" min="0.5" max="4" step="0.1" v-model.number="kRatio" />
+          <input
+            type="range" min="0.5" max="4" step="0.1" v-model.number="kRatio"
+            aria-label="电阻比 R₂/R₁" :aria-valuetext="'R₂/R₁ = ' + kRatio.toFixed(1)" />
           <b>{{ kRatio.toFixed(1) }}</b>
         </label>
         <label class="osc-slider">
           <span>积分时间常数 R·C</span>
-          <input type="range" min="0.05" max="5" step="0.05" v-model.number="tauMs" />
+          <input
+            type="range" min="0.05" max="5" step="0.05" v-model.number="tauMs"
+            aria-label="积分时间常数 R·C" :aria-valuetext="tauMs.toFixed(2) + ' 毫秒'" />
           <b>{{ tauMs.toFixed(2) }} ms</b>
         </label>
       </div>
@@ -238,12 +246,16 @@ function fmt(f: number): string {
       <div class="osc-row">
         <label class="osc-slider">
           <span>L（C = 0.01 μF，线圈电阻 1 Ω）</span>
-          <input type="range" min="10" max="500" step="10" v-model.number="Lh" />
+          <input
+            type="range" min="10" max="500" step="10" v-model.number="Lh"
+            aria-label="振荡电感 L" :aria-valuetext="Lh + ' 微亨'" />
           <b>{{ Lh }} μH</b>
         </label>
         <label class="osc-slider">
           <span>品质因数 Q</span>
-          <input type="range" min="10" max="300" step="10" v-model.number="Qv" />
+          <input
+            type="range" min="10" max="300" step="10" v-model.number="Qv"
+            aria-label="品质因数 Q" :aria-valuetext="'Q = ' + Qv" />
           <b>{{ Qv }}</b>
         </label>
       </div>

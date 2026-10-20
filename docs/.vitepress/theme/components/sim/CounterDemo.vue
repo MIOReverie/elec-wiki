@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useCanvas, TC, SIG } from '../../lib/canvas'
+import { useReducedMotion } from '../../composables/useReducedMotion'
 import { poly, dot, label } from '../../lib/plot'
 
 const dir = ref<'up' | 'down'>('up')
@@ -11,7 +12,20 @@ const cv = ref<HTMLCanvasElement | null>(null)
 
 const rows = computed(() => ['CLK', ...Array.from({ length: bits.value }, (_, i) => `Q${i}`)])
 
-useCanvas(
+function reset() {
+  dir.value = 'up'
+  bits.value = 4
+  speed.value = 1
+}
+
+const cvLabel = computed(
+  () =>
+    `${dir.value === 'up' ? '加' : '减'}计数波形演示：${bits.value} 位计数，速度 ${speed.value} 倍。` +
+    `时钟每个周期翻一次，Q0 每 2 个时钟翻一次，Q1 每 4 个，以此类推，逐级二分频。` +
+    `当前为加计数、4 位、速度 1 倍时计数范围 0 到 15。`
+)
+
+const anim = useCanvas(
   cv,
   ({ ctx, w, h, t }) => {
     const n = bits.value
@@ -87,6 +101,8 @@ useCanvas(
   },
   { animate: true }
 )
+
+const reducedMotion = useReducedMotion().reduced
 </script>
 
 <template>
@@ -103,7 +119,11 @@ useCanvas(
       <Ctrl label="位数" v-model="bits" :min="2" :max="4" :step="1" :fixed="0" />
       <Ctrl label="速度" v-model="speed" :min="0.25" :max="3" :step="0.25" unit="×" />
     </div>
-    <canvas ref="cv" class="cd-cv" />
+    <canvas ref="cv" class="cd-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
+    <button class="cd-play" type="button" @click="anim.togglePlay()">
+      {{ anim.playing.value ? '⏸ 暂停' : '▶ 播放' }}<template v-if="reducedMotion && !anim.playing.value">（已按系统设置减少动态效果）</template>
+    </button>
     <p class="cd-note">
       看关键规律：<b>Q0 每个时钟翻一次，Q1 每 2 个，Q2 每 4 个…</b> —— 频率逐级二分频，所以计数器同时也是<b>分频器</b>。
     </p>
@@ -114,6 +134,18 @@ useCanvas(
 .cd { display: flex; flex-direction: column; gap: 8px; }
 .cd-bar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
 .cd-cv { width: 100%; height: 260px; border: 1px solid var(--vp-c-divider); border-radius: 10px; background: var(--vp-c-bg); }
+.cd-play {
+  align-self: flex-start;
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  font-family: inherit;
+}
+.cd-play:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .cd-note { margin: 0; font-size: 12.5px; color: var(--vp-c-text-3); line-height: 1.65; }
 .cd-note b { color: var(--vp-c-text-2); }
 </style>

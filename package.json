@@ -6,13 +6,15 @@
   "type": "module",
   "license": "MIT",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "dev": "vitepress dev docs",
     "lint": "node tools/lint.mjs",
-    "build": "node tools/lint.mjs && vitepress build docs",
-    "check": "node tools/lint.mjs && vitepress build docs --outDir docs/.vitepress/dist-check",
+    "build": "node tools/lint.mjs && vitepress build docs && node tools/trim-dist.mjs",
+    "check": "node tools/lint.mjs && vitepress build docs --outDir docs/.vitepress/dist-check && node tools/trim-dist.mjs docs/.vitepress/dist-check",
+    "trim": "node tools/trim-dist.mjs",
+    "perf:check": "node tools/perf-budget.mjs docs/.vitepress/dist",
     "preview": "vitepress preview docs",
     "serve": "node tools/serve.mjs docs/.vitepress/dist 4174",
     "crawl": "node tools/crawl.mjs http://localhost:4174 docs/.vitepress/dist",

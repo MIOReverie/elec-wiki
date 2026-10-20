@@ -51,23 +51,46 @@ const exactMag = computed(() => {
   }
   return pts.join(' ')
 })
+function reset() {
+  Au0.value = 57
+  fL.value = 100
+  fH.value = 100000
+}
+
+const svgLabel = computed(
+  () =>
+    `波特图：中频增益 ${Au0.value} 倍（${gainDb.value.toFixed(1)} dB），下限频率 ${fL.value} Hz，` +
+    `上限频率 ${fH.value} Hz；带宽 ${(BW.value / 1000).toFixed(1)} kHz，增益带宽积 ${(GBD.value / 1e6).toFixed(1)} MHz。`
+)
 </script>
 
 <template>
   <div class="bode">
     <div class="bode-ctl">
       <span class="bode-lab">中频增益</span>
-      <input v-model.number="Au0" type="range" min="10" max="200" step="1" class="bode-slider" />
+      <input
+        v-model.number="Au0" type="range" min="10" max="200" step="1" class="bode-slider"
+        aria-label="中频增益" :aria-valuetext="Au0 + ' 倍（' + gainDb.toFixed(1) + ' dB）'" />
       <span class="bode-val">{{ Au0 }} 倍（{{ gainDb.toFixed(1) }} dB）</span>
       <span class="bode-lab">下限频率</span>
-      <input v-model.number="fL" type="range" min="10" max="1000" step="10" class="bode-slider" />
+      <input
+        v-model.number="fL" type="range" min="10" max="1000" step="10" class="bode-slider"
+        aria-label="下限频率" :aria-valuetext="fL + ' 赫兹'" />
       <span class="bode-val">{{ fL }} Hz</span>
       <span class="bode-lab">上限频率</span>
-      <input v-model.number="fH" type="range" min="10000" max="1000000" step="10000" class="bode-slider" />
+      <input
+        v-model.number="fH" type="range" min="10000" max="1000000" step="10000" class="bode-slider"
+        aria-label="上限频率" :aria-valuetext="(fH / 1000).toFixed(0) + ' 千赫'" />
       <span class="bode-val">{{ (fH / 1000).toFixed(0) }} kHz</span>
+      <button
+        type="button"
+        class="bode-reset"
+        aria-label="重置波特图演示：把中频增益与上下限频率恢复到默认值"
+        @click="reset"
+      >重置</button>
     </div>
 
-    <svg viewBox="0 0 460 200" class="bode-svg">
+    <svg viewBox="0 0 460 200" class="bode-svg" role="img" :aria-label="svgLabel">
       <!-- 网格与坐标 -->
       <line x1="40" y1="150" x2="440" y2="150" stroke="var(--vp-c-divider)" />
       <line x1="40" y1="150" x2="40" y2="20" stroke="var(--vp-c-divider)" />
@@ -85,6 +108,7 @@ const exactMag = computed(() => {
       <text x="46" :y="150 - ((gainDb - 3 + 40) / 100) * 120 - 3" font-size="10" fill="#d5303e">半功率点 −3dB（0.707 倍）</text>
       <text x="46" y="24" font-size="11" fill="var(--vp-c-text-2)">蓝虚线 = 渐近近似（画图用）　黑实线 = 实际响应</text>
     </svg>
+    <p class="sr-only">{{ svgLabel }}</p>
 
     <div class="bode-read">
       带宽 $BW=f_H-f_L\approx{{ (BW / 1000).toFixed(1) }}\,\text{kHz}$；增益带宽积 $\approx{{ (GBD / 1e6).toFixed(1) }}\,\text{MHz}$
@@ -100,6 +124,17 @@ const exactMag = computed(() => {
 .bode-ctl { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
 .bode-lab { font-size: 12.5px; font-weight: 600; color: var(--vp-c-text-2); }
 .bode-slider { width: 100px; }
+.bode-reset {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+}
+.bode-reset:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .bode-val { font-size: 12.5px; font-family: var(--vp-font-family-mono, monospace); min-width: 90px; }
 .bode-svg { width: 100%; height: auto; background: var(--vp-c-bg-alt); border-radius: 8px; }
 .bode-read {

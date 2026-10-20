@@ -42,7 +42,7 @@ defineProps<{
   padding: 2px 7px;
   border-radius: 5px;
   color: #fff;
-  background: #0d9488;
+  background: var(--wiki-fig-tag-bg);
   flex: none;
 }
 .fig-title {

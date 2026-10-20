@@ -10,7 +10,7 @@
  * 状态机按真实回路推：线圈得电 ⇔ 所在回路闭合；松开 SB2 靠自锁触点保持；
  * SB1（停止）与 FR（过载）优先级最高，一动作立即切断全部线圈。
  */
-import { computed, ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 import { wire, dot, node, txt, rect, sw, fuse, svg } from '../../lib/schematic'
 
 const props = defineProps<{ mode?: 'start' | 'reverse' }>()
@@ -24,6 +24,13 @@ const tripped = ref(false) // FR 过载动作
 const km1 = ref(false)
 const km2 = ref(false)
 
+// 按钮回弹定时器：组件卸载时统一清理，避免销毁后仍写 ref
+const timers: number[] = []
+onUnmounted(() => {
+  for (const id of timers) clearTimeout(id)
+  timers.length = 0
+})
+
 function hit(e: MouseEvent) {
   const t = (e.target as HTMLElement).dataset?.act
   if (t === 'sb2') press('sb2')
@@ -35,11 +42,13 @@ function press(which: 'sb1' | 'sb2' | 'sb3') {
   if (which === 'sb2') sb2.value = true
   if (which === 'sb3') sb3.value = true
   settle()
-  setTimeout(() => {
-    if (which === 'sb1') sb1.value = false
-    if (which === 'sb2') sb2.value = false
-    if (which === 'sb3') sb3.value = false
-  }, 380)
+  timers.push(
+    window.setTimeout(() => {
+      if (which === 'sb1') sb1.value = false
+      if (which === 'sb2') sb2.value = false
+      if (which === 'sb3') sb3.value = false
+    }, 380)
+  )
 }
 function trip() {
   if (!running.value) return

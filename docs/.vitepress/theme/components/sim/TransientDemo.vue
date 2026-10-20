@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useCanvas, TC, SIG } from '../../lib/canvas'
+import { useReducedMotion } from '../../composables/useReducedMotion'
 import { drawFrame, mapper, poly, dot, label, type Box, type Range } from '../../lib/plot'
 import { resistor, battery, capacitor, inductor, wire, tag, ground } from '../../lib/parts'
 
@@ -31,9 +32,16 @@ const fInf = computed(() => {
 const unit = computed(() => (mode.value === 'RC' ? 'u_C / V' : 'i_L / A'))
 const name = computed(() => (mode.value === 'RC' ? 'u_C' : 'i_L'))
 
+const cvLabel = computed(() => {
+  const unitTxt = mode.value === 'RC' ? `R=${R.value} kΩ、C=${C.value} µF` : `R=${R.value} Ω、L=${L.value} mH`
+  return `${mode.value} 一阶暂态响应（${act.value === 'charge' ? '零状态充电' : '零输入放电'}）：电源 ${E.value} V，${unitTxt}。` +
+    `初始值 ${f0.value.toFixed(3)}，稳态值 ${fInf.value.toFixed(3)}，时间常数 τ=${tau.value.toFixed(4)} s，` +
+    `1τ 到 63.2 %、3τ 到 95 %、5τ 到 99.3 %。`
+})
+
 const cv = ref<HTMLCanvasElement | null>(null)
 
-useCanvas(
+const anim = useCanvas(
   cv,
   ({ ctx, w, h, t }) => {
     const el = performance.now()
@@ -122,6 +130,8 @@ useCanvas(
   },
   { animate: true }
 )
+
+const reducedMotion = useReducedMotion().reduced
 </script>
 
 <template>
@@ -156,7 +166,11 @@ useCanvas(
       <Ctrl v-if="mode === 'RC'" label="电容 C" v-model="C" :min="1" :max="1000" :step="1" unit="µF" :fixed="0" />
       <Ctrl v-else label="电感 L" v-model="L" :min="1" :max="1000" :step="1" unit="mH" :fixed="0" />
     </div>
-    <canvas ref="cv" class="tr-cv" />
+    <canvas ref="cv" class="tr-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
+    <button class="tr-play" type="button" @click="anim.togglePlay()">
+      {{ anim.playing.value ? '⏸ 暂停' : '▶ 播放' }}<template v-if="reducedMotion && !anim.playing.value">（已按系统设置减少动态效果）</template>
+    </button>
     <div class="tr-out">
       <span>f(0₊) = <b>{{ f0.toFixed(3) }}</b></span>
       <span>f(∞) = <b>{{ fInf.toFixed(3) }}</b></span>
@@ -183,6 +197,18 @@ useCanvas(
 .tr-acts button.on { background: var(--vp-c-brand-1); color: #fff; border-color: var(--vp-c-brand-1); font-weight: 600; }
 .tr-ctrls { display: flex; flex-direction: column; gap: 1px; }
 .tr-cv { width: 100%; height: 380px; border: 1px solid var(--vp-c-divider); border-radius: 10px; background: var(--vp-c-bg); }
+.tr-play {
+  align-self: flex-start;
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  font-family: inherit;
+}
+.tr-play:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .tr-out { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--vp-c-text-2); }
 .tr-out b { color: var(--vp-c-text-1); font-family: var(--vp-font-family-mono); }
 </style>

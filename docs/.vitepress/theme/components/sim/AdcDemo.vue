@@ -14,7 +14,8 @@ const N = 200 // 画多少个连续采样时刻
 const nyquistOK = computed(() => fs.value >= 2 * fin.value)
 const aliasF = computed(() => {
   if (nyquistOK.value) return 0
-  return Math.abs(fs.value - fin.value)
+  // 混叠频率 = |fin − round(fin/fs)·fs|：把 fin 折回 [0, fs/2] 区间（对任意 fin/fs 都成立）
+  return Math.abs(fin.value - Math.round(fin.value / fs.value) * fs.value)
 })
 const LSB = computed(() => VFS.value / Math.pow(2, bits.value))
 
@@ -32,13 +33,16 @@ const wavePts = computed(() => {
 const sampleDots = computed(() => {
   const count = Math.round(fs.value)
   const dots: { x: number; y: number; qy: number; v: number }[] = []
+  // 双极性输入先加满量程/2 电平搬移到 0…VFS，再按单极性 ADC 量化
+  // （与 AdcQuantDemo 的单极性模型统一：0 V 输入对应中点码 2^(bits-1)）
+  const offsetCode = Math.pow(2, bits.value) / 2
   for (let k = 0; k <= count; k++) {
     const t = k / fs.value
     if (t > 1) break
     const v = Math.sin(2 * Math.PI * fin.value * t) // -1..1
-    const av = (v * VFS.value) / 2 // 映射到满量程
-    const q = Math.max(0, Math.min(Math.pow(2, bits.value) - 1, Math.round(av / LSB.value)))
-    const qv = q * LSB.value
+    const av = v * (VFS.value / 2) // -VFS/2 … +VFS/2
+    const q = Math.max(0, Math.min(Math.pow(2, bits.value) - 1, Math.round(offsetCode + av / LSB.value)))
+    const qv = (q - offsetCode) * LSB.value
     dots.push({
       x: (t * 460).toFixed(1) as unknown as number,
       y: (60 - v * 45).toFixed(1) as unknown as number,
@@ -114,6 +118,18 @@ const filteredPts = computed(() => {
   }
   return pts.join(' ')
 })
+
+function reset() {
+  tab.value = 'samp'
+  fin.value = 5
+  fs.value = 40
+  bits.value = 4
+  VFS.value = 5
+  duty.value = 35
+  vHigh.value = 12
+  dBits.value = [1, 0, 0, 0, 0, 0, 0, 1]
+  pwmOn.value = true
+}
 </script>
 
 <template>
@@ -123,18 +139,30 @@ const filteredPts = computed(() => {
       { value: 'dac', label: 'DAC 重建' },
       { value: 'pwm', label: 'PWM 调速' }
     ]" />
+    <button
+      type="button"
+      class="adc-reset"
+      aria-label="重置 ADC 演示：把输入频率、采样频率、位数、满量程、占空比与高电平恢复到默认值"
+      @click="reset"
+    >重置</button>
 
     <!-- ===== 采样与量化 ===== -->
     <template v-if="tab === 'samp'">
       <div class="adc-ctl">
         <span class="adc-lab">输入频率</span>
-        <input v-model.number="fin" type="range" min="1" max="30" class="adc-slider" />
+        <input
+          v-model.number="fin" type="range" min="1" max="30" class="adc-slider"
+          aria-label="输入频率" :aria-valuetext="fin + ' 赫兹'" />
         <span class="adc-val">{{ fin }}</span>
         <span class="adc-lab">采样频率</span>
-        <input v-model.number="fs" type="range" min="4" max="80" class="adc-slider" />
+        <input
+          v-model.number="fs" type="range" min="4" max="80" class="adc-slider"
+          aria-label="采样频率" :aria-valuetext="fs + ' 赫兹'" />
         <span class="adc-val">{{ fs }}</span>
         <span class="adc-lab">位数</span>
-        <input v-model.number="bits" type="range" min="2" max="8" class="adc-slider" />
+        <input
+          v-model.number="bits" type="range" min="2" max="8" class="adc-slider"
+          aria-label="量化位数" :aria-valuetext="bits + ' 位'" />
         <span class="adc-val">{{ bits }} 位</span>
       </div>
 
@@ -162,11 +190,14 @@ const filteredPts = computed(() => {
           ✓ 采样频率 {{ fs }} ≥ 2×{{ fin }}，满足采样定理，可以完整重建
         </template>
         <template v-else>
-          ⚠ 违反奈奎斯特判据！{{ fin }} Hz 的信号被 {{ fs }} Hz 采样后，会以 <b>{{ aliasF }} Hz</b> 的假信号出现（图中红色虚线）——这就是「混叠」
+          ⚠ 违反奈奎斯特判据！{{ fin }} Hz 的信号被 {{ fs }} Hz 采样后，会以 <b>{{ aliasF }} Hz</b> 的假信号出现（图中红色虚线）——这就是「混叠」（混叠频率 = |fin − round(fin/fs)·fs|，即把 fin 按 fs 周期折回低频段）
         </template>
       </div>
       <div class="adc-read">
         LSB = {{ VFS }} V / 2<sup>{{ bits }}</sup> = <b>{{ LSB.toFixed(3) }} V</b>；量化误差 ≤ ±½ LSB = ±{{ (LSB / 2).toFixed(3) }} V
+      </div>
+      <div class="adc-read dim">
+        量程模型：本组件输入为<b>双极性</b>正弦（±{{ VFS / 2 }} V），量化前先加 {{ VFS / 2 }} V 电平搬移到 0…{{ VFS }} V——0 V 输入对应中点码 {{ Math.pow(2, bits) / 2 }}，负半周完整保留。量化页的 AdcQuantDemo 用单极性 0…VFS 输入，二者对 0…VFS 区间的量化行为一致。
       </div>
     </template>
 
@@ -180,7 +211,9 @@ const filteredPts = computed(() => {
       </div>
       <div class="adc-ctl">
         <span class="adc-lab">满量程</span>
-        <input v-model.number="VFS" type="range" min="1" max="10" step="0.5" class="adc-slider" />
+        <input
+          v-model.number="VFS" type="range" min="1" max="10" step="0.5" class="adc-slider"
+          aria-label="满量程电压" :aria-valuetext="VFS + ' 伏特'" />
         <span class="adc-val">{{ VFS }} V</span>
       </div>
 
@@ -203,10 +236,14 @@ const filteredPts = computed(() => {
     <template v-else>
       <div class="adc-ctl">
         <span class="adc-lab">占空比</span>
-        <input v-model.number="duty" type="range" min="0" max="100" class="adc-slider" />
+        <input
+          v-model.number="duty" type="range" min="0" max="100" class="adc-slider"
+          aria-label="占空比" :aria-valuetext="duty + ' %'" />
         <span class="adc-val">{{ duty }} %</span>
         <span class="adc-lab">高电平</span>
-        <input v-model.number="vHigh" type="range" min="3.3" max="24" step="0.1" class="adc-slider" />
+        <input
+          v-model.number="vHigh" type="range" min="3.3" max="24" step="0.1" class="adc-slider"
+          aria-label="高电平电压" :aria-valuetext="vHigh + ' 伏特'" />
         <span class="adc-val">{{ vHigh }} V</span>
       </div>
 
@@ -233,6 +270,18 @@ const filteredPts = computed(() => {
 .adc-ctl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .adc-lab { font-size: 12.5px; font-weight: 600; color: var(--vp-c-text-2); }
 .adc-slider { width: 110px; }
+.adc-reset {
+  align-self: flex-start;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+}
+.adc-reset:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .adc-val { font-size: 12.5px; font-family: var(--vp-font-family-mono, monospace); min-width: 34px; }
 .adc-bit {
   width: 26px;

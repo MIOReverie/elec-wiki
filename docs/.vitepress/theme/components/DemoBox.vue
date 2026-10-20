@@ -17,10 +17,10 @@ defineProps<{ title?: string; hint?: string; tag?: string }>()
 .demo-box {
   margin: 26px 0;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   overflow: hidden;
   background: var(--vp-c-bg-soft);
-  box-shadow: 0 1px 3px rgb(0 0 0 / 0.06);
+  box-shadow: var(--shadow-1);
 }
 .demo-head {
   display: flex;
@@ -31,16 +31,17 @@ defineProps<{ title?: string; hint?: string; tag?: string }>()
   background: var(--vp-c-bg-alt);
 }
 .demo-tag {
-  font-size: 11px;
+  font-size: var(--text-xs);
   font-weight: 700;
   letter-spacing: 0.05em;
   padding: 2px 8px;
-  border-radius: 5px;
+  border-radius: var(--r-sm);
   color: #fff;
-  background: #2f7de1;
+  /* 原 #2f7de1 对白字仅 4.08:1，加深到 brand-3（#1d4ed8）达 6.70:1 */
+  background: var(--vp-c-brand-3);
   flex: none;
 }
-.demo-title { font-size: 13.5px; font-weight: 600; color: var(--vp-c-text-1); }
+.demo-title { font-size: var(--text-sm); font-weight: 600; color: var(--vp-c-text-1); }
 .demo-hint {
   margin: 10px 14px 0;
   font-size: 12.5px;
@@ -48,5 +49,5 @@ defineProps<{ title?: string; hint?: string; tag?: string }>()
   line-height: 1.6;
 }
 .demo-body { padding: 14px; }
-.demo-body :deep(canvas) { display: block; width: 100%; border-radius: 8px; }
+.demo-body :deep(canvas) { display: block; width: 100%; border-radius: var(--r-md); }
 </style>

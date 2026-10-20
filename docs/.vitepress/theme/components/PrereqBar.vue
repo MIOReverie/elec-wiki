@@ -28,7 +28,7 @@ const own = computed(() => Object.values(PREREQ).filter((i) => i.full === path.v
   margin: 0 0 22px;
   padding: 10px 14px;
   border: 1px dashed var(--vp-c-divider);
-  border-radius: 10px;
+  border-radius: var(--r-md);
   background: var(--vp-c-bg-soft);
   display: flex;
   flex-direction: column;

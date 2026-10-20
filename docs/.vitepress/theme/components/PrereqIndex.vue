@@ -4,7 +4,18 @@ import { withBase } from 'vitepress'
 import { PREREQ } from '../data/prereq'
 import { openPrereq } from '../composables/usePrereq'
 
-const ORDER = ['基础', '分析方法', '暂态', '交流', '三相', '磁路与电机', '电子技术']
+const ORDER = [
+  '基础',
+  '分析方法',
+  '暂态',
+  '交流',
+  '三相',
+  '磁路与电机',
+  '电子技术',
+  '数字电路',
+  '模拟电子',
+  '嵌入式'
+]
 
 const groups = computed(() => {
   const map = new Map<string, typeof PREREQ[string][]>()

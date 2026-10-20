@@ -17,17 +17,22 @@ if /i "%~1"=="build"   ( set "MODE=build" )
 type "%~dp0tools\banner.txt"
 
 rem ---- 1. locate node.exe ----
+rem 优先 PATH，其次常见安装位置（不硬编码用户名/路径）
 set "NODE_EXE="
 for /f "delims=" %%i in ('where node 2^>nul') do (
   if not defined NODE_EXE set "NODE_EXE=%%i"
 )
 if not defined NODE_EXE (
-  if exist "C:\Users\Administrator\.workbuddy\binaries\node\versions\22.22.2-6\node.exe" (
-    set "NODE_EXE=C:\Users\Administrator\.workbuddy\binaries\node\versions\22.22.2-6\node.exe"
-  )
+  if exist "%ProgramFiles%\nodejs\node.exe" set "NODE_EXE=%ProgramFiles%\nodejs\node.exe"
 )
 if not defined NODE_EXE (
-  echo [ERROR] node.exe not found. Install Node.js 18+ first.
+  if exist "%ProgramFiles(x86)%\nodejs\node.exe" set "NODE_EXE=%ProgramFiles(x86)%\nodejs\node.exe"
+)
+if not defined NODE_EXE (
+  if exist "%LocalAppData%\Programs\nodejs\node.exe" set "NODE_EXE=%LocalAppData%\Programs\nodejs\node.exe"
+)
+if not defined NODE_EXE (
+  echo [ERROR] node.exe not found. Install Node.js 20+ first.
   pause
   exit /b 1
 )

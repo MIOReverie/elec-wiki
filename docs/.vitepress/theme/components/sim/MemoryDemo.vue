@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 import Seg from '../Seg.vue'
 
 const WORDS = 8
@@ -69,12 +69,32 @@ const decoder = computed(() => {
   return a
 })
 const nonZero = computed(() => mem.value.filter((v) => v !== 0).length)
+
+// DRAM 衰减定时器：组件卸载时必须清掉，否则离开页面后仍在改 ref（并向已卸载组件发更新）
+onUnmounted(() => stopDecay())
+
+function resetAll() {
+  stopDecay()
+  mode.value = 'SRAM'
+  addr.value = 0
+  data.value = [1, 0, 1, 1]
+  mem.value = Array.from({ length: WORDS }, () => 0)
+  log.value = ['已重置：全部单元回到 0']
+  lastOp.value = '—'
+  charge.value = 100
+}
 </script>
 
 <template>
   <div class="mem">
     <div class="mem-bar">
       <Seg v-model="mode" label="类型" :options="[{ value: 'SRAM', label: 'SRAM（触发器）' }, { value: 'DRAM', label: 'DRAM（电容）' }]" @update:model-value="toggleMode" />
+      <button
+        type="button"
+        class="mem-reset"
+        aria-label="重置存储器演示：清空全部单元、地址与数据，并停止 DRAM 电荷衰减"
+        @click="resetAll"
+      >重置</button>
     </div>
 
     <div class="mem-dec">
@@ -96,13 +116,18 @@ const nonZero = computed(() => mem.value.filter((v) => v !== 0).length)
 
     <div class="mem-ctl">
       <span class="mem-lab">地址</span>
-      <input v-model.number="addr" type="range" min="0" :max="WORDS - 1" class="mem-slider" />
+      <input
+        v-model.number="addr" type="range" min="0" :max="WORDS - 1" class="mem-slider"
+        aria-label="存储单元地址 A" :aria-valuetext="'第 ' + addr + ' 号单元'" />
       <span class="mem-val">A = {{ addr }}</span>
     </div>
     <div class="mem-ctl">
       <span class="mem-lab">数据</span>
       <template v-for="(b, i) in data" :key="i">
-        <button class="mem-bit" :class="{ on: b }" @click="data[i] = b ? 0 : 1">D{{ BITS - 1 - i }} = {{ b }}</button>
+        <button
+          class="mem-bit" :class="{ on: b }" :aria-pressed="b ? 'true' : 'false'"
+          :aria-label="'数据位 D' + (BITS - 1 - i)" @click="data[i] = b ? 0 : 1"
+        >D{{ BITS - 1 - i }} = {{ b }}</button>
       </template>
     </div>
     <div class="mem-ctl">
@@ -159,6 +184,17 @@ const nonZero = computed(() => mem.value.filter((v) => v !== 0).length)
 .mem-ctl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .mem-lab { font-size: 12.5px; font-weight: 600; color: var(--vp-c-text-2); min-width: 30px; }
 .mem-slider { width: 180px; }
+.mem-reset {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+}
+.mem-reset:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .mem-val { font-family: var(--vp-font-family-mono, monospace); font-size: 12.5px; }
 .mem-bit {
   padding: 3px 9px;

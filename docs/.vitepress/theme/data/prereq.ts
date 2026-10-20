@@ -293,6 +293,120 @@ export const PREREQ: Record<string, PrereqItem> = {
     full: '/ee/08-electronics/sequential',
     fullTitle: '25 · 触发器与时序电路',
     group: '电子技术'
+  },
+
+  // ---- 数字电路 ----
+  'boolean-algebra': {
+    id: 'boolean-algebra',
+    title: '布尔代数与化简',
+    brief: '与或非三种运算、德摩根定律、吸收律与冗余项；化简的判据是项数最少、每项字面数最少。',
+    page: '/prereq/boolean-algebra',
+    full: '/digital/boolean-kmap',
+    fullTitle: '02 · 逻辑代数与卡诺图',
+    group: '数字电路'
+  },
+  kmap: {
+    id: 'kmap',
+    title: '卡诺图与最小项',
+    brief: '按格雷码排列，圈 1 的规则：圈必须含 2^k 个相邻的 1，圈数最少、字面数最少；无关项用来把圈画大。',
+    page: '/prereq/kmap',
+    full: '/digital/boolean-kmap',
+    fullTitle: '02 · 逻辑代数与卡诺图',
+    group: '数字电路'
+  },
+  'gate-fanout': {
+    id: 'gate-fanout',
+    title: '门电路扇出与驱动能力',
+    brief: '扇出 = 输出能带动的输入数，取高电平与低电平两个方向中较小者；扇出不足时用缓冲器扩展。',
+    page: '/prereq/gate-fanout',
+    full: '/digital/gates',
+    fullTitle: '03 · 门电路与集成器件',
+    group: '数字电路'
+  },
+  'setup-hold': {
+    id: 'setup-hold',
+    title: '建立时间与保持时间',
+    brief: '触发器的采样窗口：时钟沿之前数据要稳定够久（建立），沿之后还要稳够久（保持）。',
+    page: '/prereq/setup-hold',
+    full: '/digital/flip-flops',
+    fullTitle: '05 · 触发器',
+    group: '数字电路'
+  },
+
+  // ---- 模拟电子 ----
+  'pn-diode': {
+    id: 'pn-diode',
+    title: 'PN 结与二极管模型',
+    brief: '耗尽层与内电场造成单向导电；工程估算用恒压模型（硅 0.7 V），小信号用动态电阻 nV_T/I_DQ。',
+    page: '/prereq/pn-diode',
+    full: '/analog/semiconductor',
+    fullTitle: '01 · 半导体器件',
+    group: '模拟电子'
+  },
+  'bjt-regions': {
+    id: 'bjt-regions',
+    title: '三极管工作区',
+    brief: '放大区、饱和区、截止区的判据；先算需求 I_C=βI_B，再算天花板 V_CC/R_C，谁小听谁的。',
+    page: '/prereq/bjt-regions',
+    full: '/analog/semiconductor',
+    fullTitle: '01 · 半导体器件',
+    group: '模拟电子'
+  },
+  'q-point-loadline': {
+    id: 'q-point-loadline',
+    title: '静态工作点与负载线',
+    brief: 'Q 点定位置、直流与交流负载线定摆幅；最大不失真输出取两侧余量的较小值。',
+    page: '/prereq/q-point-loadline',
+    full: '/analog/amplifiers',
+    fullTitle: '02 · 基本放大电路',
+    group: '模拟电子'
+  },
+  'virtual-short': {
+    id: 'virtual-short',
+    title: '虚短与虚断',
+    brief: '运放线性区的两条近似规则：输入电流近似为零、两个输入端电位近似相等；前提是有负反馈。',
+    page: '/prereq/virtual-short',
+    full: '/analog/signal-processing',
+    fullTitle: '07 · 信号的运算和处理',
+    group: '模拟电子'
+  },
+
+  // ---- 嵌入式 ----
+  'register-map': {
+    id: 'register-map',
+    title: '寄存器映射',
+    brief: '寄存器就是占据固定地址的一小块内存；基地址加固定偏移，读-改-写或用 BSRR 原子置位。',
+    page: '/prereq/register-map',
+    full: '/embedded/embedded-c',
+    fullTitle: '03 · 嵌入式 C 与寄存器思维',
+    group: '嵌入式'
+  },
+  'nvic-priority': {
+    id: 'nvic-priority',
+    title: 'NVIC 优先级',
+    brief: '抢占优先级决定能否嵌套，子优先级只决定同时挂起时的排队顺序；数值越小优先级越高。',
+    page: '/prereq/nvic-priority',
+    full: '/embedded/interrupt',
+    fullTitle: '06 · 中断与 NVIC',
+    group: '嵌入式'
+  },
+  'dma-cache': {
+    id: 'dma-cache',
+    title: 'DMA 与缓存一致性',
+    brief: 'DMA 搬运不占 CPU；带 D-Cache 的芯片上 DMA 写内存后必须 Invalidate，否则 CPU 读到旧值。',
+    page: '/prereq/dma-cache',
+    full: '/embedded/adc-dma',
+    fullTitle: '10 · ADC 与 DMA',
+    group: '嵌入式'
+  },
+  'clock-tree': {
+    id: 'clock-tree',
+    title: '时钟树',
+    brief: 'HSI/HSE 经 PLL 倍频再分频到各总线；外设时钟默认关闭，APB 预分频不为 1 时定时器时钟自动乘二。',
+    page: '/prereq/clock-tree',
+    full: '/embedded/clock',
+    fullTitle: '04 · 时钟系统（RCC 与时钟树）',
+    group: '嵌入式'
   }
 }
 

@@ -30,6 +30,24 @@ const th = computed(() => {
   return { Uoc, Req, IL, UL: IL * Math.max(RL.value, 1e-6) }
 })
 
+function reset() {
+  E.value = 24
+  R1.value = 6
+  R2.value = 12
+  R3.value = 4
+  RL.value = 10
+  view.value = 'origin'
+}
+
+const cvLabel = computed(() => {
+  const base =
+    `E=${E.value} V，R₁=${R1.value} Ω、R₂=${R2.value} Ω、R₃=${R3.value} Ω，负载 R_L=${RL.value} Ω。` +
+    `结点法精确解：负载电流 ${exact.value.IL.toFixed(4)} A、负载电压 ${exact.value.Vb.toFixed(4)} V。` +
+    `戴维南等效：开路电压 ${th.value.Uoc.toFixed(3)} V、等效电阻 ${th.value.Req.toFixed(3)} Ω，` +
+    `负载电流 ${th.value.IL.toFixed(4)} A、负载电压 ${th.value.UL.toFixed(4)} V。`
+  return `戴维南定理演示（当前${view.value === 'origin' ? '原电路' : '等效电路'}视图）：${base}`
+})
+
 const cv = ref<HTMLCanvasElement | null>(null)
 
 useCanvas(cv, ({ ctx, w, h }) => {
@@ -120,8 +138,15 @@ useCanvas(cv, ({ ctx, w, h }) => {
       <Ctrl label="R₂" v-model="R2" :min="1" :max="40" :step="1" unit="Ω" />
       <Ctrl label="R₃" v-model="R3" :min="1" :max="40" :step="1" unit="Ω" />
       <Ctrl label="R_L" v-model="RL" :min="1" :max="40" :step="0.5" unit="Ω" />
+      <button
+        type="button"
+        class="th-reset"
+        aria-label="重置戴维南等效演示：把电源、各电阻与负载恢复到默认值"
+        @click="reset"
+      >重置</button>
     </div>
-    <canvas ref="cv" class="th-cv" />
+    <canvas ref="cv" class="th-cv" role="img" :aria-label="cvLabel" />
+    <p class="sr-only">{{ cvLabel }}</p>
     <div class="th-cmp">
       <div class="th-col">
         <span class="th-t">原电路（结点法精确解）</span>
@@ -146,6 +171,19 @@ useCanvas(cv, ({ ctx, w, h }) => {
 <style scoped>
 .th { display: flex; flex-direction: column; gap: 8px; }
 .th-ctrls { display: flex; flex-direction: column; gap: 1px; }
+.th-reset {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+}
+.th-reset:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .th-cv { width: 100%; height: 400px; border: 1px solid var(--vp-c-divider); border-radius: 10px; background: var(--vp-c-bg); }
 .th-cmp { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .th-col { display: flex; flex-direction: column; gap: 2px; font-size: 12.5px; color: var(--vp-c-text-2); flex: 1; min-width: 150px; padding: 8px 12px; border: 1px solid var(--vp-c-divider); border-radius: 9px; background: var(--vp-c-bg-soft); }

@@ -90,13 +90,19 @@ const qMark = computed(() => ({
   <div class="pa">
     <div class="pa-ctl">
       <span class="pa-lab">V_CC</span>
-      <input v-model.number="VCC" type="range" min="6" max="24" step="0.5" class="pa-slider" />
+      <input
+        v-model.number="VCC" type="range" min="6" max="24" step="0.5" class="pa-slider"
+        aria-label="电源电压 V_CC" :aria-valuetext="VCC + ' 伏特'" />
       <span class="pa-val">{{ VCC }} V</span>
       <span class="pa-lab">负载</span>
-      <input v-model.number="RL" type="range" min="4" max="16" step="0.5" class="pa-slider" />
+      <input
+        v-model.number="RL" type="range" min="4" max="16" step="0.5" class="pa-slider"
+        aria-label="负载电阻" :aria-valuetext="RL + ' 欧姆'" />
       <span class="pa-val">{{ RL }} Ω</span>
       <span class="pa-lab">输出幅度</span>
-      <input v-model.number="VOM" type="range" min="0.5" :max="VCC" step="0.5" class="pa-slider" />
+      <input
+        v-model.number="VOM" type="range" min="0.5" :max="VCC" step="0.5" class="pa-slider"
+        aria-label="输出电压幅度" :aria-valuetext="VOM + ' 伏特'" />
       <span class="pa-val">{{ VOM }} V</span>
       <span class="pa-lab">偏置</span>
       <button class="pa-btn" :class="{ on: crossover }" @click="crossover = !crossover">

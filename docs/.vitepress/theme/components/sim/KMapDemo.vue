@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import Seg from '../Seg.vue'
 
 type Preset = 'p2' | 'p3' | 'p4e' | 'p4d'
@@ -69,10 +69,36 @@ const DEFS: Record<Preset, Def> = {
 const preset = ref<Preset>('p3')
 const def = computed(() => DEFS[preset.value])
 
+// —— 键盘光标：与鼠标无关的可达路径（Tab 到格子后用方向键切换，Shift+方向键把光标并入选区）——
+const cursor = ref<Cell>({ r: 0, c: 0 })
 watch(preset, () => {
   sel.value = null
   circles.value = []
+  cursor.value = { r: 0, c: 0 }
 })
+
+function moveCursor(dr: number, dc: number, extend: boolean) {
+  const d = def.value
+  // 允许走出主网格一步：复制列 cc = −1 与 cols，用于「跨左右边界」圈选
+  const minC = -1, maxC = d.cols
+  const nr = Math.max(0, Math.min(d.rows - 1, cursor.value.r + dr))
+  const nc = Math.max(minC, Math.min(maxC, cursor.value.c + dc))
+  if (extend) {
+    if (!dragFrom.value) dragFrom.value = { r: cursor.value.r, c: wrap(0, cursor.value.c).c }
+  } else {
+    dragFrom.value = null
+  }
+  cursor.value = { r: nr, c: nc }
+  dragTo.value = { r: nr, c: nc }
+  if (extend) sel.value = collect(dragFrom.value!, dragTo.value!)
+}
+function resetAll() {
+  sel.value = null
+  circles.value = []
+  dragFrom.value = null
+  dragTo.value = null
+  cursor.value = { r: 0, c: 0 }
+}
 
 // —— 拖拽圈选（渲染坐标允许越界，越界即跨边界环绕）——
 interface Cell { r: number; c: number }
@@ -230,6 +256,41 @@ const coveredOnes = computed(() => {
 })
 const done = computed(() => circles.value.length > 0 && coveredOnes.value === totalOnes.value)
 
+const mapLabel = computed(
+  () =>
+    `${def.value.title} 卡诺图：行变量 ${def.value.rowVar}、列变量 ${def.value.colVar}，` +
+    `${def.value.rows} 行 ${def.value.cols} 列，共 ${def.value.rows * def.value.cols} 个格子。` +
+    `目标 ${def.value.answer}。已确认 ${circles.value.length} 个圈。`
+)
+
+const cellLabel = (r: number, c: number) => {
+  const w = wrap(r, c)
+  const v = def.value.grid[w.r][w.c]
+  const val = v === 1 ? '1' : v === 2 ? '无关项 d' : '0'
+  return `第 ${w.c + 1} 列 第 ${w.r + 1} 行，最小项 m${mt(w.r, w.c)}，值 ${val}`
+}
+
+function onCellKey(e: KeyboardEvent, r: number, c: number) {
+  const k = e.key
+  if (k === 'Enter') {
+    cursor.value = { r, c }
+    sel.value = [wrap(r, c)]
+    dragFrom.value = null
+    dragTo.value = null
+  } else if (k === ' ') {
+    cursor.value = { r, c }
+  } else if (k === 'ArrowUp') moveCursor(-1, 0, e.shiftKey)
+  else if (k === 'ArrowDown') moveCursor(1, 0, e.shiftKey)
+  else if (k === 'ArrowLeft') moveCursor(0, -1, e.shiftKey)
+  else if (k === 'ArrowRight') moveCursor(0, 1, e.shiftKey)
+  else return
+  e.preventDefault()
+  nextTick(() => {
+    const el = document.querySelector<SVGElement>('.km-cell.km-cursor')
+    el?.focus?.()
+  })
+}
+
 // —— 渲染几何：网格左右各画一份副本列，副本上也能直接拖（跨边界圈）；上下不设副本 ——
 const CELL = 42
 const OX = 46
@@ -300,15 +361,25 @@ function cellStroke(r: number, c: number): string {
         ]"
       />
       <span class="km-fn">{{ def.title }} · F = Σm{{ preset === 'p4d' ? '(1,3,5,7,9)+d(11,13,15)' : preset === 'p4e' ? '(0,2,4,6,8,10,12,14)' : preset === 'p3' ? '(0,1,2,5,6,7)' : '(1,2,3)' }}</span>
+      <button
+        type="button"
+        class="km-reset"
+        aria-label="重置卡诺图演示：清空所有已确认的圈并把键盘光标回到左上角"
+        @click="resetAll"
+      >重置</button>
     </div>
+    <p class="sr-only">{{ mapLabel }} 当前化简结果：F = {{ totalExpr }}；1 格覆盖 {{ coveredOnes }} / {{ totalOnes }}。</p>
 
     <div class="km-main">
       <div class="km-mapwrap">
         <svg
           class="km-svg"
           :viewBox="`0 0 ${vbW} ${vbH}`"
-          @mouseup="endDrag"
-          @mouseleave="endDrag"
+          role="application"
+          :aria-label="mapLabel"
+          @pointerup="endDrag"
+          @pointercancel="endDrag"
+          @pointerleave="endDrag"
         >
           <!-- 行标签 -->
           <text
@@ -345,8 +416,12 @@ function cellStroke(r: number, c: number): string {
               :stroke-dasharray="circleKeys.has(row.r + ',' + col.c) && !previewKeys.has(row.r + ',' + col.c) ? '4 3' : undefined"
               :opacity="col.cc < 0 || col.cc >= def.cols ? 0.38 : 1"
               class="km-cell"
-              @mousedown.prevent="startDrag(row.rr, col.cc)"
-              @mouseenter="moveDrag(row.rr, col.cc)"
+              :class="{ 'km-cursor': row.rr === cursor.r && col.cc === cursor.c }"
+              :tabindex="row.rr === cursor.r && col.cc === cursor.c ? 0 : -1"
+              :aria-label="cellLabel(row.rr, col.cc)"
+              @pointerdown.prevent="startDrag(row.rr, col.cc)"
+              @pointerenter="moveDrag(row.rr, col.cc)"
+              @keydown="onCellKey($event, row.rr, col.cc)"
             />
           </template>
           <!-- 格内文字：最小项编号 + 值 -->
@@ -427,8 +502,20 @@ function cellStroke(r: number, c: number): string {
 .km-main { display: grid; grid-template-columns: minmax(260px, 340px) 1fr; gap: 16px; align-items: start; }
 @media (max-width: 760px) { .km-main { grid-template-columns: 1fr; } }
 .km-mapwrap { min-width: 0; }
-.km-svg { width: 100%; height: auto; display: block; user-select: none; }
+.km-svg { width: 100%; height: auto; display: block; user-select: none; touch-action: none; }
 .km-cell { cursor: crosshair; }
+.km-cursor:focus, .km-cursor:focus-visible { outline: none; stroke: var(--vp-c-brand-1); stroke-width: 3; }
+.km-reset {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+}
+.km-reset:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .km-cell:hover { filter: brightness(1.12); }
 .km-hint { margin: 8px 2px 0; font-size: 12px; color: var(--vp-c-text-3); line-height: 1.65; }
 .km-panel { display: grid; gap: 10px; min-width: 0; }

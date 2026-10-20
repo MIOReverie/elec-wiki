@@ -13,7 +13,7 @@
  *   - 章节序号取标题前缀「08 · xxx」里的数字；没有序号时按字母序排在最后
  *   - 分组由下面的 SECTION_LABELS 决定（按二级目录名映射），未登记的目录自动归入「其它」
  */
-import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { execSync } from 'node:child_process'
@@ -141,20 +141,31 @@ function stripTags(s: string) {
 /** 取正文第一个有内容的段落，做 meta description */
 function extractDescription(body: string): string {
   const lines = body.split(/\r?\n/)
-  let started = false
+  let inCode = false
+  let inMath = false
   for (const raw of lines) {
     const line = raw.trim()
+    if (line.startsWith('```')) {
+      inCode = !inCode
+      continue
+    }
+    if (line.startsWith('$$')) {
+      // 单行 $$…$$ 直接跳过；多行公式翻围栏状态
+      if (!/^\$\$[\s\S]+\$\$$/.test(line)) inMath = !inMath
+      continue
+    }
+    if (inCode || inMath) continue
     if (!line || line.startsWith('#')) continue
     if (line.startsWith(':::') || line.startsWith('<') || line.startsWith('|') || line.startsWith('```')) continue
     if (line.startsWith('>')) continue
-    started = true
-    const text = stripTags(line)
-      .replace(/\$[^$]*\$/g, '')
-      .replace(/\s+/g, ' ')
-      .trim()
+    // 跳过列表行（- * + 或有序）与表格行：都不是一句完整的话
+    if (/^\s*([-*+]|\d+[.、])\s/.test(raw)) continue
+    if (line.startsWith('|')) continue
+    const stripped = stripTags(line).replace(/\s+/g, ' ').trim()
+    const text = stripped.replace(/\$[^$]*\$/g, '').replace(/\s+/g, ' ').trim()
     if (text.length >= 12) return text.slice(0, 110)
   }
-  return started ? '' : ''
+  return ''
 }
 
 function walk(dir: string, out: string[] = []): string[] {
@@ -170,12 +181,49 @@ function walk(dir: string, out: string[] = []): string[] {
 /** 不是章节的工具页（在侧边栏里单独挂，不进课程路线图与统计） */
 const TOOL_PAGES = new Set(['ee/graph', 'ee/depth', 'shared/cheatsheet'])
 
+/** 前置知识卡片页的目录前缀：这些页面不是章节，不进侧边栏与路线图 */
+const PREREQ_DIRS = ['ee/prereq/', 'prereq/']
+
+/** 判断一个 slug 是不是前置知识卡片页 */
+function isPrereqSlug(slug: string): boolean {
+  return PREREQ_DIRS.some((d) => slug.startsWith(d))
+}
+
+/** 前置知识卡片页（ee/prereq/* 与 prereq/*）的 description：不进章节列表，单独给 meta 数据源用 */
+const PREREQ_DESCRIPTIONS: Record<string, string> = {}
+
+/** 全部可直达页面的路由 → 一句话摘要（含前置知识卡片），config.mts 用它补 meta description */
+export function allDescriptions(): Record<string, string> {
+  const map: Record<string, string> = {}
+  for (const c of allChapters()) if (c.description) map[c.route] = c.description
+  collectTopLevelPrereqDescriptions()
+  Object.assign(map, PREREQ_DESCRIPTIONS)
+  return map
+}
+
+/**
+ * 顶层 docs/prereq/ 目录的前置知识卡片：它们不属于任何一门课，
+ * 因此不会被上面的课程扫描碰到，这里单独扫一遍，只取 description。
+ */
+function collectTopLevelPrereqDescriptions() {
+  const dir = join(DOCS, 'prereq')
+  if (!existsSync(dir)) return
+  for (const file of walk(dir)) {
+    const src = readFileSync(file, 'utf8')
+    const slug = relative(DOCS, file).replace(/\\/g, '/').replace(/\.md$/, '')
+    if (!isPrereqSlug(slug)) continue
+    const fm = parseFrontmatter(src)
+    const body = src.replace(/^---[\s\S]*?---\r?\n/, '')
+    const desc = (fm.description || '').trim() || extractDescription(body)
+    if (desc) PREREQ_DESCRIPTIONS['/' + slug] = desc
+  }
+}
+
 function chapterFrom(file: string): Chapter | null {
   const src = readFileSync(file, 'utf8')
   const fm = parseFrontmatter(src)
   const slug = relative(DOCS, file).replace(/\\/g, '/').replace(/\.md$/, '')
   if (slug.endsWith('/index')) return null
-  if (slug.startsWith('ee/prereq/')) return null // 前置知识卡片只在抽屉里出现
   if (TOOL_PAGES.has(slug)) return null
   if (fm.chapter === 'false') return null
   if (fm.layout === 'home' || fm.layout === 'page') return null
@@ -189,6 +237,7 @@ function chapterFrom(file: string): Chapter | null {
   const timeAttr = (metaAttrs.match(/time="([^"]*)"/) || [])[1] || ''
   const minutes = /^\d+/.test(timeAttr) ? parseInt(timeAttr, 10) : null
   const level = (metaAttrs.match(/level="([^"]*)"/) || [])[1] || '—'
+  const note = (metaAttrs.match(/note="([^"]*)"/) || [])[1] || ''
   const text = stripTags(body)
   const plain = text.replace(/\s+/g, '')
 
@@ -210,7 +259,8 @@ function chapterFrom(file: string): Chapter | null {
       engineering: /^##\s*工程实例/m.test(body),
       selfCheck: /自检|自查/.test(body)
     },
-    description: extractDescription(body)
+    // 页头 note 本来就是作者写的一句话摘要，优先用它；没有再退回正文首段
+    description: note.trim() || extractDescription(body)
   }
 }
 
@@ -225,10 +275,15 @@ function buildCourse(meta: (typeof COURSE_META)[number]): Course {
   const indexFile = files.find((f) => f.replace(/\\/g, '/').endsWith(`${meta.slug}/index.md`))
   const indexSrc = indexFile ? readFileSync(indexFile, 'utf8') : ''
   const indexFm = parseFrontmatter(indexSrc)
-  const chapters = files
-    .map(chapterFrom)
-    .filter((c): c is Chapter => Boolean(c))
-    .sort(sortChapters)
+  const parsed = files.map(chapterFrom).filter((c): c is Chapter => Boolean(c))
+  // 前置知识卡片不进侧边栏与路线图，但仍是可直达页面：
+  // 它们的 description 单独收集，供 meta description 数据源使用
+  for (const c of parsed) {
+    if (isPrereqSlug(c.slug)) {
+      PREREQ_DESCRIPTIONS[c.route] = c.description
+    }
+  }
+  const chapters = parsed.filter((c) => !isPrereqSlug(c.slug)).sort(sortChapters)
 
   const sectionPlan = SECTION_LABELS[meta.slug] || [{ title: meta.name, dirs: ['.'] }]
   const used = new Set<string>()

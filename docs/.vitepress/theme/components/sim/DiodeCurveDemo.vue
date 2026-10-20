@@ -124,10 +124,14 @@ const bjtRegion = computed(() => {
     <template v-if="tab === 'diode'">
       <div class="cur-ctl">
         <span class="cur-lab">电源 V</span>
-        <input v-model.number="Vsrc" type="range" min="1" max="10" step="0.5" class="cur-slider" />
+        <input
+          v-model.number="Vsrc" type="range" min="1" max="10" step="0.5" class="cur-slider"
+          aria-label="电源电压 V" :aria-valuetext="Vsrc + ' 伏特'" />
         <span class="cur-val">{{ Vsrc }} V</span>
         <span class="cur-lab">电阻 R</span>
-        <input v-model.number="R" type="range" min="100" max="3000" step="100" class="cur-slider" />
+        <input
+          v-model.number="R" type="range" min="100" max="3000" step="100" class="cur-slider"
+          aria-label="电阻 R" :aria-valuetext="R + ' 欧姆'" />
         <span class="cur-val">{{ R }} Ω</span>
       </div>
       <svg viewBox="0 0 460 200" class="cur-svg">
@@ -160,13 +164,19 @@ const bjtRegion = computed(() => {
     <template v-else-if="tab === 'zener'">
       <div class="cur-ctl">
         <span class="cur-lab">输入电压</span>
-        <input v-model.number="Vs" type="range" min="8" max="20" step="0.5" class="cur-slider" />
+        <input
+          v-model.number="Vs" type="range" min="8" max="20" step="0.5" class="cur-slider"
+          aria-label="稳压管输入电压" :aria-valuetext="Vs + ' 伏特'" />
         <span class="cur-val">{{ Vs }} V</span>
         <span class="cur-lab">稳压值</span>
-        <input v-model.number="Vz" type="range" min="3" max="9" step="0.5" class="cur-slider" />
+        <input
+          v-model.number="Vz" type="range" min="3" max="9" step="0.5" class="cur-slider"
+          aria-label="稳压值 Vz" :aria-valuetext="Vz + ' 伏特'" />
         <span class="cur-val">{{ Vz }} V</span>
         <span class="cur-lab">限流电阻</span>
-        <input v-model.number="Rz" type="range" min="100" max="1000" step="20" class="cur-slider" />
+        <input
+          v-model.number="Rz" type="range" min="100" max="1000" step="20" class="cur-slider"
+          aria-label="限流电阻 Rz" :aria-valuetext="Rz + ' 欧姆'" />
         <span class="cur-val">{{ Rz }} Ω</span>
       </div>
       <svg viewBox="0 0 460 200" class="cur-svg">
@@ -199,16 +209,24 @@ const bjtRegion = computed(() => {
     <template v-else>
       <div class="cur-ctl">
         <span class="cur-lab">β</span>
-        <input v-model.number="beta" type="range" min="20" max="200" step="10" class="cur-slider" />
+        <input
+          v-model.number="beta" type="range" min="20" max="200" step="10" class="cur-slider"
+          aria-label="电流放大系数 β" :aria-valuetext="'β = ' + beta" />
         <span class="cur-val">{{ beta }}</span>
         <span class="cur-lab">V_CC</span>
-        <input v-model.number="VCC" type="range" min="6" max="20" class="cur-slider" />
+        <input
+          v-model.number="VCC" type="range" min="6" max="20" class="cur-slider"
+          aria-label="集电极电源电压 V_CC" :aria-valuetext="VCC + ' 伏特'" />
         <span class="cur-val">{{ VCC }} V</span>
         <span class="cur-lab">R_C</span>
-        <input v-model.number="Rc" type="range" min="500" max="5000" step="100" class="cur-slider" />
+        <input
+          v-model.number="Rc" type="range" min="500" max="5000" step="100" class="cur-slider"
+          aria-label="集电极电阻 R_C" :aria-valuetext="Rc + ' 欧姆'" />
         <span class="cur-val">{{ Rc }} Ω</span>
         <span class="cur-lab">I_BQ</span>
-        <input v-model.number="IBQ" type="range" min="0" max="80" step="5" class="cur-slider" />
+        <input
+          v-model.number="IBQ" type="range" min="0" max="80" step="5" class="cur-slider"
+          aria-label="静态基极电流 I_BQ" :aria-valuetext="IBQ + ' 微安'" />
         <span class="cur-val">{{ IBQ }} μA</span>
       </div>
       <svg viewBox="0 0 460 200" class="cur-svg">

@@ -58,6 +58,11 @@ const wave = computed(() => {
   return { ptsUCE: ptsUCE.join(' '), ptsUI: ptsUI.join(' '), ptsUO: ptsUO.join(' '), clippedSat, clippedCut }
 })
 
+function reset() {
+  Rb2.value = 10e3
+  beta.value = 60
+  viAmp.value = 0.02
+}
 const clipText = computed(() => {
   const w = wave.value
   const drive = Math.abs(Au.value * viAmp.value)
@@ -67,23 +72,42 @@ const clipText = computed(() => {
   return '波形完整无失真'
 })
 const clipOK = computed(() => !wave.value.clippedSat && !wave.value.clippedCut)
+
+const svgLabel = computed(
+  () =>
+    `共射放大器波形：VCC=${VCC} V、Rb1=${Rb1 / 1000} kΩ、Rc=${Rc / 1000} kΩ、Re=${Re / 1000} kΩ、RL=${RL / 1000} kΩ。` +
+    `工作点 V_CEQ=${VCEQ.value.toFixed(2)} V、I_CQ=${(ICQ.value * 1000).toFixed(2)} mA；` +
+    `电压放大倍数 ${Au.value.toFixed(1)}。${clipText.value}。`
+)
 </script>
 
 <template>
   <div class="amp">
     <div class="amp-ctl">
       <span class="amp-lab">Rb₂（偏置）</span>
-      <input v-model.number="Rb2" type="range" min="2000" max="60000" step="1000" class="amp-slider" />
+      <input
+        v-model.number="Rb2" type="range" min="2000" max="60000" step="1000" class="amp-slider"
+        aria-label="偏置电阻 Rb₂" :aria-valuetext="(Rb2 / 1000).toFixed(0) + ' 千欧'" />
       <span class="amp-val">{{ (Rb2 / 1000).toFixed(0) }} kΩ</span>
       <span class="amp-lab">β</span>
-      <input v-model.number="beta" type="range" min="20" max="200" step="10" class="amp-slider" />
+      <input
+        v-model.number="beta" type="range" min="20" max="200" step="10" class="amp-slider"
+        aria-label="电流放大系数 β" :aria-valuetext="'β = ' + beta" />
       <span class="amp-val">{{ beta }}</span>
       <span class="amp-lab">输入幅度</span>
-      <input v-model.number="viAmp" type="range" min="0" max="0.06" step="0.005" class="amp-slider" />
+      <input
+        v-model.number="viAmp" type="range" min="0" max="0.06" step="0.005" class="amp-slider"
+        aria-label="输入信号幅度" :aria-valuetext="(viAmp * 1000).toFixed(0) + ' 毫伏（峰值）'" />
       <span class="amp-val">{{ (viAmp * 1000).toFixed(0) }} mV</span>
+      <button
+        type="button"
+        class="amp-reset"
+        aria-label="重置共射放大器演示：把偏置电阻、电流放大系数与输入幅度恢复到默认值"
+        @click="reset"
+      >重置</button>
     </div>
 
-    <svg viewBox="0 0 460 200" class="amp-svg">
+    <svg viewBox="0 0 460 200" class="amp-svg" role="img" :aria-label="svgLabel">
       <!-- 电源轨 -->
       <line x1="40" y1="20" x2="440" y2="20" stroke="var(--vp-c-divider)" stroke-dasharray="4 3" />
       <text x="42" y="16" font-size="10" fill="var(--vp-c-text-3)">VCC = {{ VCC }} V（截止边界）</text>
@@ -98,6 +122,7 @@ const clipOK = computed(() => !wave.value.clippedSat && !wave.value.clippedCut)
       <polyline :points="wave.ptsUO" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 2" />
       <text x="42" y="192" font-size="10" fill="var(--vp-c-text-3)">蓝粗线 = u_CE（交直流叠加）　灰细线 = u_o（纯交流）　横轴 = 时间</text>
     </svg>
+    <p class="sr-only">{{ svgLabel }}</p>
 
     <div class="amp-read" :class="{ warn: !clipOK }">
       <b>{{ clipText }}</b>　Q 点：I_CQ = {{ (ICQ * 1000).toFixed(2) }} mA、V_CEQ = {{ VCEQ.toFixed(2) }} V、I_BQ = {{ ((ICQ / beta) * 1e6).toFixed(1) }} μA
@@ -119,6 +144,17 @@ const clipOK = computed(() => !wave.value.clippedSat && !wave.value.clippedCut)
 .amp-ctl { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
 .amp-lab { font-size: 12.5px; font-weight: 600; color: var(--vp-c-text-2); }
 .amp-slider { width: 100px; }
+.amp-reset {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+}
+.amp-reset:hover { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }
 .amp-val { font-size: 12.5px; font-family: var(--vp-font-family-mono, monospace); min-width: 44px; }
 .amp-svg { width: 100%; height: auto; background: var(--vp-c-bg-alt); border-radius: 8px; }
 .amp-read {

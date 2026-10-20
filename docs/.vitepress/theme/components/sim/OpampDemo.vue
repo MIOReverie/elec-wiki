@@ -22,8 +22,14 @@ const uic = computed(() => (ui1.value + ui2.value) / 2000)   // V
 
 const Ad = computed(() => (outMode.value === 'diff' ? -BETA * RC / rbe.value : -BETA * RC / (2 * rbe.value)))
 const ReEff = computed(() => (tailMode.value === 're' ? reK.value * 1e3 : RO))
-const Ac = computed(() => (outMode.value === 'diff' ? 0 : -RC / (2 * ReEff.value)))
-const cmrr = computed(() => (Ac.value === 0 ? Infinity : Math.abs(Ad.value / Ac.value)))
+// 理想值：双端输出共模增益为 0（完全对称），CMRR = ∞；
+// 实际值：按与正文 docs/analog/opamp.md 例 1 一致的单端模型估算
+//   Ac = −RC/(2·ReEff)，Ad(单端) = −βRC/(2·rbe) → CMRR = 3418 ≈ 71 dB（恒流源）/ 约 51 dB（Re=10kΩ）
+const AcIdeal = computed(() => (outMode.value === 'diff' ? 0 : -RC / (2 * ReEff.value)))
+const Ac = AcIdeal
+const cmrrIdeal = computed(() => (AcIdeal.value === 0 ? Infinity : Math.abs(Ad.value / AcIdeal.value)))
+const AdSingle = -BETA * RC / (2 * rbe.value)
+const cmrrReal = computed(() => Math.abs(AdSingle / AcIdeal.value))
 
 const uoDiff = computed(() => Ad.value * uid.value)
 const uoCm = computed(() => Ac.value * uic.value)
@@ -35,7 +41,7 @@ const uidPct = computed(() => Math.max(-100, Math.min(100, (uid.value / 0.04) * 
 const uicPct = computed(() => Math.max(-100, Math.min(100, (uic.value / 0.02) * 100)))
 const uoPct = computed(() => Math.max(-100, Math.min(100, (uo.value / VRAIL) * 100)))
 
-const cmrrText = computed(() => (cmrr.value === Infinity ? '∞（理想对称）' : `${cmrr.value.toFixed(0)}（${(20 * Math.log10(cmrr.value)).toFixed(1)} dB）`))
+const cmrrText = computed(() => `${cmrrReal.value.toFixed(0)}（${(20 * Math.log10(cmrrReal.value)).toFixed(1)} dB）`)
 
 const scen = computed(() => {
   if (Math.abs(uid.value) > 0.0015 && Math.abs(uic.value) < 0.001) return { label: '纯差模', desc: '两输入等值反向——只有有用信号，共模分量为零' }
@@ -99,12 +105,16 @@ function setScene(a: number, b: number) {
         <div class="df-row">
           <label class="df-sl">
             <span>ui1</span>
-            <input type="range" min="-20" max="20" step="1" v-model.number="ui1" />
+            <input
+              type="range" min="-20" max="20" step="1" v-model.number="ui1"
+              aria-label="第一输入端电压 ui1" :aria-valuetext="(ui1 > 0 ? '+' : '') + ui1 + ' 毫伏'" />
             <b>{{ ui1 > 0 ? '+' : '' }}{{ ui1 }} mV</b>
           </label>
           <label class="df-sl">
             <span>ui2</span>
-            <input type="range" min="-20" max="20" step="1" v-model.number="ui2" />
+            <input
+              type="range" min="-20" max="20" step="1" v-model.number="ui2"
+              aria-label="第二输入端电压 ui2" :aria-valuetext="(ui2 > 0 ? '+' : '') + ui2 + ' 毫伏'" />
             <b>{{ ui2 > 0 ? '+' : '' }}{{ ui2 }} mV</b>
           </label>
         </div>
@@ -120,7 +130,9 @@ function setScene(a: number, b: number) {
         </div>
         <label v-if="tailMode === 're'" class="df-sl">
           <span>Re</span>
-          <input type="range" min="2" max="50" step="2" v-model.number="reK" />
+          <input
+            type="range" min="2" max="50" step="2" v-model.number="reK"
+            aria-label="长尾电阻 Re" :aria-valuetext="reK + ' 千欧'" />
           <b>{{ reK }} kΩ</b>
         </label>
       </div>
@@ -136,9 +148,10 @@ function setScene(a: number, b: number) {
       </div>
       <div class="df-res">
         <div class="df-kv"><span>差模增益 Ad</span><b>{{ Ad.toFixed(1) }}</b></div>
-        <div class="df-kv"><span>共模增益 Ac</span><b>{{ Ac === 0 ? '0（理想）' : Ac.toFixed(3) }}</b></div>
-        <div class="df-kv"><span>共模抑制比 CMRR</span><b>{{ cmrrText }}</b></div>
-        <div class="df-kv big" :class="{ over: saturated }"><span>输出电压 uo = Ad·uid + Ac·uic</span><b>{{ uo.toFixed(3) }} V{{ saturated ? '（超线性区）' : '' }}</b></div>
+        <div class="df-kv"><span>共模增益 Ac（理想）</span><b>{{ AcIdeal === 0 ? '0（完全对称）' : AcIdeal.toFixed(3) }}</b></div>
+        <div class="df-kv"><span>共模增益 Ac（实际）</span><b>{{ AcIdeal.toFixed(3) }}</b></div>
+        <div class="df-kv"><span>CMRR（理想 / 实际）</span><b>{{ cmrrIdeal === Infinity ? '∞' : cmrrIdeal.toFixed(0) }} / {{ cmrrText }}</b></div>
+        <div class="df-kv"><span>输出电压 uo = Ad·uid + Ac·uic</span><b>{{ uo.toFixed(3) }} V{{ saturated ? '（超线性区）' : '' }}</b></div>
         <div class="df-bar tall"><div class="df-fill out" :style="{ width: Math.abs(uoPct) / 2 + '%', left: uoPct >= 0 ? '50%' : (50 + uoPct / 2) + '%' }" /></div>
       </div>
     </div>
@@ -147,7 +160,7 @@ function setScene(a: number, b: number) {
       <b>当前输入：{{ scen.label }}</b>——{{ scen.desc }}。
       任意一对输入都可以拆成「差模 + 共模」：差分放大只放大前者，后者被尾电流源的负反馈死死摁住
       （换成恒流源，等效 Re 从 {{ tailMode === 're' ? reK + ' kΩ' : '100 kΩ' }} 变成无穷大，CMRR 再抬一个量级）。
-      双端输出下共模增益理想为 0——这就是仪表放大器敢在工业现场用的本钱。
+      双端输出下理想共模增益为 0（CMRR = ∞），但真实器件两臂电阻、β 失配，实际 CMRR 仍按单端共模模型估算——教材例题给出的 71 dB（恒流源）/ 51 dB（Re=10 kΩ）就是这个值。这就是仪表放大器敢在工业现场用的本钱。
     </p>
   </div>
 </template>

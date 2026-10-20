@@ -1,6 +1,8 @@
 import { defineConfig } from 'vitepress'
 import markdownKatex from './theme/lib/markdown-katex'
-import { COURSE_META, allChapters, courseSidebar, getCourses } from './data/catalog'
+import { COURSE_META, allDescriptions, courseSidebar, getCourses } from './data/catalog'
+import { readFile, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
 
 // 部署到子路径时（如 GitHub Pages 项目页）：DOCS_BASE=/仓库名/ npm run build
 const BASE = process.env.DOCS_BASE || '/'
@@ -18,6 +20,9 @@ const withBasePath = (path: string) =>
 const SITE_NAME = '速通 Wiki'
 const SITE_DESC =
   '电工学、数字电路、模拟电子与嵌入式开发的学习 Wiki：结论先行、可交互演示、每页标注难度与耗时。'
+// og:image 宽高（docs/public/og.png）
+const OG_IMAGE_W = 1200
+const OG_IMAGE_H = 630
 
 // 中文检索友好：把连续汉字切成 2-gram，避免整句变成一个 token
 const zhTokenize = (text: string) => {
@@ -36,10 +41,9 @@ const zhTokenize = (text: string) => {
   return out
 }
 
-/** 路由 → 一句话摘要，用于生成 meta description / og:description */
+/** 路由 → 一句话摘要，用于生成 meta description / og:description（含前置知识卡片页） */
 const DESCRIPTIONS: Record<string, string> = (() => {
-  const map: Record<string, string> = {}
-  for (const c of allChapters()) if (c.description) map[c.route] = c.description
+  const map = allDescriptions()
   for (const course of getCourses()) {
     if (course.summary) map[course.route] = course.summary
   }
@@ -61,7 +65,9 @@ const GUIDE_SIDEBAR = [
       { text: '内容状态与成熟度', link: '/guide/status' },
       { text: '全部页面', link: '/guide/pages' },
       { text: '术语与前置知识索引', link: '/guide/glossary' },
-      { text: '写作与贡献指南', link: '/guide/contributing' }
+      { text: '写作与贡献指南', link: '/guide/contributing' },
+      { text: '更新日志', link: '/guide/changelog' },
+      { text: '隐私与免责', link: '/guide/privacy' }
     ]
   },
   {
@@ -82,6 +88,8 @@ export default defineConfig({
   base: BASE,
   lang: 'zh-CN',
   title: SITE_NAME,
+  // VitePress 的占位符是 :title（不是 %s），渲染为「页面标题 · 速通 Wiki」
+  titleTemplate: ':title · 速通 Wiki',
   description: SITE_DESC,
   cleanUrls: true,
   // 死链直接让构建失败：wiki 的第一条底线是「点得到」
@@ -118,8 +126,49 @@ export default defineConfig({
       md.use(markdownKatex, {})
     }
   },
+  // 首页没有 frontmatter title，pageData.title 会回退成站名，
+  // 拼上 titleTemplate 就成了「速通 Wiki · 速通 Wiki」；首页单独关掉模板
+  transformPageData(pageData) {
+    if (pageData.relativePath === 'index.md') pageData.titleTemplate = false
+  },
+  transformHtml(html: string, id: string) {
+    let out = html
+    // VitePress 会对默认主题硬插入 inter-roman-latin 的 <link rel=preload>（chunk-D3CUZ4fa.js:49604）。
+    // 本站中文正文由 PingFang / 微软雅黑兜底，Inter 只服务拉丁字形，SSR 首屏不需要抢带宽；
+    // 这里去掉该 preload，浏览器仍会在 CSS 解析到 @font-face 命中 latin 字形时才按需下载。
+    out = out.replace(
+      /<link\s+[^>]*rel="preload"[^>]*inter-roman-latin[^>]*>/g,
+      ''
+    )
+    // 404 的客户端壳在禁用 JS 时是空白页：在 #app 容器内塞一份静态兜底，
+    // Vue 挂载时会清空容器，不会产生 hydration 冲突；纯静态，无额外资源。
+    if (/404\.html$/.test(id)) {
+      out = out.replace(
+        /<div id="app">/,
+        `<div id="app"><div class="static-404">
+      <style>
+        .static-404{max-width:640px;margin:12vh auto;padding:0 24px;text-align:center;
+          font-family:PingFang SC,Microsoft YaHei,system-ui,sans-serif;line-height:1.8;color:#1f2937}
+        .static-404 h1{font-size:1.8rem;margin:0 0 12px}
+        .static-404 p{margin:6px 0;color:#4b5563}
+        .static-404 a{color:#3451b2}
+        @media (prefers-color-scheme:dark){.static-404{color:#e5e7eb}.static-404 p{color:#9ca3af}.static-404 a{color:#93b4ff}}
+      </style>
+      <h1>页面不存在</h1>
+      <p>你访问的这个地址在本站没有对应内容——它可能被移动、重命名，或从未存在。</p>
+      <p><a href="${BASE}">返回站点首页</a>，从目录重新找一次。</p>
+      <p>浏览器启用了 JavaScript 时还可以按 <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>K</kbd> 搜索站内内容。</p>
+    </div><noscript><div class="static-404"><h1>页面不存在</h1><p>当前未启用 JavaScript，无法使用站内搜索。</p><p><a href="${BASE}">返回站点首页</a></p></div></noscript>`
+      )
+    }
+    return out
+  },
   transformHead({ pageData }) {
+    // 404 页不进索引：默认主题用同一份数据渲染，这里显式声明 noindex
+    if ((pageData as any).isNotFound) return [['meta', { name: 'robots', content: 'noindex' }]]
+
     const isIndex = /(^|\/)index\.md$/.test(pageData.relativePath)
+    const isHome = pageData.relativePath === 'index.md'
     const slug = pageData.relativePath
       .replace(/\.md$/, '')
       .replace(/\/index$/, '')
@@ -127,17 +176,105 @@ export default defineConfig({
     const route = slug ? `/${slug}${isIndex ? '/' : ''}` : '/'
     const desc = pageData.description || DESCRIPTIONS[route] || SITE_DESC
     const title = pageData.frontmatter.title || pageData.title || SITE_NAME
-    const tags: any[] = [
-      ['meta', { property: 'og:title', content: title === SITE_NAME ? SITE_NAME : `${title} · ${SITE_NAME}` }],
-      ['meta', { property: 'og:description', content: desc }]
-    ]
+    const ogTitle = title === SITE_NAME ? SITE_NAME : `${title} · ${SITE_NAME}`
     // SITE_ROOT 已经包含子路径（https://user.github.io/repo/）
     const canonical = route === '/' ? SITE_ROOT : `${SITE_ROOT}${route.slice(1)}`
+    // og:image 用绝对地址：分享卡片抓取器不接受相对路径
+    const ogImage = SITE_ROOT ? `${SITE_ROOT}og.png` : `${BASE}og.png`
+    const lastUpdated = pageData.lastUpdated ? new Date(pageData.lastUpdated).toISOString() : ''
+
+    const tags: any[] = [
+      ['meta', { property: 'og:title', content: ogTitle }],
+      ['meta', { property: 'og:description', content: desc }],
+      ['meta', { property: 'og:locale', content: 'zh_CN' }],
+      // 与静态 head 里的 og:type:website 同名去重，正文页覆盖为 article
+      ['meta', { property: 'og:type', content: isHome ? 'website' : 'article' }],
+      ['meta', { property: 'og:image', content: ogImage }],
+      ['meta', { property: 'og:image:width', content: String(OG_IMAGE_W) }],
+      ['meta', { property: 'og:image:height', content: String(OG_IMAGE_H) }],
+      ['meta', { property: 'og:image:alt', content: `${SITE_NAME} 分享卡片` }],
+      ['meta', { name: 'twitter:title', content: ogTitle }],
+      ['meta', { name: 'twitter:description', content: desc }],
+      ['meta', { name: 'twitter:image', content: ogImage }]
+    ]
+    // 正文页大多没写 frontmatter description，用目录扫描出的首段摘要补一条 meta description
+    if (!pageData.description) tags.push(['meta', { name: 'description', content: desc }])
     if (SITE_ROOT) {
       tags.push(['link', { rel: 'canonical', href: canonical }])
       tags.push(['meta', { property: 'og:url', content: canonical }])
     }
+    if (lastUpdated && !isHome) {
+      tags.push(['meta', { property: 'article:modified_time', content: lastUpdated }])
+    }
+
+    // 结构化数据：首页 WebSite，其余页 TechArticle + 面包屑
+    if (isHome) {
+      const website: Record<string, unknown> = {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: SITE_NAME,
+        description: SITE_DESC,
+        inLanguage: 'zh-CN'
+      }
+      if (SITE_ROOT) website.url = SITE_ROOT
+      tags.push(['script', { type: 'application/ld+json' }, JSON.stringify(website)])
+    } else {
+      const article: Record<string, unknown> = {
+        '@context': 'https://schema.org',
+        '@type': 'TechArticle',
+        headline: ogTitle,
+        description: desc,
+        inLanguage: 'zh-CN',
+        image: ogImage
+      }
+      if (SITE_ROOT) article.url = canonical
+      if (lastUpdated) article.dateModified = lastUpdated
+      tags.push(['script', { type: 'application/ld+json' }, JSON.stringify(article)])
+
+      // 面包屑：首页 > 课程（及中间有名字的层级）> 本页
+      const crumbs: { '@type': string; name: string; url?: string }[] = [
+        { '@type': 'ListItem', name: '首页' }
+      ]
+      if (SITE_ROOT) crumbs[0].url = SITE_ROOT
+      const segs = route.split('/').filter(Boolean)
+      segs.forEach((seg, i) => {
+        const last = i === segs.length - 1
+        const course = COURSE_META.find((m) => m.slug === seg)
+        if (!last && !course) return // 无名字的中间目录（如 01-basics）跳过
+        const item: { '@type': string; name: string; url?: string } = {
+          '@type': 'ListItem',
+          name: last ? title : (course?.name ?? seg)
+        }
+        if (SITE_ROOT) item.url = `${SITE_ROOT}${segs.slice(0, i + 1).join('/')}/`
+        crumbs.push(item)
+      })
+      const breadcrumb = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: crumbs.map((c, i) => ({ ...c, position: i + 1 }))
+      }
+      tags.push(['script', { type: 'application/ld+json' }, JSON.stringify(breadcrumb)])
+    }
     return tags
+  },
+  async buildEnd({ outDir }) {
+    // public/robots.txt 是静态拷贝，Sitemap 行只有在知道正式地址时才有意义：
+    // 构建产物里改写（保留原规则），不设置 SITE_URL 时保持原样
+    if (!SITE_ROOT) return
+    const file = join(outDir, 'robots.txt')
+    let content: string
+    try {
+      content = await readFile(file, 'utf8')
+    } catch {
+      return
+    }
+    const sitemapLine = `Sitemap: ${SITE_ROOT}sitemap.xml`
+    const lines = content.split(/\r?\n/).filter((l) => !/^Sitemap:/i.test(l.trim()))
+    while (lines.length && lines[lines.length - 1] === '') lines.pop()
+    if (lines.join('\n') !== sitemapLine && !lines.includes(sitemapLine)) {
+      lines.push('', sitemapLine)
+    }
+    await writeFile(file, lines.join('\n').replace(/\n*$/, '\n'), 'utf8')
   },
   themeConfig: {
     // 不要自己拼 base：主题会对 logo.src 再做一次 withBase
@@ -222,7 +359,7 @@ export default defineConfig({
       linkText: '回到首页'
     },
 
-    socialLinks: [{ icon: 'github', link: 'https://github.com/kongjianguan' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/MIOREverie' }],
 
     footer: {
       message: '内容基于秦曾煌《电工学》等教材整理，仅供个人学习使用',

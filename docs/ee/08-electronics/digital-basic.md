@@ -4,7 +4,7 @@ title: 23 · 数字电路基础
 
 # 23 · 数字电路基础
 
-> 📎 **教材下册速览**：本章是《电工学》下册第 23 章的压缩版，用来先建立框架。同一主题在[数字电路课](../../digital/index.md)有完整版（推导更长、演示更多）：[01 数制与编码](../../digital/number-systems.md)、[02 逻辑代数与卡诺图](../../digital/boolean-kmap.md)、[03 门电路](../../digital/gates.md)。
+> 📎 **教材下册速览**：本章是《电工学》下册[第 23 章 · 数字电路基础](../../digital/number-systems.md)等三章的压缩版，用来先建立框架。同一主题在[数字电路课](../../digital/index.md)有完整版（推导更长、演示更多）：[01 数制与编码](../../digital/number-systems.md)、[02 逻辑代数与卡诺图](../../digital/boolean-kmap.md)、[03 门电路](../../digital/gates.md)。
 
 <Meta time="20 min" level="了解" note="数制转换 + 布尔代数 + 门电路，三步走" />
 
