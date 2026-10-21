@@ -1,6 +1,6 @@
 ---
 title: 更新日志
-description: 速通 Wiki 的阶段性改动记录：站点结构、正确性修复与内容更新，由仓库 CHANGELOG 整理而来。
+description: 电学手记的阶段性改动记录：站点结构、正确性修复与内容更新，由仓库 CHANGELOG 整理而来。
 outline: [2]
 ---
 

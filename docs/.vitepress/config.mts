@@ -17,7 +17,7 @@ const HOSTNAME = SITE_ROOT.replace(/\/$/, '')
 const withBasePath = (path: string) =>
   `${BASE.replace(/\/$/, '')}/${path.replace(/^\//, '')}`
 
-const SITE_NAME = '速通 Wiki'
+const SITE_NAME = '电学手记'
 const SITE_DESC =
   '电工学、数字电路、模拟电子与嵌入式开发的学习 Wiki：结论先行、可交互演示、每页标注难度与耗时。'
 // og:image 宽高（docs/public/og.png）
@@ -56,6 +56,7 @@ const GUIDE_SIDEBAR = [
     items: [
       { text: '这个站是什么', link: '/guide/' },
       { text: '怎么用（新读者从这里开始）', link: '/guide/start' },
+      { text: 'B 站网课推荐', link: '/guide/courses' },
       { text: '关于与版权', link: '/guide/about' }
     ]
   },
@@ -88,8 +89,8 @@ export default defineConfig({
   base: BASE,
   lang: 'zh-CN',
   title: SITE_NAME,
-  // VitePress 的占位符是 :title（不是 %s），渲染为「页面标题 · 速通 Wiki」
-  titleTemplate: ':title · 速通 Wiki',
+  // VitePress 的占位符是 :title（不是 %s），渲染为「页面标题 · 电学手记」
+  titleTemplate: ':title · 电学手记',
   description: SITE_DESC,
   cleanUrls: true,
   // 死链直接让构建失败：wiki 的第一条底线是「点得到」
@@ -127,7 +128,7 @@ export default defineConfig({
     }
   },
   // 首页没有 frontmatter title，pageData.title 会回退成站名，
-  // 拼上 titleTemplate 就成了「速通 Wiki · 速通 Wiki」；首页单独关掉模板
+  // 拼上 titleTemplate 就成了「电学手记 · 电学手记」；首页单独关掉模板
   transformPageData(pageData) {
     if (pageData.relativePath === 'index.md') pageData.titleTemplate = false
   },

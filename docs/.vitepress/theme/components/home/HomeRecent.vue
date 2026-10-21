@@ -15,7 +15,7 @@ function shortDate(iso: string) {
 <template>
   <section v-if="items.length" class="home-recent">
     <h2>最近更新</h2>
-    <p class="recent-hint">按 git 提交时间排序；只保留最近 8 次内容改动。</p>
+    <p class="recent-hint">按 git 提交时间排序。刚导入仓库、所有页面一样新时，这一块不显示。</p>
     <div class="recent">
       <a v-for="r in items" :key="r.route" class="recent-row" :href="withBase(r.route)">
         <span class="r-date">{{ shortDate(r.date) }}</span>

@@ -23,8 +23,8 @@ const totals = computed(() => ({
 
 <template>
   <p class="cc-totals">
-    {{ totals.courses }} 门课 · {{ totals.chapters }} 节 · 约 {{ totals.hours }} 小时 ·
-    {{ totals.demos }} 个可以拖参数的交互演示
+    {{ totals.courses }} 门课一共 {{ totals.chapters }} 节：把标注的时长加起来约
+    {{ totals.hours }} 小时，另有 {{ totals.demos }} 个演示可以拖参数。
   </p>
   <div class="course-cards">
     <a
@@ -39,8 +39,8 @@ const totals = computed(() => ({
       </div>
       <p class="cc-tagline">{{ c.tagline }}</p>
       <div class="cc-foot">
-        <span v-if="c.hours">≈ {{ c.hours }} 小时</span>
-        <span v-if="c.first">从「{{ c.first.title }}」开始</span>
+        <span v-if="c.hours">读完约 {{ c.hours }} 小时</span>
+        <span v-if="c.first">第一节：「{{ c.first.title }}」</span>
       </div>
     </a>
   </div>

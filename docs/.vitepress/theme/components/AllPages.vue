@@ -7,6 +7,7 @@ const courses = computed(() => data.courses.filter((c) => c.chapters.length > 0)
 
 const guides = [
   { title: '怎么用这个站', route: '/guide/start' },
+  { title: 'B 站网课推荐', route: '/guide/courses' },
   { title: '关于与版权', route: '/guide/about' },
   { title: '内容状态与成熟度', route: '/guide/status' },
   { title: '写作与贡献指南', route: '/guide/contributing' },

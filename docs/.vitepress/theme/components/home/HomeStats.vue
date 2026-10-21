@@ -6,8 +6,8 @@ import { data } from '../../../data/catalog.data'
 // hero tagline 与卡片不再重复出现这些数字。
 const stats = computed(() => [
   { value: String(data.totals.chapters), label: '节正文' },
-  { value: String(data.totals.demos), label: '处可拖演示' },
-  { value: (Math.round((data.totals.minutes / 60) * 10) / 10).toFixed(1), label: '小时预计耗时' }
+  { value: String(data.totals.demos), label: '个演示' },
+  { value: (Math.round((data.totals.minutes / 60) * 10) / 10).toFixed(1), label: '小时预估' }
 ])
 </script>
 

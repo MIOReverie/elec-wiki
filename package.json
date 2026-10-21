@@ -2,7 +2,7 @@
   "name": "elec-wiki",
   "version": "1.0.0",
   "private": true,
-  "description": "速通 Wiki · 电工学 / 数字电路 / 模拟电子 / 嵌入式开发的学习站点",
+  "description": "电学手记 · 电工学 / 数字电路 / 模拟电子 / 嵌入式开发的学习站点",
   "type": "module",
   "license": "MIT",
   "engines": {
