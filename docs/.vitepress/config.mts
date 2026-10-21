@@ -56,6 +56,7 @@ const GUIDE_SIDEBAR = [
     items: [
       { text: '这个站是什么', link: '/guide/' },
       { text: '怎么用（新读者从这里开始）', link: '/guide/start' },
+      { text: '学习地图', link: '/map' },
       { text: 'B 站网课推荐', link: '/guide/courses' },
       { text: '关于与版权', link: '/guide/about' }
     ]
@@ -70,12 +71,42 @@ const GUIDE_SIDEBAR = [
       { text: '更新日志', link: '/guide/changelog' },
       { text: '隐私与免责', link: '/guide/privacy' }
     ]
+  }
+]
+
+/** 实验与仪器板块侧栏 */
+const LAB_SIDEBAR = [
+  {
+    text: '实验与仪器',
+    items: [
+      { text: '实验总览', link: '/lab/' },
+      { text: '万用表', link: '/lab/multimeter' },
+      { text: '示波器', link: '/lab/oscilloscope' },
+      { text: '焊接与搭电路', link: '/lab/soldering' },
+      { text: '实验台与安全', link: '/lab/bench' }
+    ]
+  }
+]
+
+/** 项目专题板块侧栏（电力电子入门是其中一个子系列） */
+const TOPICS_SIDEBAR = [
+  {
+    text: '项目专题',
+    items: [
+      { text: '专题总览', link: '/topics/' },
+      { text: '可调实验电源', link: '/topics/power-supply' },
+      { text: '直流电机驱动', link: '/topics/motor-drive' },
+      { text: '双轴舵机云台', link: '/topics/servo-gimbal' }
+    ]
   },
   {
-    text: '工具',
+    text: '电力电子入门',
+    collapsed: false,
     items: [
-      { text: '公式速查表', link: '/shared/cheatsheet' },
-      { text: '知识依赖图谱', link: '/ee/graph' }
+      { text: '课程导览', link: '/topics/power-electronics/' },
+      { text: '整流 AC-DC', link: '/topics/power-electronics/ac-dc' },
+      { text: '直流变换 DC-DC', link: '/topics/power-electronics/dc-dc' },
+      { text: '逆变 DC-AC', link: '/topics/power-electronics/dc-ac' }
     ]
   }
 ]
@@ -284,16 +315,37 @@ export default defineConfig({
     nav: [
       { text: '课程', items: COURSE_NAV },
       {
+        text: '专题',
+        items: [
+          { text: '专题总览', link: '/topics/' },
+          { text: '可调实验电源', link: '/topics/power-supply' },
+          { text: '直流电机驱动', link: '/topics/motor-drive' },
+          { text: '双轴舵机云台', link: '/topics/servo-gimbal' },
+          { text: '电力电子入门', link: '/topics/power-electronics/' }
+        ]
+      },
+      {
+        text: '实验',
+        items: [
+          { text: '实验总览', link: '/lab/' },
+          { text: '万用表', link: '/lab/multimeter' },
+          { text: '示波器', link: '/lab/oscilloscope' },
+          { text: '焊接与搭电路', link: '/lab/soldering' },
+          { text: '实验台与安全', link: '/lab/bench' }
+        ]
+      },
+      {
         text: '工具',
         items: [
           { text: '公式速查表', link: '/shared/cheatsheet' },
           { text: '知识依赖图谱', link: '/ee/graph' },
+          { text: 'B 站网课推荐', link: '/guide/courses' },
+          { text: '术语索引', link: '/guide/glossary' },
           { text: '内容状态', link: '/guide/status' },
-          { text: '全部页面', link: '/guide/pages' },
-          { text: '术语索引', link: '/guide/glossary' }
+          { text: '全部页面', link: '/guide/pages' }
         ]
       },
-      { text: '怎么用', link: '/guide/start' },
+      { text: '学习地图', link: '/map' },
       { text: '关于', link: '/guide/about' }
     ],
 
@@ -302,6 +354,9 @@ export default defineConfig({
       '/digital/': courseSidebar('digital'),
       '/analog/': courseSidebar('analog'),
       '/embedded/': courseSidebar('embedded'),
+      '/lab/': LAB_SIDEBAR,
+      '/topics/': TOPICS_SIDEBAR,
+      '/map': GUIDE_SIDEBAR,
       '/shared/': GUIDE_SIDEBAR,
       '/guide/': GUIDE_SIDEBAR
     },

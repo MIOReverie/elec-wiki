@@ -5,7 +5,33 @@ import { data } from '../../data/catalog.data'
 
 const courses = computed(() => data.courses.filter((c) => c.chapters.length > 0))
 
+// 项目专题：标题与 config.mts 的 TOPICS_SIDEBAR 保持一致
+const topics = [
+  { title: '专题总览', route: '/topics/' },
+  { title: '可调实验电源', route: '/topics/power-supply' },
+  { title: '直流电机驱动', route: '/topics/motor-drive' },
+  { title: '双轴舵机云台', route: '/topics/servo-gimbal' }
+]
+
+// 电力电子入门是专题里的子系列，单独列一段
+const powerElectronics = [
+  { title: '课程导览', route: '/topics/power-electronics/' },
+  { title: '整流 AC-DC', route: '/topics/power-electronics/ac-dc' },
+  { title: '直流变换 DC-DC', route: '/topics/power-electronics/dc-dc' },
+  { title: '逆变 DC-AC', route: '/topics/power-electronics/dc-ac' }
+]
+
+// 实验与仪器：标题与 config.mts 的 LAB_SIDEBAR 保持一致
+const lab = [
+  { title: '实验总览', route: '/lab/' },
+  { title: '万用表', route: '/lab/multimeter' },
+  { title: '示波器', route: '/lab/oscilloscope' },
+  { title: '焊接与搭电路', route: '/lab/soldering' },
+  { title: '实验台与安全', route: '/lab/bench' }
+]
+
 const guides = [
+  { title: '学习地图', route: '/map' },
   { title: '怎么用这个站', route: '/guide/start' },
   { title: 'B 站网课推荐', route: '/guide/courses' },
   { title: '关于与版权', route: '/guide/about' },
@@ -22,6 +48,9 @@ const total = computed(
   () =>
     courses.value.reduce((s, c) => s + c.chapters.length, 0) +
     courses.value.length +
+    topics.length +
+    powerElectronics.length +
+    lab.length +
     guides.length
 )
 </script>
@@ -44,6 +73,38 @@ const total = computed(
           </li>
         </ul>
       </div>
+    </section>
+
+    <section class="ap-course">
+      <h2 class="ap-course-title">
+        <a :href="withBase('/topics/')">项目专题</a>
+        <span>{{ topics.length + powerElectronics.length }} 页</span>
+      </h2>
+      <ul class="ap-list">
+        <li v-for="t in topics" :key="t.route">
+          <a :href="withBase(t.route)">{{ t.title }}</a>
+        </li>
+      </ul>
+      <div class="ap-section">
+        <div class="ap-section-title">电力电子入门</div>
+        <ul class="ap-list">
+          <li v-for="t in powerElectronics" :key="t.route">
+            <a :href="withBase(t.route)">{{ t.title }}</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="ap-course">
+      <h2 class="ap-course-title">
+        <a :href="withBase('/lab/')">实验与仪器</a>
+        <span>{{ lab.length }} 页</span>
+      </h2>
+      <ul class="ap-list">
+        <li v-for="p in lab" :key="p.route">
+          <a :href="withBase(p.route)">{{ p.title }}</a>
+        </li>
+      </ul>
     </section>
 
     <section class="ap-course">
