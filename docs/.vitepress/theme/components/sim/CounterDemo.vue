@@ -43,10 +43,12 @@ const anim = useCanvas(
     const levelAt = (row: number, idx: number) => {
       // row 0 = CLK（占空比 50%），row i+1 = Qi，翻转周期 2^i 个时钟
       if (row === 0) return idx % 2 === 0 ? 1 : 0
-      const div = Math.pow(2, row - 1)
-      const up = Math.floor(idx / (div * 2)) % 2 === 0 ? 1 : 0
-      // 减计数 = 加计数逐位取反
-      return dir.value === 'up' ? up : 1 - up
+      // 波形按「时钟序号」画：一个时钟占 2 格，格内电平不变。
+      // 加计数时第 c 个时钟结束后的计数值就是 c，第 i 位 = (c >> i) & 1。
+      const c = Math.floor(idx / 2)
+      const bit = (c >> (row - 1)) & 1
+      // 减计数 = 加计数逐位取反（4 位下 15-c 恰为 c 的按位取反）
+      return dir.value === 'up' ? bit : 1 - bit
     }
 
     rows.value.forEach((name, row) => {
@@ -91,7 +93,7 @@ const anim = useCanvas(
     label(ctx, `计数 = ${qval}`, px + 8, 14, SIG.p, 'left', 12, true)
     label(
       ctx,
-      `二进制 ${bin.split('').reverse().join('')}  (Q${n - 1}…Q0)   十六进制 0x${qval.toString(16).toUpperCase()}`,
+      `二进制 ${bin}  (Q${n - 1}…Q0)   十六进制 0x${qval.toString(16).toUpperCase()}`,
       w / 2,
       h - 8,
       TC.text2,

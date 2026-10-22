@@ -95,7 +95,7 @@ useCanvas(cv, ({ ctx, w, h, t }) => {
   label(ctx, mode.value === 'filtered' ? '橙色：整流后（未滤波）' : '橙色：整流输出', b.x + 6, b.y + 26, SIG.v, 'left', 10.5)
   label(ctx, '绿色：最终直流输出', b.x + 6, b.y + 42, SIG.p, 'left', 10.5)
   label(ctx, 't', b.x + b.w, b.y + b.h + 16, TC.text3, 'right', 10.5)
-})
+}, { animate: true })
 </script>
 
 <template>

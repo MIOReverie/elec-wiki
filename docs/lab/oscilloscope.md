@@ -8,6 +8,14 @@ outline: [2, 3]
 
 <Meta time="50 min" level="核心" note="示波器能看到的不是电压，是『电压对时间』；探头是电路的一部分，地线夹是大地的一部分" />
 
+**这一页要解决什么**：示波器屏幕上的每一条曲线都经过了「探头 → 耦合 → 触发 → 显示」四道关卡，任何一道设置错，看到的波形就不是电路里的波形。这一页按信号进表的顺序，讲清 10X 探头为什么要补偿、带宽如何吃掉上升沿、触发电平怎么让波形停住、以及地线夹为什么是全台最危险的一根线。读完你应该能：给任意一个测量任务选对探头与耦合方式、把补偿与触发调好，并且知道哪些场合必须换差分测量。
+
+::: tip 读这页之前
+- **需要会**：分压与容抗 $X_C = 1/(2\pi f C)$（<Prereq id="voltage-divider" />）、RC 电路的时间常数（<Prereq id="time-constant" />）、正弦量的幅值与有效值（<Prereq id="sine-params" />）。
+- **这一页用到的符号**：$B$ 是**带宽**（bandwidth：幅度衰减到 −3 dB 即 0.707 倍时的频率，单位 Hz），$t_r$ 是**上升时间**（10%~90% 幅度所需时间），$C_s$ 是探头里的补偿电容，CMRR 是**共模抑制比**（common-mode rejection ratio：对两端共同电压的抑制能力，dB 越大越好）。全部约定见[符号与约定](../guide/notation.md)。
+- **不需要**复数：这一页只有实数乘除与平方和，公式都是代数式。
+:::
+
 万用表给你一个数字，示波器给你一条曲线。这条曲线上藏着数字里没有的一切：上升沿有多快、有没有振铃、占空比稳不稳、纹波里是开关频率还是工频干扰、触发点前后发生了什么。**从「能读出一个数」到「能看懂一条波形」的距离，比从买到示波器的距离更远。**
 
 这一页假设你手上应有一台 50~100 MHz 带宽、1 GSa/s 采样率的入门数字示波器（DSO）。所有规格与操作同样适用于更高档的机型，只是数字会变。
@@ -23,6 +31,8 @@ outline: [2, 3]
 7. **差分测量是必须掌握的技能**：任何一端不接地的信号（半桥中点、电流采样电阻两端、市电相关电路）都不允许用单端探头直接测。
 
 ## 探头：1X、10X 与补偿
+
+这一节只回答两个问题：**探头拨到 1X 还是 10X**，以及**为什么必须先用校准方波调补偿**。探头是信号进入示波器的第一道关卡，它错了后面全错。
 
 ### 三种探头，三种用法
 
@@ -48,7 +58,54 @@ $$\frac{C_s}{C_s + C_{\text{cable}} + C_{\text{in}}} = \frac{R_{\text{in}}}{R_s 
 
 $$C_s = \frac{0.1 \times (100 + 20)}{1 - 0.1} = 13.33\ \text{pF}$$
 
-这个电容就装在探头里，你调它。
+这个电容就装在探头里，你调它。理解补偿最快的办法是把「探头 + 示波器输入」当成一个**频率相关的分压器**：低频由电阻决定分压比，高频由电容决定，两者必须同时是 10 : 1：
+
+<FigBox title="10X 探头的等效电路：电阻分压与电容分压必须同时成立" kind="结构" note="左：探头内部是 9 MΩ 串联电阻加可调补偿电容 C_s，示波器输入是 1 MΩ 并联输入电容。低频看电阻分压 10:1，高频看电容分压——C_s 太小欠补偿（圆角），太大过补偿（上冲）。调 C_s 就是让两个分压比在全频段重合。">
+
+<svg viewBox="0 0 560 250" role="img" aria-label="左图 10X 探头等效电路含 9 兆欧串联电阻与补偿电容，右图三种补偿状态的方波形状对比">
+<defs>
+  <marker id="osc-p1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+</defs>
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <text x="120" y="18" text-anchor="middle" font-weight="700">等效电路</text>
+  <line x1="30" y1="60" x2="70" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <rect x="70" y="48" width="60" height="24" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <text x="100" y="64" text-anchor="middle" fill="var(--vp-c-brand-1)">9 MΩ</text>
+  <line x1="130" y1="60" x2="180" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <line x1="150" y1="60" x2="150" y2="80" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <line x1="136" y1="80" x2="164" y2="80" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <line x1="136" y1="90" x2="164" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <line x1="150" y1="90" x2="150" y2="110" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <text x="176" y="88" fill="var(--vp-c-brand-1)">C_s 可调</text>
+  <line x1="180" y1="60" x2="230" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <line x1="230" y1="60" x2="230" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <line x1="216" y1="90" x2="244" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <line x1="216" y1="100" x2="244" y2="100" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <line x1="230" y1="100" x2="230" y2="130" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <text x="252" y="98" fill="var(--vp-c-brand-1)">1 MΩ ∥ 20 pF</text>
+  <text x="26" y="64" text-anchor="end" fill="var(--vp-c-text-3)">信号</text>
+  <line x1="230" y1="130" x2="30" y2="130" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+  <line x1="30" y1="130" x2="30" y2="60" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+  <text x="130" y="152" text-anchor="middle" fill="var(--vp-c-text-3)">R 分压：9:1 → 10:1（低频）</text>
+  <text x="130" y="168" text-anchor="middle" fill="var(--vp-c-text-3)">C 分压：C_s 与后级电容比 → 也要 10:1（高频）</text>
+
+  <text x="420" y="18" text-anchor="middle" font-weight="700">调 C_s 时的方波</text>
+  <line x1="320" y1="30" x2="320" y2="80" stroke="var(--vp-c-divider)" stroke-width="1" />
+  <text x="314" y="60" text-anchor="end" fill="var(--vp-c-text-3)">欠：圆角下陷</text>
+  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" points="322,30 330,58 340,64 360,62 380,58 400,58 420,58 440,58 460,58 480,58" />
+  <line x1="320" y1="130" x2="320" y2="180" stroke="var(--vp-c-divider)" stroke-width="1" />
+  <text x="314" y="160" text-anchor="end" fill="var(--vp-c-text-2)">正：方正平顶</text>
+  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" points="322,130 328,132 332,130 350,130 370,130 390,130 410,130 430,130 450,130 470,130 490,130" />
+  <line x1="320" y1="230" x2="320" y2="180" stroke="var(--vp-c-divider)" stroke-width="1" />
+  <text x="314" y="210" text-anchor="end" fill="var(--vp-c-text-3)">过：上冲振铃</text>
+  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" points="322,230 330,198 338,192 346,206 354,198 362,204 370,198 380,200 400,198 420,198 440,198 460,198 480,198" />
+  <text x="420" y="244" text-anchor="middle" fill="var(--vp-c-text-3)">目标：四角是直角、平顶水平、无过冲无圆角</text>
+</g>
+</svg>
+
+</FigBox>
 
 | 补偿状态 | 在高频方波上的表现 | 高频增益相对低频 |
 | --- | --- | --- |
@@ -68,6 +125,8 @@ $$C_s = \frac{0.1 \times (100 + 20)}{1 - 0.1} = 13.33\ \text{pF}$$
 
 ## 带宽与上升时间
 
+这一节给出选购与「敢不敢信读数」的判据：**带宽 $B$ 决定示波器自己最快能看清多陡的边沿**。看完你会算「这个信号该用多大带宽的机子」，也会知道读出来的上升时间为什么总比资料上的大。
+
 带宽 $B$ 是「幅度衰减到 −3 dB（0.707 倍）」的频率。对它的一阶低通模型，阶跃响应的时间常数 $\tau = 1/(2\pi B)$，对应的 10%–90% 上升时间为
 
 $$t_r \approx \frac{0.35}{B}$$
@@ -84,11 +143,35 @@ $$t_r \approx \frac{0.35}{B}$$
 
 $$t_{r,\text{测得}} \approx \sqrt{t_{r,\text{信号}}^2 + t_{r,\text{示波器}}^2}$$
 
-100 MHz 示波器测一个真实 20 ns 上升沿的信号，测得 $\sqrt{3.5^2 + 20^2} = 20.3$ ns，还算够用；测一个 3.5 ns 的信号，测得 $\sqrt{3.5^2 + 3.5^2} = 4.95$ ns，**读数比真实值慢 41%**，这就是「带宽要 3~5 倍于信号」的来源。
+100 MHz 示波器测一个真实 20 ns 上升沿的信号，测得 $\sqrt{3.5^2 + 20^2} = 20.3$ ns，还算够用；测一个 3.5 ns 的信号，测得 $\sqrt{3.5^2 + 3.5^2} = 4.95$ ns，**读数比真实值慢 41%**，这就是「带宽要 3~5 倍于信号」的来源。三个带宽档位对同一条 5 ns 边沿的作用，可以画在同一张图上看：
+
+<FigBox title="带宽不足如何吃掉一条 5 ns 的边沿" kind="波形" note="三条曲线是同一信号经不同带宽示波器后的样子：100 MHz 时边沿只被拉长一点，读数可信；20 MHz 时边沿被拉成 18 ns，幅度也开始掉。判断标准就是 $t_r \approx 0.35/B$ 与平方和叠加。">
+
+<svg viewBox="0 0 560 240" role="img" aria-label="同一 5 纳秒上升沿经不同带宽示波器后的波形：100 兆赫基本保持，20 兆赫被拉长成 18 纳秒">
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <text x="280" y="16" text-anchor="middle" font-weight="700">真实信号上升沿 t_r = 5 ns（灰色为基准）</text>
+  <line x1="40" y1="200" x2="540" y2="200" stroke="var(--vp-c-divider)" stroke-width="1.2" />
+  <line x1="40" y1="60" x2="40" y2="200" stroke="var(--vp-c-divider)" stroke-width="1.2" />
+  <text x="36" y="56" text-anchor="end">5 V</text>
+  <text x="36" y="204" text-anchor="end">0 V</text>
+  <polyline fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 3" points="100,200 140,200 145,60 300,60" />
+  <text x="152" y="52" fill="var(--vp-c-text-3)">真实边沿（5 ns）</text>
+  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" points="100,200 140,200 152,76 170,64 300,62" />
+  <text x="176" y="80" fill="var(--vp-c-brand-1)">100 MHz：6.1 ns，可信</text>
+  <polyline fill="none" stroke="var(--vp-c-text-2)" stroke-width="2" points="100,200 140,200 175,150 205,120 235,102 265,88 300,80" />
+  <text x="212" y="140" fill="var(--vp-c-text-2)">20 MHz：18.2 ns，边沿与幅度全失真</text>
+  <text x="290" y="228" text-anchor="end" fill="var(--vp-c-text-3)">时间 →</text>
+  <text x="280" y="248" text-anchor="middle" fill="var(--vp-c-text-3)">判据：信号上升时间 ≥ 3 × 示波器固有上升时间，读数误差 5% 以内</text>
+</g>
+</svg>
+
+</FigBox>
 
 > **更实用的判断**：只要被测信号的上升时间**比示波器的固有上升时间大 3 倍以上**，测出的边沿误差就在 5% 以内；边沿本身比带宽更重要。频率低不代表边沿慢，1 kHz 的方波如果上升沿是 5 ns，同样需要 100 MHz 以上的带宽。
 
 ## 触发：让波形停住
+
+这一节解决新手最常见的「波形在屏幕上乱滚」：**触发是给采集定一个起点条件，条件满足才从那一点开始画**。看完你会把触发电平、边沿、模式三件事一次配对。
 
 数字示波器之所以能把波形「定」在屏幕上，是因为它在满足条件的事件上开始采集。触发菜单里最常用的三个参数：
 
@@ -98,6 +181,38 @@ $$t_{r,\text{测得}} \approx \sqrt{t_{r,\text{信号}}^2 + t_{r,\text{示波器
 | 触发电平 | 屏幕上一个可调的横线 | 设置在信号的两个电平之间，通常是幅度中点（50%） |
 | 触发边沿 | 上升沿 / 下降沿 | 看上升沿用上升沿触发，看 PWM 的下降沿用下降沿 |
 | 触发模式 | Auto / Normal / Single | Auto 用于「先让它显示出来」；Normal 用于「只在满足条件时更新」；Single 用于抓单次事件 |
+
+<FigBox title="触发电平与边沿：每一次采集都从满足条件的那个点开始" kind="波形" note="左边是触发条件：电平线设在幅度中点、选上升沿。信号每次上穿这条线，采集就从那里开始，于是每屏波形都对齐在同一个相位上。右边对比三种模式：Auto 找不到触发也硬刷，Normal 只在满足条件时更新，Single 抓一次就停。">
+
+<svg viewBox="0 0 560 250" role="img" aria-label="左图触发电平与上升沿示意，右图 Auto Normal Single 三种模式的行为对比">
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <text x="140" y="16" text-anchor="middle" font-weight="700">触发条件</text>
+  <line x1="30" y1="130" x2="270" y2="130" stroke="var(--vp-c-divider)" stroke-width="1" />
+  <line x1="30" y1="50" x2="270" y2="50" stroke="var(--vp-c-divider)" stroke-width="1" />
+  <text x="26" y="54" text-anchor="end">3.3 V</text>
+  <text x="26" y="134" text-anchor="end">0 V</text>
+  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" points="30,130 70,130 74,124 78,96 82,60 82,50 122,50 126,56 130,84 134,120 138,130 178,130 182,124 186,96 190,60 190,50 230,50 234,56 238,84 242,120 246,130 270,130" />
+  <line x1="30" y1="90" x2="270" y2="90" stroke="var(--vp-c-text-2)" stroke-width="1.4" stroke-dasharray="5 3" />
+  <text x="274" y="94" fill="var(--vp-c-text-2)">触发电平（中点）</text>
+  <circle cx="81" cy="90" r="4" fill="var(--vp-c-brand-1)" />
+  <text x="86" y="76" fill="var(--vp-c-brand-1)">上穿此点 → 开始采集</text>
+  <text x="140" y="164" text-anchor="middle" fill="var(--vp-c-text-3)">每屏波形都从这一个相位对齐，所以「停住」</text>
+
+  <text x="420" y="16" text-anchor="middle" font-weight="700">三种模式</text>
+  <rect x="320" y="34" width="220" height="52" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="330" y="52" fill="var(--vp-c-text-2)">Auto</text>
+  <text x="330" y="70" fill="var(--vp-c-text-3)">没触发也按固定间隔刷新 → 波形可能滚</text>
+  <rect x="320" y="96" width="220" height="52" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="330" y="114" fill="var(--vp-c-text-2)">Normal</text>
+  <text x="330" y="132" fill="var(--vp-c-text-3)">只在满足条件时更新 → 稳定但可能空屏</text>
+  <rect x="320" y="158" width="220" height="52" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="330" y="176" fill="var(--vp-c-text-2)">Single</text>
+  <text x="330" y="194" fill="var(--vp-c-text-3)">抓一次就停 → 上电浪涌、毛刺、复位沿</text>
+  <text x="420" y="234" text-anchor="middle" fill="var(--vp-c-text-3)">调试先用 Auto 找信号，测量换 Normal，抓偶发用 Single</text>
+</g>
+</svg>
+
+</FigBox>
 
 **触发模式的区别**：
 
@@ -121,9 +236,41 @@ $$t_{r,\text{测得}} \approx \sqrt{t_{r,\text{信号}}^2 + t_{r,\text{示波器
 
 ## 地线夹：最危险的那根线
 
+这一节值得用最重的字：**示波器的地线夹通过外壳接大地，它不是「负极」，是大地的延伸**。这一节讲它连到哪、夹错会烧什么、以及正确的夹法与短地弹簧的用法。
+
 ### 它到底连到了哪里
 
-单端示波器的 BNC 外壳、探头地线、后面板的地端子在**仪器内部是连通的**，而仪器外壳通过三脚插头的中间那根接大地（PE）。所以你**手里的鳄鱼夹是大地**。
+单端示波器的 BNC 外壳、探头地线、后面板的地端子在**仪器内部是连通的**，而仪器外壳通过三脚插头的中间那根接大地（PE）。所以你**手里的鳄鱼夹是大地**：
+
+<FigBox title="地线夹的真实路径：探头地 → 示波器外壳 → 插座 PE → 大地" kind="结构" note="整条绿色路径在仪器内部与电网的地是连通的。把地线夹夹到任何对大地有电压的点上，都等于用这根细地线把这个电压直接对地短路——浪涌电流走的就是这条路。">
+
+<svg viewBox="0 0 560 200" role="img" aria-label="探头地线经示波器外壳与三脚插头连到插座保护地再到大地的路径图">
+<defs>
+  <marker id="osc-g1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+</defs>
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <rect x="20" y="40" width="120" height="60" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <text x="80" y="66" text-anchor="middle" fill="var(--vp-c-brand-1)">被测电路</text>
+  <text x="80" y="84" text-anchor="middle" fill="var(--vp-c-text-3)">那个「以为是地」的点</text>
+  <line x1="140" y1="70" x2="200" y2="70" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#osc-g1)" />
+  <text x="170" y="60" text-anchor="middle" fill="var(--vp-c-brand-1)">探头地线夹</text>
+  <rect x="200" y="40" width="140" height="60" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <text x="270" y="66" text-anchor="middle">示波器</text>
+  <text x="270" y="84" text-anchor="middle" fill="var(--vp-c-text-3)">BNC 外壳 = 机壳</text>
+  <line x1="340" y1="70" x2="400" y2="70" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#osc-g1)" />
+  <text x="370" y="60" text-anchor="middle" fill="var(--vp-c-brand-1)">三脚插头 PE 脚</text>
+  <rect x="400" y="40" width="130" height="60" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <text x="465" y="66" text-anchor="middle">墙上插座</text>
+  <text x="465" y="84" text-anchor="middle" fill="var(--vp-c-text-3)">保护地 → 大地</text>
+  <text x="280" y="140" text-anchor="middle" fill="var(--vp-c-brand-1)">整条路径电气连通，阻抗可能只有 0.1 Ω</text>
+  <text x="280" y="160" text-anchor="middle" fill="var(--vp-c-text-2)">被测点对大地有 U 伏 → 短路电流理论值 = U / 0.1 Ω</text>
+  <text x="280" y="182" text-anchor="middle" fill="var(--vp-c-text-3)">这条线是全实验台唯一一根「夹错立刻炸」的线</text>
+</g>
+</svg>
+
+</FigBox>
 
 这不是设计缺陷，是为了安全，示波器本身要接大地，探头才能稳定测量。问题在于，很多人把「黑鳄鱼夹」理解成「一根普通的负极线」。
 
@@ -158,9 +305,44 @@ $$u_L = L\frac{di}{dt}$$
 | 10 A/μs | 1.00 V |
 | 100 A/μs | 10.0 V |
 
-所以看开关电源的开关节点、或者 MOSFET 的开关波形时，**必须用探头自带的短地弹簧（ground spring）**，把头套直接压在旁边的地过孔上，把地回路长度压到 5 mm 以内。否则你会看到一个由探头地线「造出来」的振铃。
+所以看开关电源的开关节点、或者 MOSFET 的开关波形时，**必须用探头自带的短地弹簧（ground spring）**，把头套直接压在旁边的地过孔上，把地回路长度压到 5 mm 以内。否则你会看到一个由探头地线「造出来」的振铃。两种接法的差别：
+
+<FigBox title="长地线夹 vs 短地弹簧：假振铃是地线电感造出来的" kind="结构" note="左：长地线夹 10 cm，电感约 0.1 μH，开关电流的 di/dt 在它上面感应出「看起来像振铃」的电压——你看到的抖动不是电路的，是地线的。右：短地弹簧把回路压到 5 mm 内，感应电压小 20 倍以上，测开关波形必须用它。">
+
+<svg viewBox="0 0 560 230" role="img" aria-label="左图长地线夹在开关电流下感应出假振铃，右图短地弹簧贴近焊盘测得干净波形">
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <text x="130" y="16" text-anchor="middle" font-weight="700">长地线夹（10 cm，≈0.1 μH）</text>
+  <rect x="40" y="40" width="90" height="34" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="85" y="61" text-anchor="middle">被测板</text>
+  <line x1="130" y1="52" x2="180" y2="40" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <text x="182" y="36" fill="var(--vp-c-brand-1)">探头尖</text>
+  <path d="M 175 58 C 150 92, 100 96, 78 76" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <text x="52" y="106" fill="var(--vp-c-text-2)">地线夹绕一大圈</text>
+  <text x="130" y="136" text-anchor="middle" fill="var(--vp-c-text-3)">10 A/μs → 地线上 1.0 V 假电压</text>
+  <line x1="40" y1="150" x2="220" y2="150" stroke="var(--vp-c-divider)" stroke-width="1" />
+  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" points="50,150 70,150 72,130 74,164 76,124 78,168 80,128 84,158 88,138 92,152 96,144 100,150 220,150" />
+  <text x="130" y="188" text-anchor="middle" fill="var(--vp-c-text-3)">看到：边沿上的「振铃」（多半是假的）</text>
+
+  <text x="430" y="16" text-anchor="middle" font-weight="700">短地弹簧（≈5 mm）</text>
+  <rect x="340" y="40" width="90" height="34" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="385" y="61" text-anchor="middle">被测板</text>
+  <line x1="430" y1="52" x2="470" y2="46" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <text x="472" y="42" fill="var(--vp-c-brand-1)">探头尖</text>
+  <line x1="466" y1="56" x2="430" y2="70" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <text x="422" y="86" fill="var(--vp-c-text-2)">地弹簧贴焊盘</text>
+  <text x="430" y="112" text-anchor="middle" fill="var(--vp-c-text-3)">回路 5 mm：感应电压缩小 20 倍以上</text>
+  <line x1="340" y1="130" x2="520" y2="130" stroke="var(--vp-c-divider)" stroke-width="1" />
+  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" points="350,130 390,130 394,104 398,130 520,130" />
+  <text x="430" y="168" text-anchor="middle" fill="var(--vp-c-text-3)">看到：干净的边沿，这才是电路的真实波形</text>
+  <text x="280" y="206" text-anchor="middle" fill="var(--vp-c-text-2)">测开关电源、MOSFET 波形：先换短地弹簧，再谈波形好不好</text>
+</g>
+</svg>
+
+</FigBox>
 
 ## 测 PWM 占空比
+
+这一节是最高频的日常测量：**从屏幕上把周期与高电平时间读出来，相除就是占空比**。要点在时基怎么选、光标放在哪。
 
 占空比测量的三步：**找到周期 → 找到高电平时间 → 用光标或自动测量读出来**。
 
@@ -174,7 +356,35 @@ $$T = \frac{1}{25\times10^3} = 40.0\ \mu\text{s}$$
 
 $$D = \frac{T_H}{T} \times 100\%$$
 
-12.5% 占空比对应 40 μs 的 5.00 μs。
+12.5% 占空比对应 40 μs 的 5.00 μs。光标放在哪、读哪段，看下图：
+
+<FigBox title="光标怎么放：T_H 在两个 50% 点之间，T 在两个同相边沿之间" kind="波形" note="虚线是 50% 电平，两根竖直光标夹住高电平时间 T_H；周期 T 取两个相邻上升沿同一点。25 kHz 信号时基 10 μs/div 时屏幕正好 2.5 个周期，光标两端都看得清。">
+
+<svg viewBox="0 0 560 230" role="img" aria-label="方波上标注周期与高电平时间的光标测量法，50 百分电平与两根竖直光标">
+<defs>
+  <marker id="osc-c1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
+  </marker>
+</defs>
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <line x1="30" y1="60" x2="540" y2="60" stroke="var(--vp-c-divider)" stroke-width="1" />
+  <line x1="30" y1="160" x2="540" y2="160" stroke="var(--vp-c-divider)" stroke-width="1" />
+  <text x="26" y="64" text-anchor="end">3.3 V</text>
+  <text x="26" y="164" text-anchor="end">0 V</text>
+  <line x1="30" y1="110" x2="540" y2="110" stroke="var(--vp-c-text-2)" stroke-width="1" stroke-dasharray="4 4" />
+  <text x="544" y="114" fill="var(--vp-c-text-2)">50%</text>
+  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" points="40,160 90,160 95,152 100,72 105,60 185,60 190,68 195,148 200,160 280,160 285,152 290,72 295,60 375,60 380,68 385,148 390,160 470,160 475,152 480,72 485,60 540,60" />
+  <line x1="100" y1="30" x2="100" y2="190" stroke="var(--vp-c-brand-1)" stroke-width="1.2" stroke-dasharray="3 3" />
+  <line x1="195" y1="30" x2="195" y2="190" stroke="var(--vp-c-brand-1)" stroke-width="1.2" stroke-dasharray="3 3" />
+  <line x1="100" y1="22" x2="195" y2="22" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-start="url(#osc-c1)" marker-end="url(#osc-c1)" />
+  <text x="148" y="16" text-anchor="middle" fill="var(--vp-c-brand-1)">光标 Δt = T_H = 5.00 μs</text>
+  <line x1="100" y1="206" x2="290" y2="206" stroke="var(--vp-c-text-2)" stroke-width="1.4" marker-start="url(#osc-c1)" marker-end="url(#osc-c1)" />
+  <text x="195" y="222" text-anchor="middle" fill="var(--vp-c-text-2)">T = 40.0 μs（相邻上升沿同一点）</text>
+  <text x="430" y="222" text-anchor="middle" fill="var(--vp-c-text-3)">D = 5.00 / 40.0 = 12.5%</text>
+</g>
+</svg>
+
+</FigBox>
 
 **自动测量**：现代示波器有 Frequency、Period、+Width（正脉宽）、−Width、Duty Cycle 等自动测量项。它们通常也按 50% 电平判定，并且会用多次平均。自动测量的数值比手动光标更准，但**要注意它取的是哪个周期**，如果 PWM 被抖动（jitter）调制，单次读数和多次平均的差异会很大。
 
@@ -182,7 +392,9 @@ $$D = \frac{T_H}{T} \times 100\%$$
 
 ## 测电源纹波
 
-纹波（ripple）是直流电源输出上叠加的交流成分，它通常是开关频率的整数倍，是开关电源与线性电源的核心差异之一。
+这一节是「示波器测毫伏级小信号」的代表场景：**纹波被地线电感与高频噪声淹没的概率，比被测不准的概率大得多**。标准做法的五步、20 MHz 带宽限制与短地，都是为了把假成分压掉。
+
+纹波（ripple：直流电源输出上叠加的交流成分）通常是开关频率的整数倍，是开关电源与线性电源的核心差异之一。
 
 **标准做法**：
 
@@ -198,11 +410,29 @@ $$D = \frac{T_H}{T} \times 100\%$$
 
 - 纹波是**开关频率**（例如 500 kHz）还是**工频**（50/100 Hz）？前者过滤波电容与电感，后者查整流与变压器屏蔽。
 - 纹波的**峰峰值随负载**怎么变？开关电源轻载时可能进入跳周期模式，纹波反而变大。
-- 有没有**尖峰**（spike）？那是开关器件的反向恢复与寄生电感造成的，用带宽限制看着不明显，但可能耦合进后级电路。
+- 有没有**尖峰**（spike：开关器件反向恢复与寄生电感造成的窄脉冲）？用带宽限制看着不明显，但可能耦合进后级电路。
+
+<FigBox title="一次纹波测量该看到什么：开关纹波 + 尖峰 + 20 MHz 限制后的样子" kind="波形" note="绿色是 AC 耦合、20 MHz 带宽限制后的典型纹波：与开关频率同周期的三角状成分。灰色虚线提示被限制滤掉的窄尖峰——它们仍然存在于电路里，只是这台设置看不见，需要时另开全带宽单独确认。">
+
+<svg viewBox="0 0 560 220" role="img" aria-label="开关纹波波形：周期性三角纹波叠加窄尖峰，20 兆赫带宽限制后尖峰被滤掉">
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <line x1="30" y1="110" x2="540" y2="110" stroke="var(--vp-c-divider)" stroke-width="1" />
+  <text x="26" y="114" text-anchor="end">0</text>
+  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" points="40,86 60,110 80,134 100,110 120,86 140,110 160,134 180,110 200,86 220,110 240,134 260,110 280,86 300,110 320,134 340,110 360,86 380,110 400,134 420,110 440,86 460,110 480,134 500,110 520,86 540,110" />
+  <text x="290" y="160" text-anchor="middle" fill="var(--vp-c-brand-1)">开关纹波：与开关频率同周期（如 500 kHz）</text>
+  <line x1="140" y1="60" x2="140" y2="40" stroke="var(--vp-c-text-3)" stroke-width="1" marker-start="url(#osc-c1)" />
+  <text x="146" y="36" fill="var(--vp-c-text-3)">窄尖峰位置（被 20 MHz 限制滤掉）</text>
+  <text x="290" y="190" text-anchor="middle" fill="var(--vp-c-text-2)">记录：峰峰值 + 当时的负载电流与输入电压，缺一个都无法对比</text>
+</g>
+</svg>
+
+</FigBox>
 
 ## 用 FFT 看开关噪声
 
-现代示波器都有 FFT（快速傅里叶变换）功能。它把时域波形变成频谱，让你看到「这个信号里有哪些频率成分」。
+这一节把示波器从「看波形」切换到「看频谱」：**FFT 把一段时域波形分解成「哪些频率、各多大」**。看开关噪声、找干扰源时它比肉眼扫波形快得多。
+
+现代示波器都有 FFT（fast Fourier transform，快速傅里叶变换：把时域波形分解成频率成分的算法）功能。它把时域波形变成频谱，让你看到「这个信号里有哪些频率成分」。
 
 **关键设定**：
 
@@ -219,7 +449,46 @@ $$D = \frac{T_H}{T} \times 100\%$$
 
 ## 差分测量
 
-当你要测量的两个点**都不是地**时（例如 H 桥两个开关管之间的中点、电流采样电阻的两端、桥式整流器的输出），单端探头的地线夹无论夹在哪里都会引入短路，必须用差分测量。
+这一节回答「两个点都不是地时怎么测」：**单端探头的地线夹无论夹哪都会短路，必须换测量方法**。三种做法按成本排：差分探头、两通道相减、隔离技术——正确性也按同样的顺序排。
+
+当你要测量的两个点**都不是地**时（例如 H 桥两个开关管之间的中点、电流采样电阻的两端、桥式整流器的输出），单端探头的地线夹无论夹在哪里都会引入短路，必须用差分测量。三种做法的差别：
+
+<FigBox title="差分测量的三种做法与适用边界" kind="结构" note="A 差分探头：两个输入端都对地高阻，内部仪表放大器只取差值，共模几百伏也能抑制，最贵最正确。B 两通道相减：零成本，但两只探头的地夹必须夹同一点，且共模抑制取决于增益失配——10% 失配在 100 V 共模下残差 10 V。C 隔离技术：取消保护地的方案，新手不要碰。">
+
+<svg viewBox="0 0 560 260" role="img" aria-label="差分测量三种做法的结构框图与优缺点对比">
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <rect x="16" y="30" width="160" height="76" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <text x="96" y="52" text-anchor="middle" fill="var(--vp-c-brand-1)">A · 差分探头</text>
+  <text x="96" y="70" text-anchor="middle" fill="var(--vp-c-text-3)">两端高阻、内部取差</text>
+  <text x="96" y="86" text-anchor="middle" fill="var(--vp-c-text-3)">CMRR 60~100 dB</text>
+  <text x="200" y="72" fill="var(--vp-c-text-2)">← 最贵，也最正确</text>
+
+  <rect x="16" y="126" width="160" height="92" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <text x="96" y="148" text-anchor="middle" fill="var(--vp-c-text-2)">B · 两通道相减</text>
+  <text x="96" y="166" text-anchor="middle" fill="var(--vp-c-text-3)">CH1 − CH2</text>
+  <text x="96" y="182" text-anchor="middle" fill="var(--vp-c-text-3)">前提：两黑夹夹同一点</text>
+  <text x="96" y="198" text-anchor="middle" fill="var(--vp-c-text-3)">探头同型号、补偿一致</text>
+  <text x="200" y="168" fill="var(--vp-c-text-2)">← 零成本，只适用小共模</text>
+
+  <rect x="16" y="238" width="160" height="56" rx="8" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.4" stroke-dasharray="5 3" />
+  <text x="96" y="260" text-anchor="middle">C · 隔离技术</text>
+  <text x="96" y="278" text-anchor="middle" fill="var(--vp-c-text-3)">取消保护地，新手勿用</text>
+
+  <rect x="320" y="30" width="224" height="100" rx="8" fill="none" stroke="var(--vp-c-divider)" />
+  <text x="332" y="52" fill="var(--vp-c-text-2)">B 的代价：增益失配直接变成误差</text>
+  <text x="332" y="74">10% 失配 → CMRR 20 dB</text>
+  <text x="332" y="92">共模 100 V → 残差 10 V</text>
+  <text x="332" y="110" fill="var(--vp-c-text-3)">你要测的可能是 100 mV 的采样压降</text>
+
+  <rect x="320" y="150" width="224" height="100" rx="8" fill="none" stroke="var(--vp-c-divider)" />
+  <text x="332" y="172" fill="var(--vp-c-text-2)">安全规则</text>
+  <text x="332" y="194">· 涉及 220 V：没有专业差分探头就不测</text>
+  <text x="332" y="212">· 必须隔离时，隔离被测设备，不隔离示波器</text>
+  <text x="332" y="230">· 任何时刻，两只黑夹只能夹同一点</text>
+</g>
+</svg>
+
+</FigBox>
 
 ### 三种做法
 
@@ -259,6 +528,8 @@ $$\text{CMRR} = 20\log_{10}\left(\frac{1}{\delta}\right)$$
 - 任何时刻，两只探头的地线夹都只能夹同一点。
 
 ## 例题
+
+两道例题把前面的概念落成数字：第一题用示波器读数反推 PWM 的平均电压，回答「万用表直测 PWM 可不可信」；第二题算带宽不足时读数错多少。共同的方法是先想清楚「仪器在这一步等效成了什么」。
 
 ::: tip 例 1 · 用示波器反过来验证万用表 {#ex-scope-pwm}
 **题干**：一个 PWM 输出在示波器上测得周期 40.0 μs、正脉宽 5.00 μs，高电平 3.3 V、低电平 0 V。万用表用直流档直接测高电平与低电平，分别读 3.28 V 与 0.04 V。求占空比、理论平均电压与理论真有效值，并判断用万用表直流档直接测这路 PWM 的平均电压是否可靠。
@@ -324,6 +595,8 @@ $$t_{r,\text{测}} = \sqrt{5^2 + 17.5^2} = 18.2\ \text{ns}$$
 
 ## 工程实例：地线夹引起的「死机」排查
 
+下面这次事故把「地线夹是大地」这一条演绎到极致：夹点只差几厘米，结果从冒烟到死机。排查过程也按「断开可疑路径 → 验证电位差 → 换差分测量」的顺序走。
+
 某同学用示波器调一块 STM32 板上的电机驱动。他测 H 桥下管的栅极电压，把黑夹子夹在电机的负极上。上电后，板子瞬间死机，示波器探头地线冒出一缕青烟。
 
 排查后的结论：
@@ -336,6 +609,8 @@ $$t_{r,\text{测}} = \sqrt{5^2 + 17.5^2} = 18.2\ \text{ns}$$
 **修复**：改用差分探头测下管栅极；示波器地线夹只接在电源输入的地上。**探头换掉，板子重新焊了复位上拉。**
 
 ## 常见错误
+
+四个错误按「先仪器后电路」的顺序列：探头没补偿、地线夹乱夹、AC 耦合看慢信号、存储深度不够。每一个都有明确的症状与一步到位的处理。
 
 ::: tip 错误 1 · 探头没有补偿，直接看波形
 **现象**：所有方波的边沿都圆滚滚的，或者每个上升沿都有一个小尖峰，怀疑电路有问题。
@@ -362,6 +637,8 @@ $$t_{r,\text{测}} = \sqrt{5^2 + 17.5^2} = 18.2\ \text{ns}$$
 :::
 
 ## 自检清单
+
+这一页的内容多，上电测量之前按信号流过的顺序过一遍清单：探头 → 补偿 → 耦合 → 触发 → 地。
 
 - [ ] 探头已补偿，并且每换一次通道都重新补偿过；
 - [ ] 地线夹夹在真实参考地上，或改用差分探头；

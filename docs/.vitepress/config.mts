@@ -56,6 +56,7 @@ const GUIDE_SIDEBAR = [
     items: [
       { text: '这个站是什么', link: '/guide/' },
       { text: '怎么用（新读者从这里开始）', link: '/guide/start' },
+      { text: '符号与约定（读任何章之前先看）', link: '/guide/notation' },
       { text: '学习地图', link: '/map' },
       { text: 'B 站网课推荐', link: '/guide/courses' },
       { text: '关于与版权', link: '/guide/about' }
@@ -337,6 +338,7 @@ export default defineConfig({
       {
         text: '工具',
         items: [
+          { text: '符号与约定', link: '/guide/notation' },
           { text: '公式速查表', link: '/shared/cheatsheet' },
           { text: '知识依赖图谱', link: '/ee/graph' },
           { text: 'B 站网课推荐', link: '/guide/courses' },

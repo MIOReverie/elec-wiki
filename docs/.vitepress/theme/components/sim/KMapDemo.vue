@@ -129,14 +129,50 @@ function collect(a: Cell, b: Cell): Cell[] {
   return out
 }
 
-function startDrag(r: number, c: number) {
+// 拖拽靠「指针位置 → 命中格子」反查，而不是逐格 pointerenter：
+// 触屏 pointerdown 会被浏览器隐式捕获给起手元素，其他格子的 pointerenter 根本不会触发。
+const svgEl = ref<SVGSVGElement | null>(null)
+
+function cellAtPoint(clientX: number, clientY: number): Cell | null {
+  const el = document.elementFromPoint(clientX, clientY)
+  const cell = el?.closest?.('.km-cell')
+  if (!cell) return null
+  const rr = Number(cell.getAttribute('data-rr'))
+  const cc = Number(cell.getAttribute('data-cc'))
+  if (!Number.isFinite(rr) || !Number.isFinite(cc)) return null
+  return { r: rr, c: cc }
+}
+
+function startDrag(e: PointerEvent, r: number, c: number) {
+  if (e.button !== 0 || !e.isPrimary) return // 右键 / 双指不参与圈选
+  e.preventDefault()
+  try {
+    // 捕获挂到 <svg> 上：指针移出格子后 move/up 仍然落在 svg，鼠标拖出边界也不丢事件
+    svgEl.value?.setPointerCapture?.(e.pointerId)
+  } catch { /* 老浏览器不支持捕获时退化为逐格 enter */ }
   dragFrom.value = { r, c }
   dragTo.value = { r, c }
 }
 function moveDrag(r: number, c: number) {
   if (dragFrom.value) dragTo.value = { r, c }
 }
-function endDrag() {
+function onSvgMove(e: PointerEvent) {
+  if (!dragFrom.value) return
+  const cell = cellAtPoint(e.clientX, e.clientY)
+  if (cell) dragTo.value = cell
+}
+function onSvgLeave(e: PointerEvent) {
+  if (!dragFrom.value) return
+  // 捕获状态下 pointerleave 会在松手后补发，结束拖拽交给 pointerup / pointercancel
+  if (svgEl.value?.hasPointerCapture?.(e.pointerId)) return
+  endDrag()
+}
+function endDrag(e?: PointerEvent) {
+  if (e) {
+    try {
+      if (svgEl.value?.hasPointerCapture?.(e.pointerId)) svgEl.value.releasePointerCapture(e.pointerId)
+    } catch { /* 忽略 */ }
+  }
   if (dragFrom.value && dragTo.value) sel.value = collect(dragFrom.value, dragTo.value)
   dragFrom.value = null
   dragTo.value = null
@@ -373,13 +409,16 @@ function cellStroke(r: number, c: number): string {
     <div class="km-main">
       <div class="km-mapwrap">
         <svg
+          ref="svgEl"
           class="km-svg"
           :viewBox="`0 0 ${vbW} ${vbH}`"
           role="application"
           :aria-label="mapLabel"
+          @pointerdown.self.prevent
+          @pointermove="onSvgMove"
           @pointerup="endDrag"
           @pointercancel="endDrag"
-          @pointerleave="endDrag"
+          @pointerleave="onSvgLeave"
         >
           <!-- 行标签 -->
           <text
@@ -419,7 +458,9 @@ function cellStroke(r: number, c: number): string {
               :class="{ 'km-cursor': row.rr === cursor.r && col.cc === cursor.c }"
               :tabindex="row.rr === cursor.r && col.cc === cursor.c ? 0 : -1"
               :aria-label="cellLabel(row.rr, col.cc)"
-              @pointerdown.prevent="startDrag(row.rr, col.cc)"
+              :data-rr="row.rr"
+              :data-cc="col.cc"
+              @pointerdown="startDrag($event, row.rr, col.cc)"
               @pointerenter="moveDrag(row.rr, col.cc)"
               @keydown="onCellKey($event, row.rr, col.cc)"
             />
@@ -503,6 +544,8 @@ function cellStroke(r: number, c: number): string {
 @media (max-width: 760px) { .km-main { grid-template-columns: 1fr; } }
 .km-mapwrap { min-width: 0; }
 .km-svg { width: 100%; height: auto; display: block; user-select: none; touch-action: none; }
+/* 格子上的文字不抢指针事件：elementFromPoint / 点击都要命中下面的矩形 */
+.km-svg text { pointer-events: none; }
 .km-cell { cursor: crosshair; }
 .km-cursor:focus, .km-cursor:focus-visible { outline: none; stroke: var(--vp-c-brand-1); stroke-width: 3; }
 .km-reset {

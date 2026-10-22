@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import Ctrl from '../Ctrl.vue'
+import { ensureThemeWatch, themeRev } from '../../lib/canvas'
 
 /**
  * 舵机控制演示：50 Hz PWM + 脉宽滑块 ↔ 角度联动
@@ -47,17 +48,33 @@ const startAngle = ref(-90)
 let raf = 0
 let lastT = 0
 let reduceMotion = false
+let ro: ResizeObserver | null = null
+
+/** 取色缓存（--vp-c-* 的值只在主题切换时失效） */
+const varCache = new Map<string, string>()
 
 function cssVar(name: string, fallback: string): string {
-  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
-  return v || fallback
+  // 取色缓存：主题切换前不必每帧都做 getComputedStyle（原来每帧 13~15 次强制样式重算）
+  const hit = varCache.get(name)
+  if (hit !== undefined) return hit
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
+  varCache.set(name, v)
+  return v
 }
 
-function setupCanvas(el: HTMLCanvasElement | null): CanvasRenderingContext2D | null {
+interface Ctx {
+  ctx: CanvasRenderingContext2D
+  w: number
+  h: number
+}
+
+function setupCanvas(el: HTMLCanvasElement | null): Ctx | null {
   if (!el) return null
+  // 宽度为 0 说明布局还没稳定（隐藏 / 折叠的容器）：直接跳过，等 ResizeObserver 再来
+  const w = el.clientWidth
+  const h = el.clientHeight
+  if (!w || !h) return null
   const dpr = Math.min(window.devicePixelRatio || 1, 2)
-  const w = el.clientWidth || 600
-  const h = el.clientHeight || 120
   if (el.width !== Math.round(w * dpr) || el.height !== Math.round(h * dpr)) {
     el.width = Math.round(w * dpr)
     el.height = Math.round(h * dpr)
@@ -66,14 +83,19 @@ function setupCanvas(el: HTMLCanvasElement | null): CanvasRenderingContext2D | n
   if (!ctx) return null
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
   ctx.clearRect(0, 0, w, h)
-  return ctx
+  return { ctx, w, h }
+}
+
+function drawAll() {
+  drawWave()
+  drawSlew()
+  drawDial()
 }
 
 function drawWave() {
-  const ctx = setupCanvas(waveEl.value)
-  if (!ctx || !waveEl.value) return
-  const w = waveEl.value.clientWidth
-  const h = waveEl.value.clientHeight
+  const c = setupCanvas(waveEl.value)
+  if (!c) return
+  const { ctx, w, h } = c
   const cBrand = cssVar('--vp-c-brand-1', '#2563eb')
   const cDivider = cssVar('--vp-c-divider', '#e2e2e3')
   const cText = cssVar('--vp-c-text-3', '#5f6368')
@@ -149,10 +171,9 @@ function drawWave() {
 }
 
 function drawSlew() {
-  const ctx = setupCanvas(slewEl.value)
-  if (!ctx || !slewEl.value) return
-  const w = slewEl.value.clientWidth
-  const h = slewEl.value.clientHeight
+  const c = setupCanvas(slewEl.value)
+  if (!c) return
+  const { ctx, w, h } = c
   const cBrand = cssVar('--vp-c-brand-1', '#2563eb')
   const cDivider = cssVar('--vp-c-divider', '#e2e2e3')
   const cText = cssVar('--vp-c-text-3', '#5f6368')
@@ -229,10 +250,9 @@ function drawSlew() {
 }
 
 function drawDial() {
-  const ctx = setupCanvas(dialEl.value)
-  if (!ctx || !dialEl.value) return
-  const w = dialEl.value.clientWidth
-  const h = dialEl.value.clientHeight
+  const c = setupCanvas(dialEl.value)
+  if (!c) return
+  const { ctx, w, h } = c
   const cBrand = cssVar('--vp-c-brand-1', '#2563eb')
   const cDivider = cssVar('--vp-c-divider', '#e2e2e3')
   const cText = cssVar('--vp-c-text-3', '#5f6368')
@@ -324,9 +344,7 @@ function tick(t: number) {
     paceTrail.value = Math.min(1, 0.08 + done * 0.92)
   }
 
-  drawWave()
-  drawSlew()
-  drawDial()
+  drawAll()
   raf = requestAnimationFrame(tick)
 }
 
@@ -337,9 +355,7 @@ function start() {
     prevTarget = targetAngle.value
     startAngle.value = targetAngle.value
     paceTrail.value = 1
-    drawWave()
-    drawSlew()
-    drawDial()
+    drawAll()
     return
   }
   stop()
@@ -361,6 +377,7 @@ function onMotionChange(e: MediaQueryListEvent | MediaQueryList) {
 
 onMounted(() => {
   // window 只在挂载后访问（SSR 期间没有 window）
+  ensureThemeWatch()
   mq = window.matchMedia?.('(prefers-reduced-motion: reduce)') ?? null
   reduceMotion = mq ? mq.matches : false
   mq?.addEventListener?.('change', onMotionChange as (e: MediaQueryListEvent) => void)
@@ -369,10 +386,17 @@ onMounted(() => {
   startAngle.value = targetAngle.value
   paceTrail.value = 1
   start()
+  // 窗口 / 侧边栏尺寸变化后按新尺寸重画（reduce-motion 下没有 rAF 循环，不重画就会被拉伸）
+  if (typeof ResizeObserver !== 'undefined') {
+    ro = new ResizeObserver(() => drawAll())
+    for (const el of [waveEl.value, slewEl.value, dialEl.value]) if (el) ro.observe(el)
+  }
 })
 
 onUnmounted(() => {
   stop()
+  ro?.disconnect()
+  ro = null
   mq?.removeEventListener?.('change', onMotionChange as (e: MediaQueryListEvent) => void)
   mq = null
 })
@@ -382,6 +406,12 @@ const yank = computed(() => pulseUs.value - 1500)
 // 减少动态效果时，滑块一动就重画（不依赖 rAF 循环）
 watch(pulseUs, () => {
   if (reduceMotion) start()
+})
+
+// 深浅色切换：取色缓存失效后整组重画一遍
+watch(themeRev, () => {
+  varCache.clear()
+  drawAll()
 })
 </script>
 

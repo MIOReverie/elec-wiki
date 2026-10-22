@@ -30,7 +30,7 @@ const cv = ref<HTMLCanvasElement | null>(null)
 
 const cvLabel = computed(() => {
   const stateName = { normal: '有载', open: '开路', short: '短路' }[state.value]
-  return `电源外特性演示：电动势 ${E.value} V、内阻 ${R0} Ω、负载 ${RL} Ω，状态${stateName}。` +
+  return `电源外特性演示：电动势 ${E.value} V、内阻 ${R0.value} Ω、负载 ${RL.value} Ω，状态${stateName}。` +
     `电流 ${calc.value.I.toFixed(3)} A，负载端电压 ${calc.value.U.toFixed(2)} V，` +
     `负载功率 ${calc.value.PL.toFixed(2)} W，效率 ${(calc.value.eta * 100).toFixed(1)} %。`
 })

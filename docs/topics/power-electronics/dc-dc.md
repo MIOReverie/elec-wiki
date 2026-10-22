@@ -17,7 +17,15 @@ $$
 
 效率只有 $\frac{5}{24}=20.83\%$，而且 38 W 的热量需要一只拳头大的散热器才能散掉。这就是为什么现代设备几乎全用 **DC-DC 开关变换器**：同样 24 V → 5 V / 2 A，一个设计良好的 Buck 可以把损耗压到 **0.2 W 左右**，效率 **98%**。
 
-这一页讲清楚三个问题：**占空比怎么算、电感怎么选、纹波从哪来**。前置是电感电流不能突变 <Prereq id="switching-rule" />、RL 电路的时间常数 <Prereq id="time-constant" />、以及电容的充放电 $Q=CV$。
+这一页讲清楚三个问题：**占空比怎么算、电感怎么选、纹波从哪来**。
+
+::: tip 读这页之前
+- **需要会**：电感电流不能突变 <Prereq id="switching-rule" />；RL 电路的时间常数 $\tau=L/R$ <Prereq id="time-constant" />；电容的充放电 $Q=CV$ <Prereq id="diode" /> <Prereq id="time-constant" />。
+- **这一页用到的符号**：$D$（**占空比**，即高边开关导通时间占整个**开关周期**的比例，取 0–1）、$T_s$（开关周期，$T_s=1/f_s$）、$f_s$（**开关频率**，单位 Hz）、$\Delta i_L$（**纹波电流**，一个周期内电感电流上下摆动的峰峰值）、$\Delta i_o$（输出纹波电流）、CCM / DCM（**连续 / 断续导电模式**：CCM 指电感电流全程不为零，DCM 指每周期有一段降到零）、**同步整流**（用一只 MOS 替掉续流二极管）、**死区**（上下管同时关断的刻意空窗，否则直通）。约定见[符号与约定](../../guide/notation.md)。
+- **会用到微积分**：伏秒平衡那一步要对 $u_L=L\,\mathrm{d}i_L/\mathrm{d}t$ 两边积分，所以本页第一节需要一点点「$\int$ 面积 = 变化量」这个想法。不熟悉的话记住一句话就行：**电感上电压的平均值乘以时间，等于电流的净变化**。
+:::
+
+**这一页要解决什么**：[上一页 AC-DC](./ac-dc.md) 的产物是一条 18.3 V、带着 2 V 纹波的「粗直流」，离一条能喂 MCU 的 5 V 轨还差两件事：电压要降下来，波动要压到毫伏级。这一页教你用**开关变换器**做到这两件事，并且回答三个具体问题：**占空比 $D$ 怎么定**、**电感 $L$ 怎么选**、**开关频率 $f_s$ 取多少**。读完你应该能对着「24 V 转 5 V / 2 A」这个需求，从零算出 $D$、$L$、$C$ 三个数，并说清损耗花在哪里。
 
 ## 结论先行
 
@@ -28,6 +36,8 @@ $$
 5. **CCM 与 DCM 的分界是「临界电感」**：$\Delta i_L=2I_o$ 时刚好进入 DCM。22 µH 在 2 A 时是 CCM，但负载掉到 0.3 A 以后就会进入 DCM，输出电压的纹波形态会变——这是轻载效率与稳定性的常见坑。
 
 ## 一、原理：Buck 是怎样把电压「切低」的
+
+这一节只回答一个问题：一个开关怎么能把一条 24 V 的直流「切」出 5 V 来。
 
 ### 1.1 电路的两种状态
 
@@ -46,6 +56,64 @@ $$
 - 负载仍然有电流流过。
 
 **关键洞察**：负载拿到的永远是从电感来的电流，开关只是决定了电感「在哪一段时间被充电」。**所以输出电压永远不会超过输入电压**——这是 Buck 的先天限制。
+
+<FigBox title="Buck 的两个状态与四条电流路径" kind="拓扑" note="左：开关导通，输入直接给电感供电，电流从左向右流过电感与负载。低边二极管反偏截止。右：开关关断，电感要维持电流，只能从地经二极管续流——电流在电感里仍然是同向的，这就是输出永远为正的原因。两条虚线框分别是输入滤波电容与输出滤波电容。">
+
+<svg viewBox="0 0 660 300" role="img" aria-label="Buck 变换器拓扑图与两种工作状态：状态一高边开关导通时电感充电，状态二关断时电流经续流二极管维持">
+<g stroke="var(--vp-c-text-2)" stroke-width="2.2" fill="none">
+  <line x1="160" y1="40" x2="380" y2="40" />
+  <line x1="160" y1="40" x2="160" y2="200" />
+  <line x1="500" y1="40" x2="500" y2="200" />
+  <line x1="160" y1="200" x2="500" y2="200" />
+</g>
+
+<rect x="146" y="76" width="28" height="46" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
+<text x="160" y="66" font-size="11" fill="var(--vp-c-text-1)" text-anchor="middle" font-weight="600">高边开关 Q1</text>
+
+<line x1="380" y1="40" x2="380" y2="78" stroke="var(--vp-c-text-2)" stroke-width="2.2" />
+<path d="M 366 86 C 356 96, 366 106, 380 102 L 380 116" stroke="var(--vp-c-text-2)" stroke-width="2.2" fill="none" />
+<text x="380" y="66" font-size="11" fill="var(--vp-c-text-1)" text-anchor="middle" font-weight="600">电感 L</text>
+
+<path d="M 440 84 L 452 84 L 452 108 L 468 108 L 468 84 L 480 84 L 480 108 L 462 122 L 444 108 Z" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="2" />
+<text x="462" y="68" font-size="11" fill="var(--vp-c-text-1)" text-anchor="middle" font-weight="600">续流二极管</text>
+
+<rect x="230" y="220" width="14" height="38" rx="2" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.6" />
+<line x1="244" y1="220" x2="244" y2="200" stroke="var(--vp-c-divider)" stroke-width="1.8" />
+<line x1="230" y1="220" x2="230" y2="200" stroke="var(--vp-c-divider)" stroke-width="1.8" />
+<text x="200" y="248" font-size="10" fill="var(--vp-c-text-3)">C_out</text>
+
+<rect x="112" y="60" width="14" height="38" rx="2" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.6" />
+<line x1="126" y1="60" x2="126" y2="40" stroke="var(--vp-c-divider)" stroke-width="1.8" />
+<line x1="112" y1="60" x2="112" y2="40" stroke="var(--vp-c-divider)" stroke-width="1.8" />
+<text x="82" y="248" font-size="10" fill="var(--vp-c-text-3)">C_in</text>
+
+<text x="160" y="26" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle" font-weight="600">U_in</text>
+<text x="500" y="26" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle" font-weight="600">U_o</text>
+<text x="500" y="278" font-size="11" fill="var(--vp-c-text-3)" text-anchor="middle">负载</text>
+
+<g stroke="var(--vp-c-brand-1)" stroke-width="2.4" fill="none">
+  <path d="M 118 40 L 100 40 L 100 200" marker-end="url(#dd-buck-arrow)" />
+  <path d="M 168 40 L 380 40" marker-end="url(#dd-buck-arrow)" />
+</g>
+<text x="176" y="34" font-size="10" fill="var(--vp-c-brand-1)">状态一：导通 D·T_s，i_L 线性上升</text>
+
+<g stroke="var(--vp-c-brand-2)" stroke-width="2.4" fill="none">
+  <path d="M 492 122 L 540 122 L 540 200 L 168 200 L 168 96" marker-end="url(#dd-buck-arrow2)" />
+</g>
+<text x="546" y="150" font-size="10" fill="var(--vp-c-brand-2)">状态二：关断 (1−D)·T_s</text>
+<text x="546" y="166" font-size="10" fill="var(--vp-c-brand-2)">i_L 线性下降</text>
+
+<defs>
+  <marker id="dd-buck-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+  <marker id="dd-buck-arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-2)" />
+  </marker>
+</defs>
+</svg>
+
+</FigBox>
 
 ### 1.2 伏秒平衡：D 的来历
 
@@ -97,7 +165,11 @@ $$
 | Boost | $D=1-U_{in}/U_o$ | $U_o=2U_{in}$ | 升压，注意 $D\to1$ 退化 |
 | Buck-Boost | $D=\frac{U_o}{U_{in}+U_o}$ | $U_o=U_{in}$ | 反极性输出，$U_o=-U_{in}\frac{D}{1-D}$ |
 
+到这里 Buck 的电压公式已经有了。但 $U_o=DU_{in}$ 只告诉你「平均电压是多少」，没告诉你**这个平均值靠什么实现**——靠的是电感电流不撞到零。下一节把电感当成一个主角来选。
+
 ## 二、电感：整个变换器的心脏
+
+这一节只回答一个问题：电感量怎么选，才既能让纹波够小、又能让变换器在轻载时也保持稳定。
 
 ### 2.1 电感电流的三角波
 
@@ -125,6 +197,41 @@ $$
 2. $\Delta i_L$ 与 $f_s$ **成反比**——频率越高，同样的电感能得到更小的纹波；
 3. $\Delta i_L$ 还正比于 $(1-D)$——**占空比越小（降压越多），纹波越大**。这是为什么 24 V → 5 V 比 12 V → 5 V 更吃电感。
 
+<FigBox title="电感电流是三角波，电容电压是它的镜像" kind="波形" note="上图：电感电流在一个周期内上升再下降，峰峰值就是 Δi_L。若 Δi_L 大于 2·I_o，谷底会跌破零，变换器进入 DCM——图中虚线就是那个零线。下图：输出电容看到的是电感电流减去负载电流的差值在积分，所以它的纹波形状与电感电流相反、幅度小得多。这就是为什么电感叫「心脏」、电容只是「滤细节」。">
+
+<svg viewBox="0 0 660 300" role="img" aria-label="Buck 的电感电流三角波与输出电压纹波波形：电感电流峰峰值为纹波电流，输出电压纹波远小于电感电流">
+<g stroke="var(--vp-c-divider)" stroke-width="1">
+  <line x1="60" y1="120" x2="640" y2="120" />
+  <line x1="60" y1="260" x2="640" y2="260" />
+</g>
+
+<path d="M 60 40 L 180 80 L 300 120 L 420 160 L 540 200 L 620 220" stroke="var(--vp-c-brand-1)" stroke-width="2.4" fill="none" />
+<path d="M 60 200 L 180 160 L 300 120 L 420 80 L 540 40 L 620 30" stroke="var(--vp-c-brand-2)" stroke-width="2.4" fill="none" />
+<path d="M 60 200 L 180 160 L 300 120 L 420 80 L 540 40 L 620 30" stroke="none" />
+
+<g stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="5 4">
+  <line x1="300" y1="20" x2="300" y2="200" />
+  <line x1="300" y1="30" x2="300" y2="200" />
+</g>
+<text x="306" y="34" font-size="10" fill="var(--vp-c-text-3)">i_L 谷底</text>
+
+<line x1="60" y1="200" x2="640" y2="200" stroke="#ef4444" stroke-width="1.3" stroke-dasharray="4 3" />
+<text x="636" y="212" font-size="10" fill="#ef4444" text-anchor="end">DCM 分界：i_L = 0</text>
+
+<path d="M 60 268 Q 180 246 300 240 Q 420 234 540 240 Q 600 244 640 240" stroke="var(--vp-c-brand-2)" stroke-width="2.2" fill="none" />
+<line x1="60" y1="238" x2="640" y2="238" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3" />
+<text x="636" y="286" font-size="10" fill="var(--vp-c-text-3)" text-anchor="end">输出电压 u_o：纹波只有几十 mV，形状与 i_L 相反</text>
+
+<g font-size="10.5" fill="var(--vp-c-text-2)">
+  <text x="66" y="30">导通 D·T_s（i_L 上升）</text>
+  <text x="330" y="30">关断 (1−D)·T_s（i_L 下降）</text>
+</g>
+<path d="M 60 120 L 300 120" stroke="var(--vp-c-brand-1)" stroke-width="1" opacity="0.5" />
+<path d="M 300 120 L 620 26" stroke="var(--vp-c-brand-2)" stroke-width="1" opacity="0.5" />
+</svg>
+
+</FigBox>
+
 ### 2.2 纹波比例：一个工程经验
 
 纹波取多大？实践中有一个标准区间：
@@ -151,7 +258,11 @@ $$
 
 饱和电流是最容易忽略的一项。22 µH、2 A 的电感，饱和电流通常在 3–5 A，而本页例题的峰值是 2.30 A，**看起来够用，但如果启动瞬间或负载突变时有 3 A 的冲击，余量就没了**。所以工程上取 **$I_{sat}\ge1.5I_{peak}$**。
 
+电感选完了，纹波还没有真正落到输出端。下一节讲电容怎么把电感电流的纹波进一步压掉。
+
 ## 三、电容：纹波的另一半
+
+这一节只回答一个问题：输出电压的纹波由哪两项构成，以及为什么加电容常常没用。
 
 ### 3.1 输出电容的两个作用
 
@@ -190,7 +301,11 @@ node 验算：`0.6/(8*300e3*47e-6)*1000 = 5.317`；`0.6*0.005*1000 = 3.0`。
 1. **陶瓷电容的直流偏压效应**：标称 47 µF / 6.3 V 的 0805 陶瓷电容，在 5 V 直流偏置下有效容量可能只剩 **20 µF 左右**。所以**必须按厂商的偏压曲线取值**，或者直接选更大的封装/更高耐压（10 V 或 16 V 的 47 µF 在 5 V 下更接近标称）。
 2. **电容的纹波电流**：Buck 输出电容承受的有效值电流约为 $\Delta i_L/\sqrt{12}=0.173$ A，不算大；但**输入电容**承受的是脉冲电流，有效值可达 $I_o\sqrt{D(1-D)}$，本页例题是 `2*sqrt(0.2083*0.7917) = 0.81 A`——所以**输入电容必须是低 ESR 的陶瓷**，否则它比输出电容先坏。
 
+频率是最后一个还没定的自由参数。下一节把它的三笔账一起算，看它到底能取多大。
+
 ## 四、开关频率：三笔账
+
+这一节只回答一个问题：开关频率为什么有上限——它同时换来了体积和损耗。
 
 ### 4.1 频率越高越好吗
 
@@ -235,7 +350,11 @@ $$
 
 **结论**：一般的中小功率板子，**300–500 kHz** 是甜点；要求极致小型化才升到 1 MHz 以上，且必须配 GaN 或低压差的沟槽 MOSFET 来缩小 $t_r$、$t_f$。频率再高的另一个隐形成本是 **EMI**：1 MHz 的开关谐波会直接穿过很多 EMI 测试的起始频段（150 kHz–30 MHz）。
 
+三个参数都定了，但损耗预算里还有一项大得离谱。下一节处理那颗二极管。
+
 ## 五、同步整流：替掉二极管
+
+这一节只回答一个问题：为什么在低压差 Buck 里，二极管损耗会比其它所有损耗加起来还大。
 
 ### 5.1 为什么低温差下必须同步整流
 
@@ -290,7 +409,11 @@ $$
 - **输出电压高（> 24 V）**：$U_F\times I_o$ 相对比例变小，同步整流收益下降。
 :::
 
+各处分项算完了。下一节把它们汇总成一张预算表，并算出这个设计的效率天花板。
+
 ## 六、效率与损耗：一张预算表
+
+这一节只回答一个问题：算出来的 98% 效率是真的吗，还是被某些被忽略的项拉高了。
 
 ### 6.1 损耗分类
 
@@ -326,7 +449,11 @@ node 验算：`10/(10+0.4905)*100 = 95.32`。各项占「小计」的比例：`0
 
 这就是为什么 PSU 的「额定效率」通常标在 50% 负载点。选电源时**不要按满载算效率**，要按你实际的工作点算。
 
+到这里所有公式都有了。下一节把它们串成一道从需求反推到 BOM 的完整例题。
+
 ## 七、例题一：24 V → 5 V / 2 A 的 Buck（完整计算）
+
+这一节只回答一个问题：给定「24 V 进、5 V / 2 A 出、纹波 ≤ 20 mV」，前六节的公式按什么顺序用起来。
 
 这是本页的核心题目，把所有公式串一遍。
 
@@ -442,6 +569,8 @@ $$
 
 ## 八、例题二：5 V → 12 V 的 Boost
 
+这一节只回答一个问题：升压时哪些公式和 Buck 不一样，最容易搞错的是哪一个。
+
 **已知**：$U_{in}=5\ \text{V}$、$U_o=12\ \text{V}$、$I_o=0.5\ \text{A}$、$f_s=300\ \text{kHz}$、效率 88%、纹波电流比例 30%。
 
 **第 1 步：占空比**
@@ -508,7 +637,11 @@ $$
 
 **这张表解释了为什么新手做 Boost 总是不稳、而 Buck 很稳**：Boost 有右半平面零点（RHPZ），环路带宽不能太高，否则会振荡。这是控制理论的问题，不属于本页的范围，但值得知道它存在。
 
+理论算完的两道题，最后用一块真实板子校准一下。下一节把公式和实测数据摆在一起看。
+
 ## 九、工程实例：一块真实的 24 V → 5 V 降压板
+
+这一节只回答一个问题：公式算出的效率，和一块真实存在的板上量出来的效率，差在哪里。
 
 **场景**：一台 24 V 供电的工业设备（PLC 输出电源），需要给板上的 STM32（5 V）、传感器（5 V）与 RS485（3.3 V）供电，总电流约 **1.5 A**。
 
@@ -534,6 +667,8 @@ $$
 
 ## 十、易错清单
 
+这一节只回答一个问题：哪八个错误最常让人把一颗能用的芯片换成一颗不能用的。
+
 - [ ] **电感按输出电流选**——必须按**峰值电流** $I_o+\Delta i_L/2$ 并留 1.5 倍，否则饱和炸管
 - [ ] **忘了占空比越小、纹波越大**（$\Delta i\propto 1-D$），24 V 降到 5 V 比 12 V 降到 5 V 更吃电感
 - [ ] **把 Boost 的电感电流当输出电流**——它是**输入电流** $U_oI_o/(U_{in}\eta)$，例题是 1.364 A 而非 0.5 A
@@ -548,6 +683,8 @@ $$
 - [ ] **线性稳压器和 DC-DC 混着算**——24 V 降到 5 V 用线性，2 A 时烧 38 W，一定要算一遍
 
 ## 十一、自检
+
+这一节只回答一个问题：这页的核心结论换个问法，你还答不答得上来（下面四个问题不给答案）。
 
 1. 一个 48 V → 12 V、$f_s=500$ kHz、1 A 的 Buck，$D$ 是多少？30% 纹波需要多大的电感？
 2. 为什么 Boost 的输出电容必须比同功率的 Buck 大？从「开关导通时输出端接了谁」这个角度看。

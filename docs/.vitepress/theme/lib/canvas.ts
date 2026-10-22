@@ -29,16 +29,23 @@ export function useCanvas(
 ): CanvasHandle {
   let raf = 0
   ensureSrOnlyStyle()
+  ensureThemeWatch()
   let ro: ResizeObserver | null = null
   let io: IntersectionObserver | null = null
-  let lastTs = 0
-  let tOffset = 0
+  let tStart = 0 // 本次播放的起点（ms）；0 表示当前没在跑循环
+  let tOffset = 0 // 已经播过的累计秒数：暂停 / 滚出视口期间冻结
   let inView = true
   // 用户意图：animate 模式默认播放（reduced-motion 下改为默认暂停）
   const playing = ref(false)
   const { reduced } = useReducedMotion()
 
+  const nowMs = () => (typeof performance !== 'undefined' ? performance.now() : Date.now())
+  /** t 的语义：从开始播放起累计的秒数（不是帧间隔）；暂停期间不累加 */
+  const currentT = () => tOffset + (tStart ? (nowMs() - tStart) / 1000 : 0)
+
   function render() {
+    // 把主题登记为 watchEffect 的依赖：深浅色切换后 TC / SIG 的墨色要跟着重绘
+    void themeRev.value
     const c = el.value
     if (!c) return
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -55,7 +62,7 @@ export function useCanvas(
     ctx.clearRect(0, 0, w, h)
     ctx.font = '12px system-ui, -apple-system, "Segoe UI", sans-serif'
     ctx.textBaseline = 'middle'
-    draw({ ctx, w, h, t: tOffset + (lastTs ? (performance.now() - lastTs) / 1000 : 0) })
+    draw({ ctx, w, h, t: currentT() })
   }
 
   function loopRunning() {
@@ -63,19 +70,18 @@ export function useCanvas(
   }
   function startLoop() {
     if (loopRunning()) return
-    lastTs = performance.now()
+    tStart = nowMs()
     const loop = () => {
       render()
-      lastTs = performance.now()
       raf = requestAnimationFrame(loop)
     }
     raf = requestAnimationFrame(loop)
   }
   function stopLoop() {
     if (loopRunning()) {
-      // 冻结动画时钟：暂停期间流逝的时间不计入 t
-      tOffset += (performance.now() - lastTs) / 1000
-      lastTs = 0
+      // 冻结动画时钟：把这一段播放时长结转进累计值，暂停期间流逝的时间不计入 t
+      tOffset = currentT()
+      tStart = 0
       cancelAnimationFrame(raf)
       raf = 0
       render()
@@ -177,14 +183,28 @@ const TC_KEYS = {
 } as const
 
 type TCKey = keyof typeof TC_KEYS
+
+/**
+ * 主题版本号：<html> 的 class 变化（深浅色切换）时 +1。
+ * useCanvas 的 render() 会读它，因此主题变化成为 watchEffect 的依赖 → 画布重绘。
+ */
+export const themeRev = ref(0)
+let themeWatcher: MutationObserver | null = null
+
+/** 全局只挂一次 MutationObserver：失效取色缓存 + 推进主题版本号（SSR 下是空操作） */
+export function ensureThemeWatch() {
+  if (typeof document === 'undefined' || themeWatcher) return
+  themeWatcher = new MutationObserver(() => {
+    tcCache.clear()
+    themeRev.value++
+  })
+  themeWatcher.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+}
+
 const tcCache = new Map<TCKey, string>()
-let tcWatcher: MutationObserver | null = null
 
 function tcGet(key: TCKey) {
-  if (typeof document !== 'undefined' && !tcWatcher) {
-    tcWatcher = new MutationObserver(() => tcCache.clear())
-    tcWatcher.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
-  }
+  ensureThemeWatch()
   const hit = tcCache.get(key)
   if (hit !== undefined) return hit
   const [name, fallback] = TC_KEYS[key]

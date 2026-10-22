@@ -65,6 +65,16 @@ const gridPath = computed(() => {
   }
   return d
 })
+// 无障碍读数：把当前波形的关键数字说清楚
+const waveLabel = computed(() => {
+  const modeName =
+    mode.value === 'servo' ? '舵机角度' : mode.value === 'tick' ? '定时中断' : 'PWM 调光/调速'
+  return (
+    `定时器 PWM 波形（${modeName}）：周期 ${periodMs.value < 1 ? (periodMs.value * 1000).toFixed(1) + ' 微秒' : periodMs.value.toFixed(3) + ' 毫秒'}，` +
+    `频率 ${fmtHz(freq.value)}，高电平持续 ${highUs.value.toFixed(1)} 微秒，实际占空比 ${actualDuty.value.toFixed(2)}%。` +
+    `图中画出两个周期，高电平在前、低电平在后。`
+  )
+})
 </script>
 
 <template>
@@ -111,7 +121,13 @@ const gridPath = computed(() => {
       </div>
     </div>
 
-    <svg class="tp-wave" :viewBox="`0 0 ${W} ${H}`" preserveAspectRatio="none">
+    <svg
+      class="tp-wave"
+      :viewBox="`0 0 ${W} ${H}`"
+      preserveAspectRatio="none"
+      role="img"
+      :aria-label="waveLabel"
+    >
       <path :d="gridPath" stroke="var(--vp-c-divider)" stroke-width="1" stroke-dasharray="3 3" fill="none" />
       <path :d="wavePath" stroke="var(--vp-c-brand-1)" stroke-width="2.5" fill="none" />
       <text :x="6" :y="topY - 4" font-size="11" fill="var(--vp-c-text-3)">高</text>

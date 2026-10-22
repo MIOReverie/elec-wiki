@@ -8,6 +8,14 @@ outline: [2, 3]
 
 <Meta time="45 min" level="核心" note="焊点的形状告诉你它的一切：锥形、发亮、边角圆润是好焊点；球状、发灰、拉尖都是问题" />
 
+**这一页要解决什么**：面包板上的电路「能跑」不等于它成立——每个接点都是几毫欧到几欧的串联电阻，焊点质量直接决定你算出来的电压、电流能不能在实物上兑现。这一页讲烙铁温度怎么定、通孔与贴片怎么焊、虚焊和连锡怎么认、洞洞板怎么走线。读完你应该能：焊出一个「锥形、发亮、边角圆润」的标准焊点，用压降法量化判断焊点好坏，并且按「电源地先走」的原则在洞洞板上布线。
+
+::: tip 读这页之前
+- **需要会**：欧姆定律与功率 $P=I^2R$（<Prereq id="ohm" />）；电阻率公式 $R=\rho l / S$ 的含义（中学物理即可）。
+- **这一页用到的符号**：$R_{\text{接触}}$ 是**接触电阻**（contact resistance：两个导体压在一起的界面电阻，焊点、插孔、弹簧片都存在），虚焊的本质就是它异常大；AWG 是美制线规（American wire gauge，编号越大线越细）。全部约定见[符号与约定](../guide/notation.md)。
+- **不需要**数学：这一页的公式只有乘除，重点全在图与操作顺序上。
+:::
+
 面包板让你在 30 秒内改一次拓扑，但它不是电路。面包板的接触电阻会随插拔次数上升，弹簧片会疲劳，1 A 电流下 0.1 Ω 的接触就是 0.1 V 的压降。当电路「在面包板上能跑、装进盒子就不跑」，或者「调好参数、想让它长期通电」，就该把它焊到洞洞板上。
 
 这一页讲的是**工艺**：烙铁多少度、焊锡怎么选、通孔和贴片怎么焊、虚焊和连锡怎么判断、洞洞板怎么走线、怎么拆。工艺本身不产生新知识，但它决定你之前的全部电路知识能不能在实物上兑现。
@@ -23,6 +31,8 @@ outline: [2, 3]
 7. **拆焊比焊接难。** 吸锡带、吸锡器、热风枪各管一类场景，且必须先把焊点加热到完全熔化再动，否则焊盘会被整块撕下来。
 
 ## 烙铁：温度只是参数之一
+
+这一节先破一个直觉：**焊锡不化从来不是「温度不够」，而是「热量没传到」**。温度、热容量、焊锡与助焊剂四件事里，后两件才是新手真正卡住的地方。
 
 ### 温度怎么定
 
@@ -63,6 +73,8 @@ $$Q = C_{\text{铜}} \Delta T + C_{\text{锡}} \Delta T \approx (0.6 + 0.85)\ \t
 
 ## 焊接手法：通孔与贴片
 
+这一节是操作核心：**通孔元件的五步法、贴片元件的先定位后补焊、多脚芯片的拖焊**。每一步都配了图——焊接是手上功夫，但判断「现在该动烙铁还是该送锡」靠的是看图想清楚热量与焊锡的走向。
+
 ### 通孔元件：五步焊接法
 
 1. **准备**：烙铁头上挂少量锡（增加接触面积），元件引脚与焊盘清洁（发黑的引脚先刮亮或蘸助焊剂）；
@@ -70,6 +82,57 @@ $$Q = C_{\text{铜}} \Delta T + C_{\text{锡}} \Delta T \approx (0.6 + 0.85)\ \t
 3. **送锡**：焊锡丝从**引脚的对侧**送入，而不是直接送到烙铁头上。焊锡在熔化的瞬间会被毛细作用吸进焊盘与引脚之间；
 4. **收锡**：焊锡铺满焊盘边缘、形成锥形后立刻撤走焊锡丝，再撤烙铁（顺序不能反，先撤锡再撤烙铁，可避免拉尖）；
 5. **检查**：好的焊点是**锥形、发亮、边角略凹**。有铅焊点通常亮银色，无铅焊点略偏灰、有细微颗粒感，都是正常的。
+
+<FigBox title="通孔五步法：烙铁与焊锡丝的位置关系" kind="结构" note="第 2 步：烙铁头斜压、同时碰到焊盘铜箔与元件引脚，两者同时升温。第 3 步：焊锡丝从对侧送入，接触的是被加热的引脚而不是烙铁头——焊锡往热量所在的地方流，毛细作用把它吸进缝隙。第 4 步：先撤焊锡丝、后撤烙铁，顺序反了会拉尖。">
+
+<svg viewBox="0 0 560 300" role="img" aria-label="通孔焊接五步：烙铁同时接触焊盘与引脚，焊锡丝从对侧送入，形成锥形焊点">
+<defs>
+  <marker id="sol-s1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+</defs>
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <text x="100" y="18" text-anchor="middle" font-weight="700">步骤 1 准备 · 步骤 2 同时加热</text>
+  <rect x="40" y="60" width="120" height="14" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.2" />
+  <text x="100" y="92" text-anchor="middle" fill="var(--vp-c-text-3)">焊盘（铜箔）</text>
+  <rect x="94" y="30" width="12" height="60" rx="2" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="118" y="40" fill="var(--vp-c-text-3)">引脚</text>
+  <line x1="30" y1="52" x2="88" y2="66" stroke="var(--vp-c-brand-1)" stroke-width="4" />
+  <line x1="22" y1="44" x2="34" y2="58" stroke="var(--vp-c-brand-1)" stroke-width="6" />
+  <text x="26" y="34" fill="var(--vp-c-brand-1)">烙铁</text>
+  <text x="100" y="120" text-anchor="middle" fill="var(--vp-c-brand-1)">同时接触焊盘 + 引脚 1~2 s</text>
+
+  <text x="300" y="18" text-anchor="middle" font-weight="700">步骤 3 对侧送锡</text>
+  <rect x="240" y="60" width="120" height="14" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.2" />
+  <rect x="294" y="30" width="12" height="60" rx="2" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <line x1="230" y1="52" x2="288" y2="66" stroke="var(--vp-c-brand-1)" stroke-width="4" />
+  <line x1="360" y1="46" x2="320" y2="58" stroke="var(--vp-c-text-2)" stroke-width="2.4" marker-end="url(#sol-s1)" />
+  <text x="366" y="40" fill="var(--vp-c-text-2)">焊锡丝</text>
+  <text x="300" y="120" text-anchor="middle" fill="var(--vp-c-text-2)">从引脚对侧送，接触被加热的引脚</text>
+  <text x="300" y="136" text-anchor="middle" fill="var(--vp-c-text-3)">毛细作用把焊锡吸进焊盘与引脚之间</text>
+
+  <text x="480" y="18" text-anchor="middle" font-weight="700">步骤 4 先撤锡 后撤铁</text>
+  <rect x="430" y="60" width="100" height="14" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.2" />
+  <rect x="474" y="30" width="12" height="60" rx="2" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <path d="M 434 68 Q 454 88 470 76 Q 488 62 500 74 Q 512 84 526 70" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+  <text x="480" y="106" text-anchor="middle" fill="var(--vp-c-brand-1)">锥形焊点（凹面）</text>
+  <text x="480" y="122" text-anchor="middle" fill="var(--vp-c-text-3)">顺序反了 → 拉尖</text>
+
+  <text x="280" y="176" text-anchor="middle" font-weight="700">⑤ 检查：好焊点 vs 坏焊点</text>
+  <path d="M 130 220 Q 150 244 170 220 Q 150 214 130 220" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+  <line x1="150" y1="196" x2="150" y2="222" stroke="var(--vp-c-text-2)" stroke-width="2" />
+  <text x="150" y="262" text-anchor="middle" fill="var(--vp-c-brand-1)">锥形、发亮、边角略凹 通过</text>
+  <circle cx="290" cy="224" r="14" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1.6" />
+  <line x1="290" y1="196" x2="290" y2="212" stroke="var(--vp-c-text-2)" stroke-width="2" />
+  <text x="290" y="262" text-anchor="middle" fill="var(--vp-c-text-3)">球状（锡多）✗</text>
+  <polygon points="440,196 436,240 448,240" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1.6" />
+  <line x1="444" y1="196" x2="444" y2="206" stroke="var(--vp-c-text-2)" stroke-width="2" />
+  <text x="444" y="262" text-anchor="middle" fill="var(--vp-c-text-3)">拉尖（撤锡顺序错）✗</text>
+  <text x="280" y="288" text-anchor="middle" fill="var(--vp-c-text-3)">有铅焊点亮银色，无铅略灰带颗粒感，都正常；判据是形状不是颜色</text>
+</g>
+</svg>
+
+</FigBox>
 
 ### 贴片元件：先定位，后焊接
 
@@ -91,9 +154,11 @@ $$Q = C_{\text{铜}} \Delta T + C_{\text{锡}} \Delta T \approx (0.6 + 0.85)\ \t
 
 ## 虚焊与连锡
 
+这一节是焊后质检：**虚焊是「看着像焊上了、电阻却有几十毫欧」，连锡是「不该连的焊盘连成一片」**。两类缺陷各有三个判别手段，压降法是其中唯一能量化的。
+
 ### 虚焊
 
-虚焊（冷焊）是「焊锡在电气上接触、在机械上没有结合」的状态。它的形成原因：
+**虚焊**（cold joint：焊锡在电气上接触、在机械上没有真正结合的状态）是「焊锡在电气上接触、在机械上没有结合」的状态。它的形成原因：
 
 - 烙铁温度不够，焊锡在焊盘上「化开」但没润湿；
 - 焊接时动了元件，焊锡在凝固过程中被扰动；
@@ -111,6 +176,50 @@ $$P = I^2 R_{\text{接触}}$$
 - **目视**：焊点发灰、球状、拉尖、与引脚之间有明显缝隙；
 - **镊子拉**：焊好后用镊子轻轻拉元件引脚，焊点应该不动，元件不应移位；
 - **压降法**：让 1 A 电流流过，用万用表 mV 档测焊点两端，1 mV/mΩ。正常焊点 < 5 mΩ。
+
+<FigBox title="虚焊的本质：一条藏在「焊上了」外表下的接触电阻" kind="结构" note="左：外表看起来完整，但焊锡与引脚之间有一条氧化层缝隙，电流被迫挤过这条高阻缝。右：压降法的判据表——正常 < 5 mΩ；10 mΩ 在 3 A 下 0.09 W 还撑得住；50 mΩ 就是 0.45 W，焊点变色冒烟。蜂鸣档全都会叫，所以「叫了」不构成任何证据。">
+
+<svg viewBox="0 0 560 250" role="img" aria-label="左图虚焊截面缝隙示意，右图接触电阻与发热的对照表">
+<defs>
+  <marker id="sol-f1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+</defs>
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <text x="120" y="16" text-anchor="middle" font-weight="700">截面：缝隙在哪</text>
+  <line x1="40" y1="60" x2="90" y2="60" stroke="var(--vp-c-text-2)" stroke-width="3" />
+  <text x="34" y="64" text-anchor="end">引脚</text>
+  <path d="M 90 50 Q 120 40 150 50 Q 165 56 170 70 L 60 70 Q 62 56 78 52" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <text x="118" y="42" fill="var(--vp-c-brand-1)">焊锡外壳完整…</text>
+  <line x1="88" y1="62" x2="146" y2="64" stroke="var(--vp-c-text-2)" stroke-width="1.6" stroke-dasharray="4 3" />
+  <text x="160" y="86" fill="var(--vp-c-text-2)">…但这条缝是氧化层</text>
+  <path d="M 40 92 L 90 92" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#sol-f1)" />
+  <text x="96" y="96" fill="var(--vp-c-brand-1)">电流挤过高阻缝 → R_接触 50 mΩ</text>
+  <text x="120" y="126" text-anchor="middle" fill="var(--vp-c-text-3)">3 A 时 P = I²R = 0.45 W → 变色、冒烟</text>
+
+  <text x="430" y="16" text-anchor="middle" font-weight="700">压降判据（1 A 下）</text>
+  <line x1="300" y1="140" x2="540" y2="140" stroke="var(--vp-c-divider)" stroke-width="1.2" />
+  <text x="300" y="156" fill="var(--vp-c-text-3)">R_接触</text>
+  <text x="400" y="156" text-anchor="middle" fill="var(--vp-c-text-3)">压降</text>
+  <text x="490" y="156" text-anchor="middle" fill="var(--vp-c-text-3)">判定</text>
+  <text x="300" y="56">&lt; 5 mΩ</text>
+  <text x="400" y="56" text-anchor="middle">&lt; 5 mV</text>
+  <text x="490" y="56" text-anchor="middle" fill="var(--vp-c-brand-1)">合格</text>
+  <line x1="300" y1="66" x2="540" y2="66" stroke="var(--vp-c-divider)" stroke-width="0.6" />
+  <text x="300" y="86">10 mΩ</text>
+  <text x="400" y="86" text-anchor="middle">10 mV</text>
+  <text x="490" y="86" text-anchor="middle">3 A 下建议重焊</text>
+  <line x1="300" y1="96" x2="540" y2="96" stroke="var(--vp-c-divider)" stroke-width="0.6" />
+  <text x="300" y="116">50 mΩ</text>
+  <text x="400" y="116" text-anchor="middle">50 mV</text>
+  <text x="490" y="116" text-anchor="middle" fill="var(--vp-c-brand-1)">必冒烟</text>
+  <line x1="300" y1="126" x2="540" y2="126" stroke="var(--vp-c-divider)" stroke-width="0.6" />
+  <text x="420" y="176" text-anchor="middle" fill="var(--vp-c-text-2)">蜂鸣阈值 30~50 Ω：上述全部「会叫」</text>
+  <text x="420" y="194" text-anchor="middle" fill="var(--vp-c-text-3)">→ 蜂鸣档不能作为焊点合格的证据</text>
+</g>
+</svg>
+
+</FigBox>
 
 ### 连锡
 
@@ -132,6 +241,8 @@ $$P = I^2 R_{\text{接触}}$$
 
 ## 面包板的接触不良
 
+这一节解释「在面包板上能跑、装进盒子就不跑」的另一半原因（前一半在[万用表](multimeter.md)的接触电阻一节）：**面包板是信号接线器，不是电源分配器**。每个弹簧片都是一个串联电阻。
+
 面包板的问题主要是三件事：**弹簧片疲劳、孔内氧化、杜邦线插针缩径**。
 
 | 接点状态 | 接触电阻 | 0.5 A 电流下的压降 |
@@ -151,9 +262,11 @@ $$P = I^2 R_{\text{接触}}$$
 
 ## 洞洞板走线
 
+这一节把「焊得好」升级成「板子布局合理」：**洞洞板孔与孔默认不连通，每一条连接都要靠锡桥或飞线**，所以走线顺序决定成败——电源和地先画出来，信号再填进去。
+
 ### 开始之前：画一张草图
 
-洞洞板（万用板）有 0.1 in（2.54 mm）的孔距，每孔镀铜焊盘，**孔与孔之间默认不连通**。所以洞洞板上的每一个连接都要靠「焊接的锡桥」或者「飞线」建立。
+洞洞板（万用板，perforated board：整板打满 2.54 mm 间距镀铜孔、孔间默认不连通的通用实验板）有 0.1 in（2.54 mm）的孔距，每孔镀铜焊盘，**孔与孔之间默认不连通**。所以洞洞板上的每一个连接都要靠「焊接的锡桥」或者「飞线」建立。
 
 画草图时，用单位「孔」来数：一块 5 cm × 7 cm 的板子大约是 19 × 27 个孔。先画外围的电源轨和地轨，再把主要芯片（DIP 封装直接插，SOP 封装需要转接板）放进去，最后填信号。
 
@@ -179,7 +292,51 @@ $$R = \rho\frac{l}{S}, \qquad \rho \approx 0.0172\ \Omega\cdot\text{mm}^2/\text{
 
 ### 万用板的电源与地
 
-这是一个几乎每个新手都踩过的坑：把正电源线走成一串焊点，而地走成另一串，在板子末端接负载。结果是「电源越走越弱」，每个焊点都有电阻，串联起来就是一条分压链。
+这是一个几乎每个新手都踩过的坑：把正电源线走成一串焊点，而地走成另一串，在板子末端接负载。结果是「电源越走越弱」，每个焊点都有电阻，串联起来就是一条分压链。两种走法的差别：
+
+<FigBox title="电源地走法：串成分压链，还是连成轨道" kind="结构" note="上：错误走法——电源像串糖葫芦一样一个焊点一个焊点接到末端负载，每个焊点几十毫欧，末端电压被沿途吃掉。下：正确走法——电源与地各走一条环形粗轨道，负载就近挂轨，去耦电容贴着芯片电源脚。">
+
+<svg viewBox="0 0 560 300" role="img" aria-label="上图为错误串接供电使末端电压下降，下图为正确环形电源轨与就近去耦">
+<defs>
+  <marker id="sol-r1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+</defs>
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <text x="130" y="18" text-anchor="middle" font-weight="700">错误：串成分压链</text>
+  <rect x="20" y="44" width="60" height="24" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="50" y="60" text-anchor="middle">电源</text>
+  <line x1="80" y1="56" x2="130" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <circle cx="130" cy="56" r="4" fill="var(--vp-c-brand-1)" />
+  <line x1="134" y1="56" x2="184" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <circle cx="184" cy="56" r="4" fill="var(--vp-c-brand-1)" />
+  <line x1="188" y1="56" x2="238" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <circle cx="238" cy="56" r="4" fill="var(--vp-c-brand-1)" />
+  <rect x="242" y="44" width="52" height="24" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="268" y="60" text-anchor="middle">负载</text>
+  <text x="158" y="42" text-anchor="middle" fill="var(--vp-c-text-3)">焊点 ×n 串联</text>
+  <line x1="268" y1="68" x2="268" y2="90" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#sol-r1)" />
+  <text x="268" y="106" text-anchor="middle" fill="var(--vp-c-text-3)">末端电压被沿途焊点吃掉</text>
+
+  <text x="430" y="18" text-anchor="middle" font-weight="700">正确：环形轨道</text>
+  <rect x="340" y="44" width="200" height="72" rx="10" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="4" />
+  <text x="356" y="40" fill="var(--vp-c-brand-1)">+5 V 轨</text>
+  <rect x="340" y="124" width="200" height="72" rx="10" fill="none" stroke="var(--vp-c-text-2)" stroke-width="4" />
+  <text x="356" y="120" fill="var(--vp-c-text-2)">GND 轨</text>
+  <line x1="400" y1="80" x2="400" y2="70" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <rect x="386" y="94" width="28" height="24" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="400" y="111" text-anchor="middle">IC</text>
+  <line x1="400" y1="118" x2="400" y2="128" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <rect x="420" y="96" width="14" height="20" rx="3" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.2" />
+  <text x="444" y="110" fill="var(--vp-c-text-3)">0.1 μF 就近</text>
+  <text x="430" y="216" text-anchor="middle" fill="var(--vp-c-text-3)">负载就近挂轨，轨道大面积载流</text>
+
+  <text x="280" y="258" text-anchor="middle" fill="var(--vp-c-text-2)">有动负载（电机、继电器）时：负载电流的地与信号的地分开走，在电源入口单点汇合</text>
+  <text x="280" y="280" text-anchor="middle" fill="var(--vp-c-text-3)">否则负载电流在地轨上的压降会叠加进 ADC 的参考地 → 一启动电机读数就跳</text>
+</g>
+</svg>
+
+</FigBox>
 
 **正确做法**：
 
@@ -193,6 +350,8 @@ $$R = \rho\frac{l}{S}, \qquad \rho \approx 0.0172\ \Omega\cdot\text{mm}^2/\text{
 如果洞洞板上接了会动的负载（电机、继电器），**负载电流的地与信号的地要分开走，在电源入口处汇合**。否则负载电流在地轨道上的压降会叠加到 MCU 的参考地上，表现为「一启动电机，ADC 读数就跳」。
 
 ## 拆焊
+
+这一节是焊接的逆操作，也是焊盘存活率的关键：**所有焊点必须彻底熔化后才能动元件**。四个工具各管一类场景，先选对工具再动手。
 
 拆焊比焊接更难，因为一旦焊盘被拉起，整块板就废了。
 
@@ -216,6 +375,8 @@ $$R = \rho\frac{l}{S}, \qquad \rho \approx 0.0172\ \Omega\cdot\text{mm}^2/\text{
 > **一条保命规则**：如果一个焊点「怎么都化不开」，原因通常是**散热太快**（大面积铜），而不是温度不够。做法是**提高烙铁功率**、加大烙铁头接触面积、预先用热风枪给周围预热，而不是把温度调到 450 °C。
 
 ## 例题
+
+两道例题把「接触电阻」从定性变成数字：第一题算面包板供电的压降（对应「面包板不走主电源」），第二题算虚焊发热（对应「蜂鸣档不能当证据」）。
 
 ::: tip 例 1 · 面包板接触电阻消耗了多少电压 {#ex-weld-breadboard}
 **题干**：一块 5 V 的 MCU 开发板通过面包板供电，走线路径上有 4 个面包板接点，每个 0.15 Ω。负载电流 0.2 A。求接点造成的压降；如果换成 1 A 的负载呢？
@@ -281,6 +442,8 @@ $$P = I^2R = 9 \times 0.010 = 0.090\ \text{W}$$
 
 ## 工程实例：一次「通电三秒就烧」的虚焊
 
+这则实例把上一节的连锡判别用到真实事故里：万用表两步定位，放大镜找到那颗 0.3 mm 的锡珠。它也是「通电前必测电源对地电阻」这条清单项的出处。
+
 某块洞洞板上的降压模块，上电后三秒就把输入保险丝烧断。目视看不出问题，元器件逐个拆测都正常。
 
 排查：
@@ -295,6 +458,8 @@ $$P = I^2R = 9 \times 0.010 = 0.090\ \text{W}$$
 **教训**：焊完的板子，在通电之前**必须先测电源与地之间的电阻**。一个万用表就能避免的损失，被省掉了。
 
 ## 常见错误
+
+四个错误覆盖温度、助焊剂、元件封装与通电流程，每一个都对应前面某一节的具体做法。
 
 ::: tip 错误 1 · 温度调高来「焊得快一点」
 **现象**：烙铁设到 450 °C，结果元件引脚周围的塑料变形，焊盘发黑，焊锡成渣。
@@ -317,10 +482,12 @@ $$P = I^2R = 9 \times 0.010 = 0.090\ \text{W}$$
 ::: tip 错误 4 · 通电前不测电源与地之间的电阻
 **现象**：焊好的板子第一次上电就烧保险丝、冒烟，或者芯片发热。
 
-**处理**：通电前必须做三件事：① 用电阻档测电源与地之间，读数应为几百欧以上（有滤波电容时会先小后大）；② 检查电解电容的极性；③ 用限流电源先供电，看电流是否在正常范围。
+**处理**：通电前必须做三件事：一、用电阻档测电源与地之间，读数应为几百欧以上（有滤波电容时会先小后大）；二、检查电解电容的极性；三、用限流电源先供电，看电流是否在正常范围。
 :::
 
 ## 自检清单
+
+焊完到通电之间有五道检查，全部来自本页：形状、连锡、拉力、短路、限流。清单如下：
 
 - [ ] 烙铁温度 350±10 °C，焊锡丝直径与焊盘匹配；
 - [ ] 焊前检查元件引脚与焊盘是否氧化；

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# 站点是静态页，没有需要屏蔽的后台路径。
+# sitemap 在设置 SITE_URL 构建时会自动生成（/sitemap.xml）。

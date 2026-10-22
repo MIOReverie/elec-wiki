@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="480" height="360" role="img" aria-label="电学手记概念图：结论先行、演示可拖、公式可查">
+  <defs>
+    <linearGradient id="hbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#2563eb" stop-opacity="0.14"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 面板 -->
+  <rect x="8" y="8" width="464" height="344" rx="18" fill="url(#hbg)" stroke="#3b82f6" stroke-opacity="0.3"/>
+
+  <!-- 顶部标题条：结论先行 -->
+  <rect x="36" y="36" width="170" height="40" rx="10" fill="#2563eb"/>
+  <text x="121" y="62" text-anchor="middle" font-family="system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="700" fill="#ffffff">结论先行</text>
+
+  <!-- 正文示意行 -->
+  <g stroke="#3b82f6" stroke-opacity="0.45" stroke-width="8" stroke-linecap="round">
+    <line x1="36" y1="104" x2="300" y2="104"/>
+    <line x1="36" y1="126" x2="252" y2="126"/>
+    <line x1="36" y1="148" x2="336" y2="148"/>
+  </g>
+  <!-- 前置知识胶囊 -->
+  <rect x="312" y="94" width="88" height="20" rx="10" fill="none" stroke="#3b82f6" stroke-opacity="0.7"/>
+  <text x="356" y="109" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#3b82f6">前置 · 展开</text>
+
+  <!-- 波形演示卡 -->
+  <rect x="36" y="180" width="264" height="140" rx="12" fill="none" stroke="#3b82f6" stroke-opacity="0.5"/>
+  <path d="M52 268 C 76 216, 100 216, 124 268 S 172 320, 196 268 S 244 216, 268 268" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+  <line x1="52" y1="268" x2="284" y2="268" stroke="#3b82f6" stroke-opacity="0.35" stroke-width="1.5" stroke-dasharray="4 5"/>
+  <circle cx="124" cy="268" r="5" fill="#2563eb"/>
+  <circle cx="196" cy="268" r="5" fill="#2563eb"/>
+  <text x="52" y="204" font-family="system-ui, sans-serif" font-size="13" fill="#3b82f6">演示 · 参数可拖</text>
+
+  <!-- 公式卡 -->
+  <rect x="316" y="180" width="128" height="140" rx="12" fill="none" stroke="#3b82f6" stroke-opacity="0.5"/>
+  <text x="380" y="238" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="26" fill="#3b82f6">U = IR</text>
+  <line x1="340" y1="262" x2="420" y2="262" stroke="#3b82f6" stroke-opacity="0.4" stroke-width="2"/>
+  <text x="380" y="292" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" fill="#3b82f6">公式速查</text>
+
+  <!-- 闪电点缀（呼应 logo） -->
+  <path d="M436 52 L420 84 L432 84 L416 116" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

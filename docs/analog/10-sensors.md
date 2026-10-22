@@ -5,22 +5,33 @@ description: 传感器输出为什么不能直接进 ADC：量程、偏置、阻
 
 # 10 · 传感器与信号调理：把物理量送进 ADC
 
-<Meta time="40 min" level="核心" note="传感器靠『接口』落地：同一颗 PT100，接错一根线就凭空多出 10 ℃" />
+<Meta time="45 min" level="核心" note="传感器靠『接口』落地：同一颗 PT100，接错一根线就凭空多出 10 ℃" />
 
-这一章是模电的出口：前面九章的运放、反馈、滤波、电源，全部在这里被拧成一条**从物理量到数字码**的流水线。
+**这一页要解决什么**：物理量变成数字码，中间是一条流水线。这一页把流水线上的每一个环节讲透：为什么传感器的输出**几乎都不能直接进 ADC**、电桥凭什么把微小变化从巨大基线里挖出来、共模电压为什么要用仪表放大器（INA）而不是一个运放来处理、以及抗混叠滤波器为什么只能放在 ADC **之前**。读完你应该能：对任意一颗传感器说出它缺哪一项前端、写出电桥与 INA 的增益公式、算出一套前端该选多大增益，并列出一份误差预算指出最大项。
 
-本章用到的三件老工具：分压比例见 <Prereq id="voltage-divider" />，把传感器输出等效成「源 + 内阻」见 <Prereq id="thevenin" />，运放的虚短虚断见 <Prereq id="virtual-short" />；数字化那一步的采样与量化，在[数电 08 章 · AD/DA](../digital/ad-da.md)已经推导过，本章只讨论「送进去之前」。
+::: tip 读这页之前
+- **需要会**：分压比例（<Prereq id="voltage-divider" />）、把网络等效成「源 + 内阻」（<Prereq id="thevenin" />）、运放的虚短虚断（<Prereq id="virtual-short" />，见 [05 · 集成运算放大电路](opamp.md)）。**这一页所有「放大」的字眼都指这三条规则。**
+- **会用到复数与频率**：本页的噪声、相移、幅频曲线用 $j\omega$ 表示，见 <Prereq id="complex-number" />；采样定理与混叠的完整推导在[数电 08 章](../digital/ad-da.md)，本页只说「送进去之前」怎么防。
+- **这一页用到的符号**：$V_S$（电桥激励电压）、$V_{ref}$（ADC 参考电压，也就是量程标尺）、$R_{sh}$（4–20 mA 采样电阻）、$R_G$（INA 的增益设定电阻）、$\varepsilon$（**应变**，无量纲的相对形变，单位常写 με）、$K$（**灵敏系数**，应变片阻值相对变化与应变的比值）、$f_s$（采样率）、$f_c$（滤波器截止频率）、$\mathrm{CMRR}$（**共模抑制比**，差模增益与共模增益之比）、$R_{shunt}$。约定见[符号与约定](../guide/notation.md#四、常用符号速查)。
+:::
+
+这一章是模电的出口：前面九章的运放、反馈、滤波、电源，全部在这里被拧成一条**从物理量到数字码**的流水线。数字化那一步的采样与量化在[数电 08 章 · AD/DA](../digital/ad-da.md)已经推导过，本章只讨论「送进去之前」。
+
+先看一个具体到能想象的场面。你把一颗 Pt100（铂电阻，阻值随温度线性变化的元件，0 ℃ 时 100 Ω）按手册接进一块板：红线进 AIN0，蓝线进 GND。室温 25 ℃，程序读回来显示 **35.2 ℃**。你反复换板子、换室温，它都偏得差不多同一个数；把板子搬到夏天，读数又整体上移。这个误差不需要任何精密仪器就能解释：**两根引线的电阻被算进了测量结果**，而它随环境温度在变。
+
+同一颗传感器，接成三线制，误差立刻降到 0.05 ℃。这一页要解释的就是这两件事背后的全部逻辑：传感器输出到底是什么样的信号、为什么必须先用电路收拾它、每一类传感器该配哪种前端。
 
 ## 结论先行
 
-1. **传感器输出几乎都不能直接进 ADC**。要解决的是五件事：**量程**（信号才几 mV，ADC 满量程 3.3 V）、**偏置**（信号悬在共模电位上、或落在 ADC 输入范围外）、**阻抗**（应变片、热敏电阻的输出阻抗高且会变）、**噪声**（50 Hz 工频、开关电源纹波、导线环路感应）、**非线性**（传感器本身不是直线）。前端电路只做一件事：把物理量**线性地、低噪声地、对齐到 ADC 输入范围**。
-2. **按输出类型分四类前端**：电阻式走「恒流/电桥 + 差分」，热电偶走「μV 级直流放大 + 冷端补偿」，电流输出走「采样电阻 + 共模处理」，数字式直接挂 I²C/SPI/单总线、**跳过模拟前端**。
-3. **电桥灵敏度与桥臂变化数成正比**：单臂 : 半桥 : 全桥 = 1 : 2 : 4，同为 $V_S$ 激励、同为 $\Delta R/R=2\times10^{-3}$ 时输出分别是 2.5 mV、5 mV、10 mV。**要 4 倍灵敏度，就去凑四个应变片**。
-4. **仪表放大器 = 三运放**：两级增益 $G=(1+2R_1/R_G)\cdot(R_3/R_2)$，第一级是真正的共模抑制来源（对称差分对 + 后端差分相减），CMRR 能做到 100 dB 以上，这是精密桥式测量的标配。
-5. **抗混叠必须在 ADC 之前**：采样率 $f_s$ 之下，任何超过 $f_s/2$ 的成分都会折回带内，**事后无法区分**。RC 一阶滤波必须让「最危险的干扰频率」先被压到噪声底。
-6. **参考电压就是标尺**：$V_{ref}$ 有 1% 误差，读数就有 1% 误差，ADC 位数再高也没用。**能比例式（ratiometric）测的，就不要用绝对电压量**——激励和参考来自同一个源，误差对消。
+1. **传感器输出几乎都不能直接进 ADC**，要解决五件事：**量程**（信号才几 mV，ADC 满量程 3.3 V）、**偏置**（信号悬在共模电位上或落在输入范围外）、**阻抗**（输出阻抗高且会变）、**噪声**（50 Hz 工频、开关纹波、导线环路）、**非线性**（传感器本身不是直线）。
+2. **电桥灵敏度与桥臂变化数成正比**：单臂 : 半桥 : 全桥 = 1 : 2 : 4。**要 4 倍灵敏度，就去凑四个应变片。**
+3. **仪表放大器 = 三运放**，两级增益 $G=(1+2R_1/R_G)(R_3/R_2)$；**共模抑制靠第一级的对称性**，所以 CMRR 能做到 100 dB 以上，而单运放加 1% 电阻只有约 40 dB。
+4. **抗混叠必须在 ADC 之前**：超过 $f_s/2$ 的成分一旦折回带内就再也分不开，数字滤波救不回来。
+5. **参考电压就是标尺**，**比例式测量能把 $V_{ref}$ 的误差约掉**——能比例式测的就不要用绝对电压量。
 
 ## 一、为什么直接接不行：五件事逐条对账
+
+这一节只回答一个问题：把传感器直接怼到 ADC 引脚上，会依次出哪几类问题、症状各是什么。
 
 把一颗传感器直接接上 MCU 的 ADC 引脚，出问题的顺序几乎总是这一串：
 
@@ -36,7 +47,11 @@ description: 传感器输出为什么不能直接进 ADC：量程、偏置、阻
 
 一个最常见的错误类比：把传感器当「电源」直接接 ADC，以为 ADC 自己会放大。**ADC 只做对齐，不做放大**——它把 0~Vref 的区间线性切分，你的 10 mV 在里面只占 0.3%。
 
+五件事的顺序不是随机的：先解决「量程」决定要多少增益，再解决「偏置」决定输出落在电压范围的哪里，然后「阻抗」决定信号能不能活着走到运放，「噪声」决定这个增益能用多少倍，最后「非线性」才轮到标定算法。下面按传感器的输出类型逐类给出对策。
+
 ## 二、四类典型传感器与前端
+
+这一节的目标是：看完能对任意一颗传感器说出「它的输出是什么、缺哪一项前端、该配哪类电路」。
 
 ### 2.1 电阻式：PT100、热敏电阻、应变片
 
@@ -49,7 +64,7 @@ description: 传感器输出为什么不能直接进 ADC：量程、偏置、阻
 
 ### 2.2 热电偶：μV 级信号的放大器考验
 
-K 型热电偶灵敏度约 $41\,\mu\text{V}/^\circ\text{C}$。教材与工程口算常用简化值 $10\,\mu\text{V}/^\circ\text{C}$ 估算量级，本章按 10~40 μV/℃ 这个区间理解都成立。100 ℃ 温差也才 1~4 mV，而且信号**本身就带着共模**：两根不同的金属一接，测的是「热端–冷端」的温差，所以：
+**热电偶**是两种不同金属焊在一起构成的元件，接点上温差变化时输出一个微小电压——它测的是**温差**，不是温度本身。K 型灵敏度约 $41\,\mu\text{V}/^\circ\text{C}$。教材与工程口算常用简化值 $10\,\mu\text{V}/^\circ\text{C}$ 估算量级，本章按 10~40 μV/℃ 这个区间理解都成立。100 ℃ 温差也才 1~4 mV，而且信号**本身就带着共模**：两根不同的金属一接，测的是「热端–冷端」的温差，所以：
 
 - **冷端补偿**：热电偶测的是温差，不知道冷端温度就推不出热端温度。常用办法是在接线端子处放一颗数字温度计（如 LM75、DS18B20）测出冷端，再查表求和。**冷端测错 1 ℃，结果就错约 1 ℃**——冷端温度计的精度直接决定系统精度，不能随便找颗芯片。
 - **必须用斩波/零漂运放**：信号只有几十 μV，而普通运放的失调（0.5~5 mV）就比整个量程还大。适合的器件是斩波稳零运放（如 AD8551、ICL7650）或集成的热电偶专用前端（如 MAX31855、AD8495）。
@@ -84,9 +99,65 @@ I²C（SHT3x 温湿度、INA219 电流监测）、SPI（MAX31855 热电偶）、
 
 数字式不是「更先进」，而是**把模拟前端的难点转移给了芯片厂**。代价是：速度受总线限制、地址冲突、无法灵活换量程。工程师要会判断的是「我的信号能不能被厂商的现成前端接住」，而不是见数字就选。
 
+四类看下来，电阻式（尤其应变片）最难：它的信号天生只有毫伏级，还骑在一个很大的电位上。**这正是下一节电桥与仪表放大器存在的唯一理由。**
+
 ## 三、电桥与仪表放大器
 
-### 3.1 惠斯通电桥：把微小变化从巨大基线里挖出来
+这一节的目标是：把「微小差分信号 + 巨大共模电位」这个组合彻底解决，拿到增益公式和 CMRR 的来源。
+
+### 3.1 先分清两种信号：差模与共模
+
+这是本节最要紧的一组术语，先一次说清，后面全靠它：
+
+- **差模信号**（differential）：两个输入端**互相反着动**的部分，即 $u_d=\dfrac{u_1-u_2}{2}$。**它才是你想测的那个物理量**——应变、温度、压力变化的信号全在这里。
+- **共模信号**（common mode）：两个输入端**同向一起动**的部分，即 $u_{cm}=\dfrac{u_1+u_2}{2}$。它通常是干扰：地弹、电阻失配、桥臂不匹配产生的差值。
+
+**必须理解的关键事实**：单个输入放大器（反相或同相）对差模和共模**一视同仁**地放大——增益由外部电阻决定，与信号是两路还是一路无关。所以共模 2.5 V 会被一起放大成 2.5 V × 增益。**只有做差分相减，才能把共模消掉**。
+
+### 3.2 惠斯通电桥：把微小变化从巨大基线里挖出来
+
+**惠斯通电桥**就是四个电阻接成一个菱形、对角加激励、另两对角取输出。平衡时两个中点等电位，输出为零；某臂的阻值一变，两个中点分压比例不再相等，输出出现电压。
+
+<FigBox title="惠斯通电桥：激励对角、输出对角" kind="结构" note="R1、R2 与 R3、R4 各自串联分压，两条中点之间取输出。平衡时中点等电位、输出为零；某臂阻值变化破坏平衡，输出才出现毫伏级电压。">
+<svg viewBox="0 0 420 380" role="img" aria-label="惠斯通电桥电路图，激励加在上下两端，输出取左右中点">
+<defs><marker id="arb" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="currentColor" /></marker></defs>
+<g stroke="currentColor" stroke-width="2" fill="none">
+<line x1="120" y1="30" x2="120" y2="68" />
+<rect x="110" y="68" width="20" height="90" />
+<line x1="120" y1="158" x2="120" y2="190" />
+<rect x="110" y="190" width="20" height="90" />
+<line x1="120" y1="30" x2="300" y2="30" />
+<rect x="272" y="20" width="20" height="90" />
+<line x1="300" y1="110" x2="300" y2="190" />
+<rect x="290" y="190" width="20" height="90" />
+<line x1="300" y1="280" x2="300" y2="310" />
+<line x1="120" y1="310" x2="300" y2="310" />
+<line x1="120" y1="155" x2="60" y2="155" />
+<line x1="300" y1="155" x2="360" y2="155" />
+</g>
+<g font-size="13" fill="currentColor">
+<text x="100" y="118" text-anchor="end">R₁</text>
+<text x="100" y="240" text-anchor="end">R₂</text>
+<text x="316" y="70">R₃</text>
+<text x="316" y="240">R₄</text>
+</g>
+<g stroke="currentColor" fill="none">
+<line x1="60" y1="155" x2="60" y2="340" stroke-width="1.6" />
+<line x1="42" y1="340" x2="78" y2="340" stroke-width="2.2" />
+<line x1="48" y1="348" x2="72" y2="348" stroke-width="2.2" />
+<line x1="54" y1="356" x2="66" y2="356" stroke-width="2.2" />
+<circle cx="60" cy="30" r="3.5" fill="currentColor" />
+<text x="60" y="16" text-anchor="middle">+V_S</text>
+<circle cx="300" cy="310" r="3.5" fill="currentColor" />
+<text x="316" y="300">−V_S</text>
+<text x="40" y="152" text-anchor="end">Vo⁺</text>
+<text x="376" y="152">Vo⁻</text>
+</g>
+<text x="210" y="372" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">四个阻值相等时 Vo⁺ = Vo⁻，输出为零</text>
+<text x="210" y="270" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7">差模电压 = 两中点之差</text>
+<text x="210" y="288" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.7">共模电位 ≈ V_S/2 = 2.5 V</text>
+</svg>
+</FigBox>
 
 四个电阻 $R_1\sim R_4$ 构成桥，激励 $V_S$：
 
@@ -103,11 +174,47 @@ $$\Delta V_o\approx V_S\frac{\Delta R}{4R}$$
 
 这个「4 倍」不是数学巧合，而是**能量的利用率**：单臂桥里有三臂的静态压降白白存在，全桥让四个臂的变化都参与贡献。
 
-### 3.2 仪表放大器：三运放的增益与共模抑制
+### 3.3 仪表放大器：三运放的增益与共模抑制
 
-电桥输出 10 mV、源阻抗 700 Ω 量级、共模在 2.5 V 附近，直接进 ADC 必死。仪表放大器（INA）是专为这种场景设计的：
+电桥输出 10 mV、源阻抗 700 Ω 量级、**共模电位在 2.5 V 附近**（两条分压支路的中点都落在激励的一半处），直接进 ADC 必死。仪表放大器（INA，instrumentation amplifier）是专为这种场景设计的——它的任务就是**只放大差模、把共模消掉**。
 
-第一级是**两个同相放大器 + 一个 $R_G$**：
+<FigBox title="三运放仪表放大器：共模在前级就被压住" kind="结构" note="第一级两个同相放大器只做放大，两个输出之差已把共模消掉；第二级差分相减再次相减，只留差模。共模抑制比主要来自第一级的对称性。">
+<svg viewBox="0 0 760 320" role="img" aria-label="三运放仪表放大器结构：两个同相放大器加差分后级">
+<defs><marker id="ari" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="currentColor" /></marker></defs>
+<!-- 输入 -->
+<g font-size="13" fill="currentColor">
+<text x="34" y="118">V_in⁺</text><text x="34" y="240">V_in⁻</text>
+</g>
+<g stroke="currentColor" stroke-width="2" fill="none">
+<line x1="34" y1="130" x2="130" y2="130" />
+<line x1="34" y1="228" x2="130" y2="228" />
+<path d="M130 60 L130 180 L230 120 Z" />
+<path d="M130 180 L130 300 L230 240 Z" />
+<line x1="230" y1="120" x2="470" y2="120" />
+<line x1="230" y1="240" x2="470" y2="240" />
+<path d="M470 90 L470 270 L600 180 Z" />
+<line x1="600" y1="180" x2="700" y2="180" marker-end="url(#ari)" />
+<!-- RG 跨接 -->
+<line x1="180" y1="150" x2="180" y2="210" />
+<line x1="180" y1="180" x2="512" y2="180" />
+</g>
+<g font-size="12" fill="currentColor" text-anchor="middle">
+<text x="180" y="56">A1 同相</text><text x="180" y="316">A2 同相</text>
+<text x="535" y="82">A3 差分</text>
+</g>
+<g stroke="currentColor" fill="none">
+<rect x="150" y="166" width="60" height="28" />
+</g>
+<text x="180" y="185" text-anchor="middle" font-size="12" fill="currentColor">R_G</text>
+<text x="330" y="228" text-anchor="middle" font-size="12" fill="currentColor">共模在这里被消掉</text>
+<text x="330" y="246" text-anchor="middle" font-size="12" fill="currentColor">两路输出之差只剩差模</text>
+<text x="716" y="176" font-size="13" fill="currentColor">V_out</text>
+<text x="120" y="86" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.75">G₁=1+2R₁/R_G</text>
+<text x="560" y="272" text-anchor="middle" font-size="11" fill="currentColor" opacity="0.75">× R₃/R₂</text>
+</svg>
+</FigBox>
+
+第一级是**两个同相放大器 + 一个跨接在两输出之间的 $R_G$**：
 
 $$G_1=1+\frac{2R_1}{R_G}$$
 
@@ -119,9 +226,9 @@ $$G=\left(1+\frac{2R_1}{R_G}\right)\frac{R_3}{R_2}$$
 
 **共模抑制靠什么**：第一级两个运放各放大「本端对地」，但它们的输出被 $R_G$ 串起来形成差分，共模信号在 $R_G$ 上不产生压差，于是两个输出同向移动、被第二级差分**整体减掉**。只要两级对称（同批芯片内匹配到 0.01% 量级），CMRR 可达 100 dB 以上。第二级本身也是差分对，但真正的 CMRR 来自第一级的对称性。
 
-**为什么不直接用一个运放做差分放大**：单运放差分放大的 CMRR 由外接电阻的匹配度决定，1% 电阻只给约 40 dB CMRR——共模 2.5 V 泄漏到输出 25 mV，比整个信号还大。INA 把输入级的匹配做在硅片上，不用你配电阻。
+**为什么不直接用一个运放做差分放大**：单运放差分放大的 CMRR 由外接电阻的匹配度决定，1% 电阻只给约 40 dB CMRR——共模 2.5 V 泄漏到输出 25 mV，比整个信号还大。INA 把输入级的匹配做在硅片上，不用你配电阻。**这就是「共模抑制」这件事为什么必须用专用芯片，而不能靠手搭。**
 
-### 3.3 电阻误差与温漂
+### 3.4 电阻误差与温漂
 
 即使 CMRR 完美，电桥自身的**失配**仍是最大误差源：
 
@@ -130,9 +237,43 @@ $$G=\left(1+\frac{2R_1}{R_G}\right)\frac{R_3}{R_2}$$
 
 ## 四、抗混叠与滤波
 
-### 4.1 为什么必须在 ADC 之前
+这一节的目标只有一句：**说清「混叠」是什么、为什么它只能靠模拟滤波解决、以及 $f_c$ 怎么定。**
 
-[数电 08 章](../digital/ad-da.md)已证：采样率 $f_s$ 下，任何 $f>f_s/2$ 的频率都会折叠成 $\left|f-k f_s\right|$（$k$ 取最近的整数），**一旦折叠，就再也分不开**。所以模拟滤波器不是「可选的优化」，它是整条链唯一的防线。
+### 4.1 混叠（aliasing）：把高频伪装成低频
+
+**混叠**（aliasing）指的是：采样时，高于 $f_s/2$ 的信号成分被「折叠」到带内，冒充成一个真实存在的低频。完整推导在[数电 08 章](../digital/ad-da.md)，这里只说后果：
+
+- 采样率 $f_s$ 下，一个 $f>f_s/2$ 的频率会以 $\left|f-k f_s\right|$ 的形式出现在带内（$k$ 取最近的整数）；
+- **一旦折叠，就再也分不开**——采样值和「真的有一个这么低的信号」完全一样；
+- 所以模拟滤波器不是「可选的优化」，它是整条链唯一的防线。
+
+<FigBox title="混叠：1 kHz 的干扰在 600 Hz 采样下变成 200 Hz" kind="波形" note="采样点只取到若干离散瞬间。1 kHz 的信号在 600 Hz 采样下每隔几个采样点落在同样的高度，看起来就像一条 200 Hz 的慢波——这条 200 Hz 曲线是凭空捏出来的。">
+<svg viewBox="0 0 760 300" role="img" aria-label="混叠示意图：1 kHz 信号在 600 Hz 采样下呈现为 200 Hz 假信号">
+<g stroke="currentColor" fill="none">
+<line x1="60" y1="230" x2="730" y2="230" stroke-width="1.4" />
+<line x1="60" y1="40" x2="60" y2="230" stroke-width="1.4" />
+<path d="M60 190 L100 70 L140 190 L180 70 L220 190 L260 70 L300 190 L340 70 L380 190 L420 70 L460 190 L500 70 L540 190 L580 70 L620 190 L660 70 L700 190 L730 120" stroke-width="1.8" />
+<g stroke="currentColor" stroke-width="2">
+<circle cx="60" cy="190" r="4" fill="currentColor" />
+<circle cx="160" cy="70" r="4" fill="currentColor" />
+<circle cx="260" cy="190" r="4" fill="currentColor" />
+<circle cx="360" cy="70" r="4" fill="currentColor" />
+<circle cx="460" cy="190" r="4" fill="currentColor" />
+<circle cx="560" cy="70" r="4" fill="currentColor" />
+<circle cx="660" cy="190" r="4" fill="currentColor" />
+</g>
+<path d="M60 200 L460 160 L460 200 Z" fill="currentColor" opacity="0.14" stroke="none" />
+<path d="M60 200 L260 190 L460 200 Z" fill="currentColor" opacity="0.14" stroke="none" />
+</g>
+<text x="46" y="46" text-anchor="end" font-size="13" fill="currentColor">真实信号</text>
+<text x="46" y="204" text-anchor="end" font-size="13" fill="currentColor">1 kHz</text>
+<text x="370" y="252" text-anchor="middle" font-size="12" fill="currentColor">采样点（f_s = 600 Hz，只隔 1/600 s 取一个值）</text>
+<text x="370" y="278" text-anchor="middle" font-size="13" fill="currentColor">把这些点连起来 → 看起来是一条 200 Hz 的波（|1000−600|=400，再折一次 |400−600|=200）</text>
+<text x="370" y="296" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.8">频谱里那条 200 Hz 纹波根本不存在，它是 1 kHz 的鬼影</text>
+</svg>
+</FigBox>
+
+看这张图的方法：先看**细曲线**（真实信号），再看**实心圆点**（采样时刻取到的值）。这些点连成的折线与真实信号形状完全不同——这就是「折叠」的可视化。**数字滤波处理不了它**，因为采样值里已经没有任何证据表明那些高点来自 1 kHz。
 
 ### 4.2 RC 截止频率怎么选
 
@@ -159,6 +300,8 @@ $$f_c\approx\frac{f_s}{10}\quad\text{（常用的经验起点）}$$
 
 ## 五、参考电压与量化
 
+这一节只回答一个问题：数字码本身带来哪些误差，以及哪个技巧能把它们消掉。
+
 ADC 的读数公式：
 
 $$\text{code}=\text{round}\left(\frac{V_{in}}{V_{ref}}\cdot(2^N-1)\right)$$
@@ -175,6 +318,8 @@ $$\text{ENOB}=\frac{\text{SINAD}-1.76\,\text{dB}}{6.02\,\text{dB}}$$
 - **比例式测量（ratiometric）**：如果激励和参考来自**同一个源**（例如都用 3.3 V），那么 $V_{in}=V_{ref}\cdot f(x)$，$V_{ref}$ 在读数公式里被约掉！分压器、比例式电桥都能用这个技巧，**参考源的误差、温漂、噪声全部不出现**。代价是激励源必须能给电桥供电（要好看得多的负载能力），且接线多一根。这是性价比最高的技巧之一，见[第 07 章 · 信号的运算和处理](signal-processing.md)里比较器的思路：「比较基准与信号」本质上是同一个想法。
 
 ## 六、交互演示
+
+这一节的目标是把「非线性」从一句话变成可以拖动的曲线——它是传感器前端最难在纸上讲清的概念。
 
 非线性是传感器前端最难在纸上讲清的概念：传感器本身、放大器、ADC 三段里任何一段「不直」，读数就会在量程两端挤在一起。下面这个演示用**二极管的指数特性**当「传感器」，把 $V_{in}$ 从小拖到大，看输出电流怎么在低端爬得慢、高端蹿得快——**这就是「量程」和「非线性」在曲线上长什么样**。
 
@@ -226,6 +371,38 @@ $$\text{ENOB}=\frac{\text{SINAD}-1.76\,\text{dB}}{6.02\,\text{dB}}$$
 
 $$\Delta R=R\cdot K\varepsilon=350\times2.0\times1000\times10^{-6}=0.7\,\Omega,\qquad\frac{\Delta R}{R}=2.0\times10^{-3}$$
 
+**先想什么**：这是一道「算链条」题——先把应变翻译成电阻变化，再翻译成桥输出，最后翻译成增益需求。**关键是认清哪一段是差模、哪一段是共模**：全桥的 10 mV 是差模（要放大），2.5 V 是共模（必须消掉）。
+
+<FigBox title="本例的信号链：全桥 → INA → ADC" kind="结构" note="全桥输出 10 mV 差模骑在 2.5 V 共模上；INA333 把差模放大 304 倍、消掉共模；结果 0~3.04 V 进入 3.3 V 量程的 ADC，留了约 10% 余量。">
+<svg viewBox="0 0 760 220" role="img" aria-label="全桥应变片经 INA333 到 ADS1115 的信号链框图">
+<defs><marker id="ars" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="currentColor" /></marker></defs>
+<rect x="20" y="60" width="130" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1.7" />
+<text x="85" y="88" text-anchor="middle" font-size="13" fill="currentColor">全桥 350Ω×4</text>
+<text x="85" y="110" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">V_S = 5 V</text>
+<rect x="230" y="60" width="150" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1.7" />
+<text x="305" y="88" text-anchor="middle" font-size="13" fill="currentColor">INA333</text>
+<text x="305" y="110" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">R_G = 330 Ω</text>
+<rect x="470" y="60" width="130" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1.7" />
+<text x="535" y="88" text-anchor="middle" font-size="13" fill="currentColor">ADS1115</text>
+<text x="535" y="110" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">16 位，3.3 V</text>
+<rect x="670" y="60" width="70" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1.7" />
+<text x="705" y="100" text-anchor="middle" font-size="13" fill="currentColor">码</text>
+<g stroke="currentColor" stroke-width="2" fill="none">
+<line x1="150" y1="95" x2="230" y2="95" marker-end="url(#ars)" />
+<line x1="380" y1="95" x2="470" y2="95" marker-end="url(#ars)" />
+<line x1="600" y1="95" x2="670" y2="95" marker-end="url(#ars)" />
+</g>
+<g font-size="12" fill="currentColor">
+<text x="190" y="78" text-anchor="middle">±10 mV 差模</text>
+<text x="190" y="116" text-anchor="middle" opacity="0.75">共模 2.5 V</text>
+<text x="425" y="88" text-anchor="middle">0~3.04 V</text>
+<text x="425" y="114" text-anchor="middle" opacity="0.7">共模已消</text>
+</g>
+<text x="380" y="180" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">全桥放大 4 倍只拿到 10 mV：桥的输出永远是毫伏级，所以增益必须大</text>
+<text x="380" y="202" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">而增益又被 3.3 V 量程封顶——两个约束一起决定 R_G</text>
+</svg>
+</FigBox>
+
 **第 2 步：三种桥的输出**
 
 $$\Delta V_{\text{单臂}}=5\times\frac{2.0\times10^{-3}}{4}=2.5\,\text{mV}$$
@@ -275,6 +452,44 @@ $$t=0:\ R_{\text{测}}=104\,\Omega\rightarrow t_{\text{显}}=10.25\,^\circ\text{
 **第 3 步：三线制的原理**
 
 三线制用三根同样长度、同样材料的引线：两根接 PT100 两端进入差分放大器的两端，**第三根接在恒流源回路，把「同一根引线」的压降也送进放大器的一端**。这样两个输入端各含一份 $I R_L$，在差分里**相消**——只要两根引线电阻相等（同一根电缆、同一批次），误差就是零。同理还有四线制（开尔文接法）：用恒流两端与电压采样两端**物理分开**，连「引线失配」都不用担心，是精密测量的终极答案。
+
+<FigBox title="两线制 vs 三线制：引线压降去了哪里" kind="结构" note="两线制里两根引线的压降与信号混在同一个测量回路中，被当成传感器阻值读出；三线制把第三根引线的压降送进差分的另一端，两份 I·R_L 在相减时抵消。">
+<svg viewBox="0 0 760 300" role="img" aria-label="两线制与三线制 PT100 接线的对比示意图">
+<g stroke="currentColor" stroke-width="2" fill="none">
+<!-- 两线制 -->
+<circle cx="60" cy="60" r="4" fill="currentColor" />
+<circle cx="60" cy="140" r="4" fill="currentColor" />
+<line x1="60" y1="60" x2="150" y2="60" /><line x1="60" y1="140" x2="150" y2="140" />
+<rect x="150" y="44" width="64" height="32" /><rect x="150" y="124" width="64" height="32" />
+<text x="182" y="36" text-anchor="middle" font-size="12" fill="currentColor">引线 2 Ω</text>
+<text x="182" y="176" text-anchor="middle" font-size="12" fill="currentColor">引线 2 Ω</text>
+<rect x="240" y="80" width="80" height="40" rx="4" />
+<text x="280" y="105" text-anchor="middle" font-size="12" fill="currentColor">Pt100</text>
+<line x1="214" y1="60" x2="240" y2="80" /><line x1="214" y1="140" x2="240" y2="120" />
+<text x="60" y="30" font-size="13" fill="currentColor">I+</text>
+<text x="60" y="170" font-size="13" fill="currentColor">I−</text>
+<text x="380" y="100" font-size="13" fill="currentColor">两线制：R_L 串进读数 → 恒偏 4 Ω ≈ 10.2 ℃</text>
+</g>
+<!-- 三线制 -->
+<g stroke="currentColor" stroke-width="2" fill="none">
+<line x1="60" y1="230" x2="150" y2="230" />
+<circle cx="60" cy="300" r="4" fill="currentColor" />
+<circle cx="60" cy="215" r="4" fill="currentColor" />
+<rect x="150" y="214" width="64" height="32" /><rect x="150" y="254" width="64" height="32" />
+<text x="182" y="208" text-anchor="middle" font-size="12" fill="currentColor">引线</text>
+<text x="182" y="302" text-anchor="middle" font-size="12" fill="currentColor">引线</text>
+<line x1="214" y1="230" x2="240" y2="240" /><line x1="214" y1="270" x2="240" y2="262" />
+<line x1="60" y1="215" x2="60" y2="230" />
+<rect x="240" y="240" width="80" height="34" rx="4" />
+<text x="280" y="262" text-anchor="middle" font-size="12" fill="currentColor">Pt100</text>
+<line x1="320" y1="250" x2="370" y2="250" />
+<line x1="214" y1="285" x2="370" y2="285" />
+<text x="182" y="322" text-anchor="middle" font-size="12" fill="currentColor">第三根</text>
+</g>
+<text x="440" y="248" font-size="13" fill="currentColor">三线制：第三根引线的 I·R_L 送进差分另一端</text>
+<text x="440" y="272" font-size="13" fill="currentColor">→ 两个输入各含一份 I·R_L，相减归零</text>
+</svg>
+</FigBox>
 
 **第 4 步：失配与分辨率**
 
@@ -450,6 +665,8 @@ $k_1$、$k_2$ 由标定台给出（一般 $-3\times10^{-4}/^\circ\text{C}$ 量�
 | 两点校准 | 消零偏与增益，消不掉温漂与非线性 |
 
 ## 下一步
+
+<Prereq id="thevenin" /> → [07 · 信号的运算和处理](signal-processing.md)
 
 - 采样与量化的完整推导：[数电 08 · AD/DA 与脉冲调制](../digital/ad-da.md)
 - 运放与虚短虚断：[05 · 集成运算放大电路](opamp.md)、[07 · 信号的运算和处理](signal-processing.md)

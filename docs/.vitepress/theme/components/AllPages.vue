@@ -33,6 +33,7 @@ const lab = [
 const guides = [
   { title: '学习地图', route: '/map' },
   { title: '怎么用这个站', route: '/guide/start' },
+  { title: '符号与约定', route: '/guide/notation' },
   { title: 'B 站网课推荐', route: '/guide/courses' },
   { title: '关于与版权', route: '/guide/about' },
   { title: '内容状态与成熟度', route: '/guide/status' },

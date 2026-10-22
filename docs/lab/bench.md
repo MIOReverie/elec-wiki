@@ -8,6 +8,14 @@ outline: [2, 3]
 
 <Meta time="40 min" level="核心" note="安全不是小心一点，而是一串可以背下来的动作：分区、限流、放电、防静电、接地、先断后查" />
 
+**这一页要解决什么**：实验台上的事故几乎都不是「不懂 220 V 危险」，而是流程缺了一步——没分区、没限流、没放电、没验证就伸手。这一页把台子的器材、电流边界、静电防护与出问题时的动作顺序串成一套可背下来的流程。读完你应该能：按预算配齐一张台子、给电源设对限流、知道大电容断电后该怎么放、以及出事时第一步先做什么。
+
+::: tip 读这页之前
+- **需要会**：欧姆定律、功率 $P=UI$（<Prereq id="ohm" />）；电容储能与 RC 放电的时间常数（<Prereq id="time-constant" />）。
+- **这一页用到的符号**：$\tau = RC$ 是**时间常数**（时间常数的定义与 5τ 放尽见 [07 · 三要素法](../ee/03-transient/three-factor.md)）；**漏保**是漏电保护器的简称（residual current device，比较火线与零线电流之差、超过 30 mA 即切断的人身保护装置）；PE 指保护接地线（protective earth，三脚插头中间那根）。全部约定见[符号与约定](../guide/notation.md)。
+- **人身安全的物理原理**（摆脱电流、30 mA 动作值的由来）在[电工学 21 · 安全用电](../ee/07-control/safety.md)，本页只讲操作。
+:::
+
 「实验台」听上去像是一个器材清单，实际上它是一个**流程设计**：什么东西放在哪里、电流从哪条路进来、什么情况下会断开、出问题时手先伸向哪里。器材决定了能做什么，流程决定了做的时候会不会出事。
 
 这一页讲三件事：**台子上应该有什么**（三个预算档位）、**电流的边界怎么设**（保险丝、限流、放电）、**出问题时按什么顺序动作**。人身安全的物理原理（摆脱电流、漏保的 30 mA 动作值、保护接地与接零的区别）在[电工学 21 · 安全用电](../ee/07-control/safety.md)里有完整推导，这一页只讲「在台子上怎么做到」。
@@ -24,6 +32,8 @@ outline: [2, 3]
 8. **出问题的动作顺序是固定的：断电 → 等 → 放电 → 验证 → 检查 → 分析。** 顺序错了，分析的对象就是带电的电路。
 
 ## 器材清单
+
+这一节按预算给三档配置。选择原则只有一条：**先用熟手里的，再买下一台**——顺序是万用表 → 带限流的电源 → 示波器 → 焊台。
 
 ### 入门档：能做完第一次上手的 3 小时清单
 
@@ -69,6 +79,8 @@ outline: [2, 3]
 
 ## 强电与弱电分区
 
+这一节是台子的物理布局：**用一块绝缘垫把 220 V 与弱电隔成两个动作区域**。布局画在图里，四条规则跟着图走。
+
 ### 分区的意义
 
 一个人同时处理 220 V 与 3.3 V 时，真正的风险不是「不知道 220 V 危险」，而是**手在弱电区形成了习惯**：随手把表笔往一个端子上戳、随手去摸一个发热的元件。当这个动作发生在有 220 V 的电路上，习惯就变成了事故。
@@ -77,19 +89,46 @@ outline: [2, 3]
 
 ### 分区怎么做
 
-```
-┌──────────────────────────────────────────────┐
-│ 墙面插座（带漏保）   ── 强电区 ──              │
-│   ├─ 开关电源输入端（220 V）                   │
-│   └─ 隔离变压器（如使用）                       │
-├────────────── 绝缘垫（≥ 2 mm）─────────────────┤
-│ 弱电区（桌面主体）                              │
-│   ├─ 台式电源输出（≤ 30 V）                     │
-│   ├─ DC 电源模块输出（5 V / 3.3 V）             │
-│   ├─ 示波器（探头只在左侧活动）                 │
-│   └─ 面包板 / 洞洞板 / 被调电路                 │
-└──────────────────────────────────────────────┘
-```
+<FigBox title="实验台分区图：绝缘垫是强电与弱电的物理边界" kind="结构" note="上半：强电区只有墙面插座、开关电源输入端与（可选的）隔离变压器，220 V 的线不跨过绝缘垫。下半：弱电区是台面主体，台式电源、示波器、面包板都在这里；防静电台垫经 1 MΩ 接大地。所有表笔、杜邦线、探头的活动范围到绝缘垫为止。">
+
+<svg viewBox="0 0 560 320" role="img" aria-label="实验台分区俯视图：上方强电区与下方弱电区由绝缘垫隔开，防静电台垫经 1 兆欧接地">
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <rect x="16" y="16" width="528" height="92" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+  <text x="32" y="36" fill="var(--vp-c-brand-1)" font-weight="700">强电区（220 V）</text>
+  <rect x="36" y="48" width="130" height="46" rx="6" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="101" y="68" text-anchor="middle">墙面插座</text>
+  <text x="101" y="84" text-anchor="middle" fill="var(--vp-c-text-3)">三孔 · 带漏保</text>
+  <line x1="166" y1="71" x2="206" y2="71" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <rect x="206" y="48" width="130" height="46" rx="6" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="271" y="68" text-anchor="middle">开关电源输入</text>
+  <text x="271" y="84" text-anchor="middle" fill="var(--vp-c-text-3)">220 V 只到这一端</text>
+  <rect x="356" y="48" width="130" height="46" rx="6" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.4" stroke-dasharray="5 3" />
+  <text x="421" y="68" text-anchor="middle">隔离变压器（可选）</text>
+  <text x="421" y="84" text-anchor="middle" fill="var(--vp-c-text-3)">隔离被测设备，不隔离示波器</text>
+
+  <rect x="16" y="122" width="528" height="22" rx="4" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="280" y="137" text-anchor="middle" fill="var(--vp-c-text-2)">绝缘垫 ≥ 2 mm —— 强电的线不跨过它</text>
+
+  <rect x="16" y="158" width="528" height="146" rx="8" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <text x="32" y="178" font-weight="700">弱电区（≤ 30 V）</text>
+  <rect x="36" y="192" width="120" height="44" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="96" y="210" text-anchor="middle">台式电源</text>
+  <text x="96" y="226" text-anchor="middle" fill="var(--vp-c-text-3)">限流已设</text>
+  <rect x="176" y="192" width="120" height="44" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="236" y="210" text-anchor="middle">示波器</text>
+  <text x="236" y="226" text-anchor="middle" fill="var(--vp-c-text-3)">探头只在左侧活动</text>
+  <rect x="316" y="192" width="110" height="44" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="371" y="210" text-anchor="middle">面包板 / 洞洞板</text>
+  <text x="371" y="226" text-anchor="middle" fill="var(--vp-c-text-3)">被调电路</text>
+  <rect x="446" y="192" width="86" height="44" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="489" y="210" text-anchor="middle">防静电台垫</text>
+  <text x="489" y="226" text-anchor="middle" fill="var(--vp-c-text-3)">经 1 MΩ 接地</text>
+  <text x="280" y="272" text-anchor="middle" fill="var(--vp-c-text-3)">规则：弱电区没有一根线直接通到 220 V；末端必须经过电源模块或隔离</text>
+  <text x="280" y="290" text-anchor="middle" fill="var(--vp-c-text-3)">手伸进强电区之前停一下：确认手上没有表笔、没有金属</text>
+</g>
+</svg>
+
+</FigBox>
 
 具体规则：
 
@@ -105,6 +144,8 @@ outline: [2, 3]
 > **为什么不能隔离示波器**：示波器的 BNC 外壳与三脚插头的 PE 相连，隔离变压器会让示波器**失去保护地**。一旦探头地线与内部短路，外壳就可能带 220 V，而你没有意识到。隔离被测设备，保证了示波器的地与大地仍然相连，而设备的「地」与大地断开。
 
 ## 保险丝与限流
+
+这一节给台上的每一条电流通路设边界：**保险丝保护「持续过载」，限流保护「接反与短路」**，两者的选法与设置顺序各有一张图或一个口诀。
 
 ### 保险丝不是「防止烧东西」，是「有界限地烧」
 
@@ -128,13 +169,42 @@ outline: [2, 3]
 
 ### 台式电源的限流
 
-限流设置在**预计电流的 1.2~1.5 倍**。按下面的顺序操作：
+限流设置在**预计电流的 1.2~1.5 倍**。整个动作的思路是「让电源先学会多大力气，再去推电路」，五步顺序：
 
-1. 输出关闭，电压调到 0；
-2. 电流限流旋钮调到最左（最低）；
-3. 短接输出（或用一根短金属丝），慢慢旋大限流旋钮，看电流读数到设定值；
-4. 撤掉短接，设定目标电压；
-5. 接上负载，上电。
+<FigBox title="限流设置五步：短路定标 → 撤短接 → 设电压 → 接负载" kind="结构" note="前三步在输出关闭或短接状态下标定限流值，第四步才设目标电压，第五步接负载上电。这样任何接反、短路、装错都表现为电源停在 CC 模式（恒流），而不是把功率灌进电路。">
+
+<svg viewBox="0 0 560 180" role="img" aria-label="限流设置五步流程：关输出调零、限流调到最低、短接输出标定、设电压、接负载上电">
+<defs>
+  <marker id="bn-l1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+</defs>
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <rect x="16" y="40" width="92" height="56" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <text x="62" y="62" text-anchor="middle">1 关输出</text>
+  <text x="62" y="80" text-anchor="middle" fill="var(--vp-c-text-3)">电压调到 0</text>
+  <line x1="108" y1="68" x2="130" y2="68" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#bn-l1)" />
+  <rect x="132" y="40" width="92" height="56" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <text x="178" y="62" text-anchor="middle">2 限流调最低</text>
+  <text x="178" y="80" text-anchor="middle" fill="var(--vp-c-text-3)">旋钮到最左</text>
+  <line x1="224" y1="68" x2="246" y2="68" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#bn-l1)" />
+  <rect x="248" y="40" width="92" height="56" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <text x="294" y="62" text-anchor="middle">3 短接输出</text>
+  <text x="294" y="80" text-anchor="middle" fill="var(--vp-c-text-3)">标定限流值</text>
+  <line x1="340" y1="68" x2="362" y2="68" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#bn-l1)" />
+  <rect x="364" y="40" width="80" height="56" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="404" y="62" text-anchor="middle">4 撤短接</text>
+  <text x="404" y="80" text-anchor="middle" fill="var(--vp-c-text-3)">设目标电压</text>
+  <line x1="444" y1="68" x2="466" y2="68" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#bn-l1)" />
+  <rect x="468" y="40" width="76" height="56" rx="7" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="506" y="62" text-anchor="middle">5 接负载</text>
+  <text x="506" y="80" text-anchor="middle" fill="var(--vp-c-text-3)">上电</text>
+  <text x="280" y="140" text-anchor="middle" fill="var(--vp-c-text-2)">限流取「峰值电流 × 1.2」：太紧会误伤正常瞬态，太松短路时烧的是板子</text>
+  <text x="280" y="162" text-anchor="middle" fill="var(--vp-c-text-3)">上电后一切异常都应表现为 CC 灯亮 + 电压被拉低，这正是限流在保护电路</text>
+</g>
+</svg>
+
+</FigBox>
 
 这样做的目的是让电源**先学会「多大力气」，再去推电路**。接反、短路、元件装错，都只会让电源停在 CC 模式，而不是把功率灌进元件里。
 
@@ -143,6 +213,8 @@ outline: [2, 3]
 **限流设大了就没意义，设小了会误伤。** 一台 5 V 电源限流 100 mA，接一个正常电流 80 mA 的负载，轻载时没问题，但一进入瞬态就会「触发 CC」，电压被拉下来，电路死机。这时应该限流 150 mA，而不是 100 mA 或 1 A。
 
 ## 电容放电
+
+这一节处理「断电 ≠ 没电」：**大电容在插头拔掉之后仍然储能，最多可达数焦耳**。先算能量决定小心程度，再按四步放掉。
 
 ### 先算一遍能量
 
@@ -163,6 +235,37 @@ $$E = \frac{1}{2}CU^2$$
 2. **等 30 秒**：让电源内部的泄放电阻起一点作用（有的有，有的没有）；
 3. **放电**：用一只 1 kΩ 到 10 kΩ、功率够的电阻跨接在电容两端，持续时间见下表；手不要碰电阻的两端；
 4. **验证**：用万用表直流档测电容两端，**5 V 以下才算安全**。
+
+<FigBox title="放电四步：断电 → 等 → 放 → 验证，一步都不能省" kind="结构" note="第 1 步拔插头（开关可能是单刀的，零线仍带电）；第 2 步等 30 s 让内部泄放电阻工作；第 3 步用 1~10 kΩ 功率够的电阻跨接放电，手不碰电阻两端；第 4 步万用表直流档确认 5 V 以下。顺序错了，后面的动作就发生在带电的板子上。">
+
+<svg viewBox="0 0 560 170" role="img" aria-label="放电四步流程：拔插头、等 30 秒、电阻放电、万用表验证 5 伏以下">
+<defs>
+  <marker id="bn-d1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+</defs>
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <rect x="16" y="34" width="112" height="56" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <text x="72" y="56" text-anchor="middle">1 断电：拔插头</text>
+  <text x="72" y="74" text-anchor="middle" fill="var(--vp-c-text-3)">不是关开关</text>
+  <line x1="128" y1="62" x2="150" y2="62" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#bn-d1)" />
+  <rect x="152" y="34" width="100" height="56" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <text x="202" y="56" text-anchor="middle">2 等 30 s</text>
+  <text x="202" y="74" text-anchor="middle" fill="var(--vp-c-text-3)">内部泄放起效</text>
+  <line x1="252" y1="62" x2="274" y2="62" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#bn-d1)" />
+  <rect x="276" y="34" width="128" height="56" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <text x="340" y="56" text-anchor="middle">3 电阻放电</text>
+  <text x="340" y="74" text-anchor="middle" fill="var(--vp-c-text-3)">1~10 kΩ · 手不碰两端</text>
+  <line x1="404" y1="62" x2="426" y2="62" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#bn-d1)" />
+  <rect x="428" y="34" width="116" height="56" rx="7" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="486" y="56" text-anchor="middle">4 验证 &lt; 5 V</text>
+  <text x="486" y="74" text-anchor="middle" fill="var(--vp-c-text-3)">万用表直流档</text>
+  <text x="280" y="130" text-anchor="middle" fill="var(--vp-c-text-2)">放电电阻按 U₀²/R &lt; 额定功率选：400 V 用 1 kΩ 瞬间 160 W，电阻当场烧掉</text>
+  <text x="280" y="152" text-anchor="middle" fill="var(--vp-c-text-3)">高压电容换 10 kΩ / 10 W，靠延长等待时间补偿；串联电容组要逐个放</text>
+</g>
+</svg>
+
+</FigBox>
 
 放电电阻的选择有个坑：**用小阻值（如 10 Ω）放电会瞬间产生很大的脉冲电流，可能损坏电容本身，或者烧掉电阻**。1 kΩ 在 400 V 上的瞬间功率是 $400^2/1000 = 160$ W，即使是 5 W 的电阻也会在一两秒内烧毁；换成 10 kΩ 时瞬间功率降到 16 W，用 10 W 的电阻就能安全工作。所以高压电容要先看电压再选电阻：**电阻的两端电压平方除以阻值，必须小于它的额定功率**。
 
@@ -186,6 +289,8 @@ $$E = \frac{1}{2}CU^2$$
 真正不需要放电的只有两种情况：一是**低压小容量**（例如 5 V 下的 0.1 μF，储能只有 1.25 μJ），二是**电容两端已经被万用表验证在 5 V 以下**。**不确定就当它需要放电**，判断的成本是几秒钟，不判断的成本可能是一次手术。
 
 ## 静电
+
+这一节的反差最大：**静电对人只是「啪」一下，对 MOS 栅极却是千倍以上的能量差**。防护五件事全部围绕「让电荷慢慢走 1 MΩ 这条路」。
 
 ### 人体静电有多大
 
@@ -219,6 +324,8 @@ $$E = \frac{1}{2} \times 5\times10^{-9} \times 20^2 = 1.0\ \mu\text{J}$$
 
 ## 接地与漏电保护
 
+这一节是台子的最后一条安全线：**大地只有一个，接地的路径只能有一条**；漏保管的是人，空开管的是设备，互不替代。
+
 ### 单一接地点
 
 你的台子上，以下东西在电气上都连到大地（PE）：
@@ -229,7 +336,43 @@ $$E = \frac{1}{2} \times 5\times10^{-9} \times 20^2 = 1.0\ \mu\text{J}$$
 - 台式电源的输出负极（**通常悬空**，这是好事）；
 - 你的防静电手环 / 台垫（经 1 MΩ）。
 
-**「单一接地」的意思是**：被测电路的参考地只能通过一个点接大地，其他地方不再连。如果你把电路的地接了示波器的地线夹，又接了烙铁头的地，又接了电源的地，就有了三条并联的接地路径，三条路之间的电位差会在你毫无察觉时造成电流。
+**「单一接地」的意思是**：被测电路的参考地只能通过一个点接大地，其他地方不再连。如果你把电路的地接了示波器的地线夹，又接了烙铁头的地，又接了电源的地，就有了三条并联的接地路径，三条路之间的电位差会在你毫无察觉时造成电流：
+
+<FigBox title="台子上都谁接着大地，以及为什么只能留一条路" kind="结构" note="左侧列出接大地的设备：示波器 BNC 外壳、烙铁台金属壳、防静电台垫与手环（经 1 MΩ）；台式电源输出负极通常悬空（好事），万用表表笔绝缘不接地。右侧示意「多路径」的后果：两个接地点之间的电位差会沿你不知道的路径形成电流。">
+
+<svg viewBox="0 0 560 260" role="img" aria-label="左栏设备接地清单，右栏多接地路径形成电位差电流的示意">
+<defs>
+  <marker id="bn-g1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
+  </marker>
+</defs>
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <text x="110" y="18" text-anchor="middle" font-weight="700">台子上接大地的设备</text>
+  <rect x="20" y="34" width="190" height="200" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="36" y="58">· 示波器 BNC 外壳 + 探头地线</text>
+  <text x="36" y="84">· 烙铁台金属外壳（部分头也接地）</text>
+  <text x="36" y="110">· 防静电台垫 / 手环（经 1 MΩ）</text>
+  <text x="36" y="136">· 台式电源输出负极：通常悬空（好）</text>
+  <text x="36" y="162">· 万用表表笔：绝缘，不接大地</text>
+  <text x="36" y="196" fill="var(--vp-c-text-2)">手环直接接大地 = 接触漏电时</text>
+  <text x="36" y="214" fill="var(--vp-c-text-2)">变成低阻通路，反而更危险</text>
+
+  <text x="430" y="18" text-anchor="middle" font-weight="700">多路径的后果</text>
+  <rect x="320" y="60" width="100" height="40" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="370" y="84" text-anchor="middle">电路地</text>
+  <line x1="340" y1="100" x2="340" y2="150" stroke="var(--vp-c-text-3)" stroke-width="1.4" marker-end="url(#bn-g1)" />
+  <text x="332" y="130" text-anchor="end" fill="var(--vp-c-text-3)">路 1：示波器地夹</text>
+  <line x1="400" y1="100" x2="400" y2="150" stroke="var(--vp-c-text-3)" stroke-width="1.4" marker-end="url(#bn-g1)" />
+  <text x="408" y="130" fill="var(--vp-c-text-3)">路 2：烙铁头地</text>
+  <rect x="320" y="150" width="100" height="34" rx="6" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="370" y="171" text-anchor="middle">大地（PE）</text>
+  <text x="430" y="210" fill="var(--vp-c-text-2)">两路电阻不等 → 电位差沿</text>
+  <text x="430" y="228" fill="var(--vp-c-text-2)">你不知道的路径形成电流</text>
+  <text x="430" y="246" fill="var(--vp-c-text-3)">→ 只留一条接地点</text>
+</g>
+</svg>
+
+</FigBox>
 
 ### 漏电保护器
 
@@ -249,9 +392,51 @@ $$E = \frac{1}{2} \times 5\times10^{-9} \times 20^2 = 1.0\ \mu\text{J}$$
 
 ## 出问题时的排查顺序
 
+这一节是全页的收口：**出事时的动作顺序是固定的**。冒烟走「断电 → 放电 → 验证」，不冒烟走「验证工具 → 分段隔离」——顺序错了，分析对象就是带电的电路。
+
 ### 冒烟、异响、发烫、焦味：立刻断电
 
 **第一动作永远是断电**，不是「看看是哪个元件冒烟」。顺序：
+
+<FigBox title="异常处置流程：冒烟走左边，不冒烟走右边" kind="结构" note="左：冒烟 / 焦味路线——拔电源 → 等 30 s → 电阻放电 → 万用表验证 5 V 以下 → 拔掉所有探头表笔 → 才开始看外观。右：不冒烟但不工作路线——先验证电源与工具，再断电测连接，最后限流上电分段隔离。两条路的共同点：先让电路确认没电，再让手靠近。">
+
+<svg viewBox="0 0 560 280" role="img" aria-label="异常处置双路线流程图：左侧冒烟立即断电路线，右侧不冒烟验证排查路线">
+<defs>
+  <marker id="bn-f1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+  <marker id="bn-f2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
+  </marker>
+</defs>
+<g font-size="11" fill="var(--vp-c-text-1)">
+  <rect x="16" y="20" width="240" height="34" rx="7" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <text x="136" y="41" text-anchor="middle" fill="var(--vp-c-brand-1)">冒烟 / 异响 / 焦味</text>
+  <line x1="136" y1="54" x2="136" y2="70" stroke="var(--vp-c-brand-1)" stroke-width="1.2" marker-end="url(#bn-f1)" />
+  <rect x="16" y="72" width="240" height="150" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="32" y="96">1. 拔被测电路电源（电源冒烟拔墙上插头）</text>
+  <text x="32" y="122">2. 等 30 s</text>
+  <text x="32" y="148">3. 放电电阻放掉大电容</text>
+  <text x="32" y="174">4. 万用表电压档确认 5 V 以下</text>
+  <text x="32" y="200">5. 拔掉探头 BNC 与所有表笔，再动板子</text>
+  <line x1="256" y1="147" x2="280" y2="147" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-end="url(#bn-f1)" />
+  <rect x="282" y="112" width="120" height="34" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <text x="342" y="133" text-anchor="middle" fill="var(--vp-c-brand-1)">才开始看外观</text>
+
+  <rect x="304" y="20" width="240" height="34" rx="7" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <text x="424" y="41" text-anchor="middle">不冒烟但不工作</text>
+  <line x1="424" y1="54" x2="424" y2="70" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#bn-f2)" />
+  <rect x="304" y="72" width="240" height="150" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="320" y="96">1. 验证电源：CC 灯亮 = 已进限流</text>
+  <text x="320" y="122">2. 验证工具：拿电池确认表读数正常</text>
+  <text x="320" y="148">3. 断电测电源对地电阻（几百欧以上）</text>
+  <text x="320" y="174">4. 限流调小上电，看电流是否异常</text>
+  <text x="320" y="200">5. 分段隔离：从电源往后一段一段接</text>
+  <text x="280" y="252" text-anchor="middle" fill="var(--vp-c-text-2)">一上电就烧保险丝 = 一定有短路：先查短路，绝不换更大的保险丝再试</text>
+</g>
+</svg>
+
+</FigBox>
 
 1. 拔掉被测电路的电源（插头或电源输出），**如果电源在冒烟，直接拔墙上的插头**；
 2. 等 30 秒；
@@ -276,6 +461,8 @@ $$E = \frac{1}{2} \times 5\times10^{-9} \times 20^2 = 1.0\ \mu\text{J}$$
 只有在**断电、放电、验证过**之后，才允许「再看一眼是哪里的问题」。带电状态下用长表笔去戳冒烟的区域，是实验室最常见的手指、眼睛受伤原因。
 
 ## 例题
+
+两道例题把安全参数算成数字：第一题算放电时间与电阻功率（对应「放电四步」），第二题算限流取值（对应「限流五步」）。
 
 ::: tip 例 1 · 一块 12 V 电源板，断电后多久才能碰 {#ex-bench-discharge}
 **题干**：一块电源板输出端有 4700 μF 的电容，上电时电压 12 V。拔掉插头后，用 1 kΩ / 2 W 的电阻放电。求时间常数、放电到 5 V 所需时间、以及电阻在放电瞬间的功率是否超限。
@@ -349,6 +536,8 @@ TO-220 封装无散热片时热阻约 65 °C/W，温升 27 °C，可以接受。
 
 ## 常见错误
 
+四个错误分别对应四条安全线：断电假设、隔离对象、漏保测试、手环接地——每条都有明确的一步修正。
+
 ::: tip 错误 1 · 以为「关掉开关」就安全了
 **现象**：关掉台式电源的开关，但输出电容仍然充电，接上一个低阻负载后打火。
 
@@ -374,6 +563,8 @@ TO-220 封装无散热片时热阻约 65 °C/W，温升 27 °C，可以接受。
 :::
 
 ## 自检清单
+
+这张清单覆盖本页全部六条安全线：分区、接地、限流、保险丝、放电、防静电。每次上电前扫一遍。
 
 - [ ] 桌面分强电区与弱电区，绝缘垫隔开；
 - [ ] 墙上插座是三孔、有有效接地，漏保测试按钮按下能跳闸；

@@ -110,7 +110,7 @@ useCanvas(cv, ({ ctx, w, h, t }) => {
   label(ctx, `u₁ 峰值 ${V1.value}V`, x0 + pw + 2, cyw - a1, SIG.v, 'left', 10.5, true)
   label(ctx, `u₂ 峰值 ${calc.value.V2.toFixed(1)}V`, x0 + pw + 2, cyw - a2 + 12, SIG.i, 'left', 10.5, true)
   label(ctx, '变压器只"变"交流：直流磁通不变 → 副边感应不出电压', w / 2, h - 10, TC.text3, 'center', 11)
-})
+}, { animate: true })
 </script>
 
 <template>

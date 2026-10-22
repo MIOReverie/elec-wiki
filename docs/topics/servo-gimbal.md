@@ -7,9 +7,19 @@ description: 用两路 50 Hz PWM 做一台能指向指定坐标的双轴舵机�
 
 <Meta time="70 min" level="核心" note="云台的难点不在代码——两个定时器通道就够；难点在「两根独立电源的地连在一起」这一句话上" />
 
+**这一页要解决什么**：你有一台摄像头，想让它「指着某个坐标」。这一页教你做一台**双轴舵机云台**，并回答三个必然遇到的问题：**两路 PWM 怎么共用一个定时器**；**坐标怎么换算成两个角度**；以及**云台为什么会抖**（答案不在代码里，在**供电**与**共地**上）。读完你应该能写出 `Servo_Set(轴, 角度)` 这个函数，并且知道它的三个校准数字（`p_min`/`p_max`/`p_mid`）是干什么的。
+
+::: tip 读这页之前
+- **需要会**：定时器的 PSC/ARR/CCR 与 PWM 模式 [嵌入式 07](../embedded/timer-pwm.md)；舵机脉宽协议与内部结构 [嵌入式 13](../embedded/13-servo-control.md)；定时器时钟树 <Prereq id="clock-tree" /> 与寄存器映射 <Prereq id="register-map" />。
+- **这一页用到的符号**：$D$（**占空比**，高电平时间占周期的比例；50 Hz、1.5 ms 对应 7.5%）、$f_{cnt}$（**计数频率**，定时器每秒计多少个数，1 µs 步进就是 1 MHz）、ARR（**自动重装载值**，决定周期）、CCR（**捕获/比较寄存器**，决定脉宽）、**纹波** $\Delta U$（电压在一个周期内上下摆动的峰峰值）、**死区**（舵机内部的容差窗口，典型 5–10 µs；与电机页里的上下管关断空窗同名词、不同含义）、$R=\rho l/A$（导线电阻，$\rho$ 是铜的电阻率）。约定见[符号与约定](../guide/notation.md)。
+- **会用到三角函数**：$\operatorname{atan2}$（**二参数反正切**，一次同时给出象限，不需要先算象限）与 $\sqrt{\ }$、$\pi$；例题里都附 node 验算。
+:::
+
+先想象一个具体的下午。云台装好了，代码跑通了，俯仰与水平两个方向都能动——然后你把手放到舵机上，它开始细微地来回颤。你打开调试器看，脉宽完全正确。问题在于：两路舵机的红黑线是从面包板各接各的，而 MCU 的地是从另一块板引过来的。**抖动 90% 来自这里，而不在代码里。**
+
 前两个项目（[电源](./power-supply.md)、[电机驱动](./motor-drive.md)）都是「造一台机器」。这个项目更像「调一台仪器」：舵机内部已经有完整的闭环（位置环），你唯一要负责的是**给它一个宽度准确的脉冲、一个扛得住堵转的电源、一个合理的地**。这三件事任何一件做歪了，表现出来的都是同一个症状：**抖**。
 
-舵机的原理、内部结构、PSC/ARR/CCR 换算与烧板原因，在[嵌入式 13 · 舵机控制](../embedded/13-servo-control.md)里已经写得极细，本页**不重复**，只做云台特有的三件事：两路 PWM 怎么共存、两轴坐标怎么映射成角度、以及「已经抖了该怎么排查」。定时器的寄存器层面见 <Prereq id="clock-tree" /> 与 <Prereq id="register-map" />。
+舵机的原理、内部结构、PSC/ARR/CCR 换算与烧板原因，在[嵌入式 13 · 舵机控制](../embedded/13-servo-control.md)里已经写得极细，本页**不重复**，只做云台特有的三件事：两路 PWM 怎么共存、两轴坐标怎么映射成角度、以及「已经抖了该怎么排查」。
 
 ## 结论先行
 
@@ -21,6 +31,8 @@ description: 用两路 50 Hz PWM 做一台能指向指定坐标的双轴舵机�
 6. **抖动 90% 来自供电**：3 节 0.1 mm² 杜邦线在 2.5 A 上往返压降就是 **0.17 V**，加上电源本身的线损与内阻，瞬间跌破 4.8 V → 舵机内部 MCU 复位 → 重新定位。**换粗线、加 4700 µF、换大电源**，比改任何一行代码都有用。
 
 ## 一、机械结构：两轴的顺序
+
+这一节只回答一个问题：两个舵机谁在上、谁在下，以及为什么这个顺序决定了能不能撑住载荷。
 
 云台的拓扑有两种：**水平轴在下、俯仰轴在上（yaw-on-top）**，或者**俯仰轴在下、水平轴在上（pitch-on-top）**。
 
@@ -61,7 +73,11 @@ SG90 标称 1.8 kg·cm（4.8 V），看起来够，但那是**堵转扭矩**，�
 - **舵机用自攻螺丝 + 减振垫**，不要只用热熔胶；
 - **走线要留余量**：pan 转 180° 时，从底座到 tilt 的线要绕成「螺旋」，否则会被拉断。
 
+机械骨架定了，下一节解决软件侧最基础的一件事：怎么用同一个定时器产生两路互不干扰的 50 Hz 脉冲。
+
 ## 二、两路 50 Hz PWM
+
+这一节只回答一个问题：两路舵机的脉宽怎么共用一个定时器，并且频率天然一致。
 
 ### 2.1 参数只要一张表
 
@@ -133,7 +149,11 @@ void Servo_Init(void)
 舵机**每个周期只认一次脉宽**，所以你能做到的最大角速度由舵机本身决定：MG996R 6 V 下 0.17 s 转 60°，90° 需要 `0.17×1.5 = 0.255 s`，也就是**每秒约 353°，每 20 ms 约 7°**。如果代码以 100 Hz 写 CCR，多写的几次不会带来任何效果；如果一次跳 90°，舵机会全速冲过去，**瞬间电流拉满 → 电源跌落 → 抖动**。正确做法是**把大角度分成每 20 ms 不超过 7° 的小步**。
 :::
 
+脉宽信号已经能正确送给舵机了。下一节处理那个让「一切正常却一直抖」的根源：供电与接地。
+
 ## 三、电源：独立 5 V 与共地
+
+这一节只回答一个问题：舵机的电流从哪来、地又和谁相连，才能在两轴同时堵转时也不掉压。
 
 ### 3.1 电流账
 
@@ -165,6 +185,74 @@ STM32 PA7 ── tilt 舵机 信号（橙/黄线）
 ```
 
 **为什么必须共地**：舵机内部比较脉宽时，把「高电平」与「它自己的 GND」比较。如果 STM32 的地与舵机的地分开，两者之间可能存在几百毫伏的电位差，脉宽判断会偏移——表现为「角度轻微不准」「偶发乱跳」「一开串口就抖」。
+
+<FigBox title="云台接线：两个电源、一条共地点" kind="接线" note="红线与黑线在图上分属两个不同电源（5 V 舵机电源与 MCU 的 3.3/5 V），唯一把它们连起来的是地线。所有地必须汇聚到同一点；信号线 PA6/PA7 只送脉宽，不承载回流电流。">
+
+<svg viewBox="0 0 660 300" role="img" aria-label="云台接线图：5 V 独立电源经 4700 微法电容分给两只舵机的 VCC，MCU 的 PA6 与 PA7 分别送信号，所有地汇聚到一个公共接地点">
+<defs>
+  <marker id="sg-wire-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+</defs>
+
+<g font-size="11.5" text-anchor="middle">
+  <rect x="14" y="96" width="116" height="66" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.8" />
+  <text x="72" y="122" fill="var(--vp-c-text-1)" font-weight="600">5 V 独立电源</text>
+  <text x="72" y="140" fill="var(--vp-c-text-3)">≥ 3 A</text>
+  <text x="72" y="157" fill="var(--vp-c-text-3)">与 MCU 不同源</text>
+
+  <rect x="252" y="24" width="118" height="58" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.6" />
+  <text x="311" y="48" fill="var(--vp-c-text-1)" font-weight="600">pan 舵机</text>
+  <text x="311" y="67" fill="var(--vp-c-text-3)">MG996R</text>
+
+  <rect x="252" y="176" width="118" height="58" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.6" />
+  <text x="311" y="200" fill="var(--vp-c-text-1)" font-weight="600">tilt 舵机</text>
+  <text x="311" y="219" fill="var(--vp-c-text-3)">MG996R</text>
+
+  <rect x="512" y="100" width="128" height="60" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+  <text x="576" y="124" fill="var(--vp-c-text-1)" font-weight="600">STM32</text>
+  <text x="576" y="143" fill="var(--vp-c-text-3)">PA6 / PA7 / GND</text>
+</g>
+
+<g stroke="#ef4444" stroke-width="2.2" fill="none">
+  <path d="M 130 108 L 200 108 L 200 62 L 250 62" />
+  <path d="M 130 108 L 200 108 L 200 210 L 250 210" />
+</g>
+
+<path d="M 130 108 L 178 108 L 178 62" stroke="var(--vp-c-brand-2)" stroke-width="2.2" fill="none" />
+<rect x="166" y="48" width="24" height="40" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.8" />
+<text x="178" y="40" font-size="10" fill="var(--vp-c-text-3)" text-anchor="middle">4700 µF</text>
+<line x1="196" y1="70" x2="196" y2="106" stroke="var(--vp-c-brand-2)" stroke-width="2.2" />
+
+<path d="M 200 108 L 200 26" stroke="var(--vp-c-brand-2)" stroke-width="2.2" fill="none" />
+<path d="M 200 108 L 200 190" stroke="var(--vp-c-brand-2)" stroke-width="2.2" fill="none" />
+
+<g stroke="var(--vp-c-brand-1)" stroke-width="2" fill="none" marker-end="url(#sg-wire-arrow)">
+  <line x1="371" y1="48" x2="466" y2="48" />
+  <line x1="371" y1="200" x2="466" y2="200" />
+  <line x1="466" y1="48" x2="466" y2="124" stroke-dasharray="0" />
+</g>
+
+<g stroke="var(--vp-c-text-3)" stroke-width="2.4" fill="none">
+  <path d="M 130 150 L 130 268 L 576 268" />
+  <path d="M 311 82 L 311 268" />
+  <path d="M 311 234 L 311 268" />
+</g>
+<circle cx="311" cy="268" r="6" fill="var(--vp-c-brand-1)" />
+<text x="330" y="290" font-size="11" fill="var(--vp-c-brand-1)">公共接地点：所有 GND 汇聚于此</text>
+<text x="576" y="290" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="end">MCU GND 接这里</text>
+
+<g font-size="10" fill="var(--vp-c-text-3)">
+  <text x="382" y="42">PA6 → pan 信号</text>
+  <text x="382" y="194">PA7 → tilt 信号</text>
+  <text x="146" y="160">红线：+5 V</text>
+  <text x="146" y="262">黑线：GND</text>
+</g>
+</svg>
+
+</FigBox>
+
+**信号线要不要串电阻**：在 PA6/PA7 各串一只 **100 Ω**，能防止地线环路上的浪涌把 MCU 打复位，代价是脉宽前沿略钝（100 Ω × 3 nF 的输入电容约 0.3 µs，对 1500 µs 的脉宽来说可以忽略）。这是新手排查抖动时最便宜的一次尝试。
 
 ### 3.3 线材：被低估的 0.17 V
 
@@ -231,6 +319,8 @@ $$
 
 ## 四、校准：三个数字
 
+这一节只回答一个问题：为什么同一批舵机的「1.5 ms 中位」各不相同，以及怎么把每只的差异量出来。
+
 ### 4.1 校准的是什么
 
 舵机的规格书写「0.5–2.5 ms 对应 0–180°」，但**每一只舵机的实际对应关系都不同**：有的中位在 1.48 ms，有的在 1.52 ms；有的打死在 2.35 ms，有的在 2.6 ms；齿轮比差一点、电位器装配偏一点，都会改变。
@@ -287,6 +377,8 @@ void Servo_CalibrateStep(void)
 
 ## 五、坐标到角度：两段 atan2
 
+这一节只回答一个问题：给定目标点的三个坐标 $(x, y, h)$，怎么算出两个舵机各自该转到多少度。
+
 ### 5.1 模型
 
 设云台底座为原点，$x$ 向右、$y$ 向前、$h$ 向上，目标是 $(x, y, h)$。
@@ -304,6 +396,59 @@ R = \sqrt{x^2 + y^2},\qquad \beta = \operatorname{atan2}(h,\ R)
 $$
 
 用 `atan2` 而不是 `atan(h/R)` 是为了**同时处理四个象限**，而且 `R = 0` 时不会除零（`atan2(h, 0)` 直接给 ±90°）。
+
+<FigBox title="坐标到两个角度的几何关系" kind="几何" note="水平面里，目标的方位角 α 就是 (x, y) 平面上的辐角；俯仰角 β 则是竖直剖面里的角，等价于把水平距离 R 与高度 h 当成直角三角形的两条直角边。图上 R = √(x²+y²) 是一条「投影」而不是一根真实的线。">
+
+<svg viewBox="0 0 640 300" role="img" aria-label="云台坐标几何图：底座为原点，目标点坐标为 x 向右、y 向前、h 向上，水平距离 R 等于 x 与 y 的欧氏范数，方位角 alpha 与俯仰角 beta 标注在两个直角三角形中">
+<g stroke="var(--vp-c-divider)" stroke-width="1">
+  <line x1="90" y1="250" x2="600" y2="250" />
+  <line x1="90" y1="30" x2="90" y2="250" />
+  <line x1="90" y1="250" x2="90" y2="96" />
+</g>
+
+<g font-size="11.5" fill="var(--vp-c-text-1)">
+  <text x="90" y="272" text-anchor="middle" font-weight="600">O 底座原点</text>
+</g>
+
+<path d="M 90 96 L 430 96" stroke="var(--vp-c-brand-2)" stroke-width="2" stroke-dasharray="6 4" fill="none" />
+<line x1="90" y1="96" x2="90" y2="96" stroke="var(--vp-c-text-3)" stroke-width="1" />
+
+<path d="M 430 96 L 430 250" stroke="var(--vp-c-brand-1)" stroke-width="2" fill="none" marker-end="url(#sg-geo-arrow)" />
+<path d="M 90 250 L 430 250" stroke="var(--vp-c-brand-2)" stroke-width="2" fill="none" />
+
+<circle cx="430" cy="96" r="5" fill="var(--vp-c-brand-1)" />
+<text x="440" y="90" font-size="12" fill="var(--vp-c-text-1)" font-weight="600">目标 (x, y, h)</text>
+
+<path d="M 118 250 A 28 28 0 0 0 112 236" stroke="var(--vp-c-text-3)" stroke-width="1.6" fill="none" />
+<text x="150" y="238" font-size="12" fill="var(--vp-c-text-2)">α = atan2(x, y)</text>
+<text x="150" y="222" font-size="10.5" fill="var(--vp-c-text-3)">水平面内的方位角（pan）</text>
+
+<path d="M 400 128 A 30 30 0 0 0 386 118" stroke="var(--vp-c-text-3)" stroke-width="1.6" fill="none" />
+<text x="300" y="142" font-size="12" fill="var(--vp-c-text-2)">β = atan2(h, R)</text>
+<text x="236" y="158" font-size="10.5" fill="var(--vp-c-text-3)">竖直剖面内的仰角（tilt）</text>
+
+<g font-size="11" fill="var(--vp-c-text-2)">
+  <text x="250" y="270" text-anchor="middle">R = √(x² + y²)</text>
+  <text x="266" y="236" text-anchor="middle">y（向前）</text>
+  <text x="446" y="176" text-anchor="middle">h（向上）</text>
+</g>
+
+<g font-size="10.5" fill="var(--vp-c-text-3)">
+  <text x="500" y="214">两个角度相互独立：</text>
+  <text x="500" y="232">α 只看 x 与 y 的比值，</text>
+  <text x="500" y="250">β 只看 h 与 R 的比值。</text>
+  <text x="500" y="274">因此 R 与 (α, β) 一起把</text>
+  <text x="500" y="292">目标点唯一确定。</text>
+</g>
+
+<defs>
+  <marker id="sg-geo-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+</defs>
+</svg>
+
+</FigBox>
 
 ### 5.2 算例
 
@@ -380,6 +525,8 @@ int Gimbal_AimAt(Point3 target)
 
 ## 六、抖动与电源跌落排查
 
+这一节只回答一个问题：云台开始抖的时候，按什么顺序排除，才能在十分钟内定位到电源、地、信号还是机械。
+
 ### 6.1 抖动的四种来源
 
 「抖」是云台最常见的故障，但它的成因分属四个完全不同的层次。按「先排除最简单、最可能」的顺序：
@@ -431,6 +578,8 @@ int Gimbal_AimAt(Point3 target)
 
 ## 七、BOM
 
+这一节只回答一个问题：这台云台需要买哪些零件、哪些可以与项目二共用。
+
 | 序号 | 名称 | 规格 | 数量 | 参考单价（¥） | 备注 |
 | --- | --- | --- | --- | --- | --- |
 | 1 | STM32 开发板 | F103C8T6 最小系统 | 1 | 15 | 与项目二共用 |
@@ -449,6 +598,8 @@ int Gimbal_AimAt(Point3 target)
 合计约 ¥100（不含示波器）。
 
 ## 八、接线与结构图
+
+这一节只回答一个问题：机械上怎么叠、信号线怎么穿，才能让 pan 转 180° 时不把线拉断。
 
 ```
                   ┌──────────────────────┐
@@ -469,6 +620,8 @@ int Gimbal_AimAt(Point3 target)
 ```
 
 ## 九、调试：四步
+
+这一节只回答一个问题：装好之后按什么顺序验证，每一步用示波器看到什么才算通过。
 
 ### 第 1 步：空载测 PWM
 
@@ -495,6 +648,8 @@ int Gimbal_AimAt(Point3 target)
 - **不合格**：方向反了 → `x`/`y` 的符号或 `atan2` 的参数顺序错了；偏一个固定角度 → 中位没校准；误差随角度增大 → 脉宽比例 `ccr_per_deg` 不对。
 
 ## 十、故障排查表
+
+这一节只回答一个问题：出现某个具体症状时，先查哪一项。
 
 | 现象 | 最可能原因 | 一分钟验证 | 处理 |
 | --- | --- | --- | --- |
@@ -527,6 +682,8 @@ int Gimbal_AimAt(Point3 target)
 一句话记住分工：**第十三章讲「一个舵机怎么转准」，本页讲「两个舵机怎么一起转准」。**
 
 ## 十二、易错清单
+
+这一节只回答一个问题：哪十个错误最常让人怀疑是舵机坏了，其实是写法或接线。
 
 - [ ] 用「占空比 7.5%」代替绝对脉宽——周期一变角度就偏
 - [ ] 两轴用了两个定时器，频率不一致导致同步抖动
