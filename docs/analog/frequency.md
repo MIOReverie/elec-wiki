@@ -126,6 +126,41 @@ $$C_{in}=C_{be}+C_{bc}(1+A_v)=4+3\times58=178\,\text{pF}$$
 $$f_H=\dfrac{1}{\sqrt{f_{p1}^{-2}+f_{p2}^{-2}}}=\dfrac{1}{\sqrt{(1/1.57)^2+(1/9.15)^2}}=1.55\,\text{MHz}$$
 最慢极点 1.57 MHz 与结果 1.55 MHz 只差 1.4%——**极点相距 5.8 倍时，可以放心按最慢的那个估 $f_H$**；等两个极点靠到 2 倍以内，就必须走平方和。
 
+<FigBox title="密勒效应后的高频波特图：最慢极点先拉低增益" kind="曲线" note="实线按两个高频极点叠加绘制，虚线是分段渐近线。总上限频率 1.546 MHz 几乎贴着输入极点 1.569 MHz；到输出极点 9.147 MHz 后，滚降由 −20 dB/dec 加陡到 −40 dB/dec。">
+<svg viewBox="0 0 720 330" role="img" aria-label="密勒效应例题的高频波特图，标出总上限频率、两个极点与滚降斜率">
+<g stroke="var(--vp-c-text-3)" stroke-width="1.2" fill="none">
+<line x1="70" y1="280" x2="680" y2="280" />
+<line x1="70" y1="24" x2="70" y2="280" />
+<line x1="70" y1="45" x2="670" y2="45" stroke-dasharray="4 4" opacity="0.55" />
+<line x1="70" y1="57" x2="307.8" y2="57" stroke-dasharray="4 4" opacity="0.75" />
+<line x1="307.8" y1="57" x2="307.8" y2="280" stroke-dasharray="5 4" />
+<line x1="462.3" y1="42" x2="462.3" y2="280" stroke-dasharray="5 4" opacity="0.75" />
+<path d="M70 45 H309.1 L462.3 106.3 L670 272.5" stroke-dasharray="7 5" stroke-width="1.6" />
+</g>
+<polyline points="70,45.1 130.2,45.3 209.8,46.7 270,51.1 292.8,54.4 307.8,57.3 330.2,62.6 365.4,73.5 409.8,91.4 462.3,118.8 505.2,146.3 565.4,190.4 625.6,237.4 670,272.6" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" />
+<circle cx="307.8" cy="57.3" r="4" fill="var(--vp-c-brand-1)" />
+<line x1="307.8" y1="57.3" x2="339" y2="34" stroke="var(--vp-c-brand-1)" stroke-width="1.2" />
+<g fill="currentColor" font-size="11.5">
+<text x="70" y="17">增益 / dB</text>
+<text x="58" y="47" text-anchor="end">35.1</text>
+<text x="58" y="63" text-anchor="end">32.1</text>
+<text x="345" y="34" fill="var(--vp-c-brand-1)">fₚ₁ = 1.569 MHz</text>
+<text x="474" y="105">fₚ₂ = 9.147 MHz</text>
+<text x="344" y="108" fill="var(--vp-c-text-3)">−20 dB/dec</text>
+<text x="526" y="220" fill="var(--vp-c-text-3)">−40 dB/dec</text>
+<text x="307.8" y="319" text-anchor="middle" fill="var(--vp-c-brand-1)">fH = 1.546 MHz（−3.01 dB）</text>
+<text x="70" y="299" text-anchor="middle">0.1</text>
+<text x="270" y="299" text-anchor="middle">1</text>
+<text x="470" y="299" text-anchor="middle">10</text>
+<text x="670" y="299" text-anchor="middle">100 MHz</text>
+<text x="505" y="25" fill="var(--vp-c-brand-1)">实线：双极点实际响应</text>
+<text x="505" y="41" fill="var(--vp-c-text-3)">虚线：渐近线</text>
+</g>
+</svg>
+</FigBox>
+
+**看图能读出什么**：1.546 MHz 的总上限频率几乎由 1.569 MHz 输入极点单独决定；9.147 MHz 的输出极点主要负责把后段斜率再压低一档。35.1 dB 中频增益在 $f_H$ 处落到 32.1 dB，与验算的 −3.01 dB 一致。
+
 > **验算**（`node -e`）：$g_m=79.4$ mS、$C_{in}=178.0$ pF、$f_{p1}=1.569$ MHz、$f_{p2}=9.147$ MHz、$f_H=1.546$ MHz、相对偏差 1.44%，与正文一致。
 :::
 
@@ -144,6 +179,55 @@ $$BW\ge\frac{0.35}{4.61\,\text{ns}}=76\,\text{MHz}$$
 
 **第 4 步：若误用 20 MHz 档会怎样**
 $t_s=0.35/20\,\text{MHz}=17.5\,\text{ns}$，级联后的总上升时间 $t_{tot}=\sqrt{t_r^2+t_s^2}=\sqrt{2^2+17.5^2}=17.6\,\text{ns}$，等效可用带宽只剩 $0.35/17.6\,\text{ns}\approx19.9\,\text{MHz}$。一条 2 ns 的边沿被画成 17.6 ns 的斜坡，慢了近 9 倍——拿这样的波形去判上升沿时间、或去估 $RC$ 常数，结果全是错的。
+
+<FigBox title="同一条 2 ns 边沿：100 MHz 与 20 MHz 示波器看到的不同" kind="曲线" note="单极点示波器的自身上升时间满足 t_s = 0.35/BW，再与被测电路按平方和叠加。三条曲线均按 10%～90% 上升时间绘制。">
+<svg viewBox="0 0 720 365" role="img" aria-label="二纳秒阶跃边沿经过一百兆赫和二十兆赫示波器后的上升时间对比">
+<g fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.2">
+<line x1="70" y1="250" x2="680" y2="250" />
+<line x1="70" y1="45" x2="70" y2="250" />
+<line x1="70" y1="50" x2="680" y2="50" stroke-dasharray="4 4" opacity="0.5" />
+<line x1="70" y1="70" x2="680" y2="70" stroke-dasharray="4 4" opacity="0.35" />
+<line x1="70" y1="230" x2="680" y2="230" stroke-dasharray="4 4" opacity="0.35" />
+<line x1="220" y1="45" x2="220" y2="250" opacity="0.18" />
+<line x1="370" y1="45" x2="370" y2="250" opacity="0.18" />
+<line x1="520" y1="45" x2="520" y2="250" opacity="0.18" />
+<line x1="670" y1="45" x2="670" y2="250" opacity="0.18" />
+</g>
+<polyline points="70,250 76,210.5 85,165.5 100,116.7 115,88.5 130,72.2 160,57.4 190,52.5 250,50.3 670,50" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" />
+<polyline points="70,250 82,210.8 100,166 130,117.2 160,89 190.9,72.2 250,57.6 310,52.6 430,50.3 550,50 670,50" fill="none" stroke="#38bdf8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" />
+<polyline points="70,250 100,226.5 130,205.8 190,171.4 250,144.6 334,116.7 430,94.8 550,77.2 598.4,72.2 670,66.5" fill="none" stroke="#f59e0b" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" />
+<g fill="none" stroke-width="1.4">
+<line x1="75.8" y1="297" x2="196.7" y2="297" stroke="#38bdf8" />
+<line x1="75.8" y1="291" x2="75.8" y2="303" stroke="#38bdf8" />
+<line x1="196.7" y1="291" x2="196.7" y2="303" stroke="#38bdf8" />
+<line x1="95.3" y1="326" x2="623.8" y2="326" stroke="#f59e0b" />
+<line x1="95.3" y1="320" x2="95.3" y2="332" stroke="#f59e0b" />
+<line x1="623.8" y1="320" x2="623.8" y2="332" stroke="#f59e0b" />
+</g>
+<g fill="currentColor" font-size="11.5">
+<text x="70" y="39">归一化幅值</text>
+<text x="59" y="74" text-anchor="end">90%</text>
+<text x="59" y="234" text-anchor="end">10%</text>
+<text x="70" y="270" text-anchor="middle">0</text>
+<text x="220" y="270" text-anchor="middle">5</text>
+<text x="370" y="270" text-anchor="middle">10</text>
+<text x="520" y="270" text-anchor="middle">15</text>
+<text x="670" y="270" text-anchor="middle">20</text>
+<text x="680" y="286" text-anchor="end">时间 / ns</text>
+<line x1="80" y1="20" x2="110" y2="20" stroke="var(--vp-c-brand-1)" stroke-width="2.6" />
+<text x="118" y="24" fill="var(--vp-c-brand-1)">原边沿：2 ns</text>
+<line x1="250" y1="20" x2="280" y2="20" stroke="#38bdf8" stroke-width="2.6" />
+<text x="288" y="24" fill="#38bdf8">100 MHz：4.03 ns</text>
+<line x1="478" y1="20" x2="508" y2="20" stroke="#f59e0b" stroke-width="2.8" />
+<text x="516" y="24" fill="#f59e0b">20 MHz：17.6 ns</text>
+<text x="136.3" y="290" text-anchor="middle" fill="#38bdf8">100 MHz 档：t_tot = 4.03 ns</text>
+<text x="359.5" y="319" text-anchor="middle" fill="#f59e0b">20 MHz 档：t_tot = 17.6 ns</text>
+<text x="360" y="357" text-anchor="middle">t_s = 0.35 / BW；t_tot = √(t_r² + t_s²)</text>
+</g>
+</svg>
+</FigBox>
+
+**看图能读出什么**：100 MHz 档把 2 ns 边沿测成 4.03 ns，仍能看出快速跃迁；20 MHz 档却把它拖成 17.6 ns 的长斜坡。带宽选低后，仪器本身的上升时间会盖过被测对象。
 
 > **为什么这么想**
 > 两个一阶环节级联，上升时间按**平方和**叠加，与 $f_H$ 的平方和倒数是同一条规律：带宽由短板决定，不由平均决定。想清楚这一点，第 3 步的 20% 过冲结论也就自然了——$e^{-0.35\times2/(BW\times2\text{ns})}$ 这一条式子就能覆盖所有档位。
