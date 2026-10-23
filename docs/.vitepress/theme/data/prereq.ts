@@ -213,6 +213,15 @@ export const PREREQ: Record<string, PrereqItem> = {
     fullTitle: '09 · RLC 串联与阻抗',
     group: '交流'
   },
+  admittance: {
+    id: 'admittance',
+    title: '导纳 Y = 1/Z',
+    brief: '导纳是阻抗的倒数，单位 S；并联电路各支路导纳直接相加，串联才用阻抗相加。',
+    page: '/ee/prereq/admittance',
+    full: '/ee/04-ac/rlc',
+    fullTitle: '09 · RLC 串联与阻抗',
+    group: '交流'
+  },
   'power-factor': {
     id: 'power-factor',
     title: '功率因数 cosφ',
@@ -361,6 +370,15 @@ export const PREREQ: Record<string, PrereqItem> = {
     fullTitle: '02 · 基本放大电路',
     group: '模拟电子'
   },
+  'input-impedance': {
+    id: 'input-impedance',
+    title: '输入阻抗',
+    brief: '从输入端看进去的等效阻抗 Z_i = U_i/I_i；低频下就是输入电阻 r_i，越大对前级影响越小。',
+    page: '/prereq/input-impedance',
+    full: '/analog/amplifiers',
+    fullTitle: '第 2 章 · 基本放大电路',
+    group: '电子技术'
+  },
   'virtual-short': {
     id: 'virtual-short',
     title: '虚短与虚断',
@@ -425,7 +443,7 @@ export const PAGE_PREREQ: Record<string, string[]> = {
   '/ee/04-ac/rlc': ['phasor-implicit', 'impedance'].filter((x) => x !== 'phasor-implicit'),
   '/ee/04-ac/power': ['impedance', 'rms'],
   '/ee/04-ac/resonance': ['impedance'],
-  '/ee/05-three-phase/circuit': ['three-phase-source', 'impedance'],
+  '/ee/05-three-phase/circuit': ['three-phase-source', 'impedance', 'admittance'],
   '/ee/05-three-phase/power': ['three-phase-source', 'power-factor'],
   '/ee/06-machine/magnetic': ['magnetic-circuit'],
   '/ee/06-machine/transformer': ['magnetic-circuit', 'impedance'],

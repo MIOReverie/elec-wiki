@@ -309,7 +309,7 @@ $$\text{code}=\text{round}\left(\frac{V_{in}}{V_{ref}}\cdot(2^N-1)\right)$$
 两点必须记住：
 
 - **$V_{ref}$ 的噪声与精度直接变成读数误差**。Vref 噪声 1 mV、Vref = 3.3 V，则每个码都可能偏 $\pm1$ mV，相当于 12 位 ADC 丢了 2 位。MCU 内部 Vref 温漂常在 50 ppm/℃ 以上；精密测量要换外部基准（如 REF3033，±0.05%）。
-- **量化误差与「有效位数」**：理想 ADC 的量化误差 ±½ LSB，但**实际有效位数（ENOB）**由噪声决定。ENOB 的经典近似：
+- **量化误差与「有效位数」**：理想 ADC 的量化误差 ±½ **LSB** —— **LSB**（Least Significant Bit，最低有效位）是 ADC 能分辨的最小电压台阶，$1\,\text{LSB}=V_{FS}/2^N$（$V_{FS}$ 为满量程、$N$ 为位数），12 位、3.3 V 满量程时 $1\,\text{LSB}=3.3/4096=0.81\,\text{mV}$；模拟量每变 1 LSB 码才动一个字，所以四舍五入本身就有 ±½ LSB 的误差（注意串口那边的「LSB 先发」是**最低位先发送**，同一个词的另一义，不是这里的量化台阶），但**实际有效位数（ENOB）**由噪声决定。ENOB 的经典近似：
 
 $$\text{ENOB}=\frac{\text{SINAD}-1.76\,\text{dB}}{6.02\,\text{dB}}$$
 

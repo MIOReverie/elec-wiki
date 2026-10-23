@@ -71,7 +71,7 @@ description: 继电器与接触器怎么用触点控制线圈；自锁、互锁�
 :::
 
 <DemoBox title="起保停控制电路" hint="点图里的 SB2 / SB1；「模拟过载」看 FR 动作后的行为。主电路（上）与控制电路（下）是联动的。">
-  <RelayCircuit mode=「start」 />
+  <RelayCircuit mode="start" />
 </DemoBox>
 
 <FigBox caption="起保停时序：注意 t = 2s 时 SB2 早就松开了，KM 线圈却照样得电到 t = 5s —— 多出来的那段就是自锁触点的功劳">
@@ -102,7 +102,7 @@ KM2 线圈回路：… — KM1 常闭 — KM2 线圈
 KM1 一吸合，它的常闭辅助触点就断开，于是 KM2 的回路必然断开——**即使有人误按了反转按钮也没用**。
 
 <DemoBox title="正反转控制电路" hint="点 SB2 正转、SB3 反转、SB1 停止。注意主电路里 KM2 组把 L1、L2 换接；控制电路里两条支路互相串着对方的常闭触点。">
-  <RelayCircuit mode=「reverse」 />
+  <RelayCircuit mode="reverse" />
 </DemoBox>
 
 ::: tip 正转直接按反转按钮会怎样

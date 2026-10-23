@@ -763,7 +763,7 @@ const ladder = computed(() => {
     xMax: n,
     yMin: 0,
     yMax: 1.15,
-    xTicks: Array.from({ length: n + 1 }, i => i),
+    xTicks: Array.from({ length: n + 1 }, (_, i) => i),
     note: '空载时电位是等差直线；接上负载后，负载两端那一节被并联短路掉一部分，电位曲线整体下弯、末端掉得最多 —— 这就是分压器不能当电源用的原因'
   }
 })
