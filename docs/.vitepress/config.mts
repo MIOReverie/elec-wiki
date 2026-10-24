@@ -112,6 +112,32 @@ const TOPICS_SIDEBAR = [
   }
 ]
 
+// ==========================================================================
+// 【临时】线性代数复习板块
+// 学完要一键移除时，删掉以下三处即可，不会影响四门电学课：
+//   1. 下面这段 LINALG_SIDEBAR 常量
+//   2. themeConfig.nav 里的「线代（临时）」项
+//   3. themeConfig.sidebar 里的 '/linalg/': LINALG_SIDEBAR 映射
+// 另外还要删掉 docs/index.md 里的一行临时入口说明，以及整个 docs/linalg/ 目录。
+// 注意：catalog.ts 是四门电学课的扫描器，线代不走它，侧栏用手动 LINALG_SIDEBAR。
+// ==========================================================================
+/** 线性代数临时板块侧栏：主页 + 7 章，共一个分组 */
+const LINALG_SIDEBAR = [
+  {
+    text: '线性代数（临时）',
+    items: [
+      { text: '复习路线图', link: '/linalg/' },
+      { text: '01 · 向量、线性组合与张成', link: '/linalg/01-vectors' },
+      { text: '02 · 矩阵与线性变换', link: '/linalg/02-matrices' },
+      { text: '03 · 高斯消元与线性方程组', link: '/linalg/03-elimination' },
+      { text: '04 · 向量空间与四大子空间', link: '/linalg/04-subspaces' },
+      { text: '05 · 行列式：面积缩放的因子', link: '/linalg/05-determinant' },
+      { text: '06 · 特征值、特征向量与对角化', link: '/linalg/06-eigenvalues' },
+      { text: '07 · 正交、投影与二次型', link: '/linalg/07-orthogonality' }
+    ]
+  }
+]
+
 const COURSE_NAV = COURSE_META.map((m) => {
   const course = getCourses().find((c) => c.slug === m.slug)
   return { text: m.name, link: course?.route || `/${m.slug}/` }
@@ -348,6 +374,8 @@ export default defineConfig({
         ]
       },
       { text: '学习地图', link: '/map' },
+      // 【临时】线代复习入口，学完删掉这一项
+      { text: '线代（临时）', link: '/linalg/' },
       { text: '关于', link: '/guide/about' }
     ],
 
@@ -358,6 +386,8 @@ export default defineConfig({
       '/embedded/': courseSidebar('embedded'),
       '/lab/': LAB_SIDEBAR,
       '/topics/': TOPICS_SIDEBAR,
+      // 【临时】线代侧栏，学完删掉这一行
+      '/linalg/': LINALG_SIDEBAR,
       '/map': GUIDE_SIDEBAR,
       '/shared/': GUIDE_SIDEBAR,
       '/guide/': GUIDE_SIDEBAR
