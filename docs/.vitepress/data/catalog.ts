@@ -371,8 +371,8 @@ export function getRecent(limit = 8): RecentItem[] {
       seen.add(slug)
       const course = getCourses().find((c) => slug === c.slug || slug.startsWith(c.slug + '/'))
       const chapter = course?.chapters.find((c) => c.slug === slug)
-      const isIndex = slug.endsWith('/index') || !slug.includes('/')
-      const route = isIndex ? `/${slug.replace(/\/index$/, '')}/` : `/${slug}`
+      const isIndex = slug.endsWith('/index') || slug === 'index'
+      const route = slug === 'index' ? '/' : isIndex ? `/${slug.replace(/\/index$/, '')}/` : `/${slug}`
       const title = chapter?.title || (isIndex ? (course?.name ?? '首页') + ' · 课程主页' : slug)
       items.push({ route, title, course: course?.name || '本站', date })
       if (items.length >= limit) break
