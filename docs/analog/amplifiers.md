@@ -904,6 +904,373 @@ $$
 
 两道题做完后，本页的四件工具（Q 点、$\dot A_u$、$r_i$、$r_o$）就齐了。把它们放回一条真实的信号链上，就看得出每一件各管什么。
 
+## 八、MOS 也能放大：共源与共漏
+
+BJT 用基极电流控制集电极电流，MOS 用栅源电压控制漏极电流——控制量从「电流」换成「电压」，是两种管子最根本的差别。这一节把前面 BJT 的整套分析原样搬到 MOS 上：还是「先直流站位、再交流放大」，还是「共射↔共源、射随↔源随」的对应关系，只是公式里的 $\beta$ 换成 $g_m$、$r_{be}$ 换成「栅极开路」。
+
+四个名词先交代清楚：
+
+- **共源**（common source）：信号从栅极进、从漏极出，**源极是输入输出的公共端**（交流接地），对应 BJT 的共射，输出倒相。
+- **共漏**（common drain）：信号从栅极进、从源极出，**漏极是公共端**（漏极接 $V_{DD}$，交流接地），对应 BJT 的共集。
+- **源极跟随器**（source follower）：共漏接法的别名——输出电压跟着输入走（$A_u\approx1$），对应射极跟随器。
+- **跨导 $g_m$**：把栅源电压的变化转成漏极电流的变化，定义为
+
+$$
+g_m=\frac{\partial I_D}{\partial V_{GS}}=2K\,V_{ov}=\frac{2I_D}{V_{ov}}
+$$
+
+BJT 的跨导是 $g_m=I_C/V_T$，MOS 的是 $2I_D/V_{ov}$——两边都叫跨导，公式不同，别混。这里 $V_{ov}=V_{GS}-V_{GS(th)}$ 是**过驱动电压**（栅压高出开启电压 $V_{GS(th)}$ 的部分），$K$ 是**跨导参数**（工艺与尺寸决定的常数，单位 mA/V²），定义都在[上一页](semiconductor.md)第七节。
+
+**先给偏置定个数**。下面的例题统一用：$V_{DD}=12$ V，$R_{G1}=700\ \text{k}\Omega$，$R_{G2}=500\ \text{k}\Omega$，$R_S=2\ \text{k}\Omega$，$R_D=4\ \text{k}\Omega$，$R_L=4\ \text{k}\Omega$；管子取 $V_{GS(th)}=2$ V、$K=1\ \text{mA/V}^2$。
+
+**偏置：分压偏置 + 源极电阻。** MOS 做放大器同样要先站稳静态工作点。栅极不取直流电流，所以**栅极电压 $V_G$ 就是两个分压电阻按比例切出来的值**，没有 BJT 那种「分压被基极电流拉低」的修正：
+
+$$
+V_G=V_{DD}\frac{R_{G2}}{R_{G1}+R_{G2}}
+$$
+
+源极接一颗电阻 $R_S$，漏极电流流经它产生 $V_S=I_D R_S$，于是栅源电压
+
+$$
+V_{GS}=V_G-V_S=V_G-I_D R_S
+$$
+
+把这句代进恒流区方程 $I_D=K(V_{GS}-V_{GS(th)})^2$ 解出 $I_{DQ}$。$R_S$ 的作用与 BJT 的 $R_E$ 完全一样：**$I_D$ 变大 → $V_S$ 变大 → $V_{GS}$ 变小 → $I_D$ 被拉回来**，是直流负反馈。差别只在分压那一步——BJT 要校核分压器电流够不够硬（$I_{BQ}$ 会偷走电流），MOS 不用，因为 $I_G\approx0$。
+
+**共源放大器的增益。** 共源接法下 $C_1$、$C_2$ 是耦合电容，$C_S$ 旁路 $R_S$。**直流通路**：三个电容全开路，按上面两式解出 $I_{DQ}$、$V_{GSQ}$，再由 $g_m=2K V_{ov}$ 得跨导。**交流通路**：三个电容全短路、$V_{DD}$ 交流接地；栅极开路（不取电流），漏极对地并联着「受控电流源 $g_m v_{gs}$」与「负载 $R_D\parallel R_L$」。把管子换成小信号模型，就是下面这张替换图：
+
+<FigBox title="微变等效电路：MOS 被换成「开路栅极 + 受控源 g_m v_gs」" kind="电路" note="左：MOS 符号（G、D、S 三个极）。右：它的微变等效电路——栅极开路（不取电流），d-s 之间一个由 v_gs 控制的电流源 g_m v_gs。有了这张替换图，共源、共漏的增益都只是欧姆定律。" >
+
+<svg viewBox="0 0 520 240" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
+<text x="130" y="34" text-anchor="middle" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">MOS 符号</text>
+<g transform="translate(130 120)">
+<line x1="-24" y1="-6" x2="-8" y2="-6"/>
+<line x1="-8" y1="-8" x2="-8" y2="18" stroke-width="2.6"/>
+<line x1="-3" y1="-10" x2="-3" y2="2" stroke-width="2.6"/>
+<line x1="-8" y1="-4" x2="4" y2="-4"/>
+<line x1="-8" y1="8" x2="4" y2="8"/>
+<line x1="4" y1="-20" x2="4" y2="-4"/>
+<line x1="4" y1="8" x2="4" y2="20"/>
+<line x1="4" y1="-18" x2="4" y2="-13.6"/>
+<path d="M 4 -8 L 0.74 -15.3 L 7.26 -15.3 Z" class="sf-solid"/>
+</g>
+<text x="106" y="114" text-anchor="end" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">G</text>
+<text x="146" y="100" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">D</text>
+<text x="146" y="140" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">S</text>
+<text x="130" y="180" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">非线性三端器件</text>
+<line x1="230" y1="60" x2="230" y2="200" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="290" y="110" text-anchor="middle" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">≈</text>
+<text x="300" y="132" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">小信号替换</text>
+<circle cx="350" cy="70" r="4.5" class="sf-dot"/>
+<text x="340" y="70" text-anchor="end" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">G</text>
+<text x="362" y="52" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">开路，无电流</text>
+<circle cx="500" cy="70" r="4.5" class="sf-dot"/>
+<text x="510" y="70" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">D</text>
+<circle cx="500" cy="170" r="4.5" class="sf-dot"/>
+<text x="510" y="170" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">S</text>
+<line x1="500" y1="70" x2="410" y2="70"/>
+<line x1="410" y1="70" x2="410" y2="170"/>
+<line x1="410" y1="170" x2="500" y2="170"/>
+<line x1="500" y1="70" x2="500" y2="170"/>
+<path d="M 455 70 L 455 170" stroke="var(--vp-c-brand-1)" stroke-width="2.4"/>
+<path d="M 451 160 L 455 170 L 459 160 Z" fill="var(--vp-c-brand-1)" stroke="var(--vp-c-brand-1)" stroke-width="1.6"/>
+<text x="432" y="120" text-anchor="end" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700 sf-it">g</text>
+<text x="437" y="128" text-anchor="start" dominant-baseline="middle" font-size="8.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">m</text>
+<text x="444" y="120" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700 sf-it">v</text>
+<text x="449" y="128" text-anchor="start" dominant-baseline="middle" font-size="8.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">gs</text>
+<line x1="350" y1="70" x2="430" y2="96" stroke="var(--vp-c-brand-1)" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text x="430" y="224" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">线性二端口：栅极开路 + 一个受控电流源</text>
+</svg>
+
+</FigBox>
+
+因为源极被 $C_S$ 旁路到地，$v_{gs}=v_i$。令 $R_L'=R_D\parallel R_L$（交流负载），则输出
+
+$$
+v_o=-g_m v_{gs}R_L'=-g_m v_i R_L'
+$$
+
+负号来自电流方向：受控源把电流从漏极灌向源极，这个电流流过 $R_L'$ 时把漏极电位往下拉，与 $v_i$ 反相。电压增益
+
+$$
+\dot A_u=\frac{v_o}{v_i}=-g_m R_L'
+$$
+
+这一式与 BJT 共射的 $\dot A_u=-\beta R_L'/r_{be}$ 完全对偶：把 $\beta/r_{be}$ 换成 $g_m$，把 $R_C$ 换成 $R_D$，其余照搬。差别在输入电阻——共射的 $r_i=R_{b1}\parallel R_{b2}\parallel r_{be}$ 只有 kΩ 级，共源的 $r_i=R_{G1}\parallel R_{G2}$ 是 MΩ 级，因为栅极绝缘、不取电流。
+
+**共漏（源极跟随器）。** 漏极直接接 $V_{DD}$（交流接地），输出改从源极取。此时 $R_S$ 没有旁路电容，它同时是偏置电阻与「输出端往地上看」的负载。输出跟着输入走，电压增益
+
+$$
+\dot A_u=\frac{g_m R_L'}{1+g_m R_L'}
+$$
+
+其中 $R_L'=R_S\parallel R_L$。因为 $g_m R_L'$ 通常远大于 1，$\dot A_u\approx1$；更重要的是输出电阻
+
+$$
+r_o=R_S\parallel\frac{1}{g_m}
+$$
+
+$1/g_m$ 只有几百 Ω，所以 $r_o$ 很低——与射极输出器「输入高、输出低」是同一副性格，只是这里的高输入阻抗来自栅极绝缘，比 BJT 更极致。
+
+**对比表。** 把 BJT 三种接法与 MOS 三种接法并排：
+
+| 对比项 | BJT（电流控制） | MOS（电压控制） |
+| --- | --- | --- |
+| 控制量 | 基极电流 $I_B$，$I_C=\beta I_B$ | 栅源电压 $V_{GS}$，$I_D=K(V_{GS}-V_{GS(th)})^2$ |
+| 跨导 $g_m$ | $g_m=I_C/V_T$ | $g_m=2I_D/V_{ov}$ |
+| 输入阻抗 | 中（kΩ 级），基极要取电流 | 高（MΩ 级），栅极绝缘不取电流 |
+| 倒相接法 | 共射：$\dot A_u=-\beta R_L'/r_{be}$ | 共源：$\dot A_u=-g_mR_L'$ |
+| 跟随接法 | 共集（射随）：$A_u\approx1$，$r_o$ 几十 Ω | 共漏（源随）：$A_u\approx1$，$r_o\approx1/g_m$ |
+| 低输入阻抗接法 | 共基：$r_i$ 几十 Ω | 共栅：$r_i\approx1/g_m$ |
+
+表里最该记的是第一行与第三行：**BJT 靠电流、输入阻抗中，MOS 靠电压、输入阻抗高**。同电流下 BJT 的跨导比 MOS 大得多（$g_m=I_C/V_T$ 在 1 mA 时约 38 mS，$g_m=2I_D/V_{ov}$ 在 $V_{ov}=1$ V 时只有 2 mS），所以 BJT 的共射增益更「省电」；但 MOS 的栅极不取电流，前端接高阻传感器时几乎不加载信号源——两句话合起来，就是选管子的第一条理由。
+
+::: tip 例 6 · 共源放大器的完整计算 {#ex-amp-6}
+**题目**：分压偏置共源电路，参数见本节开头。求静态工作点 $I_{DQ}$、$V_{GSQ}$、跨导 $g_m$，再求 $\dot A_u$、$r_i$、$r_o$。
+
+<FigBox title="例 6 的电路：分压偏置 + 源极电阻 + 旁路电容" kind="电路" note="R_G1、R_G2 分压定栅极电位，R_S 提供直流负反馈并被 C_S 旁路。输入经 C_1 耦合到栅极，输出经 C_2 从漏极耦合到负载 R_L。栅极不取电流，分压值就是 V_G。" >
+
+<svg viewBox="0 0 560 340" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
+<line x1="70" y1="40" x2="430" y2="40"/>
+<text x="78" y="24" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">+V_DD = 12 V</text>
+<line x1="40" y1="300" x2="500" y2="300"/>
+<line x1="60" y1="300" x2="60" y2="314"/>
+<line x1="48" y1="314" x2="72" y2="314" stroke-width="1.8"/>
+<line x1="52" y1="320" x2="68" y2="320" stroke-width="1.8"/>
+<line x1="56" y1="326" x2="64" y2="326" stroke-width="1.8"/>
+<g transform="translate(246 186)">
+<line x1="-24" y1="-6" x2="-8" y2="-6"/>
+<line x1="-8" y1="-8" x2="-8" y2="18" stroke-width="2.6"/>
+<line x1="-3" y1="-10" x2="-3" y2="2" stroke-width="2.6"/>
+<line x1="-8" y1="-4" x2="4" y2="-4"/>
+<line x1="-8" y1="8" x2="4" y2="8"/>
+<line x1="4" y1="-20" x2="4" y2="-4"/>
+<line x1="4" y1="8" x2="4" y2="20"/>
+<line x1="4" y1="-18" x2="4" y2="-13.6"/>
+<path d="M 4 -8 L 0.74 -15.3 L 7.26 -15.3 Z" class="sf-solid"/>
+</g>
+<line x1="250" y1="40" x2="250" y2="80"/>
+<g transform="translate(250 100) rotate(90)">
+<line x1="-20" y1="0" x2="-6" y2="0"/>
+<rect x="-6" y="-6" width="12" height="12" rx="1.5" fill="none"/>
+<line x1="6" y1="0" x2="20" y2="0"/>
+</g>
+<line x1="250" y1="120" x2="250" y2="166"/>
+<text x="268" y="100" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_D = 4 kΩ</text>
+<circle cx="250" cy="166" r="4" class="sf-dot"/>
+<line x1="222" y1="40" x2="222" y2="80"/>
+<g transform="translate(222 100) rotate(90)">
+<line x1="-20" y1="0" x2="-6" y2="0"/>
+<rect x="-6" y="-6" width="12" height="12" rx="1.5" fill="none"/>
+<line x1="6" y1="0" x2="20" y2="0"/>
+</g>
+<line x1="222" y1="120" x2="222" y2="180"/>
+<text x="204" y="100" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_G1 = 700 kΩ</text>
+<line x1="222" y1="180" x2="222" y2="200"/>
+<g transform="translate(222 220) rotate(90)">
+<line x1="-20" y1="0" x2="-6" y2="0"/>
+<rect x="-6" y="-6" width="12" height="12" rx="1.5" fill="none"/>
+<line x1="6" y1="0" x2="20" y2="0"/>
+</g>
+<line x1="222" y1="240" x2="222" y2="300"/>
+<text x="204" y="220" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_G2 = 500 kΩ</text>
+<circle cx="222" cy="180" r="4" class="sf-dot"/>
+<circle cx="60" cy="180" r="15"/>
+<path d="M 52 180 q 4 -8 8 0 q 4 8 8 0" stroke="var(--vp-c-text-3)" stroke-width="1.3"/>
+<line x1="60" y1="180" x2="60" y2="300"/>
+<line x1="75" y1="180" x2="95" y2="180"/>
+<line x1="95" y1="166" x2="95" y2="194" stroke-width="2.6"/>
+<line x1="105" y1="166" x2="105" y2="194" stroke-width="2.6"/>
+<line x1="105" y1="180" x2="222" y2="180"/>
+<text x="40" y="150" text-anchor="end" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700 sf-it">u</text>
+<text x="47" y="159" text-anchor="start" dominant-baseline="middle" font-size="9" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">i</text>
+<text x="100" y="156" text-anchor="middle" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">C</text>
+<text x="107" y="164" text-anchor="start" dominant-baseline="middle" font-size="8.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">1</text>
+<line x1="250" y1="166" x2="280" y2="166"/>
+<line x1="280" y1="152" x2="280" y2="180" stroke-width="2.6"/>
+<line x1="290" y1="152" x2="290" y2="180" stroke-width="2.6"/>
+<line x1="290" y1="166" x2="330" y2="166"/>
+<text x="285" y="144" text-anchor="middle" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">C</text>
+<text x="292" y="152" text-anchor="start" dominant-baseline="middle" font-size="8.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">2</text>
+<line x1="330" y1="166" x2="330" y2="200"/>
+<g transform="translate(330 220) rotate(90)">
+<line x1="-20" y1="0" x2="-6" y2="0"/>
+<rect x="-6" y="-6" width="12" height="12" rx="1.5" fill="none"/>
+<line x1="6" y1="0" x2="20" y2="0"/>
+</g>
+<line x1="330" y1="240" x2="330" y2="300"/>
+<text x="348" y="220" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_L = 4 kΩ</text>
+<text x="342" y="160" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700 sf-it">u</text>
+<text x="351" y="169" text-anchor="start" dominant-baseline="middle" font-size="9" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">o</text>
+<line x1="250" y1="206" x2="250" y2="220"/>
+<g transform="translate(250 240) rotate(90)">
+<line x1="-20" y1="0" x2="-6" y2="0"/>
+<rect x="-6" y="-6" width="12" height="12" rx="1.5" fill="none"/>
+<line x1="6" y1="0" x2="20" y2="0"/>
+</g>
+<line x1="250" y1="260" x2="250" y2="300"/>
+<text x="268" y="240" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_S = 2 kΩ</text>
+<circle cx="250" cy="206" r="4" class="sf-dot"/>
+<line x1="250" y1="206" x2="290" y2="206"/>
+<line x1="290" y1="206" x2="290" y2="232"/>
+<line x1="282" y1="232" x2="298" y2="232" stroke-width="2.6"/>
+<line x1="282" y1="240" x2="298" y2="240" stroke-width="2.6"/>
+<line x1="290" y1="240" x2="290" y2="300"/>
+<text x="306" y="220" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t sf-it">C_S（旁路）</text>
+<text x="232" y="168" text-anchor="end" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">G</text>
+<text x="256" y="148" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">D</text>
+<text x="256" y="222" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">S</text>
+<text x="280" y="330" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">C_1、C_2 隔直通交，C_S 旁路 R_S——静态看直流通路，动态看交流通路</text>
+</svg>
+
+</FigBox>
+
+**第 1 步，栅极电位。** 栅极不取电流，$V_G$ 就是分压值：
+
+$$
+V_G=V_{DD}\frac{R_{G2}}{R_{G1}+R_{G2}}=12\times\frac{500}{700+500}=5\ \text{V}
+$$
+
+**第 2 步，解静态电流。** 由 $V_{GS}=V_G-I_D R_S$ 与 $I_D=K(V_{GS}-V_{GS(th)})^2$ 联立，代 $V_{GS}=5-2I_D$（$I_D$ 单位 mA）得 $I_D=(5-2I_D-2)^2=(3-2I_D)^2$，整理成 $4I_D^2-13I_D+9=0$，两根 $I_D=2.25$ mA 与 $1$ mA。前一根代回 $V_{GS}=5-2\times2.25=0.5$ V $<V_{GS(th)}$，落在截止区，舍去；取
+
+$$
+I_{DQ}=1\ \text{mA},\qquad V_{GSQ}=5-2\times1=3\ \text{V}
+$$
+
+校核恒流区：$V_{DSQ}=V_{DD}-I_{DQ}(R_D+R_S)=12-1\times(4+2)=6$ V，而 $V_{ov}=V_{GSQ}-V_{GS(th)}=1$ V，$6>1$ ✓。
+
+**第 3 步，跨导。**
+
+$$
+g_m=\frac{2I_{DQ}}{V_{ov}}=\frac{2\times1\ \text{mA}}{1\ \text{V}}=2\ \text{mS}
+$$
+
+**第 4 步，动态三参数。** $R_L'=R_D\parallel R_L=4\parallel4=2\ \text{k}\Omega$，于是
+
+$$
+\dot A_u=-g_m R_L'=-2\ \text{mS}\times2\ \text{k}\Omega=-4
+$$
+
+$$
+r_i=R_{G1}\parallel R_{G2}=700\parallel500=\frac{700\times500}{1200}\approx292\ \text{k}\Omega,\qquad r_o=R_D=4\ \text{k}\Omega
+$$
+
+**验算**（node）：`12*500/1200 = 5`，`(13-Math.sqrt(25))/8 = 1`，`2*1e-3/(3-2) = 0.002`，`-2e-3*(4000*4000/(4000+4000)) = -4`，`700e3*500e3/(700e3+500e3) = 291666.67`。
+
+**对照共射**：同一套「直流站位 + 交流放大」的流程，只是 $r_i$ 从 kΩ 级跳到 MΩ 级、$\dot A_u$ 从 $-\beta R_L'/r_{be}$ 换成 $-g_m R_L'$。倒相（负号）这一点两种管子完全一致。
+:::
+
+::: tip 例 7 · 共漏源极跟随器的阻抗账 {#ex-amp-7}
+**题目**：把例 6 的漏极改接 $V_{DD}$、去掉 $R_D$ 与 $C_S$，输出改从源极经 $C_2$ 送到 $R_L=4\ \text{k}\Omega$。求 $\dot A_u$ 与 $r_o$。
+
+<FigBox title="例 7 的电路：输出改从源极取" kind="电路" note="漏极直接接 V_DD（交流接地），输出改从源极经 C_2 耦合到负载 R_L；R_S 兼做偏置电阻与源极负载。栅极仍是高阻抗输入端。" >
+
+<svg viewBox="0 0 560 320" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
+<line x1="70" y1="40" x2="430" y2="40"/>
+<text x="78" y="24" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">+V_DD = 12 V</text>
+<line x1="40" y1="300" x2="500" y2="300"/>
+<line x1="60" y1="300" x2="60" y2="314"/>
+<line x1="48" y1="314" x2="72" y2="314" stroke-width="1.8"/>
+<line x1="52" y1="320" x2="68" y2="320" stroke-width="1.8"/>
+<line x1="56" y1="326" x2="64" y2="326" stroke-width="1.8"/>
+<g transform="translate(246 186)">
+<line x1="-24" y1="-6" x2="-8" y2="-6"/>
+<line x1="-8" y1="-8" x2="-8" y2="18" stroke-width="2.6"/>
+<line x1="-3" y1="-10" x2="-3" y2="2" stroke-width="2.6"/>
+<line x1="-8" y1="-4" x2="4" y2="-4"/>
+<line x1="-8" y1="8" x2="4" y2="8"/>
+<line x1="4" y1="-20" x2="4" y2="-4"/>
+<line x1="4" y1="8" x2="4" y2="20"/>
+<line x1="4" y1="-18" x2="4" y2="-13.6"/>
+<path d="M 4 -8 L 0.74 -15.3 L 7.26 -15.3 Z" class="sf-solid"/>
+</g>
+<line x1="250" y1="40" x2="250" y2="166"/>
+<line x1="222" y1="40" x2="222" y2="80"/>
+<g transform="translate(222 100) rotate(90)">
+<line x1="-20" y1="0" x2="-6" y2="0"/>
+<rect x="-6" y="-6" width="12" height="12" rx="1.5" fill="none"/>
+<line x1="6" y1="0" x2="20" y2="0"/>
+</g>
+<line x1="222" y1="120" x2="222" y2="180"/>
+<text x="204" y="100" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_G1 = 700 kΩ</text>
+<line x1="222" y1="180" x2="222" y2="200"/>
+<g transform="translate(222 220) rotate(90)">
+<line x1="-20" y1="0" x2="-6" y2="0"/>
+<rect x="-6" y="-6" width="12" height="12" rx="1.5" fill="none"/>
+<line x1="6" y1="0" x2="20" y2="0"/>
+</g>
+<line x1="222" y1="240" x2="222" y2="300"/>
+<text x="204" y="220" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_G2 = 500 kΩ</text>
+<circle cx="222" cy="180" r="4" class="sf-dot"/>
+<circle cx="60" cy="180" r="15"/>
+<path d="M 52 180 q 4 -8 8 0 q 4 8 8 0" stroke="var(--vp-c-text-3)" stroke-width="1.3"/>
+<line x1="60" y1="180" x2="60" y2="300"/>
+<line x1="75" y1="180" x2="95" y2="180"/>
+<line x1="95" y1="166" x2="95" y2="194" stroke-width="2.6"/>
+<line x1="105" y1="166" x2="105" y2="194" stroke-width="2.6"/>
+<line x1="105" y1="180" x2="222" y2="180"/>
+<text x="40" y="150" text-anchor="end" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700 sf-it">u</text>
+<text x="47" y="159" text-anchor="start" dominant-baseline="middle" font-size="9" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">i</text>
+<text x="100" y="156" text-anchor="middle" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">C</text>
+<text x="107" y="164" text-anchor="start" dominant-baseline="middle" font-size="8.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">1</text>
+<circle cx="250" cy="206" r="4" class="sf-dot"/>
+<line x1="250" y1="206" x2="250" y2="220"/>
+<g transform="translate(250 240) rotate(90)">
+<line x1="-20" y1="0" x2="-6" y2="0"/>
+<rect x="-6" y="-6" width="12" height="12" rx="1.5" fill="none"/>
+<line x1="6" y1="0" x2="20" y2="0"/>
+</g>
+<line x1="250" y1="260" x2="250" y2="300"/>
+<text x="268" y="240" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_S = 2 kΩ</text>
+<line x1="250" y1="206" x2="280" y2="206"/>
+<line x1="280" y1="192" x2="280" y2="220" stroke-width="2.6"/>
+<line x1="290" y1="192" x2="290" y2="220" stroke-width="2.6"/>
+<line x1="290" y1="206" x2="330" y2="206"/>
+<text x="285" y="184" text-anchor="middle" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">C</text>
+<text x="292" y="192" text-anchor="start" dominant-baseline="middle" font-size="8.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">2</text>
+<line x1="330" y1="206" x2="330" y2="230"/>
+<g transform="translate(330 250) rotate(90)">
+<line x1="-20" y1="0" x2="-6" y2="0"/>
+<rect x="-6" y="-6" width="12" height="12" rx="1.5" fill="none"/>
+<line x1="6" y1="0" x2="20" y2="0"/>
+</g>
+<line x1="330" y1="270" x2="330" y2="300"/>
+<text x="348" y="250" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_L = 4 kΩ</text>
+<text x="342" y="200" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700 sf-it">u</text>
+<text x="351" y="209" text-anchor="start" dominant-baseline="middle" font-size="9" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">o</text>
+<text x="232" y="168" text-anchor="end" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">G</text>
+<text x="256" y="148" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">D</text>
+<text x="256" y="222" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">S</text>
+<text x="280" y="314" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">输出取自源极：u_o 跟着 u_i 走（A_u ≈ 1）</text>
+</svg>
+
+</FigBox>
+
+**先想什么**：输出取自源极，而源极电位跟着栅极走，所以增益接近 1；真正值钱的是输出电阻——它决定这个电路「带不带得动」$R_L$。
+
+**第 1 步，跨导不变。** 偏置电阻与例 6 相同，只是漏极直接接 $V_{DD}$，静态电流还是 $I_{DQ}=1$ mA、$g_m=2$ mS（$V_{DSQ}=12-2=10$ V，仍在恒流区）。
+
+**第 2 步，电压增益。** 交流负载 $R_L'=R_S\parallel R_L=2\parallel4=\frac43\ \text{k}\Omega$，于是
+
+$$
+\dot A_u=\frac{g_m R_L'}{1+g_m R_L'}=\frac{2\times(4/3)}{1+2\times(4/3)}=\frac{8/3}{11/3}=\frac{8}{11}\approx0.727
+$$
+
+不到 1，且略小于 1——「跟随」名字的来历。
+
+**第 3 步，输出电阻。**
+
+$$
+r_o=R_S\parallel\frac{1}{g_m}=2\ \text{k}\Omega\parallel0.5\ \text{k}\Omega=400\ \Omega
+$$
+
+**验算**（node）：`2e-3*(2000*4000/(2000+4000)) = 2.6667`，`2.6667/(1+2.6667) = 0.7273`，`2000*500/(2000+500) = 400`。
+
+**结论**：增益 0.727（不带负载时是 $2\times2/(1+2\times2)=0.8$），输出电阻 400 Ω——比共源的 $r_o=4$ kΩ 小一个数量级，这就是「缓冲」的含义：源极跟随器几乎不放大电压，但带载能力大幅提升。
+:::
+
+共源、共漏两件工具补齐后，BJT 与 MOS 两套放大电路就都能完整算一遍了。下面把它们放回一条真实的信号链，看每一件各管什么。
+
 ## 工程实例：示波器前级的信号链
 
 一台示波器的输入衰减 + 前放，就是上面那张电路图的工程放大版：

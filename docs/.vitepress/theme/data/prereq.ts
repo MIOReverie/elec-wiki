@@ -240,13 +240,22 @@ export const PREREQ: Record<string, PrereqItem> = {
     fullTitle: '11 · 谐振与频率特性',
     group: '交流'
   },
+  fourier: {
+    id: 'fourier',
+    title: '傅里叶级数',
+    brief: '任何周期波形都能拆成「直流分量 + 基波 + 各次谐波」的正弦分量之和，精确相等、不是近似。',
+    page: '/ee/prereq/fourier',
+    full: '/ee/04-ac/non-sinusoidal',
+    fullTitle: '12 · 非正弦周期电路（傅里叶分解与谐波）',
+    group: '交流'
+  },
   'three-phase-source': {
     id: 'three-phase-source',
     title: '对称三相电源',
     brief: '三个幅值相同、频率相同、相位互差 120° 的正弦电动势。Y 接时 U_l = √3 U_p 且超前 30°。',
     page: '/ee/prereq/three-phase-source',
     full: '/ee/05-three-phase/circuit',
-    fullTitle: '12 · 三相电路',
+    fullTitle: '13 · 三相电路',
     group: '三相'
   },
   'magnetic-circuit': {
@@ -255,7 +264,7 @@ export const PREREQ: Record<string, PrereqItem> = {
     brief: 'Φ = F/R_m = NI/(l/μS)，与电路欧姆定律同构，但铁磁材料 μ 非线性。',
     page: '/ee/prereq/magnetic-circuit',
     full: '/ee/06-machine/magnetic',
-    fullTitle: '14 · 磁路基础',
+    fullTitle: '15 · 磁路基础',
     group: '磁路与电机'
   },
   transformer: {
@@ -264,7 +273,7 @@ export const PREREQ: Record<string, PrereqItem> = {
     brief: 'U₁/U₂ ≈ N₁/N₂ = k，I₁/I₂ ≈ 1/k，Z₁ = k²Z_L。只变交流、不能变直流。',
     page: '/ee/prereq/transformer',
     full: '/ee/06-machine/transformer',
-    fullTitle: '15 · 变压器',
+    fullTitle: '16 · 变压器',
     group: '磁路与电机'
   },
   slip: {
@@ -273,7 +282,7 @@ export const PREREQ: Record<string, PrereqItem> = {
     brief: 's = (n₀ - n)/n₀。s=0 空载（理想），s=1 堵转，额定 s_N 通常 2%~6%。',
     page: '/ee/prereq/slip',
     full: '/ee/06-machine/induction-motor',
-    fullTitle: '16 · 三相异步电动机原理',
+    fullTitle: '17 · 三相异步电动机原理',
     group: '磁路与电机'
   },
   diode: {
@@ -282,7 +291,7 @@ export const PREREQ: Record<string, PrereqItem> = {
     brief: '正向导通（硅管压降约 0.7V）、反向截止。整流电路的基础。（模电已学）',
     page: '/ee/prereq/diode',
     full: '/ee/08-electronics/rectifier',
-    fullTitle: '22 · 整流 · 滤波 · 稳压',
+    fullTitle: '23 · 整流 · 滤波 · 稳压',
     group: '电子技术'
   },
   boolean: {
@@ -291,7 +300,7 @@ export const PREREQ: Record<string, PrereqItem> = {
     brief: '与/或/非 + 德摩根定律。真值表 ↔ 逻辑表达式 ↔ 电路图 三者互转是基本功。',
     page: '/ee/prereq/boolean',
     full: '/ee/08-electronics/digital-basic',
-    fullTitle: '23 · 数字电路基础',
+    fullTitle: '24 · 数字电路基础',
     group: '电子技术'
   },
   'flip-flop': {
@@ -300,7 +309,7 @@ export const PREREQ: Record<string, PrereqItem> = {
     brief: '具有记忆功能的基本单元。D 触发器：Qⁿ⁺¹ = D（时钟边沿到来时）。',
     page: '/ee/prereq/flip-flop',
     full: '/ee/08-electronics/sequential',
-    fullTitle: '25 · 触发器与时序电路',
+    fullTitle: '26 · 触发器与时序电路',
     group: '电子技术'
   },
 
@@ -443,6 +452,7 @@ export const PAGE_PREREQ: Record<string, string[]> = {
   '/ee/04-ac/rlc': ['phasor-implicit', 'impedance'].filter((x) => x !== 'phasor-implicit'),
   '/ee/04-ac/power': ['impedance', 'rms'],
   '/ee/04-ac/resonance': ['impedance'],
+  '/ee/04-ac/non-sinusoidal': ['sine-params', 'rms', 'fourier'],
   '/ee/05-three-phase/circuit': ['three-phase-source', 'impedance', 'admittance'],
   '/ee/05-three-phase/power': ['three-phase-source', 'power-factor'],
   '/ee/06-machine/magnetic': ['magnetic-circuit'],

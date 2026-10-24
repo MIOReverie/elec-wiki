@@ -89,8 +89,8 @@ $$
 | $\varphi$ | 相位差（电压超前电流的角度） | 同上 |
 | $Z$、$Y$ | 阻抗、导纳，$Z=1/Y$，单位 Ω / S | [09 RLC 与阻抗](../ee/04-ac/rlc.md) |
 | $\tau$ | 时间常数，RC 电路 $\tau=RC$，RL 电路 $\tau=L/R$，单位 s | [07 三要素法](../ee/03-transient/three-factor.md) |
-| $U_L$、$U_P$ | 三相的线电压、相电压，$U_L=\sqrt3 U_P$ | [12 三相电路](../ee/05-three-phase/circuit.md) |
-| $s$ | 转差率，$s=(n_1-n)/n_1$ | [16 异步电动机原理](../ee/06-machine/induction-motor.md) |
+| $U_L$、$U_P$ | 三相的线电压、相电压，$U_L=\sqrt3 U_P$ | [13 三相电路](../ee/05-three-phase/circuit.md) |
+| $s$ | 转差率，$s=(n_1-n)/n_1$ | [17 异步电动机原理](../ee/06-machine/induction-motor.md) |
 
 ### 电子技术
 

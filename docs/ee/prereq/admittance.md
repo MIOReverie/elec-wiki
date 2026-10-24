@@ -55,7 +55,7 @@ $$
 \dot U_{N'N}=\frac{\dfrac{\dot U_A}{Z_A}+\dfrac{\dot U_B}{Z_B}+\dfrac{\dot U_C}{Z_C}}{\dfrac{1}{Z_A}+\dfrac{1}{Z_B}+\dfrac{1}{Z_C}}
 $$
 
-的分母 $\dfrac{1}{Z_A}+\dfrac{1}{Z_B}+\dfrac{1}{Z_C}$ 就是三条支路的**导纳之和**——它是节点分析法在三相里的写法：分子是各支路注入节点的电流，分母是节点对地的总导纳。完整推导见 [12 · 三相电路](../05-three-phase/circuit.md)。
+的分母 $\dfrac{1}{Z_A}+\dfrac{1}{Z_B}+\dfrac{1}{Z_C}$ 就是三条支路的**导纳之和**——它是节点分析法在三相里的写法：分子是各支路注入节点的电流，分母是节点对地的总导纳。完整推导见 [13 · 三相电路](../05-three-phase/circuit.md)。
 
 ## 常见误解
 

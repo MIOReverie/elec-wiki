@@ -1,8 +1,8 @@
 ---
-title: 15 · 变压器
+title: 16 · 变压器
 ---
 
-# 15 · 变压器
+# 16 · 变压器
 
 <Meta time="40 min" level="核心" note="三条关系（变电压、变电流、变阻抗）+ 两种试验（空载、短路）就是全部" />
 
@@ -355,4 +355,4 @@ $$
 
 ## 下一步
 
-<Prereq id="slip" /> → [16 · 三相异步电动机原理](./induction-motor.md)
+<Prereq id="slip" /> → [17 · 三相异步电动机原理](./induction-motor.md)

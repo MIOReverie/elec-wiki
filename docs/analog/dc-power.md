@@ -21,7 +21,9 @@ title: 09 · 直流电源
 2. **桥式整流两个口诀**：无滤波 $U_o=0.9U_2$，加电容滤波带载时 $U_o\approx1.2U_2$；二极管反压 $U_{DRM}=\sqrt2U_2$（桥式），中心抽头全波是 $2\sqrt2U_2$——拓扑不同，选型差一倍。
 3. **纹波近似式** $\Delta U\approx\dfrac{I_L}{fC}$（全波时 $f=2\times$ 市电频率）：电流越大、纹波要求越严，电容线性膨胀。
 4. **线性稳压稳而热**：效率 $=U_o/U_{in}$，压差全变成热；**开关电源效率 85%~95%**，代价是纹波与 EMI。
-5. **热设计是隐藏科目**：稳压器功耗 $P=(U_{in}-U_o)I_o$，超出自散热能力必须加散热器，结温超标是电源短命的头号原因。
+5. **线性稳压是负反馈闭环**：调整管扛压差、取样分压器拿比例、基准稳压管给参照、比较放大器放大差值去驱动调整管，$U_o\approx U_Z\left(1+\dfrac{R_1}{R_2}\right)$——稳压系数与输出电阻越小越稳。
+6. **三端稳压器三选一**：78xx 正压固定、79xx 负压固定（引脚顺序不同）、LM317 可调 $U_o=1.25\left(1+\dfrac{R_2}{R_1}\right)$；压差不足会失稳，功耗超了要散热或扩流。
+7. **热设计是隐藏科目**：稳压器功耗 $P=(U_{in}-U_o)I_o$，超出自散热能力必须加散热器，结温超标是电源短命的头号原因。
 
 ## 三段论的地图：从 220 V 到 5 V
 
@@ -94,7 +96,126 @@ title: 09 · 直流电源
 
 串联线性稳压的原理是「可变电阻扛压差」：调整管串在输入与输出之间，反馈环控制它的导通程度，把 $U_{in}$ 与 $U_o$ 的差全部扛在自己身上。扛压差就要发热——$P=(U_{in}-U_o)I_o$，这笔热账决定了效率与散热设计，也是线性与开关的分水岭。开关电源把调整管只当开关用（要么全通、要么全断，不泡在中间的线性区），用 PWM 占空比（duty cycle：一个开关周期内导通时间占整周期的比例）控制传过去的能量，理论损耗只剩开关瞬间与导通电阻上的少量发热，所以效率能上 85%~95%。
 
-到这里三段都齐了，下面用四道例题把数字坐实。
+到这里三段都齐了——但「调整管是可变电阻」这句话还太粗：它凭什么知道该变多少？背后是一条负反馈闭环。下面两节把串联稳压的内部结构拆开（第三节），再落到三端集成稳压器这颗成品芯片上（第四节）。
+
+## 三、串联型稳压电路：调整管怎么把电压钉住
+
+串联型稳压电路（series regulator：调整管与负载**串联**在主回路里，靠改变自身压降来调节输出）由四块拼成：
+
+- **调整管**：一颗功率三极管，工作在**放大区**（<Prereq id="bjt-regions" />），串在输入与输出之间，扛下 $U_{in}-U_o$ 的全部压差；
+- **取样电路**：$R_1$、$R_2$ 两个电阻组成的分压器，从输出端取一个按比例缩小的反馈电压 $U_F=U_o\cdot\dfrac{R_2}{R_1+R_2}$；
+- **基准电压**：一只稳压管给出稳定参照 $U_Z$（反向击穿区端电压几乎不随电流变，见[第 1 章 · 半导体器件](semiconductor.md)）；
+- **比较放大**：一个误差放大器（常用运放或差分对），把 $U_F$ 与 $U_Z$ 的差值放大，去驱动调整管基极（<Prereq id="virtual-short" />）。
+
+<FigBox title="串联型稳压电路：四块 + 一条负反馈回路" kind="框图" note="主回路从左到右：输入电压进调整管，出来的是输出电压、带负载；反馈回路从输出取样，与基准电压比较放大后回到调整管。两条线要看清：取样从输出端拿、控制回到调整管——这就是闭环；回路里任何一环断开，稳压立刻失效。">
+<svg viewBox="0 0 680 300" role="img" aria-label="串联型稳压电路框图：调整管串联在主回路，取样电路分压取反馈电压，与基准电压在比较放大器中比较后驱动调整管基极">
+<defs>
+  <marker id="sr-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+</defs>
+<text x="36" y="76" font-size="12.5" fill="var(--vp-c-text-1)" text-anchor="end">U_in</text>
+<line x1="44" y1="70" x2="120" y2="70" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<rect x="120" y="46" width="150" height="48" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+<text x="195" y="66" font-size="12.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">调整管</text>
+<text x="195" y="82" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">（放大区 · 串联）</text>
+<line x1="270" y1="70" x2="380" y2="70" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<circle cx="380" cy="70" r="3.5" fill="var(--vp-c-text-2)" />
+<text x="394" y="62" font-size="12.5" fill="var(--vp-c-text-1)" text-anchor="start">U_o</text>
+<rect x="430" y="46" width="110" height="48" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+<text x="485" y="75" font-size="12.5" fill="var(--vp-c-text-1)" text-anchor="middle">负载 R_L</text>
+<line x1="540" y1="70" x2="540" y2="120" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<line x1="528" y1="120" x2="552" y2="120" stroke="var(--vp-c-text-2)" stroke-width="2.4" />
+<line x1="380" y1="70" x2="380" y2="150" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<rect x="356" y="150" width="48" height="40" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.5" />
+<text x="380" y="175" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">R₁</text>
+<line x1="380" y1="190" x2="380" y2="196" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<circle cx="380" cy="196" r="3.5" fill="var(--vp-c-text-2)" />
+<rect x="356" y="206" width="48" height="40" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.5" />
+<text x="380" y="231" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">R₂</text>
+<line x1="380" y1="246" x2="380" y2="262" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<line x1="368" y1="262" x2="392" y2="262" stroke="var(--vp-c-text-2)" stroke-width="2.4" />
+<text x="352" y="200" font-size="11" fill="var(--vp-c-text-3)" text-anchor="end">U_F</text>
+<line x1="380" y1="196" x2="300" y2="196" stroke="var(--vp-c-brand-1)" stroke-width="1.8" marker-end="url(#sr-arrow)" />
+<rect x="150" y="182" width="150" height="48" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+<text x="225" y="202" font-size="12.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">比较放大</text>
+<text x="225" y="218" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">（误差放大）</text>
+<rect x="150" y="250" width="150" height="40" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.5" />
+<text x="225" y="275" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">基准电压 U_Z</text>
+<line x1="225" y1="250" x2="225" y2="230" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<line x1="195" y1="182" x2="195" y2="94" stroke="var(--vp-c-brand-1)" stroke-width="1.8" marker-end="url(#sr-arrow)" />
+<text x="205" y="140" font-size="11" fill="var(--vp-c-text-3)" text-anchor="start">控制基极</text>
+<text x="400" y="120" font-size="11" fill="var(--vp-c-text-3)" text-anchor="start">取样</text>
+</svg>
+</FigBox>
+
+**反馈怎么把电压钉住**：设输出 $U_o$ 因为电网升高或负载变轻而上漂——$U_F$ 跟着上漂，$U_F-U_Z$ 变大，比较放大器的输出把调整管基极电流往下压，调整管「关小一点」、自身压降变大，把 $U_o$ 拉回来。整个闭环就是「输出一变 → 取样立刻察觉 → 反着拉一把」，输出电压最终钉在 $U_F\approx U_Z$ 的平衡点上：
+
+$$U_o \approx U_Z\left(1+\frac{R_1}{R_2}\right)$$
+
+**输出只由 $U_Z$ 和分压比决定**，与 $U_{in}$、$I_L$ 几乎无关。这就是[第 6 章 · 放大电路中的反馈](feedback.md)里「深度负反馈以精度换增益」的工程落地：环路增益越大，扰动被压得越平。
+
+**两个衡量指标**（术语首现）：
+
+- **稳压系数** $S_U$：负载电流与温度不变时，输入电压相对变化引起输出电压相对变化的比值，$S_U=\dfrac{\Delta U_o/U_o}{\Delta U_{in}/U_{in}}$。它无量纲，**越小越稳**；分立串联稳压典型在 $10^{-2}\sim10^{-4}$，意思是输入跳 10%、输出只跳 0.1%~0.001%。
+- **输出电阻** $R_o$：输入电压与温度不变时，负载电流变化引起的输出电压变化（取负号），$R_o=-\dfrac{\Delta U_o}{\Delta I_o}$。它**越小，负载加重时输出掉得越少**，典型 $0.01\sim0.1\,\Omega$。**负载调整率**就是它的百分比写法：负载从空载到满载时 $\dfrac{\Delta U_o}{U_o}$。
+
+> 稳压系数压的是「电网波动」这条线，输出电阻（负载调整率）压的是「负载波动」这条线——正好对应上一节的两笔账。
+
+## 四、三端集成稳压器：78xx / 79xx / LM317
+
+把上一节四块（调整管、取样、基准、比较放大）全做进一颗芯片、只留三只脚，就是**三端集成稳压器**（three-terminal regulator）。三只脚是输入、输出、公共端（78xx 系列为 IN / GND / OUT），这是直流电源从「搭电路」变成「买零件」的分水岭。
+
+**三大家族，三种接法**：
+
+- **78xx 正压固定**：7805 出 +5 V、7812 出 +12 V，输出电压是定死的；输入接整流滤波后的正母线，公共脚直接接地；
+- **79xx 负压固定**：7905 出 −5 V，它稳的是**负**输出、输入接负母线，而且**引脚顺序与 78xx 不同**（正面朝向自己、引脚朝下时，78xx 是 IN / GND / OUT，79xx 是 GND / IN / OUT），接错即烧；
+- **LM317 可调正压**：输出 $U_o=1.25\left(1+\dfrac{R_2}{R_1}\right)$，靠外接两只电阻调压，范围 1.25 V 到约 37 V。
+
+<FigBox title="78xx 固定输出与 LM317 可调输出的接线" kind="接线" note="78xx 三只脚定死：输入、地、输出，各并一颗电容即用；LM317 多一只 ADJ 调整端，靠 R1（OUT 接 ADJ）与 R2（ADJ 接地）两只电阻定电压。注意两者引脚顺序不同，LM317 从左到右是 ADJ / OUT / IN。">
+<svg viewBox="0 0 680 250" role="img" aria-label="78xx 与 LM317 接线对照：78xx 三脚为输入地输出并接电容，LM317 三脚为调整输出输入并外接设定电阻">
+<text x="165" y="26" font-size="12.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">78xx（固定输出）</text>
+<rect x="110" y="40" width="110" height="84" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+<text x="165" y="76" font-size="13" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">78xx</text>
+<text x="165" y="94" font-size="10" fill="var(--vp-c-text-3)" text-anchor="middle">IN · GND · OUT</text>
+<line x1="140" y1="124" x2="140" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<line x1="165" y1="124" x2="165" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<line x1="190" y1="124" x2="190" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<text x="140" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">IN</text>
+<text x="165" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">GND</text>
+<text x="190" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">OUT</text>
+<text x="140" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接 U_in</text>
+<text x="165" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接地</text>
+<text x="190" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接 U_o</text>
+<text x="140" y="208" font-size="10" fill="var(--vp-c-brand-2)" text-anchor="middle">并 0.33 µF 到地</text>
+<text x="190" y="208" font-size="10" fill="var(--vp-c-brand-2)" text-anchor="middle">并 0.1 µF 到地</text>
+<line x1="330" y1="20" x2="330" y2="230" stroke="var(--vp-c-divider)" stroke-width="1.4" stroke-dasharray="5 4" />
+<text x="510" y="26" font-size="12.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">LM317（可调输出）</text>
+<rect x="455" y="40" width="110" height="84" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+<text x="510" y="76" font-size="13" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">LM317</text>
+<text x="510" y="94" font-size="10" fill="var(--vp-c-text-3)" text-anchor="middle">ADJ · OUT · IN</text>
+<line x1="480" y1="124" x2="480" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<line x1="510" y1="124" x2="510" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<line x1="540" y1="124" x2="540" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<text x="480" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">ADJ</text>
+<text x="510" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">OUT</text>
+<text x="540" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">IN</text>
+<text x="480" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">经 R₂ 到地</text>
+<text x="510" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接 U_o</text>
+<text x="540" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接 U_in</text>
+<text x="510" y="208" font-size="10" fill="var(--vp-c-brand-2)" text-anchor="middle">R₁ 240Ω 接 OUT↔ADJ</text>
+</svg>
+</FigBox>
+
+**压差（dropout）**：稳压器要正常工作，输入必须比输出高出至少一个最小值，这个最小值叫**压差**（dropout voltage）。78xx 典型要求 $U_{in}-U_o\ge2.5\,\text{V}$（工程上常取 3 V），LM317 约 3 V。滤波后的**谷底电压**一旦低于 $U_o+\text{dropout}$，调整管进入饱和区、输出跟着输入一起掉——这正是前面反复强调「谷底余量」的原因。**低压差（LDO，low-dropout regulator）** 是压差可低至 0.3 V 的品种，代价是更挑输入输出电容、稳定性更敏感。
+
+**扩流**：78xx 输出电流上限约 1~1.5 A（78M 系列 0.5 A，78L 系列 0.1 A）。要更大的电流，就在调整管上并一颗大功率三极管「分走」大部分电流，这个做法叫**扩流**（current boost）。扩流管的选型、限流与散热的完整账，在[项目一 · 可调实验电源](../topics/power-supply.md)里已经算过，这里不重复。
+
+**散热**：功耗 $P=(U_{in}-U_o)I_o$ 全部变热。TO-220 封装的 7805 自然散热只有约 1~2 W，超过就要加散热器；结温链 $T_j=T_a+P\,R_{\theta}$ 与散热器热阻的选型，同样在[项目一](../topics/power-supply.md)第 3.5 节有完整账。
+
+**输入输出电容**：输入侧并一颗 $0.33\,\mu\text{F}$ 瓷片电容（离引脚越近越好），压住输入线上的电感尖峰与高频振荡；输出侧并一颗 $0.1\,\mu\text{F}$ 改善瞬态响应，负载有较大脉冲电流时再并一颗 $10\sim100\,\mu\text{F}$ 电解电容。78xx 内部自带过流、过热保护，但这两颗电容是它**稳定工作的前提**，别省。
+
+到这里，从分立件的串联稳压到成品三端芯片都齐了，下面用六道例题把数字坐实。
 
 ## 典型例题（数字均经 node 计算验证）
 
@@ -149,6 +270,75 @@ title: 09 · 直流电源
 - **输入过压/欠压**：压敏电阻吸收电网浪涌，TVS 管钳位；*（为什么在输入侧：浪涌来自电网，越早钳位后级越安全。）*
 - **过流**：线性电源用恒流限或保险丝；开关电源用打嗝模式（hiccup：故障时周期性关断重试，避免持续大电流）；*（为什么打嗝：反复试比持续发热温和，短路移除后能自恢复。）*
 - **过热**：热敏电阻或芯片内置温度检测，超温关断。*（为什么必须有过热：例 2 的热账在散热器积灰后全部失效。）*
+:::
+
+::: tip 例 5 · 7805 的耗散功率与散热判断 {#ex-dcpower-5}
+**题目**：整流滤波后输入 $U_{in}=12\,\text{V}$，用 7805 输出 5 V，负载电流 $I_o=0.5\,\text{A}$。求 7805 的功耗与效率，并判断是否需要散热器。
+
+<FigBox title="7805 接线：12 V 进、5 V 出，压差 7 V 全耗在芯片上" kind="接线" note="7805 三只脚：IN 接 12 V、GND 接地、OUT 出 5 V。输入输出各并一颗小电容。图上标的 7 V 就是那笔要变成热的压差。">
+<svg viewBox="0 0 560 170" role="img" aria-label="7805 接线：12 伏进 IN、5 伏出 OUT、GND 接地，压差 7 伏乘 0.5 安等于 3.5 瓦耗散">
+<text x="36" y="72" font-size="12.5" fill="var(--vp-c-text-1)" text-anchor="end">12 V</text>
+<line x1="44" y1="68" x2="130" y2="68" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<rect x="130" y="44" width="110" height="48" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+<text x="185" y="72" font-size="13" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">7805</text>
+<line x1="240" y1="68" x2="330" y2="68" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<text x="336" y="64" font-size="12.5" fill="var(--vp-c-text-1)" text-anchor="start">5 V</text>
+<line x1="330" y1="68" x2="330" y2="100" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+<text x="336" y="104" font-size="11" fill="var(--vp-c-text-3)" text-anchor="start">I_o = 0.5 A</text>
+<line x1="185" y1="92" x2="185" y2="124" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<text x="185" y="140" font-size="11" fill="var(--vp-c-text-3)" text-anchor="middle">GND</text>
+<line x1="90" y1="68" x2="90" y2="124" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+<text x="90" y="140" font-size="10" fill="var(--vp-c-text-3)" text-anchor="middle">0.33 µF</text>
+<line x1="280" y1="68" x2="280" y2="124" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+<text x="280" y="140" font-size="10" fill="var(--vp-c-text-3)" text-anchor="middle">0.1 µF</text>
+<text x="185" y="26" font-size="11.5" font-weight="600" fill="var(--vp-c-danger-1)" text-anchor="middle">压差 7 V × 0.5 A = 3.5 W 耗散</text>
+</svg>
+</FigBox>
+
+**先想什么**：线性稳压没有「损耗公式」要背，能量守恒一条就够——输入功率 = 输出功率 + 压差发热；发热的那部分正是 $(U_{in}-U_o)$ 这一截。
+
+**步骤**：
+1. 稳压器功耗 $P=(U_{in}-U_o)I_o=(12-5)\times0.5=3.5\,\text{W}$；
+2. 效率 $\eta=\dfrac{U_o}{U_{in}}=\dfrac{5}{12}\approx41.7\%$——一半多电能变成热；*（为什么效率只看电压比：输入输出电流几乎相同，$I_o$ 上下约掉。）*
+3. 判断散热：TO-220 裸装自散热的上限 $P_{\max}=\dfrac{T_{j\max}-T_a}{R_{\theta JA}}=\dfrac{125-30}{50}=1.9\,\text{W}$（$T_{j\max}=125\,\text{°C}$、$T_a=30\,\text{°C}$、$R_{\theta JA}\approx50\,\text{°C/W}$）。$3.5>1.9$，**必须加散热器**；工程上常更保守地按 1 W 估，两种口径下 3.5 W 都远超上限。
+
+**验算**：`(12-5)*0.5 = 3.5`、`5/12*100 = 41.667`、`(125-30)/50 = 1.9`。散热器热阻的完整选型（$R_{\theta JC}+R_{\theta CS}+R_{\theta SA}$ 三段链）在[项目一 · 可调实验电源](../topics/power-supply.md)第 3.5 节已算过，这里不再展开。
+:::
+
+::: tip 例 6 · LM317 输出电压的设定 {#ex-dcpower-6}
+**题目**：LM317 取 $R_1=240\,\Omega$，$R_2$ 分别取 $240\,\Omega$、$1.2\,\text{k}\Omega$、$2.64\,\text{k}\Omega$，用简化式 $U_o=1.25\left(1+\dfrac{R_2}{R_1}\right)$ 求输出电压。
+
+<FigBox title="LM317 可调输出：R1 定基准电流、R2 定电压" kind="接线" note="LM317 在 OUT 与 ADJ 之间维持 1.25 V 基准；R1 从 OUT 接到 ADJ、R2 从 ADJ 接到地。改变 R2 就改变输出电压。">
+<svg viewBox="0 0 560 215" role="img" aria-label="LM317 可调输出接线：OUT 与 ADJ 之间接 240 欧姆的 R1，ADJ 经 R2 到地，改变 R2 改变输出电压">
+<text x="36" y="60" font-size="12.5" fill="var(--vp-c-text-1)" text-anchor="end">U_in</text>
+<line x1="44" y1="56" x2="130" y2="56" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<rect x="130" y="32" width="110" height="48" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+<text x="185" y="60" font-size="13" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">LM317</text>
+<line x1="240" y1="56" x2="300" y2="56" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<text x="306" y="52" font-size="12.5" fill="var(--vp-c-text-1)" text-anchor="start">U_o</text>
+<line x1="185" y1="80" x2="185" y2="150" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<line x1="300" y1="56" x2="300" y2="150" stroke="var(--vp-c-brand-2)" stroke-width="1.6" />
+<line x1="300" y1="150" x2="185" y2="150" stroke="var(--vp-c-brand-2)" stroke-width="1.6" />
+<rect x="222" y="138" width="56" height="24" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.4" />
+<text x="250" y="154" font-size="10" fill="var(--vp-c-text-2)" text-anchor="middle">R₁ 240Ω</text>
+<circle cx="185" cy="150" r="3.5" fill="var(--vp-c-text-2)" />
+<text x="250" y="126" font-size="10" fill="var(--vp-c-text-3)" text-anchor="middle">OUT 与 ADJ 之间 1.25 V</text>
+<line x1="185" y1="150" x2="185" y2="184" stroke="var(--vp-c-brand-2)" stroke-width="1.6" />
+<rect x="164" y="184" width="42" height="22" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.4" />
+<text x="185" y="199" font-size="10.5" fill="var(--vp-c-text-2)" text-anchor="middle">R₂</text>
+<line x1="185" y1="206" x2="185" y2="212" stroke="var(--vp-c-brand-2)" stroke-width="1.6" />
+<line x1="173" y1="212" x2="197" y2="212" stroke="var(--vp-c-text-2)" stroke-width="2" />
+</svg>
+</FigBox>
+
+**先想什么**：LM317 内部把 OUT 与 ADJ 之间钉在 1.25 V，所以 $R_1$ 上流过恒定电流 $1.25/R_1$；这只电流再流过 $R_2$ 到地，抬高了 ADJ 对地的电压——输出就是这两段之和。
+
+**步骤**：
+1. $R_2=240\,\Omega$：$U_o=1.25\times(1+240/240)=1.25\times2=2.5\,\text{V}$；
+2. $R_2=1.2\,\text{k}\Omega$：$U_o=1.25\times(1+1200/240)=1.25\times6=7.5\,\text{V}$；
+3. $R_2=2.64\,\text{k}\Omega$：$U_o=1.25\times(1+2640/240)=1.25\times12=15.0\,\text{V}$。
+
+**验算**：`1.25*(1+240/240) = 2.5`、`1.25*(1+1200/240) = 7.5`、`1.25*(1+2640/240) = 15`。注意简化式漏掉了 $I_{adj}R_2$ 一项（$I_{adj}\approx50\,\mu\text{A}$），$R_2=1.2\,\text{k}\Omega$ 时真实输出约 7.56 V、多出 60 mV——精确式与分压取值的完整表在[项目一](../topics/power-supply.md)第 3.4 节。
 :::
 
 ## 工程实例：手机充电器的技术演进史

@@ -25,7 +25,7 @@ description: 三个从零开始搭的电子项目：可调实验电源、直流�
 
 | 项目 | 难度 | 主要器材（详细 BOM 见各页） | 前置章节 | 典型工时 |
 | --- | --- | --- | --- | --- |
-| 可调实验电源 | ★★☆ | 220 V 变压器 15 V/2 A、桥堆 KBPC3510、10000 µF/35 V 电解、LM317T + 散热器、万用表 | [电工学 22 · 整流滤波稳压](../ee/08-electronics/rectifier.md)、<Prereq id="transformer" />、<Prereq id="time-constant" /> | 6–10 h |
+| 可调实验电源 | ★★☆ | 220 V 变压器 15 V/2 A、桥堆 KBPC3510、10000 µF/35 V 电解、LM317T + 散热器、万用表 | [电工学 23 · 整流滤波稳压](../ee/08-electronics/rectifier.md)、<Prereq id="transformer" />、<Prereq id="time-constant" /> | 6–10 h |
 | 直流电机驱动 | ★★★ | STM32F103 最小系统板、TB6612FNG 或 DRV8871 模块、12 V 减速电机带编码器、INA240 或 LM358 | [嵌入式 07 · 定时器与 PWM](../embedded/timer-pwm.md)、[嵌入式 10 · ADC 与 DMA](../embedded/adc-dma.md)、<Prereq id="virtual-short" /> | 8–12 h |
 | 双轴舵机云台 | ★★★ | STM32 开发板、SG90 × 2 或 MG996R × 2、5 V/3 A 独立电源、3D 打印或铝型材支架、示波器 | [嵌入式 13 · 舵机控制](../embedded/13-servo-control.md)、<Prereq id="clock-tree" />、<Prereq id="register-map" /> | 6–8 h |
 
@@ -45,8 +45,8 @@ description: 三个从零开始搭的电子项目：可调实验电源、直流�
 
 做电源要用的，恰好是四门课里最容易「背了就忘」的那几样：
 
-- **变压器变比**——15 V 次级怎么从 220 V 得来（[电工学 15 · 变压器](../ee/06-machine/transformer.md)）；
-- **整流与滤波的系数**——$0.9U_2$、$1.2U_2$、纹波 $\Delta U \approx I_L/(fC)$，以及它们为什么只在理想条件下成立（[电工学 22 · 整流滤波稳压](../ee/08-electronics/rectifier.md)）；
+- **变压器变比**——15 V 次级怎么从 220 V 得来（[电工学 16 · 变压器](../ee/06-machine/transformer.md)）；
+- **整流与滤波的系数**——$0.9U_2$、$1.2U_2$、纹波 $\Delta U \approx I_L/(fC)$，以及它们为什么只在理想条件下成立（[电工学 23 · 整流滤波稳压](../ee/08-electronics/rectifier.md)）；
 - **功率与热**——$P=(U_{in}-U_o)I_o$ 全变成热，散热器选型就是一道热阻串联题（<Prereq id="power" />）；
 - **纹波的时间常数本质**——电容放电的时间常数 $\tau = R_LC$ 决定谷底多低（<Prereq id="time-constant" />）。
 

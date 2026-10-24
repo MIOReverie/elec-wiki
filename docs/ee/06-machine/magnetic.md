@@ -1,8 +1,8 @@
 ---
-title: 14 · 磁路基础
+title: 15 · 磁路基础
 ---
 
-# 14 · 磁路基础
+# 15 · 磁路基础
 
 <Meta time="45 min" level="核心" note="全书最容易卡住的一章：公式像电路，但磁路不能照搬电路的算法" />
 
@@ -380,4 +380,4 @@ $$
 - [ ] 能解释交流电磁铁卡住为什么烧线圈（完整因果链）
 - [ ] 知道为什么硅钢片要叠薄、叠压紧
 
-<Prereq id="magnetic-circuit" /> → 接着看 [15 · 变压器](./transformer.md)
+<Prereq id="magnetic-circuit" /> → 接着看 [16 · 变压器](./transformer.md)
