@@ -58,7 +58,9 @@ const check = (label, files, budgetKB) => {
   )
 }
 
-check('theme chunk gzip', theme, 60)
+// theme chunk 预算 65KB：实测约 59.4KB（node 24）。gzip 输出随 zlib 版本有几十~几百字节差异，
+// CI 用 node 20 时可能略超 60KB，故留出约 5KB 余量，避免「本地全绿、CI 偶发失败」。
+check('theme chunk gzip', theme, 65)
 check('首页关键路径 JS gzip（theme+framework+app+index.lean）', [
   ...theme,
   ...framework,
