@@ -1,335 +1,325 @@
 ---
 title: 02 · 矩阵与线性变换
-description: 矩阵就是线性变换：把整张网格拉伸、旋转、剪切。这一页用基向量 i、j 的去向读懂矩阵乘向量、矩阵乘法、逆矩阵与转置。
+description: 把矩阵当成一份记录：两根轴上的单位箭头被搬到了哪。从这张记录读出矩阵乘向量、矩阵乘法（两台机器串联）、逆矩阵与转置，并用回乘验算把数字坐实。
 ---
 
 # 02 · 矩阵与线性变换
 
-<Meta time="26 min" level="核心" note="矩阵 = 线性变换：看基向量 i、j 被挪到哪，就懂了矩阵乘法、逆矩阵与转置" />
+<Meta time="26 min" level="核心" note="最容易错的一处：$AB$ 是「先做 $B$ 再做 $A$」，右边那台先动手，所以 $AB$ 和 $BA$ 通常不是同一台机器" />
 
-**这一页要解决什么**：你以前可能把矩阵当成「一堆数排成表格」，背过乘法口诀却不知道它到底在干什么。这一页换一个视角：**矩阵是一台机器，把整个平面均匀地掰变形**。读完这一页，你能回答三件事——矩阵里那两列数字到底藏了什么几何信息；矩阵乘矩阵为什么顺序不能乱；以及「逆」和「转置」分别对应几何上的什么动作。
+**这一页要解决什么**：你背过「行乘列」，也知道矩阵是一堆数排成方阵，但说不上它在干什么。这一页把矩阵当成一份记录：它记下两根轴上的单位箭头被搬到了哪。读完你能读出一个矩阵干了什么；能算它作用在一支箭上的结果；能说清两台机器的先后顺序为什么换不得；也能判断一台机器有没有倒带机。
 
-::: tip 读这页之前
-- **需要会**：本系列上一章「向量、张成与线性组合」里讲的——向量是平面上的箭头，坐标是它沿基向量走的步数；把向量看成 $c_1\mathbf i + c_2\mathbf j$ 这种线性组合。如果这两点忘了，先回去补那一章，再回来看矩阵。
-- **符号约定**：[符号与约定](../guide/notation.md) 里明确过：向量用小写粗体 $\mathbf v$、矩阵用大写 $A$、单位阵 $I$、转置 $A^T$、逆 $A^{-1}$。本页沿用，另外新增两个基向量记号：$\mathbf i = (1,0)$ 与 $\mathbf j = (0,1)$，它们就是坐标轴的「最小单位」。
-- **需要的数学**：平面直角坐标、把 $(x,y)$ 画成点或箭头，高中数学就够。
+::: tip 读之前
+- 需要会：上一页 [01 · 向量、线性组合与张成](./01-vectors.md) 的线性组合——$c\mathbf v+d\mathbf w$ 就是「各走几遍、接起来」；还有那一页给的两个单位箭头 $\mathbf i=\begin{bmatrix}1\\0\end{bmatrix}$、$\mathbf j=\begin{bmatrix}0\\1\end{bmatrix}$。
+- 本页记号：大写斜体 $A$ 表示一台变换，它的两列就是记录；$A\mathbf x$ 读作「$A$ 作用在 $\mathbf x$ 上」；$I$ 是单位矩阵，干的是「什么都不做」；$A^{-1}$ 是逆，$A^T$ 是转置。
 :::
 
-**场景引入**：想象桌上铺了一张方格纸，每个格子上画着横平竖直的线。现在你捏住这张纸的四个角，可以**旋转**它、**拉伸**它、也可以**斜着推**它——但有三条铁律：纸上的原点（那个钉子）永远不动；原来直的线还是直的；原来平行的网格线，变形后仍然平行、间距仍然均匀。这张纸发生的一切形变，就是「线性变换」；而**矩阵，就是给这台变形机器拍的一张说明书**。
+桌上铺一张方格纸。你捏住四个角，可以拉长它、斜推它、把它转一个角度，但有三条不许破：纸上钉在原点的那个钉子不动；原来直的线变完还是直的；原来平行的格线变完仍平行、间距仍均匀。这样一次整体搬动，怎么才能用几个数记下来？
 
-## 结论先行
+## 一、把整张纸搬一次，怎么把它录下来
 
-1. **矩阵 = 线性变换**：把整张网格做一次「原点不动、直线仍直、网格线仍平行等距」的形变，旋转、拉伸、剪切都是它的例子。
-2. **矩阵的每一列，就是基向量 $\mathbf i,\mathbf j$ 变形后的新位置**——所以读矩阵就是读「$\mathbf i$ 去了哪、$\mathbf j$ 去了哪」。
-3. **矩阵乘向量** $A\mathbf x$：把 $\mathbf x$ 看成 $\mathbf i,\mathbf j$ 的线性组合，再按它们的新位置重新组合，得到的箭头就是结果。
-4. **矩阵乘法** $AB$ = 复合变换「先做 $B$、再做 $A$」，顺序不能换。
-5. **逆矩阵** $A^{-1}$ 把变换原样还原；**转置** $A^T$ 沿主对角线翻个面（旋转矩阵里 $A^T = A^{-1}$）。
+盯住一个事实：任何一段位移都能写成「几个 $\mathbf i$ 加几个 $\mathbf j$」（上一页那句话），而这种搬动只认「乘倍数、相加」两种动作——「线性」两个字就是这个意思。所以只要知道两根单位箭头搬到了哪，整张纸上每一处的位置就都定了。
 
-## 一、先记住一句话：矩阵就是线性变换
-
-这一节的目标，是把「矩阵」从一张数字表，重新装进你的几何直觉里——记住一句口诀：**矩阵 = 线性变换**。
-
-**线性变换**（首次出现，先给图景）是一种特殊的「空间形变」：它把平面上的每一个箭头，按同一条规则搬到一个新位置，并且满足两条硬约束——**原点必须原地不动**；**直线变完还是直线**。直线仍直这个要求其实很苛刻：它意味着变形后的网格，每条线依然平行、格与格依然等距，不可能出现「某一块被捏皱、某一块被抻成曲线」的情况。旋转、缩放、剪切、以及它们的组合，都是线性变换；而把平面「平移」一格则不是——比如把整张纸向右推一格，原点从 O 被挪走，就违反了「原点不动」这条铁律。
-
-那么怎么**记录**一次线性变换？由于「直线仍直 + 原点不动」，只要知道两条坐标轴上的单位向量去了哪，整个变换就被唯一决定了。我们把 $\mathbf i = (1,0)$ 和 $\mathbf j = (0,1)$ 变形后的新位置分别记为两列，写进一个方括号里：
+于是记录方式很省地方：把两根单位箭头的新位置各写成一列，并排放进方括号。
 
 $$
-A = \begin{bmatrix} 2 & -1 \\ 1 & 2 \end{bmatrix}
+A=\begin{bmatrix}2&1\\0&3\end{bmatrix}
 $$
 
-读法：**第一列 $\begin{bmatrix}2\\1\end{bmatrix}$ 是 $\mathbf i$ 的新家，第二列 $\begin{bmatrix}-1\\2\end{bmatrix}$ 是 $\mathbf j$ 的新家**。这就是「矩阵的列是基向量的像」——「像」就是「映射之后落在的位置」。矩阵里没有任何多余信息，两列数字就是两张「搬家地址」。
+逐项读这个式子：第一列 $\begin{bmatrix}2\\0\end{bmatrix}$ 说的是「$\mathbf i$ 搬到了 $(2,0)$」，第二列 $\begin{bmatrix}1\\3\end{bmatrix}$ 说的是「$\mathbf j$ 搬到了 $(1,3)$」。所以读一个矩阵，就是读两句话：横轴那根单位箭去了哪、纵轴那根去了哪。这个矩阵里再没有别的信息了。
 
-**单位矩阵**（首次出现）$I = \begin{bmatrix}1&0\\0&1\end{bmatrix}$ 是那个「什么都不做」的变换：第一列说明 $\mathbf i$ 留在 $(1,0)$，第二列说明 $\mathbf j$ 留在 $(0,1)$。它是线性变换里的「0 号动作」，后面讲逆矩阵时它就是「回到原点」的终点。
-
-下面这张图是本页最重要的一张：左边是变换前的标准网格，右边是矩阵 $A = \begin{bmatrix}2&-1\\1&2\end{bmatrix}$ 作用后的网格。请你盯着它看三件事：**网格线仍然平行等距**、**原点 O 纹丝不动**、**基向量 $\mathbf i,\mathbf j$ 分别被搬到了 $(2,1)$ 和 $(-1,2)$**。
-
-<FigBox title="变换前的网格 vs 变换后的网格" kind="结构" note="A 把 i=(1,0) 送到 (2,1)、把 j=(0,1) 送到 (−1,2)：整张网格被「放大 √5 倍并旋转」，但线仍直、格仍平行、原点不动。">
-<svg viewBox="0 0 680 240" role="img" aria-label="线性变换对比图：左侧标准网格，右侧矩阵 A=[2,-1;1,2] 作用后的旋转放大网格，标出基向量 i、j 的新位置">
-  <defs>
-    <marker id="t2-i" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--vp-c-brand-1)"/></marker>
-    <marker id="t2-j" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--vp-c-danger-1)"/></marker>
-    <marker id="t2-g" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--vp-c-text-3)"/></marker>
-    <clipPath id="t2-rclip"><rect x="400" y="16" width="240" height="228"/></clipPath>
-  </defs>
-
-  <g stroke="var(--vp-c-divider)" stroke-width="1">
-    <line x1="76" y1="46" x2="76" y2="214"/>
-    <line x1="118" y1="46" x2="118" y2="214"/>
-    <line x1="160" y1="46" x2="160" y2="214"/>
-    <line x1="202" y1="46" x2="202" y2="214"/>
-    <line x1="244" y1="46" x2="244" y2="214"/>
-    <line x1="76" y1="46" x2="244" y2="46"/>
-    <line x1="76" y1="88" x2="244" y2="88"/>
-    <line x1="76" y1="130" x2="244" y2="130"/>
-    <line x1="76" y1="172" x2="244" y2="172"/>
-    <line x1="76" y1="214" x2="244" y2="214"/>
+<FigBox title="一次搬动的前后：网格线仍直、原点不动，两根单位箭换了位置" kind="结构" note="输入：左边标准方格纸，每格 1 个单位，左右同一刻度，阴影是单位正方形。操作：整张纸按 A 搬一次（i 去 (2,0)，j 去 (1,3)）。结果：右边阴影的两条边正是 A 的两列；纸被放大，同一刻度下只放得下中心一小块。看图能读出什么：读矩阵就是读这两条边。">
+<svg viewBox="0 0 700 300" role="img" aria-label="变换前后对比：左右同一刻度，左侧标准网格与 i、j，右侧 A 作用后的平行四边形网格与 i′、j′">
+<defs>
+  <marker id="n1-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+  <marker id="n1-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-danger-1)" />
+  </marker>
+  <marker id="n1-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
+  </marker>
+  <clipPath id="n1-clip"><rect x="376" y="84" width="196" height="190" /></clipPath>
+</defs>
+<text x="150" y="96" font-size="12" font-weight="600" fill="var(--vp-c-text-2)" text-anchor="middle">搬之前（每格 1 个单位）</text>
+<g stroke="var(--vp-c-divider)" stroke-width="1">
+  <line x1="94" y1="124" x2="94" y2="236" /><line x1="122" y1="124" x2="122" y2="236" />
+  <line x1="150" y1="124" x2="150" y2="236" /><line x1="178" y1="124" x2="178" y2="236" />
+  <line x1="206" y1="124" x2="206" y2="236" />
+  <line x1="94" y1="124" x2="206" y2="124" /><line x1="94" y1="152" x2="206" y2="152" />
+  <line x1="94" y1="180" x2="206" y2="180" /><line x1="94" y1="208" x2="206" y2="208" />
+  <line x1="94" y1="236" x2="206" y2="236" />
+</g>
+<polygon points="150,180 178,180 178,152 150,152" fill="var(--vp-c-brand-1)" opacity="0.16" />
+<line x1="84" y1="180" x2="216" y2="180" stroke="var(--vp-c-text-3)" stroke-width="1.3" />
+<line x1="150" y1="112" x2="150" y2="248" stroke="var(--vp-c-text-3)" stroke-width="1.3" />
+<line x1="150" y1="180" x2="178" y2="180" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#n1-a)" />
+<line x1="150" y1="180" x2="150" y2="152" stroke="var(--vp-c-danger-1)" stroke-width="2.4" marker-end="url(#n1-b)" />
+<text x="182" y="176" font-size="11" fill="var(--vp-c-brand-1)">i</text>
+<text x="142" y="146" font-size="11" fill="var(--vp-c-danger-1)">j</text>
+<text x="140" y="196" font-size="11" fill="var(--vp-c-text-3)">O</text>
+<line x1="240" y1="180" x2="300" y2="180" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#n1-g)" />
+<text x="270" y="170" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">搬一次 A</text>
+<text x="470" y="52" font-size="12" font-weight="600" fill="var(--vp-c-text-2)" text-anchor="middle">搬之后（同一刻度）</text>
+<g clip-path="url(#n1-clip)">
+  <g transform="matrix(56 0 28 -84 470 180)" stroke="var(--vp-c-divider)" stroke-width="1" vector-effect="non-scaling-stroke" fill="none">
+    <line x1="-1" y1="-1" x2="-1" y2="1" /><line x1="0" y1="-1" x2="0" y2="1" /><line x1="1" y1="-1" x2="1" y2="1" />
+    <line x1="-1" y1="-1" x2="1" y2="-1" /><line x1="-1" y1="0" x2="1" y2="0" /><line x1="-1" y1="1" x2="1" y2="1" />
   </g>
-  <g stroke="var(--vp-c-text-3)" stroke-width="1.3">
-    <line x1="76" y1="130" x2="244" y2="130"/>
-    <line x1="160" y1="46" x2="160" y2="214"/>
-  </g>
-  <line x1="160" y1="130" x2="202" y2="130" stroke="var(--vp-c-brand-1)" stroke-width="2.5" marker-end="url(#t2-i)"/>
-  <line x1="160" y1="130" x2="160" y2="88" stroke="var(--vp-c-danger-1)" stroke-width="2.5" marker-end="url(#t2-j)"/>
-  <g font-size="12" fill="var(--vp-c-text-1)">
-    <text x="206" y="124" fill="var(--vp-c-brand-1)">i</text>
-    <text x="150" y="82" fill="var(--vp-c-danger-1)">j</text>
-    <text x="150" y="144" fill="var(--vp-c-text-3)">O</text>
-    <text x="160" y="24" text-anchor="middle" fill="var(--vp-c-text-2)" font-weight="600">变换前</text>
-    <text x="238" y="146" text-anchor="middle" fill="var(--vp-c-text-3)">x</text>
-    <text x="168" y="50" text-anchor="middle" fill="var(--vp-c-text-3)">y</text>
-  </g>
-
-  <line x1="292" y1="130" x2="368" y2="130" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#t2-g)"/>
-  <text x="330" y="120" text-anchor="middle" font-size="12" fill="var(--vp-c-text-1)">乘 A</text>
-
-  <g clip-path="url(#t2-rclip)">
-    <g transform="matrix(60 -30 -30 -60 520 130)" stroke="var(--vp-c-divider)" stroke-width="1" fill="none">
-      <line x1="-3" y1="-3" x2="-3" y2="3"/>
-      <line x1="-2" y1="-3" x2="-2" y2="3"/>
-      <line x1="-1" y1="-3" x2="-1" y2="3"/>
-      <line x1="0" y1="-3" x2="0" y2="3"/>
-      <line x1="1" y1="-3" x2="1" y2="3"/>
-      <line x1="2" y1="-3" x2="2" y2="3"/>
-      <line x1="3" y1="-3" x2="3" y2="3"/>
-      <line x1="-3" y1="-3" x2="3" y2="-3"/>
-      <line x1="-3" y1="-2" x2="3" y2="-2"/>
-      <line x1="-3" y1="-1" x2="3" y2="-1"/>
-      <line x1="-3" y1="0" x2="3" y2="0"/>
-      <line x1="-3" y1="1" x2="3" y2="1"/>
-      <line x1="-3" y1="2" x2="3" y2="2"/>
-      <line x1="-3" y1="3" x2="3" y2="3"/>
-    </g>
-  </g>
-  <g stroke="var(--vp-c-text-3)" stroke-width="1.3">
-    <line x1="400" y1="190" x2="640" y2="70"/>
-    <line x1="463" y1="16" x2="577" y2="244"/>
-  </g>
-  <line x1="520" y1="130" x2="580" y2="100" stroke="var(--vp-c-brand-1)" stroke-width="2.5" marker-end="url(#t2-i)"/>
-  <line x1="520" y1="130" x2="490" y2="70" stroke="var(--vp-c-danger-1)" stroke-width="2.5" marker-end="url(#t2-j)"/>
-  <g font-size="12" fill="var(--vp-c-text-1)">
-    <text x="584" y="94" fill="var(--vp-c-brand-1)">i′ = (2, 1)</text>
-    <text x="466" y="60" fill="var(--vp-c-danger-1)">j′ = (−1, 2)</text>
-    <text x="510" y="144" fill="var(--vp-c-text-3)">O</text>
-    <text x="520" y="24" text-anchor="middle" fill="var(--vp-c-text-2)" font-weight="600">变换后</text>
-  </g>
+</g>
+<polygon points="470,180 526,180 554,96 498,96" fill="var(--vp-c-brand-1)" opacity="0.16" />
+<line x1="414" y1="180" x2="526" y2="180" stroke="var(--vp-c-text-3)" stroke-width="1.3" />
+<line x1="442" y1="264" x2="498" y2="96" stroke="var(--vp-c-text-3)" stroke-width="1.3" />
+<line x1="470" y1="180" x2="526" y2="180" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#n1-a)" />
+<line x1="470" y1="180" x2="498" y2="96" stroke="var(--vp-c-danger-1)" stroke-width="2.4" marker-end="url(#n1-b)" />
+<text x="534" y="176" font-size="11" fill="var(--vp-c-brand-1)">i′ = (2, 0)</text>
+<text x="502" y="88" font-size="11" fill="var(--vp-c-danger-1)">j′ = (1, 3)</text>
+<text x="458" y="196" font-size="11" fill="var(--vp-c-text-3)">O</text>
+<text x="470" y="288" font-size="11" fill="var(--vp-c-text-3)" text-anchor="middle">同一刻度下，右边只放得下中心 2×2 格：纸被放大了</text>
 </svg>
 </FigBox>
 
-看图能读出什么：$\mathbf i$ 和 $\mathbf j$ 原本互相垂直、等长；变换后 $\mathbf i'=(2,1)$ 与 $\mathbf j'=(-1,2)$ 仍然垂直、仍然等长（长度都是 $\sqrt5$），只是整体被放大约 2.24 倍并转了一个角度。这就是「旋转 + 均匀放大」型变换的几何指纹：**两列正交且等长**。下一节我们把视角从「整张网格」拉近到「单个箭头」，看矩阵怎么搬动一个具体的向量。
+有一个矩阵值得单独认识：$I=\begin{bmatrix}1&0\\0&1\end{bmatrix}$。它的第一列说 $\mathbf i$ 原地不动，第二列说 $\mathbf j$ 原地不动——所以它是「什么都不做」的那台机器。后面讲倒带，回到的就是它。
 
-## 二、矩阵乘向量：把箭头搬到新位置
+## 二、让这台机器作用在一支箭上
 
-这一节的目标，是掌握 $A\mathbf x$ 的两种等价算法——逐行点积和「列的线性组合」——并确认后者才是几何本质。
-
-先给结论：矩阵乘向量，就是**把 $\mathbf x$ 的坐标重新读一遍**。既然 $\mathbf x = (x_1, x_2)$ 本意是「沿 $\mathbf i$ 走 $x_1$ 步、沿 $\mathbf j$ 走 $x_2$ 步」，那么变换后的位置就该是「沿新的 $\mathbf i'$ 走 $x_1$ 步、沿新的 $\mathbf j'$ 走 $x_2$ 步」：
+取 $\mathbf x=\begin{bmatrix}1\\1\end{bmatrix}$，它就是上一页 $\mathbf i$ 与 $\mathbf j$ 各走一遍。搬动保持「乘倍数、相加」不变，所以搬完后它还是「$\mathbf i$ 的新位置走 1 遍、$\mathbf j$ 的新位置走 1 遍」：
 
 $$
-A\mathbf x = x_1\begin{bmatrix}a\\c\end{bmatrix} + x_2\begin{bmatrix}b\\d\end{bmatrix}
+A\mathbf x
+=1\begin{bmatrix}2\\0\end{bmatrix}+1\begin{bmatrix}1\\3\end{bmatrix}
+=\begin{bmatrix}2+1\\0+3\end{bmatrix}
+=\begin{bmatrix}3\\3\end{bmatrix}
 $$
 
-这就是「列的线性组合」视角：$A\mathbf x$ 永远是 $A$ 的两列按 $x_1,x_2$ 加权相加。它和你在课本里背的「行乘列、逐项求和」算出来完全一样，只是前者把「为什么」讲了出来。
+逐项读这个式子：$A$ 是 $2\times2$，$\mathbf x$ 是两个数的一列，所以结果是两个数的一列（形状对得上）。它说的是：把 $A$ 的第 1 列乘上 $\mathbf x$ 的第 1 个分量、第 2 列乘上第 2 个分量，再相加。也就是说，$A\mathbf x$ 永远是「$A$ 的两列按 $\mathbf x$ 的两个分量加权求和」。
 
-::: tip 例 1 · 一个箭头被掰到哪去了
-**先想什么**：先不套公式，先问「$\mathbf i$ 和 $\mathbf j$ 会被送到哪」。给定 $A = \begin{bmatrix}2&1\\0&3\end{bmatrix}$，读列：$\mathbf i\to(2,0)$，$\mathbf j\to(1,3)$。再算 $\mathbf x=(1,1)$ 去哪。
+课本上还有一套算法，是逐行算：结果的第 1 个分量 = $A$ 的第 1 行与 $\mathbf x$ 逐项相乘再相加 = $2\times1+1\times1=3$；第 2 个分量 = $0\times1+3\times1=3$。两套算法给出同一列数，原因就在上面的读法里：按列加权时 $\mathbf x$ 的分量是「几遍」，逐行算只是把同一个和换了个记账顺序。
 
-<FigBox title="向量 (1,1) 被 A=[2,1;0,3] 送到 (3,3)" kind="结构" note="左：输入 x=(1,1)；右：基向量被拉到 i′=(2,0)、j′=(1,3)，于是 x=1·i+1·j 被送到 1·(2,0)+1·(1,3)=(3,3)。">
-<svg viewBox="0 0 460 200" role="img" aria-label="矩阵乘向量示意：左侧输入向量 (1,1)，右侧输出向量 (3,3)，并标出变换后的基向量 i′=(2,0)、j′=(1,3)">
-  <defs>
-    <marker id="e1-i" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--vp-c-brand-1)"/></marker>
-    <marker id="e1-j" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--vp-c-danger-1)"/></marker>
-    <marker id="e1-g" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--vp-c-text-3)"/></marker>
-  </defs>
-  <g stroke="var(--vp-c-text-3)" stroke-width="1.2">
-    <line x1="10" y1="110" x2="190" y2="110"/>
-    <line x1="100" y1="20" x2="100" y2="200"/>
-    <line x1="250" y1="110" x2="410" y2="110"/>
-    <line x1="330" y1="20" x2="330" y2="200"/>
-  </g>
-  <line x1="100" y1="110" x2="140" y2="70" stroke="var(--vp-c-text-3)" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#e1-g)"/>
-  <g font-size="12" fill="var(--vp-c-text-1)">
-    <text x="144" y="62" fill="var(--vp-c-text-2)">x=(1,1)</text>
-    <text x="92" y="40" text-anchor="middle" fill="var(--vp-c-text-2)" font-weight="600">输入</text>
-  </g>
-  <line x1="205" y1="110" x2="240" y2="110" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#e1-g)"/>
-  <text x="222" y="100" text-anchor="middle" font-size="12" fill="var(--vp-c-text-1)">乘 A</text>
-  <line x1="330" y1="110" x2="378" y2="110" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#e1-i)"/>
-  <line x1="330" y1="110" x2="354" y2="38" stroke="var(--vp-c-danger-1)" stroke-width="1.6" marker-end="url(#e1-j)"/>
-  <line x1="330" y1="110" x2="402" y2="38" stroke="var(--vp-c-brand-1)" stroke-width="2.6" marker-end="url(#e1-i)"/>
-  <g font-size="12" fill="var(--vp-c-text-1)">
-    <text x="382" y="122" fill="var(--vp-c-brand-1)">i′=(2,0)</text>
-    <text x="356" y="32" fill="var(--vp-c-danger-1)">j′=(1,3)</text>
-    <text x="404" y="32" fill="var(--vp-c-brand-1)">Ax=(3,3)</text>
-    <text x="322" y="40" text-anchor="middle" fill="var(--vp-c-text-2)" font-weight="600">输出</text>
-  </g>
+<FigBox title="一支箭被搬走：x=(1,1) 落到 (3,3)" kind="结构" note="输入：左边 x=(1,1)，意思是 i 走 1 遍、j 走 1 遍。操作：把两根单位箭换成它们的新位置 i′=(2,0)、j′=(1,3)，倍数不变。结果：右边 A x=(3,3)，它正好是 i′ 与 j′ 接起来走的终点。看图能读出什么：算 A x 就是「沿新的两个方向各走原来那几遍」，不需要背口诀。">
+<svg viewBox="0 0 486 210" role="img" aria-label="矩阵乘向量：输入 (1,1)，输出 (3,3)，并标出两根单位箭头的新位置 i′ 与 j′">
+<defs>
+  <marker id="n2-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+  <marker id="n2-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-danger-1)" />
+  </marker>
+  <marker id="n2-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
+  </marker>
+</defs>
+<line x1="30" y1="120" x2="150" y2="120" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+<line x1="90" y1="40" x2="90" y2="190" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+<line x1="90" y1="120" x2="120" y2="90" stroke="var(--vp-c-text-3)" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#n2-g)" />
+<text x="122" y="84" font-size="12" fill="var(--vp-c-text-2)">x = (1, 1)</text>
+<text x="90" y="34" font-size="12" font-weight="600" fill="var(--vp-c-text-2)" text-anchor="middle">输入</text>
+<line x1="168" y1="120" x2="228" y2="120" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#n2-g)" />
+<text x="198" y="110" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">乘 A</text>
+<line x1="318" y1="120" x2="366" y2="120" stroke="var(--vp-c-brand-1)" stroke-width="1.8" marker-end="url(#n2-a)" />
+<line x1="318" y1="120" x2="342" y2="48" stroke="var(--vp-c-danger-1)" stroke-width="1.8" marker-end="url(#n2-b)" />
+<line x1="318" y1="120" x2="390" y2="48" stroke="var(--vp-c-brand-1)" stroke-width="2.6" marker-end="url(#n2-a)" />
+<text x="370" y="132" font-size="11" fill="var(--vp-c-brand-1)">i′ = (2, 0)</text>
+<text x="300" y="44" font-size="11" fill="var(--vp-c-danger-1)" text-anchor="end">j′ = (1, 3)</text>
+<text x="394" y="42" font-size="12" font-weight="600" fill="var(--vp-c-brand-1)">A x = (3, 3)</text>
+<text x="318" y="34" font-size="12" font-weight="600" fill="var(--vp-c-text-2)" text-anchor="middle">输出</text>
 </svg>
 </FigBox>
 
-**为什么**：把 $\mathbf x=(1,1)$ 写开就是 $\mathbf x = 1\cdot\mathbf i + 1\cdot\mathbf j$。变换后按新基向量重新组合：
+## 三、两台机器串起来：先 B 再 A
 
-$$A\begin{bmatrix}1\\1\end{bmatrix} = 1\cdot\begin{bmatrix}2\\0\end{bmatrix} + 1\cdot\begin{bmatrix}1\\3\end{bmatrix} = \begin{bmatrix}2+1\\0+3\end{bmatrix} = \begin{bmatrix}3\\3\end{bmatrix}$$
+再拿一台机器 $B=\begin{bmatrix}0&-1\\1&0\end{bmatrix}$：第一列说 $\mathbf i$ 去了 $(0,1)$，第二列说 $\mathbf j$ 去了 $(-1,0)$——整张纸绕原点转了 90°。
 
-**验算**（逐行点积，两者必须一致）：第一行 $2\times1 + 1\times1 = 3$，第二行 $0\times1 + 3\times1 = 3$，结果 $(3,3)$。用 node 手写矩阵乘向量的小函数核对：`A=[2,1;0,3]`、`x=[1,1]`，输出 `[3,3]`，与手算一致。
-:::
+把两台机器串起来，就有了**矩阵乘法**：$AB$ 的意思是「先做 $B$，再做 $A$」。写的时候右边那台先动手，因为 $(AB)\mathbf x=A(B\mathbf x)$：最靠近 $\mathbf x$ 的是 $B$。
 
-两种算法殊途同归：逐行点积适合「算」，列的线性组合适合「懂」。以后每次算 $A\mathbf x$，心里都可以默念一句「$\mathbf x$ 就是让两列按这个比例拌在一起」。有了这个视角，下一节「矩阵乘矩阵」就不再是新的咒语，而是同一个动作连做两次。
+怎么算这个乘积？用同一个「读列」的办法：$AB$ 的两列，就是「$B$ 的两列各自再被 $A$ 送一次」。
 
-## 三、矩阵乘法 = 复合变换：先做 B 再做 A
+$$
+AB=\begin{bmatrix}2&1\\0&3\end{bmatrix}\begin{bmatrix}0&-1\\1&0\end{bmatrix}
+=\begin{bmatrix}1&-2\\3&0\end{bmatrix}
+$$
 
-这一节的目标，是把矩阵乘法 $AB$ 从「一行对一列的死记硬背」换成「两台机器先后启动」。
+逐项读：第 1 列 $A\begin{bmatrix}0\\1\end{bmatrix}=\begin{bmatrix}1\\3\end{bmatrix}$（$\mathbf i$ 先被 $B$ 送到 $(0,1)$，再被 $A$ 送到 $(1,3)$）；第 2 列 $A\begin{bmatrix}-1\\0\end{bmatrix}=\begin{bmatrix}-2\\0\end{bmatrix}$。所以 $AB$ 的第一列 $(1,3)$、第二列 $(-2,0)$，与上面那个结果一致。
 
-**矩阵乘法**（首次出现，先给图景）：$AB$ 表示**先做 $B$、再做 $A$**。写 $AB$ 时，右边那个 $B$ 先动手——这跟函数复合 $f(g(x))$ 一样，最里层的先算。为什么这么排？因为 $A\mathbf x$ 是「把 $\mathbf x$ 送到新位置」，$AB$ 作用于 $\mathbf x$ 时，最靠近 $\mathbf x$ 的是 $B$，所以 $(AB)\mathbf x = A(B\mathbf x)$。
+**顺序换不得。** 把两台换个先后：
 
-几何上有个漂亮的验法：**$AB$ 的列，就是 $B$ 的两列分别再被 $A$ 送一次**。因为 $B$ 的列是 $\mathbf i,\mathbf j$ 被 $B$ 送到的位置，再让 $A$ 作用一下，就得到复合变换后的 $\mathbf i',\mathbf j'$。
+$$
+BA=\begin{bmatrix}0&-1\\1&0\end{bmatrix}\begin{bmatrix}2&1\\0&3\end{bmatrix}
+=\begin{bmatrix}0&-3\\2&1\end{bmatrix}
+$$
 
-**顺序不能换**，这是本节最容易翻车的一点：$AB \ne BA$。几何原因很直白——先旋转再剪切，和先剪切再旋转，纸上的网格落点不同。
+拿同一支箭分别试一下。$\mathbf x=\begin{bmatrix}1\\0\end{bmatrix}$：$(AB)\mathbf x=\begin{bmatrix}1\\3\end{bmatrix}$，而 $(BA)\mathbf x=\begin{bmatrix}0\\2\end{bmatrix}$。同一支箭、两台同样的机器，只因为先后不同，落点就不一样。
 
-顺手把课本里背过的那条口诀也接上：$(AB)_{ij}$ 等于「$A$ 的第 $i$ 行」与「$B$ 的第 $j$ 列」逐项相乘再相加。它不是新规定——因为 $AB$ 的第 $j$ 列，就是 $A$ 对 $B$ 第 $j$ 列这个向量做的变换，这个向量的第 $i$ 个分量，恰好等于 $A$ 第 $i$ 行与 $B$ 第 $j$ 列的点积。所以「行乘列」只是把复合变换每一列的坐标，一行一行写出来而已。
+课本里背的那句「左边第 $i$ 行与右边第 $j$ 列逐项相乘再相加」，也可以从这里读出来：$AB$ 的第 $j$ 列是 $A$ 作用于 $B$ 第 $j$ 列的结果，而这个结果的第 $i$ 个分量，正好是 $A$ 第 $i$ 行与 $B$ 第 $j$ 列逐项相乘再相加。行乘列不是新规定，它只是把复合变换的每一列，一行一行写下来。
 
-::: tip 例 2 · 先旋转再剪切 ≠ 先剪切再旋转
-**先想什么**：取两个最简单的变换——旋转 $B = \begin{bmatrix}0&-1\\1&0\end{bmatrix}$（逆时针转 90°）和剪切 $A = \begin{bmatrix}1&1\\0&1\end{bmatrix}$（把 $\mathbf j$ 向右推成 $(1,1)$）。算两种复合，并各追踪一个箭头 $\mathbf v=(1,0)$。
-
-<FigBox title="复合变换：先 B（转90°）再 A（剪切），v=(1,0) 落到 (1,1)" kind="结构" note="v 先被 B 旋转成 (0,1)，再被 A 剪切成 (1,1)。若顺序反过来（先 A 后 B），v 会落到 (0,1)，结果不同——顺序决定落点。">
-<svg viewBox="0 0 480 190" role="img" aria-label="复合变换示意：向量 (1,0) 先被旋转90度得到 (0,1)，再被剪切得到 (1,1)">
-  <defs>
-    <marker id="e2-i" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--vp-c-brand-1)"/></marker>
-    <marker id="e2-g" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--vp-c-text-3)"/></marker>
-  </defs>
-  <g stroke="var(--vp-c-text-3)" stroke-width="1.2">
-    <line x1="30" y1="105" x2="130" y2="105"/>
-    <line x1="80" y1="40" x2="80" y2="170"/>
-    <line x1="190" y1="105" x2="290" y2="105"/>
-    <line x1="240" y1="40" x2="240" y2="170"/>
-    <line x1="350" y1="105" x2="450" y2="105"/>
-    <line x1="400" y1="40" x2="400" y2="170"/>
-  </g>
-  <line x1="80" y1="105" x2="118" y2="105" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#e2-i)"/>
-  <line x1="240" y1="105" x2="240" y2="67" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#e2-i)"/>
-  <line x1="400" y1="105" x2="438" y2="67" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#e2-i)"/>
-  <g font-size="12" fill="var(--vp-c-text-1)">
-    <text x="110" y="98" fill="var(--vp-c-brand-1)">v=(1,0)</text>
-    <text x="222" y="60" fill="var(--vp-c-brand-1)">Bv=(0,1)</text>
-    <text x="404" y="60" fill="var(--vp-c-brand-1)">A(Bv)=(1,1)</text>
-    <text x="80" y="24" text-anchor="middle" fill="var(--vp-c-text-2)" font-weight="600">出发</text>
-    <text x="240" y="24" text-anchor="middle" fill="var(--vp-c-text-2)" font-weight="600">先 B</text>
-    <text x="400" y="24" text-anchor="middle" fill="var(--vp-c-text-2)" font-weight="600">再 A</text>
-  </g>
-  <line x1="138" y1="105" x2="182" y2="105" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#e2-g)"/>
-  <line x1="298" y1="105" x2="342" y2="105" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#e2-g)"/>
+<FigBox title="两条路，两个落点：先 B 后 A 与先 A 后 B" kind="结构" note="输入：同一条箭 (1,0)。操作：上行先被 B 转 90° 再被 A 搬，下行先被 A 搬再被 B 转。结果：上行落到 (1,3)，下行落到 (0,2)，两个落点不重合，所以 AB 与 BA 是两台不同的机器。看图能读出什么：读矩阵乘积时，右下角那台先动手。">
+<svg viewBox="0 0 500 260" role="img" aria-label="复合变换两条路径：先 B 后 A 落到 (1,3)，先 A 后 B 落到 (0,2)">
+<defs>
+  <marker id="n3-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+  <marker id="n3-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
+  </marker>
+</defs>
+<text x="60" y="22" font-size="12" font-weight="600" fill="var(--vp-c-text-2)">第一条路：先 B（转 90°），再 A</text>
+<g stroke="var(--vp-c-text-3)" stroke-width="1.2">
+  <line x1="30" y1="110" x2="130" y2="110" /><line x1="60" y1="60" x2="60" y2="150" />
+  <line x1="200" y1="110" x2="300" y2="110" /><line x1="230" y1="60" x2="230" y2="150" />
+  <line x1="370" y1="110" x2="470" y2="110" /><line x1="400" y1="20" x2="400" y2="150" />
+</g>
+<line x1="60" y1="110" x2="86" y2="110" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#n3-a)" />
+<text x="60" y="128" font-size="11" fill="var(--vp-c-brand-1)">(1, 0)</text>
+<line x1="230" y1="110" x2="230" y2="84" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#n3-a)" />
+<text x="236" y="80" font-size="11" fill="var(--vp-c-brand-1)">(0, 1)</text>
+<line x1="400" y1="110" x2="426" y2="32" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#n3-a)" />
+<text x="430" y="34" font-size="11" font-weight="600" fill="var(--vp-c-brand-1)">(1, 3)</text>
+<g font-size="11" fill="var(--vp-c-text-3)">
+  <text x="60" y="52" text-anchor="middle">出发</text>
+  <text x="230" y="52" text-anchor="middle">乘 B</text>
+  <text x="400" y="12" text-anchor="middle">乘 A</text>
+</g>
+<line x1="140" y1="110" x2="190" y2="110" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#n3-g)" />
+<line x1="310" y1="110" x2="360" y2="110" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#n3-g)" />
+<text x="60" y="150" font-size="12" font-weight="600" fill="var(--vp-c-text-2)">第二条路：先 A，再 B</text>
+<g stroke="var(--vp-c-text-3)" stroke-width="1.2">
+  <line x1="30" y1="230" x2="130" y2="230" /><line x1="60" y1="180" x2="60" y2="250" />
+  <line x1="200" y1="230" x2="300" y2="230" /><line x1="230" y1="180" x2="230" y2="250" />
+  <line x1="370" y1="230" x2="470" y2="230" /><line x1="400" y1="170" x2="400" y2="250" />
+</g>
+<line x1="60" y1="230" x2="86" y2="230" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#n3-a)" />
+<text x="60" y="248" font-size="11" fill="var(--vp-c-brand-1)">(1, 0)</text>
+<line x1="230" y1="230" x2="282" y2="230" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#n3-a)" />
+<text x="284" y="226" font-size="11" fill="var(--vp-c-brand-1)">(2, 0)</text>
+<line x1="400" y1="230" x2="400" y2="178" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#n3-a)" />
+<text x="406" y="178" font-size="11" font-weight="600" fill="var(--vp-c-brand-1)">(0, 2)</text>
+<g font-size="11" fill="var(--vp-c-text-3)">
+  <text x="60" y="172" text-anchor="middle">出发</text>
+  <text x="230" y="172" text-anchor="middle">乘 A</text>
+  <text x="400" y="162" text-anchor="middle">乘 B</text>
+</g>
+<line x1="140" y1="230" x2="190" y2="230" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#n3-g)" />
+<line x1="310" y1="230" x2="360" y2="230" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#n3-g)" />
 </svg>
 </FigBox>
 
-**为什么**：按定义逐个算。
+## 四、倒带和翻面：逆矩阵与转置
 
-$$AB = \begin{bmatrix}1&1\\0&1\end{bmatrix}\begin{bmatrix}0&-1\\1&0\end{bmatrix} = \begin{bmatrix}1&-1\\1&0\end{bmatrix}$$
+### 倒带：什么时候倒得回去
 
-第一列：$A$ 作用于 $B$ 的第一列 $(0,1)$，得到 $(1,1)$；第二列：$A$ 作用于 $B$ 的第二列 $(-1,0)$，得到 $(-1,0)$。所以 $AB$ 把 $\mathbf v=(1,0)$ 送到 $(1,1)$。再看反过来的顺序：
+$A$ 把 $\mathbf i,\mathbf j$ 搬到两个新方向。如果这两个新方向仍然指向不同方向，那么每一步都能倒着走回去——存在一台机器 $A^{-1}$，使得
 
-$$BA = \begin{bmatrix}0&-1\\1&0\end{bmatrix}\begin{bmatrix}1&1\\0&1\end{bmatrix} = \begin{bmatrix}0&-1\\1&1\end{bmatrix}$$
+$$
+A^{-1}A=AA^{-1}=I
+$$
 
-$BA$ 作用于同一个 $\mathbf v$：$A\mathbf v$ 先把 $(1,0)$ 留在原地（剪切不动 $\mathbf i$），再被 $B$ 转 90°，落到 $(0,1)$。
+（「方向仍然不同就能倒回去」只是直觉：真要判定「倒得回去」，得用第 5 章的行列式，或者第 3 章的方程组去验证；本页只做一件事——把候选的 $A^{-1}$ 乘回去，看是不是 $I$。）
 
-**验算**（node）：`A=[1,1;0,1]`、`B=[0,-1;1,0]`，算 `AB=[1,-1;1,0]`、`BA=[0,-1;1,1]`；再各乘 `v=[1,0]`，得 `(AB)v=[1,1]`、`(BA)v=[0,1]`，两两不等，与上图一致。
-:::
+对 $A=\begin{bmatrix}2&1\\0&3\end{bmatrix}$，倒带机是 $A^{-1}=\frac{1}{6}\begin{bmatrix}3&-1\\0&2\end{bmatrix}=\begin{bmatrix}\frac12&-\frac16\\0&\frac13\end{bmatrix}$。检验一遍：$A$ 的第 1 列 $(2,0)$ 被 $A^{-1}$ 送回 $\left(\frac12\cdot2,\ 0\right)=(1,0)$，第 2 列 $(1,3)$ 被送回 $\left(\frac12-\frac36,\ 1\right)=(0,1)$——两根轴都回到原位，所以乘完是 $I$。
 
-一句话收口：**矩阵乘法不交换，但满足结合律** $(AB)C = A(BC)$——因为「先后三台机器」无论怎么加括号，都是同一个先后顺序。这个结论下一节直接用得上：求逆时我们要找「能把 $A$ 抵消掉」的那台机器。
+2×2 有一个现成的公式：$A=\begin{bmatrix}a&b\\c&d\end{bmatrix}$ 时，
 
-## 四、逆矩阵：把变换还原回去
+$$
+A^{-1}=\frac{1}{ad-bc}\begin{bmatrix}d&-b\\-c&a\end{bmatrix}
+$$
 
-这一节的目标，是理解 $A^{-1}$ 的几何意义——它是一台「倒带机」——并学会对 2×2 矩阵求逆与验算。
+分母 $ad-bc$ 这个数，管的就是「有没有压扁」。$A$ 里 $ad-bc=2\times3-1\times0=6$，不为零，所以有逆；把它换成 $\begin{bmatrix}1&1\\2&2\end{bmatrix}$，两列成了倍数，$ad-bc=1\times2-1\times2=0$，整张纸被压到一条直线上，信息丢了，倒不回去。这个数第 5 章会正式命名为**行列式**，本页只要会算它、并知道它等于 0 就没有逆。
 
-**逆矩阵**（首次出现，先给图景）：如果 $A$ 是一次没有压扁信息的变形（没有把某个方向完全压没），就存在一台反向机器 $A^{-1}$，让「先 $A$ 再 $A^{-1}$」等于什么都没做。写成式子：
-
-$$A^{-1}A = AA^{-1} = I$$
-
-右边那个 $I$ 就是上一节的**单位阵**（什么都不做的变换）。几何上，$A^{-1}$ 把 $A$ 掰过的每根线、每个箭头，原样掰回原位。
-
-什么时候没有逆？当 $A$ 把平面**压扁**到一条直线甚至一个点时（比如两列共线），信息丢了，再也还原不回来——这对应 $ad-bc = 0$（这个量叫**行列式**，下一章会正式登场）。只要 $ad-bc \ne 0$，2×2 矩阵的逆就是：
-
-$$A^{-1} = \frac{1}{ad-bc}\begin{bmatrix}d&-b\\-c&a\end{bmatrix}$$
-
-::: tip 例 3 · 给剪切找一台倒带机
-**先想什么**：剪切 $A = \begin{bmatrix}1&1\\0&1\end{bmatrix}$ 把 $\mathbf j$ 向右推成 $(1,1)$。要还原，就得再向左推回来——直觉上逆应该还是剪切，只是方向相反：$A^{-1} = \begin{bmatrix}1&-1\\0&1\end{bmatrix}$。用公式验证。
-
-<FigBox title="剪切 A 把 (0,1) 送到 (1,1)，逆变换 A⁻¹ 再把它送回 (0,1)" kind="结构" note="v=(0,1) 被 A 向右剪切成 (1,1)，再被 A⁻¹ 向左剪回 (0,1)：来回一趟回到原样，A⁻¹A=I。">
-<svg viewBox="0 0 480 190" role="img" aria-label="逆变换示意：向量 (0,1) 先被剪切到 (1,1)，再被逆剪切送回 (0,1)">
-  <defs>
-    <marker id="e3-i" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--vp-c-brand-1)"/></marker>
-    <marker id="e3-g" markerWidth="8" markerHeight="8" refX="6.5" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--vp-c-text-3)"/></marker>
-  </defs>
-  <g stroke="var(--vp-c-text-3)" stroke-width="1.2">
-    <line x1="30" y1="105" x2="130" y2="105"/>
-    <line x1="80" y1="40" x2="80" y2="170"/>
-    <line x1="190" y1="105" x2="290" y2="105"/>
-    <line x1="240" y1="40" x2="240" y2="170"/>
-    <line x1="350" y1="105" x2="450" y2="105"/>
-    <line x1="400" y1="40" x2="400" y2="170"/>
-  </g>
-  <line x1="80" y1="105" x2="80" y2="67" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#e3-i)"/>
-  <line x1="240" y1="105" x2="278" y2="67" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#e3-i)"/>
-  <line x1="400" y1="105" x2="400" y2="67" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#e3-i)"/>
-  <g font-size="12" fill="var(--vp-c-text-1)">
-    <text x="62" y="60" fill="var(--vp-c-brand-1)">v=(0,1)</text>
-    <text x="244" y="60" fill="var(--vp-c-brand-1)">Av=(1,1)</text>
-    <text x="382" y="60" fill="var(--vp-c-brand-1)">A⁻¹Av=(0,1)</text>
-    <text x="80" y="24" text-anchor="middle" fill="var(--vp-c-text-2)" font-weight="600">出发</text>
-    <text x="240" y="24" text-anchor="middle" fill="var(--vp-c-text-2)" font-weight="600">乘 A</text>
-    <text x="400" y="24" text-anchor="middle" fill="var(--vp-c-text-2)" font-weight="600">乘 A⁻¹</text>
-  </g>
-  <line x1="138" y1="105" x2="182" y2="105" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#e3-g)"/>
-  <line x1="298" y1="105" x2="342" y2="105" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#e3-g)"/>
+<FigBox title="倒带：A 把 (1,1) 送到 (3,3)，A⁻¹ 再把它送回来" kind="结构" note="输入：左边 (1,1)。操作：先乘 A，再乘 A⁻¹。结果：又回到 (1,1)；反过来先乘 A⁻¹ 再乘 A 也回到原处，两种顺序都等于单位矩阵。看图能读出什么：倒带机不是「另一个方向」，而是把每一步原样退回去。">
+<svg viewBox="0 0 400 190" role="img" aria-label="逆变换示意：向量 (1,1) 被 A 送到 (3,3)，再被 A 的逆送回 (1,1)">
+<defs>
+  <marker id="n4-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+  <marker id="n4-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
+  </marker>
+</defs>
+<g stroke="var(--vp-c-text-3)" stroke-width="1.2">
+  <line x1="30" y1="130" x2="120" y2="130" /><line x1="70" y1="70" x2="70" y2="160" />
+  <line x1="170" y1="130" x2="290" y2="130" /><line x1="210" y1="30" x2="210" y2="160" />
+  <line x1="320" y1="130" x2="390" y2="130" /><line x1="350" y1="70" x2="350" y2="160" />
+</g>
+<line x1="70" y1="130" x2="94" y2="106" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#n4-a)" />
+<text x="70" y="150" font-size="11" fill="var(--vp-c-brand-1)">(1, 1)</text>
+<line x1="210" y1="130" x2="282" y2="58" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#n4-a)" />
+<text x="240" y="120" font-size="11" fill="var(--vp-c-brand-1)">(3, 3)</text>
+<line x1="350" y1="130" x2="374" y2="106" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#n4-a)" />
+<text x="340" y="150" font-size="11" fill="var(--vp-c-brand-1)">(1, 1)</text>
+<line x1="130" y1="130" x2="162" y2="130" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#n4-g)" />
+<line x1="298" y1="130" x2="318" y2="130" stroke="var(--vp-c-text-3)" stroke-width="2" marker-end="url(#n4-g)" />
+<text x="146" y="120" font-size="11" fill="var(--vp-c-text-1)" text-anchor="middle">乘 A</text>
+<text x="308" y="120" font-size="11" fill="var(--vp-c-text-1)" text-anchor="middle">乘 A⁻¹</text>
+<text x="200" y="182" font-size="11" fill="var(--vp-c-text-3)" text-anchor="middle">一来一回，两根轴都回到原位：A⁻¹A = I</text>
 </svg>
 </FigBox>
 
-**为什么**：这里 $a=1, b=1, c=0, d=1$，于是 $ad-bc = 1\times1 - 1\times0 = 1$。代入公式：
+### 翻面：转置
 
-$$A^{-1} = \frac{1}{1}\begin{bmatrix}1&-1\\0&1\end{bmatrix} = \begin{bmatrix}1&-1\\0&1\end{bmatrix}$$
+另一件常做的事是把矩阵沿主对角线（左上到右下）翻个面：第 $i$ 行搬到第 $i$ 列的位置，记作 $A^T$。
 
-和直觉完全一致——逆剪切就是朝反方向推。
+$$
+A=\begin{bmatrix}2&1\\0&3\end{bmatrix},\qquad
+A^T=\begin{bmatrix}2&0\\1&3\end{bmatrix}
+$$
 
-**验算**（node，必须两边都乘到）：$A A^{-1}$ 与 $A^{-1}A$ 都应等于单位阵。
+读法：$A$ 的第一列 $(2,0)$ 翻过去成了 $A^T$ 的第一行；第二列 $(1,3)$ 成了第二行。注意它不是倒带：倒带要把变换后的箭头送回原处，而 $A^T$ 只是把行与列交换。至于它把图形变成什么样、面积怎样变，第 5 章会算；这里只认准位置怎么换。
 
-$$AA^{-1} = \begin{bmatrix}1&1\\0&1\end{bmatrix}\begin{bmatrix}1&-1\\0&1\end{bmatrix} = \begin{bmatrix}1&0\\0&1\end{bmatrix} = I$$
+翻两次就翻回来：$(A^T)^T=A$。串联的时候顺序会反：$(AB)^T=B^TA^T$——上一节的 $AB=\begin{bmatrix}1&-2\\3&0\end{bmatrix}$ 翻面得 $\begin{bmatrix}1&3\\-2&0\end{bmatrix}$；而 $B^TA^T=\begin{bmatrix}0&1\\-1&0\end{bmatrix}\begin{bmatrix}2&0\\1&3\end{bmatrix}=\begin{bmatrix}1&3\\-2&0\end{bmatrix}$，两边一致。为什么顺序要反？因为转置把「先读列」换成了「先读行」，两段动作的先后也就跟着倒过来了。
 
-用 node 核对：`S=[1,1;0,1]`、`Sinv=[1,-1;0,1]`，`S*Sinv` 与 `Sinv*S` 都输出 `[1,0;0,1]`，判定 `A*Ainv === I` 为 `true`，验算通过。
+如果翻完和原来一模一样（$A^T=A$），这样的矩阵叫**对称矩阵**，例如 $\begin{bmatrix}2&0\\0&3\end{bmatrix}$：主对角线两边天然一样。
+
+## 例题
+
+::: tip 例 1 · 两种算法算同一支箭，再把它送回去
+**题目**：$A=\begin{bmatrix}2&1\\0&3\end{bmatrix}$，$\mathbf x=\begin{bmatrix}1\\1\end{bmatrix}$。求 $A\mathbf x$：先用按列加权，再用逐行算，两法对照；最后用倒带机把结果送回去。
+
+**先猜**：$A$ 的两列 $(2,0)$、$(1,3)$ 坐标都非负，而 $\mathbf x$ 的两个分量都是正的，所以结果的两个分量都该是正的，而且横坐标至少是 2、纵坐标至少是 3。
+
+**再算**：
+1. 按列加权：$A\mathbf x=1\begin{bmatrix}2\\0\end{bmatrix}+1\begin{bmatrix}1\\3\end{bmatrix}=\begin{bmatrix}3\\3\end{bmatrix}$。*（为什么：$\mathbf x$ 的两个分量就是「几遍」。）*
+2. 逐行算：第 1 行 $2\times1+1\times1=3$，第 2 行 $0\times1+3\times1=3$，同样得 $(3,3)$。
+
+**再回代**：把 $(3,3)$ 乘倒带机：$A^{-1}\begin{bmatrix}3\\3\end{bmatrix}=\begin{bmatrix}\frac12\cdot3-\frac16\cdot3\\ 0+\frac13\cdot3\end{bmatrix}=\begin{bmatrix}1\\1\end{bmatrix}$，回到出发的 $\mathbf x$，与「倒带」的含义一致；两个分量都是正数，也与猜测相符。
 :::
 
-注意一个反向直觉：**$(AB)^{-1} = B^{-1}A^{-1}$，顺序也反过来**——要倒放「先穿袜子再穿鞋」，就得「先脱鞋再脱袜子」。这和下一节的转置规则是同一套「顺序反转」逻辑，放在一起记。
+::: tip 例 2 · 顺序不同，落点不同
+**题目**：接上例的 $A$，另取 $B=\begin{bmatrix}0&-1\\1&0\end{bmatrix}$。（a）算 $AB$ 与 $BA$；（b）用 $\mathbf v=\begin{bmatrix}0\\1\end{bmatrix}$ 分别试这两台机器。
 
-## 五、转置：沿主对角线翻个面
+**先猜**：$AB$ 与 $BA$ 都把纸搬成同样大小的图形（先转再拉、先拉再转），但方向不同，所以两个乘积应该不一样；对同一支箭，落点也应该不同。
 
-这一节的目标，是给转置一个几何图像——它不是「还原」，而是「镜像」。
+**再算**：
+1. $AB$：第 1 列 $=A\begin{bmatrix}0\\1\end{bmatrix}=\begin{bmatrix}1\\3\end{bmatrix}$，第 2 列 $=A\begin{bmatrix}-1\\0\end{bmatrix}=\begin{bmatrix}-2\\0\end{bmatrix}$，所以 $AB=\begin{bmatrix}1&-2\\3&0\end{bmatrix}$。*（为什么这么算：$AB$ 的列就是 $B$ 的列再被 $A$ 送一次。）*
+2. $BA$：第 1 列 $=B\begin{bmatrix}2\\0\end{bmatrix}=\begin{bmatrix}0\\2\end{bmatrix}$，第 2 列 $=B\begin{bmatrix}1\\3\end{bmatrix}=\begin{bmatrix}-3\\1\end{bmatrix}$，所以 $BA=\begin{bmatrix}0&-3\\2&1\end{bmatrix}$。
+3. （b）$(AB)\begin{bmatrix}0\\1\end{bmatrix}$ 取 $AB$ 的第 2 列 $=(-2,0)$；$(BA)\begin{bmatrix}0\\1\end{bmatrix}$ 取 $BA$ 的第 2 列 $=(-3,1)$。
 
-**转置**（首次出现，先给图景）：把矩阵沿着**主对角线**（左上到右下那条）翻个面，行变列、列变行。第 $i$ 行第 $j$ 列的元素，跑到第 $j$ 行第 $i$ 列：
+**再回代**：把两条路按「两步」重走一遍核对。$B\begin{bmatrix}0\\1\end{bmatrix}=\begin{bmatrix}-1\\0\end{bmatrix}$，再 $A\begin{bmatrix}-1\\0\end{bmatrix}=\begin{bmatrix}-2\\0\end{bmatrix}$，与 $AB$ 的第 2 列一致；另一条 $A\begin{bmatrix}0\\1\end{bmatrix}=\begin{bmatrix}1\\3\end{bmatrix}$，再 $B\begin{bmatrix}1\\3\end{bmatrix}=\begin{bmatrix}-3\\1\end{bmatrix}$，与 $BA$ 的第 2 列一致。这也说明「先做谁」真的会改变结果。
+:::
 
-$$\left(A^T\right)_{ij} = A_{ji}$$
+::: tip 例 3 · 求倒带机并回乘验算
+**题目**：$A=\begin{bmatrix}2&1\\0&3\end{bmatrix}$，求 $A^{-1}$，并两边回乘验算；再说明 $\begin{bmatrix}1&1\\2&2\end{bmatrix}$ 为什么没有逆。
 
-例如 $A = \begin{bmatrix}2&1\\0&3\end{bmatrix}$ 翻面后 $A^T = \begin{bmatrix}2&0\\1&3\end{bmatrix}$：第一列 $(2,0)$ 变成了第一行，第二列 $(1,3)$ 变成了第二行。几何上，转置是关于 45° 主对角线的**镜面反射**——把「列」这条竖着读的信息，换成「行」这条横着读的同一份信息。
+**先猜**：$ad-bc=6\ne0$，所以有逆；分子是 $\begin{bmatrix}3&-1\\0&2\end{bmatrix}$，分母 6，所以 $A^{-1}$ 的元素都是 $\frac12$、$\frac16$、$\frac13$ 这类简单分数；又因为 $A$ 的左下角是 0，$A^{-1}$ 的左下角也该是 0。
 
-转置有三条规则，其中后两条和复合、逆的「顺序反转」互相呼应：
+**再算**：
+1. 按公式 $A^{-1}=\frac16\begin{bmatrix}3&-1\\0&2\end{bmatrix}=\begin{bmatrix}\frac12&-\frac16\\0&\frac13\end{bmatrix}$。*（为什么用这个公式：它把「两条边各退回去」写成了四个数，分母正是「有没有压扁」的判据。）*
+2. $AA^{-1}$：第 1 列 $A\begin{bmatrix}\frac12\\0\end{bmatrix}=\begin{bmatrix}1\\0\end{bmatrix}$，第 2 列 $A\begin{bmatrix}-\frac16\\\frac13\end{bmatrix}=\begin{bmatrix}-\frac13+\frac13\\1\end{bmatrix}=\begin{bmatrix}0\\1\end{bmatrix}$，合起来是 $I$。
+3. $A^{-1}A$：第 1 列 $A^{-1}\begin{bmatrix}2\\0\end{bmatrix}=\begin{bmatrix}1\\0\end{bmatrix}$，第 2 列 $A^{-1}\begin{bmatrix}1\\3\end{bmatrix}=\begin{bmatrix}\frac12-\frac12\\1\end{bmatrix}=\begin{bmatrix}0\\1\end{bmatrix}$，同样是 $I$。
 
-1. $(A^T)^T = A$（翻两次翻回来）；
-2. $(AB)^T = B^T A^T$（**先做 $B$ 再做 $A$ 的复合，转置后顺序反过来**）；
-3. 若 $A$ 是旋转型（正交）矩阵，则 $A^T = A^{-1}$（旋转的镜像恰好就是反旋转）。
+**再回代**：把猜的三条逐条核对——分母 6 用上了；$A^{-1}$ 左下角确实是 0；两边回乘都得到 $I$。再看 $\begin{bmatrix}1&1\\2&2\end{bmatrix}$：$ad-bc=1\times2-1\times2=0$，两列成倍数，整张纸被压到一条线上，同一个落点有无数支箭被送过来，分不清原来是谁，所以没有逆。
+:::
 
-拿第二节的旋转 $B = \begin{bmatrix}0&-1\\1&0\end{bmatrix}$ 验证第 3 条：$B^T = \begin{bmatrix}0&1\\-1&0\end{bmatrix}$，而转回原位的逆矩阵正是 $B^{-1} = \begin{bmatrix}0&1\\-1&0\end{bmatrix}$，两者相等。这就是为什么「转置」在几何里常被当作「反向旋转」来用。
+## 这一页带走三句话
 
-**验算**（第 2 条，用例 2 的 $A,B$）：$AB = \begin{bmatrix}1&-1\\1&0\end{bmatrix}$，故 $(AB)^T = \begin{bmatrix}1&1\\-1&0\end{bmatrix}$；而 $B^T A^T = \begin{bmatrix}0&1\\-1&0\end{bmatrix}\begin{bmatrix}1&0\\1&1\end{bmatrix} = \begin{bmatrix}1&1\\-1&0\end{bmatrix}$，两者相等。node 里手写转置与乘法核对，结论一致。
+1. 矩阵是一份记录：两列就是两根单位箭头的新位置；读矩阵就是读这两句话。
+2. $A\mathbf x$ 是把两列按 $\mathbf x$ 的两个分量加权相加；$AB$ 是两台机器串联，先 $B$ 后 $A$，顺序换不得。
+3. 逆是倒带机，只有「没把纸压扁」时才有；转置是沿主对角线翻面，串联时顺序要反过来。
 
-还有个特例值得记：如果 $A = A^T$（翻面后不变），就称 $A$ 是**对称矩阵**——几何上它是一个「自身镜像对称」的变换，比如纯缩放 $\begin{bmatrix}2&0\\0&3\end{bmatrix}$ 转置后还是它自己。物理和统计里很多矩阵天然是对称的，正是因为它描述的是「同一个东西在两个方向上的同一份关系」，沿主对角线两边天然一样。
+::: warning 本页最容易混的三处
+- 把矩阵当成一张数字表去背乘法。先读两列：$\mathbf i$ 去哪、$\mathbf j$ 去哪。
+- 把 $AB\ne BA$ 当成算错了。它们是两台不同的机器，落点本来就不同。
+- 以为每台机器都能倒带。两列成倍数（$ad-bc=0$）时纸被压扁，没有逆。
+:::
 
-转置是后面「内积 $\mathbf u\cdot\mathbf v = \mathbf u^T\mathbf v$」和「二次型 $\mathbf x^T A\mathbf x$」的底座，先在这认识它，后面用到时不陌生。
-
-## 六、易错清单 + 自检
-
-- [ ] **矩阵 ≠ 数字表，矩阵 = 变换**：每看到一个矩阵，先问「它把 $\mathbf i$、$\mathbf j$ 送到哪」，而不是先想着怎么乘。
-- [ ] 矩阵乘法 $AB$ 是「先 $B$ 后 $A$」：右边先动手，$AB \ne BA$。
-- [ ] $A\mathbf x$ 用「列的线性组合」来理解：$x_1$ 倍第一列加 $x_2$ 倍第二列。
-- [ ] 逆矩阵只对 $ad-bc\ne0$ 的方阵存在；压扁空间（两列共线）就没有逆。
-- [ ] $(AB)^{-1} = B^{-1}A^{-1}$、$(AB)^T = B^T A^T$：复合的逆和转置都**顺序反转**。
-- [ ] 转置不是「还原」，是「镜像」；只有旋转型（正交）矩阵才有 $A^T = A^{-1}$。
-
-**自检**：给 $A = \begin{bmatrix}1&2\\0&1\end{bmatrix}$ 求 $A^{-1}$，再算 $A A^{-1}$ 看是否等于 $I$。（答案：$A^{-1} = \begin{bmatrix}1&-2\\0&1\end{bmatrix}$，乘回后确为单位阵。）
-
----
-
-把矩阵当成变换，是一切线代直觉的起点。下一章我们继续在这个网格上量面积——变换后每个小方格被放大了几倍、什么时候会「翻面」，那正是**行列式**要回答的问题。
+下一站是[03 · 高斯消元与线性方程组](./03-elimination.md)：换个问题——不是「一支箭被搬到哪」，而是「哪支箭会被搬到指定位置」，也就是解 $A\mathbf x=\mathbf b$。

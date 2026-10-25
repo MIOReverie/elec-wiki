@@ -1,356 +1,362 @@
 ---
 title: 03 · 矩阵的初等变换与线性方程组
-description: 按同济《线性代数》第三章的顺序，把解方程组这件事拆成可操作的四步：三种初等行变换、化行阶梯形与行最简形、初等矩阵、矩阵的秩、有解判定与解的结构；给「化阶梯形求秩判解」的完整步骤，强调秩相等才有解、自由度等于 n 减 r。
+description: 经典结构版第三篇，对齐同济《线性代数》第三章：把中学的加减消元改写成三种初等行变换，化行阶梯形与行最简形，用主元个数数秩，用系数矩阵与增广矩阵的两个秩判定无解、唯一解、无穷多解，再写通解（特解加齐次解），最后用 (A|E)→(E|A⁻¹) 求逆。三道例题全部 node 验算。
 ---
 
 # 03 · 矩阵的初等变换与线性方程组
 
-<Meta time="35 min" level="核心" note="本章只有一件大事：把增广矩阵化成行阶梯形，数非零行得秩，再用秩和未知数个数比较来判定解。" />
+<Meta time="32 min" level="核心" note="最容易错的一处：判解只看两个秩是否相等，与有没有 0 行无关；自由度是 n−r，不是 r" />
 
-**对应教材**：同济《线性代数》第三章「矩阵的初等变换与线性方程组」。
+**这一页要解决的三类题**：
 
-**这一页要解决什么**：前面两章给了你「行列式会算、矩阵会乘」的手艺，这一章把它们合起来做一件更实际的事——判断一个线性方程组**有没有解、有几个解、怎么把全部解写出来**。读完你应该能：对任意增广矩阵走完「化行阶梯形」的完整流程；数出矩阵的秩；用 $r(A)$ 与 $r(A\mid\mathbf b)$ 的大小关系判定唯一解、无穷多解还是无解；并在无穷多解时写出「特解 + 基础解系」形式的通解。
+1. 给一道线性方程组，判它无解、唯一解还是无穷多解；
+2. 有无穷多解时，把全部解写成一条式子；
+3. 用同一套行变换，把一个方阵的逆矩阵求出来。
+
+**对应同济《线性代数》第三章「矩阵的初等变换与线性方程组」**。
 
 ::: tip 读这页之前
-- **需要会**：矩阵与增广矩阵的概念（经典版第 2 章《矩阵及其运算》）、$k$ 阶行列式的展开（经典版第 1 章《行列式》，秩的定义会借「子式」这个词）。这两章同板块尚未在页面中展开时可先看现代版对应概念。
-- **符号约定**：矩阵用大写粗体 $A$，未知数列向量记 $\mathbf x$，常数项列向量记 $\mathbf b$；增广矩阵写作 $[A \mid \mathbf b]$ 或 $(A,\mathbf b)$。完整符号表见 [符号与约定](../guide/notation.md)。
-- **本页术语**：增广矩阵、初等行变换、行阶梯形、行最简形、初等矩阵、矩阵的秩、基础解系，正文首次出现处都会解释。
-- **学完去哪**：本页是经典版第 4 章《向量组的线性相关性》的入口——「秩」和「基础解系」会在那里换成向量组的语言再讲一遍。
+- **需要会**：上一页的矩阵与型（$m\times n$）、单位矩阵 $E$，以及 $A\mathbf x=\mathbf b$ 这个写法（$A$ 是系数表、$\mathbf x$ 是一列未知数、$\mathbf b$ 是右端那列）。
+- **会出现的记号**：$[A\mid\mathbf b]$（增广矩阵，竖线右边是右端）、$r(A)$（秩）、$R_i$（第 $i$ 行）、$O$（零矩阵）。首次出现处都会解释。
 :::
 
-先把高中那套「加减消元」升级成能上机器、且永远不出错的流程。解方程组时，你反复做的其实只有三种动作：**换两行的顺序、把某一行整体乘一个非零数、把某一行的倍数加到另一行**。这三种动作有个共同点——都可逆，所以解集一个都不多、一个都不少。这一页的全部方法，就是把这三件小事按固定顺序做到底，再从结果里读出答案。
+## 一、把加减消元改写成三件只动系数的事
 
-## 结论先行
+中学解方程组的动作只有三种：换个次序、把一个方程两边同乘非零数、把一个方程的倍数加到另一个方程上。三种都能**倒回去**（换回来、除以它、减回去），所以解一个不多、一个不少。
 
-1. **初等行变换只有三种，且都不改变解集**：交换两行、某行乘非零常数、某行加另一行的倍数——它们都可逆，所以等价。
-2. **化行阶梯形的四步**：换（主元非零）→ 消（下方清零）→ 换到下一行下一列 → 重复。削完之后**非零行的行数就是矩阵的秩**。
-3. **有解 ⇔ 秩相等**：$r(A)=r(A\mid\mathbf b)$ 才有解；一旦 $r(A)<r(A\mid\mathbf b)$，阶梯形里必出现 $0=k$（$k\neq0$），无解。
-4. **解的自由度 = $n-r$**：$n$ 是未知数个数、$r$ 是秩。$r=n$ 唯一解；$r<n$ 无穷多解，其中 $n-r$ 个未知数可以自由取。
-5. **通解 = 特解 + 基础解系**：无穷多解时，先求一个特解 $\eta^\*$，再求齐次方程 $A\mathbf x=\mathbf 0$ 的 $n-r$ 个线性无关解（基础解系），两者相加就是全部解。
-
-## 一、初等行变换：只做三件事，解集不变
-
-这一节的目标是把「加减消元」里的合法动作列成一张只有三项的清单，并说明为什么它们不会把解改坏——这是后面所有机械步骤的前提。
-
-解方程组时，把系数和常数项并排写成一张表最方便。对 $A\mathbf x=\mathbf b$，把系数矩阵 $A$ 和常数项 $\mathbf b$ 拼成一张表，中间画一条竖线分开：
+既然只动系数，就把系数和右端抄成一张表：竖线左边 $A$、右边 $\mathbf b$，叫**增广矩阵**：
 
 $$
-[A \mid \mathbf b] = \left[\begin{array}{ccc|c}
-a_{11}&a_{12}&\cdots&b_1\\
-a_{21}&a_{22}&\cdots&b_2\\
-\vdots&\vdots&\ddots&\vdots
-\end{array}\right]
+[A\mid\mathbf b]=\left[\begin{array}{cccc|c}1&2&-1&1&1\\2&4&-3&2&2\\3&6&-4&3&3\end{array}\right]
 $$
 
-这张表叫**增广矩阵（augmented matrix）**——「增广」就是「在系数矩阵旁边多贴一列常数项」。竖线左边是 $A$，右边是 $\mathbf b$，消元时必须对整行一起做，竖线右边的数也跟着变，解才不会错。
+读一遍：竖线只是提醒——右边那列是等号右边的数，不是某未知数的系数；消元必须**整行一起动**，右边跟着变，解才不会错。这张表对应 $x_1$–$x_4$ 四个未知数，本页从头用到尾。
 
-对增广矩阵只允许做三种**初等行变换（elementary row operations）**：
+允许对这张表做的三件事，叫**初等行变换**：
 
 | 变换 | 记号 | 为什么解集不变 |
 | --- | --- | --- |
-| 交换两行 | $R_i\leftrightarrow R_j$ | 方程先后顺序不影响「同时成立」 |
-| 某行乘非零数 $k$ | $R_i\leftarrow kR_i\ (k\neq0)$ | 等式两边同乘，可逆 |
-| 某行加另一行的倍数 | $R_i\leftarrow R_i+kR_j$ | 等量替换，可逆 |
+| 交换两行 | $R_i\leftrightarrow R_j$ | 换次序不改「同时成立」 |
+| 某行乘非零数 $k$ | $R_i\leftarrow kR_i$ | 同乘非零数，能除回去 |
+| 某行加另一行的 $k$ 倍 | $R_i\leftarrow R_i+kR_j$ | 等量替换，能减回去 |
 
-三种变换都**可逆**：换回去、除以 $k$、减掉 $kR_j$ 就能回到原样。既然每步可逆，方程组的解集在每一步前后完全一样，所以「化阶梯形」这个看似改动了矩阵的过程，其实一个解都没丢、也没多出来。对应的还有**初等列变换**（对列做同样的三件事），但解方程组时只用行变换，因为列变换会打乱未知数的对应关系；列变换主要用于求矩阵的秩。
+三种都可逆，走完整条流水线解集不变。另有对列做同样动作的**列变换**，解方程组时不用——列一动，未知数与列的对应就乱了，而本页判定全靠「第几列是第几个未知数」。
 
-把这三件小事按固定顺序做，就得到了下一节的行阶梯形——那是所有判定的「仪表盘」。
+**初等矩阵**先认个名字：单位矩阵做一次初等变换得到的表；用它**左乘** $A$ 等于对 $A$ 做一次同样的行变换。例如
 
-## 二、行阶梯形与行最简形
+$$
+\begin{bmatrix}1&0&0\\2&1&0\\0&0&1\end{bmatrix}
+\begin{bmatrix}1&2&3\\0&1&4\\5&6&0\end{bmatrix}
+=\begin{bmatrix}1&2&3\\2&5&10\\5&6&0\end{bmatrix}
+$$
 
-这一节的目标是定义两个「形状规范」的矩阵——行阶梯形与行最简形——并给出把它们变出来的四步流程，因为秩和解的判定全部从这两个形状读。
+第 2 行正是「原来的第 2 行加第 1 行的 $2$ 倍」。用处只有一句：行变换能写成乘法，「可逆变换不改变秩」就能靠它论证——本页只认得这个词。
 
-**行阶梯形（row echelon form）**：一个矩阵若满足两条，就是行阶梯形——（1）若存在零行（整行全 0），零行都在非零行的下方；（2）每个非零行从左往右的第一个非零元，其所在列随行数增加而严格右移。这个「第一个非零元」叫**主元（pivot）**，它们连起来正好是一级一级的阶梯，主元下方全是 0。
+## 二、化成阶梯形，主元个数就是秩
 
-在行阶梯形基础上再收紧两条，得到**行最简形（reduced row echelon form）**：（3）每个主元都等于 1；（4）每个主元所在列的其余元素全为 0。行最简形比行阶梯形「削得更干净」，回代一步到位，是求基础解系时的首选。
+要化成的形状叫**行阶梯形**：全零行在最下面；每个非零行从左往右第一个非零数（叫**主元**）所在的列随行数增加严格右移。再收两条——主元都等于 $1$、主元所在列其余位置全是 $0$——就叫**行最简形**（图 1）。
 
-<FigBox title="行阶梯形与行最简形：主元下方清零、再上方清零" kind="结构" note="左图是行阶梯形，主元 2、3、4 逐行右移，下方全是 0，阶梯线正是主元连成的折线；右图是行最简形，主元都变成 1，且主元列上方的元素也全被削成 0。看图能读出什么：两种形状的非零行数相同，都等于矩阵的秩——形状只在主元列是否「清到底」上有差别。">
-<svg viewBox="0 0 460 200" role="img" aria-label="左图三行四列的行阶梯形矩阵，主元二三四逐行右移；右图行最简形，主元都为一且主元列其余为零">
+化阶梯形的四步：
+
+1. **定位**：当前列从当前行往下，找第一个非零数；
+2. **换行**：把含它的那一行换到当前行（挑 $1$ 或小整数当主元，口算方便）；
+3. **消**：用主元把当前列下面的数全消成 $0$；
+4. **前进**：下移一行、右移一列，回到第 1 步。
+
+拿本页那张表走一遍（$R_i$ 表示第 $i$ 行）：
+
+$$
+[A\mid\mathbf b]\xrightarrow{R_2-2R_1,\ R_3-3R_1}
+\left[\begin{array}{cccc|c}1&2&-1&1&1\\0&0&-1&0&0\\0&0&-1&0&0\end{array}\right]
+\xrightarrow{R_3-R_2}
+\left[\begin{array}{cccc|c}1&2&-1&1&1\\0&0&-1&0&0\\0&0&0&0&0\end{array}\right]
+$$
+
+主元落在第 1 列和第 3 列，共 $2$ 个。
+
+**秩**：矩阵里非零子式的最高阶数叫**矩阵的秩**，记 $r(A)$。子式就是任取 $k$ 行 $k$ 列、交叉处那些数按原位置组成的 $k$ 阶行列式（上一页算的那种）。这个定义只是让你在教材上读得懂，**算的时候不用它**：把表化成阶梯形，**主元的个数就是秩**，上面那张表的 $r(A)=2$。
+
+为什么能这样数：阶梯形里每个主元独占一行，主元数 = 非零行数，而每步都是可逆变换、秩不变。范围 $0\le r(A)\le\min(m,n)$，取到上界叫**满秩**。
+
+<FigBox title="行阶梯形与行最简形：主元画圈，阶梯线逐行右移" kind="结构" hint="左：输入化成阶梯形，主元在第一、三列，末行全 0，虚线是阶梯；右：再把主元列上方清成 0，就是最简形。" note="看图能读出什么：两种形状非零行数相同、都等于秩 2；差别只在主元列有没有清到底——最简形每行能直接读出一个未知数。">
+<svg viewBox="0 0 720 250" class="sf" role="img" aria-label="行阶梯形与行最简形对比：左侧主元在第一与第三列、末行全零；右侧主元列上下都清成零">
   <defs>
-    <marker id="fig-echelon-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <marker id="c03-f1-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-2)"/>
     </marker>
   </defs>
-  <text x="100" y="22" font-size="12" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">行阶梯形</text>
-  <text x="350" y="22" font-size="12" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">行最简形</text>
-  <!-- 左：行阶梯形 -->
-  <g font-size="13" fill="var(--vp-c-text-1)" text-anchor="middle">
-    <text x="55" y="52">2</text><text x="95" y="52">1</text><text x="135" y="52">1</text><text x="175" y="52">5</text>
-    <text x="55" y="86">0</text><text x="95" y="86">3</text><text x="135" y="86">−1</text><text x="175" y="86">2</text>
-    <text x="55" y="120">0</text><text x="95" y="120">0</text><text x="135" y="120">4</text><text x="175" y="120">8</text>
+  <text x="34" y="34" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">输入</text>
+  <text x="70" y="34" font-size="12.5" fill="var(--vp-c-text-2)" class="sf-t">消完的阶梯形</text>
+  <text x="330" y="34" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">操作</text>
+  <text x="366" y="34" font-size="12.5" fill="var(--vp-c-text-2)" class="sf-t">主元列往上也清 0</text>
+  <text x="580" y="34" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">结果</text>
+  <text x="616" y="34" font-size="12.5" fill="var(--vp-c-text-2)" class="sf-t">行最简形</text>
+  <g stroke="var(--vp-c-divider)" stroke-width="1" fill="none">
+    <line x1="60" y1="70" x2="290" y2="70"/><line x1="60" y1="120" x2="290" y2="120"/>
+    <line x1="60" y1="170" x2="290" y2="170"/><line x1="60" y1="220" x2="290" y2="220"/>
+    <line x1="60" y1="70" x2="60" y2="220"/><line x1="106" y1="70" x2="106" y2="220"/>
+    <line x1="152" y1="70" x2="152" y2="220"/><line x1="198" y1="70" x2="198" y2="220"/>
+    <line x1="244" y1="70" x2="244" y2="220"/><line x1="290" y1="70" x2="290" y2="220"/>
   </g>
-  <polyline points="42,46 82,46 82,80 122,80 122,114 162,114" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.4" stroke-dasharray="5 3"/>
-  <circle cx="55" cy="46" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="95" cy="80" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="135" cy="114" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <!-- 右：行最简形 -->
-  <g font-size="13" fill="var(--vp-c-text-1)" text-anchor="middle">
-    <text x="305" y="52">1</text><text x="345" y="52">0</text><text x="385" y="52">0</text><text x="425" y="52">a</text>
-    <text x="305" y="86">0</text><text x="345" y="86">1</text><text x="385" y="86">0</text><text x="425" y="86">b</text>
-    <text x="305" y="120">0</text><text x="345" y="120">0</text><text x="385" y="120">1</text><text x="425" y="120">c</text>
+  <line x1="66" y1="76" x2="66" y2="214" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="244" y1="70" x2="244" y2="220" stroke="var(--vp-c-text-2)" stroke-width="2.4"/>
+  <g font-size="14" text-anchor="middle" fill="var(--vp-c-text-1)" class="sf-t">
+    <text x="83" y="99">1</text><text x="129" y="99">2</text><text x="175" y="99">−1</text><text x="221" y="99">1</text><text x="267" y="99">1</text>
+    <text x="83" y="149">0</text><text x="129" y="149">0</text><text x="175" y="149">−1</text><text x="221" y="149">0</text><text x="267" y="149">0</text>
+    <text x="83" y="199">0</text><text x="129" y="199">0</text><text x="175" y="199">0</text><text x="221" y="199">0</text><text x="267" y="199">0</text>
   </g>
-  <circle cx="305" cy="46" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="345" cy="80" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="385" cy="114" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <line x1="185" y1="84" x2="295" y2="84" stroke="var(--vp-c-text-2)" stroke-width="1.5" marker-end="url(#fig-echelon-arrow)"/>
-  <text x="240" y="74" font-size="11" fill="var(--vp-c-text-2)" text-anchor="middle">主元变 1、上方清零</text>
-  <text x="240" y="152" font-size="12" fill="var(--vp-c-text-3)" text-anchor="middle">两种形状非零行数相同，都等于秩</text>
+  <circle cx="83" cy="93" r="13" fill="none" stroke="var(--vp-c-danger-1)" stroke-width="1.6"/>
+  <circle cx="175" cy="143" r="13" fill="none" stroke="var(--vp-c-danger-1)" stroke-width="1.6"/>
+  <polyline points="68,86 90,86 90,136 160,136 160,186 200,186" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.2" stroke-dasharray="5 3"/>
+  <line x1="308" y1="145" x2="344" y2="145" stroke="var(--vp-c-text-2)" stroke-width="1.6" marker-end="url(#c03-f1-arrow)"/>
+  <g stroke="var(--vp-c-divider)" stroke-width="1" fill="none">
+    <line x1="380" y1="70" x2="610" y2="70"/><line x1="380" y1="120" x2="610" y2="120"/>
+    <line x1="380" y1="170" x2="610" y2="170"/><line x1="380" y1="220" x2="610" y2="220"/>
+    <line x1="380" y1="70" x2="380" y2="220"/><line x1="426" y1="70" x2="426" y2="220"/>
+    <line x1="472" y1="70" x2="472" y2="220"/><line x1="518" y1="70" x2="518" y2="220"/>
+    <line x1="564" y1="70" x2="564" y2="220"/><line x1="610" y1="70" x2="610" y2="220"/>
+  </g>
+  <line x1="564" y1="70" x2="564" y2="220" stroke="var(--vp-c-text-2)" stroke-width="2.4"/>
+  <g font-size="14" text-anchor="middle" fill="var(--vp-c-text-1)" class="sf-t">
+    <text x="403" y="99">1</text><text x="449" y="99">2</text><text x="495" y="99">0</text><text x="541" y="99">1</text><text x="587" y="99">1</text>
+    <text x="403" y="149">0</text><text x="449" y="149">0</text><text x="495" y="149">1</text><text x="541" y="149">0</text><text x="587" y="149">0</text>
+    <text x="403" y="199">0</text><text x="449" y="199">0</text><text x="495" y="199">0</text><text x="541" y="199">0</text><text x="587" y="199">0</text>
+  </g>
+  <circle cx="403" cy="93" r="13" fill="none" stroke="var(--vp-c-danger-1)" stroke-width="1.6"/>
+  <circle cx="495" cy="143" r="13" fill="none" stroke="var(--vp-c-danger-1)" stroke-width="1.6"/>
+  <text x="345" y="240" font-size="11.5" fill="var(--vp-c-text-3)" text-anchor="middle" class="sf-t">左：主元 2 个 → 秩 2 · 右：主变量 x1、x3 直接读出</text>
 </svg>
 </FigBox>
 
-**化行阶梯形的四步**（手算就按这个走）：
+## 三、判解：两个秩一比，三种结局
 
-1. **定位**：从第 1 行第 1 列开始，看当前列从当前行往下有没有非零元；全为 0 就右移一列再看。
-2. **换**：找到非零元后，把含它的那一行换到当前行（主元尽量选 1 或绝对值小的数，方便后面口算）。
-3. **消**：用主元把当前列下方所有行削成 0——对下方第 $i$ 行做 $R_i \leftarrow R_i - \dfrac{a_{i,\text{主元列}}}{a_{\text{主元行},\text{主元列}}}R_{\text{主元行}}$。
-4. **前进**：当前行下移一行、当前列右移一列，回到第 1 步，直到没有行或列可处理。
+对 $n$ 个未知数的方程组 $A\mathbf x=\mathbf b$（$A$ 是 $m\times n$）：先把增广矩阵化成阶梯形，再比较两个秩。
 
-这套流程纯机械，不靠灵感。它能走通，靠的是每一步都可逆——而「可逆」这件事，可以写成矩阵乘法，这正是下一节初等矩阵要说的。
+- $r(A)<r(A\mid\mathbf b)$：增广矩阵多出一个非零行，这一行读出来是 $0=k$（$k\ne0$），矛盾，**无解**；
+- $r(A)=r(A\mid\mathbf b)=n$：每个未知数都被一个主元管住，**唯一解**；
+- $r(A)=r(A\mid\mathbf b)=r<n$：有 $n-r$ 列没有主元，对应未知数可以随便取，**无穷多解**，自由度 $n-r$。
 
-## 三、初等矩阵：初等行变换 = 左乘一个初等矩阵
+**自由度为什么是 $n-r$**：表有 $n$ 列（$n$ 个未知数），主元列恰好 $r$ 个，剩下 $n-r$ 个非主元列对应的未知数没人约束、可以自由取值，另外 $r$ 个由主元列唯一定出。**主元数 + 自由变量数 = 未知数个数**，这条恒等式就是 $n-r$ 的全部来源。
 
-这一节的目标是给「初等变换」一个代数身份——它等价于乘一个特殊矩阵——顺便拿到下一节最关键的一条定理：初等变换不改变矩阵的秩。
+同一张系数表配不同右端，结局会变——这是 $0=k$ 唯一可能出现的地方。取 $A=\begin{bmatrix}1&2&3\\2&4&6\\1&1&1\end{bmatrix}$：
 
-**初等矩阵（elementary matrix）**：单位矩阵 $I$ 经过**一次**初等变换得到的矩阵。三种初等变换对应三种初等矩阵。例如对 $3\times3$ 单位阵交换前两行，得到
+- $\mathbf b=(1,2,1)$：$R_2-2R_1$ 得全零行，$R_3-R_1$ 得 $(0,-1,-2\mid0)$，两秩都是 $2$、$n=3$，无穷多解（$z$ 自由，$x=1+z$、$y=-2z$）；
+- $\mathbf b=(1,3,1)$：$R_2-2R_1$ 得 $(0,0,0\mid1)$ 即 $0=1$，$r(A)=2<r(A\mid\mathbf b)=3$，无解。
 
-$$
-E = \begin{bmatrix}0&1&0\\1&0&0\\0&0&1\end{bmatrix}
-$$
-
-关键的对应关系是：**对 $A$ 做一次初等行变换，等于左乘相应的初等矩阵 $EA$；做一次初等列变换，等于右乘 $AE$**。比如「把第 1 行的 2 倍加到第 2 行」对应的初等矩阵是在单位阵第 $(2,1)$ 位置填 2：
-
-$$
-E_{21}(2)=\begin{bmatrix}1&0&0\\2&1&0\\0&0&1\end{bmatrix},
-\qquad E_{21}(2)A \ \text{正是把 $A$ 的第 2 行加上第 1 行的 2 倍}
-$$
-
-初等矩阵有两个直接后果：**初等矩阵都可逆**（三种变换都能「撤销」，逆矩阵还是同类初等矩阵）；于是**初等变换不改变矩阵的秩**——因为左乘可逆矩阵相当于做可逆变换，秩这个量在可逆变换下不变。这句「不改变秩」是整个消元法求秩的合法性来源，下一节就把它用起来。
-
-## 四、矩阵的秩：化阶梯形，数非零行
-
-这一节的目标是给「秩」下一个能算的定义，并确定求法：不用算一堆行列式，直接化行阶梯形、数非零行。
-
-先从定义说起。在 $m\times n$ 矩阵 $A$ 中，任取 $k$ 行和 $k$ 列，交叉处的 $k^2$ 个元素按原来相对位置组成的 $k$ 阶行列式，叫 $A$ 的一个 **$k$ 阶子式（minor）**。$A$ 中非零子式的**最高阶数**，就是**矩阵的秩（rank）**，记作 $r(A)$ 或 $\operatorname{rank}(A)$。零矩阵没有非零子式，规定它的秩为 0。
-
-子式定义便于理解「秩是矩阵里线性无关信息的条数」，但直接算太慢。好在有上一节的定理：**初等变换不改变矩阵的秩**。所以求秩的实用方法是——**把 $A$ 用初等行变换化成行阶梯形，非零行的行数就是秩**。行阶梯形里主元逐行右移，每个非零行贡献一个主元，主元个数 = 非零行数，正好等于非零子式的最高阶数。
-
-**求秩的完整步骤**（就四步，和化阶梯形一模一样）：
-
-1. 对 $A$ 做初等行变换化成行阶梯形（换 → 消 → 前进，见第二节）；
-2. 数非零行的行数；
-3. 这个数就是 $r(A)$。
-
-秩的基本范围是 $0 \le r(A) \le \min(m,n)$；当 $r(A)=\min(m,n)$ 时称 $A$ **满秩**。$n$ 阶方阵满秩 $\iff$ 它的行列式不为 0 $\iff$ 可逆，这几件事在经典版第 2 章讲逆矩阵时已经埋下伏笔。秩算出来了，下一步就看它怎么决定方程组的解。
-
-## 五、线性方程组有解判定：秩相等才有解
-
-这一节的目标是把「有没有解、有几个解」翻译成两个秩的比较，并给出从增广矩阵直达结论的判定流程。
-
-对 $n$ 个未知数的方程组 $A\mathbf x=\mathbf b$（$A$ 是 $m\times n$ 矩阵），有解判定定理只有一句：
-
-$$
-A\mathbf x=\mathbf b \ \text{有解} \iff r(A) = r(A\mid\mathbf b)
-$$
-
-即**系数矩阵的秩等于增广矩阵的秩，才有解**。道理在阶梯形里一眼可见：若 $r(A)<r(A\mid\mathbf b)$，说明增广矩阵比系数矩阵多出一个非零行，那行形如 $0=k$（$k\neq0$），自相矛盾，无解。若两秩相等，设都等于 $r$，再与未知数个数 $n$ 比较：
-
-| 条件 | 结论 | 几何/直观说法 |
-| --- | --- | --- |
-| $r(A)<r(A\mid\mathbf b)$ | 无解 | 出现 $0=k$，方程打架 |
-| $r(A)=r(A\mid\mathbf b)=n$ | 唯一解 | 每个未知数都被主元钉死 |
-| $r(A)=r(A\mid\mathbf b)=r<n$ | 无穷多解 | 有 $n-r$ 个未知数可以自由取 |
-
-**判定流程（照做即可）**：
-
-1. 写出增广矩阵 $[A\mid\mathbf b]$；
-2. 用初等行变换化成行阶梯形；
-3. 分别数系数矩阵部分的非零行（得 $r(A)$）和整个增广矩阵的非零行（得 $r(A\mid\mathbf b)$）；
-4. 两秩不相等 → 无解；相等且等于 $n$ → 唯一解；相等且小于 $n$ → 无穷多解，**自由度 = $n-r$**。
-
-把「自由度 = $n-r$」记成口诀：**未知数有 $n$ 个，只有 $r$ 个被主元管住，剩下 $n-r$ 个没人管，爱取什么取什么**。唯一解时 $r=n$、自由度为 0，无穷多解时 $r<n$、自由度为 $n-r$。判定清楚了，最后一节解决「无穷多解到底怎么写全」。
-
-## 六、解的结构：通解 = 特解 + 基础解系
-
-这一节的目标是学会把无穷多解**一次性写完整**——方法就一条：先求一个特解，再求齐次方程的基础解系，两者相加。
-
-先分两类。**齐次方程组** $A\mathbf x=\mathbf 0$ 永远有解（至少零解 $\mathbf x=\mathbf 0$）；它的全部解组成一个「解空间」，这个空间的基就是**基础解系（fundamental system of solutions）**——一组个数最多、且线性无关的解向量。**非齐次方程组** $A\mathbf x=\mathbf b$ 的通解，等于它自己的**一个特解**，加上导出组（也就是把 $\mathbf b$ 换成 $\mathbf 0$ 的齐次方程）基础解系的任意线性组合：
-
-$$
-\mathbf x = \eta^\* + c_1\xi_1 + c_2\xi_2 + \cdots + c_{n-r}\xi_{n-r}
-$$
-
-其中 $\eta^\*$ 是特解，$\xi_1,\dots,\xi_{n-r}$ 是基础解系，$c_i$ 是任意常数。为什么是加？因为非齐次解减特解后正好满足齐次方程，所以「所有非齐次解 = 特解 + 所有齐次解」。
-
-**求基础解系的完整步骤**（含 $n-r$ 个解向量）：
-
-1. 把系数矩阵 $A$ 化成**行最简形**；
-2. 标出主元列（对应**主变量**）与非主元列（对应**自由变量**），自由变量有 $n-r$ 个；
-3. 让自由变量依次取 $\begin{bmatrix}1\\0\\ \vdots\\0\end{bmatrix},\begin{bmatrix}0\\1\\ \vdots\\0\end{bmatrix},\dots$ 这组单位值，每取一组，回代解出主变量的值；
-4. 每次得到的一个解向量就是一个 $\xi_i$，共 $n-r$ 个，它们线性无关，构成基础解系。
-
-步骤 3 里「自由变量轮流取 1、其余取 0」能保证解出来的向量自动线性无关，这是最省事的取法。到这里，理论闭环，下面三道例题把数字坐实。
-
-## 典型例题（数字均经 node 验算）
-
-::: tip 例 1 · 化行阶梯形求矩阵的秩 {#ex-elem-1}
-**题目**：求矩阵 $A=\begin{bmatrix}1&2&0&1\\2&4&1&0\\3&6&1&1\end{bmatrix}$ 的秩。
-
-<FigBox title="例 1：三行四列矩阵化阶梯形，数非零行得秩" kind="结构" note="从左到右依次是原矩阵 A、消第 1 列、行阶梯形。主元用红圈标出：第 1 列的 1 和第 3 列的 1，共两个主元，最后一整行被削成 0。看图能读出什么：非零行只有两行，所以秩等于 2。">
-<svg viewBox="0 0 500 190" role="img" aria-label="三行四列矩阵从原矩阵经消第一列到行阶梯形，两个主元用红圈标出，末行全零">
+<FigBox title="判解：先化阶梯形，再比两个秩" kind="结构" hint="输入是增广矩阵；操作为化成阶梯形后分别数两个秩；输出三种结局之一，第三种还要跟 n 比。" note="看图能读出什么：两秩不相等即无解（某行读出 0=k）；相等时再和 n 比：等于 n 唯一解，小于 n 无穷多解、自由度 n−r。">
+<svg viewBox="0 0 720 300" class="sf" role="img" aria-label="判解流程图：化阶梯形后比较系数矩阵与增广矩阵的秩，分三种结局">
   <defs>
-    <marker id="ex1-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <marker id="c03-f2-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-2)"/>
     </marker>
   </defs>
-  <text x="100" y="22" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">A（原矩阵）</text>
-  <text x="260" y="22" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">消第 1 列</text>
-  <text x="410" y="22" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">行阶梯形</text>
-  <g font-size="13" fill="var(--vp-c-text-1)" text-anchor="middle">
-    <text x="52" y="50">1</text><text x="90" y="50">2</text><text x="128" y="50">0</text><text x="166" y="50">1</text>
-    <text x="52" y="84">2</text><text x="90" y="84">4</text><text x="128" y="84">1</text><text x="166" y="84">0</text>
-    <text x="52" y="118">3</text><text x="90" y="118">6</text><text x="128" y="118">1</text><text x="166" y="118">1</text>
-  </g>
-  <g font-size="13" fill="var(--vp-c-text-1)" text-anchor="middle">
-    <text x="212" y="50">1</text><text x="250" y="50">2</text><text x="288" y="50">0</text><text x="326" y="50">1</text>
-    <text x="212" y="84">0</text><text x="250" y="84">0</text><text x="288" y="84">1</text><text x="326" y="84">−2</text>
-    <text x="212" y="118">0</text><text x="250" y="118">0</text><text x="288" y="118">1</text><text x="326" y="118">−2</text>
-  </g>
-  <g font-size="13" fill="var(--vp-c-text-1)" text-anchor="middle">
-    <text x="360" y="50">1</text><text x="398" y="50">2</text><text x="436" y="50">0</text><text x="474" y="50">1</text>
-    <text x="360" y="84">0</text><text x="398" y="84">0</text><text x="436" y="84">1</text><text x="474" y="84">−2</text>
-    <text x="360" y="118">0</text><text x="398" y="118">0</text><text x="436" y="118">0</text><text x="474" y="118">0</text>
-  </g>
-  <circle cx="52" cy="44" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="212" cy="44" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="288" cy="78" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="360" cy="44" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="436" cy="78" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <line x1="176" y1="84" x2="204" y2="84" stroke="var(--vp-c-text-2)" stroke-width="1.5" marker-end="url(#ex1-arrow)"/>
-  <line x1="336" y1="84" x2="352" y2="84" stroke="var(--vp-c-text-2)" stroke-width="1.5" marker-end="url(#ex1-arrow)"/>
-  <text x="190" y="74" font-size="10.5" fill="var(--vp-c-text-2)" text-anchor="middle">R₂−2R₁, R₃−3R₁</text>
-  <text x="344" y="74" font-size="10.5" fill="var(--vp-c-text-2)" text-anchor="middle">R₃−R₂</text>
-  <text x="250" y="150" font-size="12" fill="var(--vp-c-text-3)" text-anchor="middle">两个主元 → 非零行 2 行 → 秩 r(A)=2</text>
+  <text x="30" y="30" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">输入</text>
+  <text x="66" y="30" font-size="12.5" fill="var(--vp-c-text-2)" class="sf-t">增广矩阵 [A|b]</text>
+  <text x="250" y="30" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">操作</text>
+  <text x="286" y="30" font-size="12.5" fill="var(--vp-c-text-2)" class="sf-t">化阶梯形、数两个秩</text>
+  <text x="540" y="30" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">结果</text>
+  <rect x="30" y="52" width="180" height="56" rx="10" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1.4"/>
+  <text x="120" y="86" font-size="13" text-anchor="middle" fill="var(--vp-c-text-1)" class="sf-t">[A | b]</text>
+  <line x1="216" y1="80" x2="262" y2="80" stroke="var(--vp-c-text-2)" stroke-width="1.6" marker-end="url(#c03-f2-arrow)"/>
+  <rect x="268" y="52" width="196" height="56" rx="10" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4"/>
+  <text x="366" y="78" font-size="12.5" text-anchor="middle" fill="var(--vp-c-text-1)" class="sf-t">化成行阶梯形</text>
+  <text x="366" y="98" font-size="11.5" text-anchor="middle" fill="var(--vp-c-text-2)" class="sf-t">数 r(A) 与 r(A|b)</text>
+  <line x1="366" y1="112" x2="366" y2="140" stroke="var(--vp-c-text-2)" stroke-width="1.6" marker-end="url(#c03-f2-arrow)"/>
+  <rect x="252" y="146" width="228" height="44" rx="10" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4"/>
+  <text x="366" y="173" font-size="12.5" text-anchor="middle" fill="var(--vp-c-text-1)" class="sf-t">r(A) ＝ r(A|b) 吗？</text>
+  <line x1="252" y1="168" x2="196" y2="168" stroke="var(--vp-c-text-2)" stroke-width="1.6" marker-end="url(#c03-f2-arrow)"/>
+  <text x="224" y="160" font-size="11" fill="var(--vp-c-text-2)" text-anchor="middle" class="sf-t">不相等</text>
+  <rect x="30" y="146" width="162" height="44" rx="10" fill="var(--vp-c-danger-1)" fill-opacity="0.10" stroke="var(--vp-c-danger-1)" stroke-width="1.4"/>
+  <text x="111" y="166" font-size="12.5" text-anchor="middle" fill="var(--vp-c-text-1)" class="sf-t">无解</text>
+  <text x="111" y="182" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-2)" class="sf-t">某行读出来 0 = k</text>
+  <line x1="480" y1="168" x2="524" y2="168" stroke="var(--vp-c-text-2)" stroke-width="1.6" marker-end="url(#c03-f2-arrow)"/>
+  <text x="502" y="160" font-size="11" fill="var(--vp-c-text-2)" text-anchor="middle" class="sf-t">相等</text>
+  <rect x="530" y="146" width="160" height="44" rx="10" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1.4"/>
+  <text x="610" y="173" font-size="12" text-anchor="middle" fill="var(--vp-c-text-1)" class="sf-t">再跟 n 比一次</text>
+  <line x1="610" y1="192" x2="610" y2="214" stroke="var(--vp-c-text-2)" stroke-width="1.6" marker-end="url(#c03-f2-arrow)"/>
+  <rect x="500" y="220" width="196" height="40" rx="10" fill="var(--vp-c-brand-1)" fill-opacity="0.10" stroke="var(--vp-c-brand-1)" stroke-width="1.4"/>
+  <text x="598" y="245" font-size="12" text-anchor="middle" fill="var(--vp-c-text-1)" class="sf-t">r ＝ n → 唯一解</text>
+  <rect x="270" y="220" width="218" height="40" rx="10" fill="var(--vp-c-brand-1)" fill-opacity="0.10" stroke="var(--vp-c-brand-1)" stroke-width="1.4"/>
+  <text x="379" y="245" font-size="12" text-anchor="middle" fill="var(--vp-c-text-1)" class="sf-t">r ＜ n → 无穷多解（自由度 n−r）</text>
+  <line x1="530" y1="240" x2="496" y2="240" stroke="var(--vp-c-text-2)" stroke-width="1.2" stroke-dasharray="4 3"/>
 </svg>
 </FigBox>
 
-**先想什么**：不用算任何行列式，直接做初等行变换化成阶梯形，数非零行。
+## 四、无穷多解怎么写全：一个特解 + 齐次方程的那几支
 
-**步骤**：
-1. 主元 $a_{11}=1$，做 $R_2\leftarrow R_2-2R_1$、$R_3\leftarrow R_3-3R_1$：第二、三行第 1 列变成 0；
-2. 第 2 列从第 2 行往下全为 0，右移到第 3 列，主元 $a_{23}=1$，做 $R_3\leftarrow R_3-R_2$：第三行第 3 列变成 0；
-3. 得到行阶梯形，非零行有 2 行，所以 $r(A)=2$。
+先把两类方程组分开：右端全 $0$ 的 $A\mathbf x=\mathbf 0$ 叫**齐次方程组**，它永远有解（全取 $0$ 就是）；$A\mathbf x=\mathbf b$ 叫非齐次。
 
-**为什么**：初等变换不改变秩，而阶梯形里每个主元独占一行，非零行数直接等于秩。
+把本页那张表继续往上清，得到行最简形：
 
-**验算**：`rank([[1,2,0,1],[2,4,1,0],[3,6,1,1]]) = 2` ✓（node 验算）。另外按子式定义也能复核：存在一个 2 阶非零子式 $\begin{vmatrix}1&0\\2&1\end{vmatrix}=1\neq0$，而所有 3 阶子式都含两行成比例的行，全为 0，故最高非零子式是 2 阶，秩确为 2。
+$$
+[A\mid\mathbf b]\to\left[\begin{array}{cccc|c}1&2&0&1&1\\0&0&1&0&0\\0&0&0&0&0\end{array}\right]
+$$
+
+读一遍：主元在第 1、3 列，所以 $x_1,x_3$ 是主变量，$x_2,x_4$ 是自由变量；第 1 行读出 $x_1+2x_2+x_4=1$，第 2 行读出 $x_3=0$。
+
+接下来三步，让自由变量轮流取 $1$、其余取 $0$。注意第 1 步代的是右端为 $(1,2,3)$ 的非齐次方程，后两步代的是**右端全 $0$** 的齐次方程 $A\mathbf x=\mathbf 0$——主变量要用右端 $0$ 重算，不能沿用第 1 步的 1：
+
+1. **特解**（右端是 $(1,2,3)$）：自由变量全取 $0$，得 $x_1=1$、$x_3=0$，即 $\eta=(1,0,0,0)$；
+2. **第一支**（右端全 $0$）：$x_2=1$、$x_4=0$，由 $x_1+2x_2+x_4=0$ 得 $x_1=-2$，即 $\xi_1=(-2,1,0,0)$；
+3. **第二支**（右端全 $0$）：$x_2=0$、$x_4=1$，同样由 $x_1=-2x_2-x_4$ 得 $x_1=-1$，即 $\xi_2=(-1,0,0,1)$。
+
+于是全部解可以写成一条式子：
+
+$$
+\mathbf x=(1,0,0,0)+c_1(-2,1,0,0)+c_2(-1,0,0,1)\qquad(c_1,c_2\ \text{任意})
+$$
+
+**为什么是加**：两个非齐次解相减，右端抵消，剩下的是齐次解；反过来特解加任何齐次解还是非齐次解，所以「所有非齐次解 = 一个特解 + 所有齐次解」。教材把 $\xi_1,\xi_2$ 这两支叫**基础解系**——齐次方程的一组「谁也凑不出谁」的解，由它们能拼出齐次方程的全部解。本页为了不提前用第 4 章的词，只叫「齐次解的两支」；这两支为什么够用、为什么彼此凑不出对方，第 4 章才正式证明。看到教材上「基础解系」四个字，回来对上它们即可。
+
+## 五、顺带：同一套行变换还能求逆
+
+把 $A$ 和单位阵并排放成 $(A\mid E)$，只做行变换把左半化成 $E$，右半就自动变成 $A^{-1}$。为什么：每步行变换都是左乘一个可逆矩阵，把 $A$ 变成 $E$ 的那串乘法的积按定义就是 $A^{-1}$，它作用在 $E$ 上就是右半。
+
+用上一章那张 $M$ 走一遍（上一章已算出 $\lvert M\rvert=1$、$M^{-1}=M^*$，正好互验）：
+
+$$
+\left[\begin{array}{ccc|ccc}1&2&3&1&0&0\\0&1&4&0&1&0\\5&6&0&0&0&1\end{array}\right]
+\xrightarrow{R_3-5R_1}
+\left[\begin{array}{ccc|ccc}1&2&3&1&0&0\\0&1&4&0&1&0\\0&-4&-15&-5&0&1\end{array}\right]
+\xrightarrow{R_3+4R_2}
+\left[\begin{array}{ccc|ccc}1&2&3&1&0&0\\0&1&4&0&1&0\\0&0&1&-5&4&1\end{array}\right]
+$$
+
+再依次 $R_2-4R_3$、$R_1-3R_3$、$R_1-2R_2$，把主元上方的数也清干净：
+
+$$
+\to\left[\begin{array}{ccc|ccc}1&0&0&-24&18&5\\0&1&0&20&-15&-4\\0&0&1&-5&4&1\end{array}\right]
+$$
+
+右半正是上一章的 $M^*$——两条完全不同的路算出同一张表，这就是最好的核对。
+
+<FigBox title="并排做行变换：(A | E) 化到 (E | A⁻¹)" kind="结构" hint="左：竖线左边 A、右边贴单位阵 E；中：只做行变换把左半化成 E；右：右半同时变成 A⁻¹。" note="看图能读出什么：左右同步变化，把 A 变成 E 的那串动作作用在 E 上就得到逆矩阵；右半与上一章的伴随矩阵一致，两条路互验。">
+<svg viewBox="0 0 720 250" class="sf" role="img" aria-label="把 A 与单位阵并排后只用行变换，左半化成单位阵的同时右半变成逆矩阵">
+  <defs>
+      <marker id="c03-f3-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-2)"/>
+      </marker>
+    </defs>
+  <text x="34" y="34" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">输入</text>
+  <text x="70" y="34" font-size="12.5" fill="var(--vp-c-text-2)" class="sf-t">(A | E)</text>
+  <text x="330" y="34" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">操作</text>
+  <text x="366" y="34" font-size="12.5" fill="var(--vp-c-text-2)" class="sf-t">只做行变换</text>
+  <text x="540" y="34" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">结果</text>
+  <text x="576" y="34" font-size="12.5" fill="var(--vp-c-text-2)" class="sf-t">(E | A⁻¹)</text>
+  <g stroke="var(--vp-c-divider)" stroke-width="1" fill="none">
+    <line x1="30" y1="76" x2="306" y2="76"/><line x1="30" y1="116" x2="306" y2="116"/>
+    <line x1="30" y1="156" x2="306" y2="156"/><line x1="30" y1="196" x2="306" y2="196"/>
+    <line x1="30" y1="76" x2="30" y2="196"/><line x1="76" y1="76" x2="76" y2="196"/>
+    <line x1="122" y1="76" x2="122" y2="196"/><line x1="168" y1="76" x2="168" y2="196"/>
+    <line x1="214" y1="76" x2="214" y2="196"/><line x1="260" y1="76" x2="260" y2="196"/>
+    <line x1="306" y1="76" x2="306" y2="196"/>
+  </g>
+  <line x1="168" y1="76" x2="168" y2="196" stroke="var(--vp-c-text-2)" stroke-width="2.4"/>
+  <g font-size="13" text-anchor="middle" fill="var(--vp-c-text-1)" class="sf-t">
+    <text x="53" y="101">1</text><text x="99" y="101">2</text><text x="145" y="101">3</text>
+    <text x="191" y="101">1</text><text x="237" y="101">0</text><text x="283" y="101">0</text>
+    <text x="53" y="141">0</text><text x="99" y="141">1</text><text x="145" y="141">4</text>
+    <text x="191" y="141">0</text><text x="237" y="141">1</text><text x="283" y="141">0</text>
+    <text x="53" y="181">5</text><text x="99" y="181">6</text><text x="145" y="181">0</text>
+    <text x="191" y="181">0</text><text x="237" y="181">0</text><text x="283" y="181">1</text>
+  </g>
+  <line x1="316" y1="136" x2="352" y2="136" stroke="var(--vp-c-text-2)" stroke-width="1.6" marker-end="url(#c03-f3-arrow)"/>
+
+  <g stroke="var(--vp-c-divider)" stroke-width="1" fill="none">
+    <line x1="392" y1="76" x2="668" y2="76"/><line x1="392" y1="116" x2="668" y2="116"/>
+    <line x1="392" y1="156" x2="668" y2="156"/><line x1="392" y1="196" x2="668" y2="196"/>
+    <line x1="392" y1="76" x2="392" y2="196"/><line x1="438" y1="76" x2="438" y2="196"/>
+    <line x1="484" y1="76" x2="484" y2="196"/><line x1="530" y1="76" x2="530" y2="196"/>
+    <line x1="576" y1="76" x2="576" y2="196"/><line x1="622" y1="76" x2="622" y2="196"/>
+    <line x1="668" y1="76" x2="668" y2="196"/>
+  </g>
+  <line x1="530" y1="76" x2="530" y2="196" stroke="var(--vp-c-text-2)" stroke-width="2.4"/>
+  <g font-size="13" text-anchor="middle" fill="var(--vp-c-text-1)" class="sf-t">
+    <text x="415" y="101">1</text><text x="461" y="101">0</text><text x="507" y="101">0</text>
+    <text x="553" y="101">−24</text><text x="599" y="101">18</text><text x="645" y="101">5</text>
+    <text x="415" y="141">0</text><text x="461" y="141">1</text><text x="507" y="141">0</text>
+    <text x="553" y="141">20</text><text x="599" y="141">−15</text><text x="645" y="141">−4</text>
+    <text x="415" y="181">0</text><text x="461" y="181">0</text><text x="507" y="181">1</text>
+    <text x="553" y="181">−5</text><text x="599" y="181">4</text><text x="645" y="181">1</text>
+  </g>
+  <text x="360" y="230" font-size="11.5" fill="var(--vp-c-text-3)" text-anchor="middle" class="sf-t">行变换序列：R₃−5R₁ → R₃＋4R₂ → R₂−4R₃ → R₁−3R₃ → R₁−2R₂</text>
+</svg>
+</FigBox>
+
+## 例题
+
+::: tip 例 1 · 化阶梯形，数秩
+**题目**：求 $A=\begin{bmatrix}1&2&3&4\\1&3&5&7\\2&5&8&11\end{bmatrix}$ 的秩。
+
+**先猜**：第 3 行像是前两行加起来（$1+1=2$、$2+3=5$、$3+5=8$、$4+7=11$）；若如此，消完末行会变全零，秩应当是 $2$。
+
+**再算**：$R_2-R_1$ 得 $(0,1,2,3)$，$R_3-2R_1$ 得 $(0,1,2,3)$，再 $R_3-R_2$ 得全零行：
+
+$$
+\begin{bmatrix}1&2&3&4\\1&3&5&7\\2&5&8&11\end{bmatrix}
+\xrightarrow{R_2-R_1,\ R_3-2R_1}
+\begin{bmatrix}1&2&3&4\\0&1&2&3\\0&1&2&3\end{bmatrix}
+\xrightarrow{R_3-R_2}
+\begin{bmatrix}1&2&3&4\\0&1&2&3\\0&0&0&0\end{bmatrix}
+$$
+
+主元两个，$r(A)=2$。
+
+*（为什么能这么数：每步都是可逆行变换，秩不变；阶梯形里主元个数就是非零行数。）*
+
+**再回代**：用子式核一遍。第 1、2 行与第 1、2 列组成的 $\begin{vmatrix}1&2\\1&3\end{vmatrix}=1\ne0$，二阶非零子式存在；三阶子式只能取这三行，而第 3 行是前两行之和，所以全是 $0$。最高非零子式 2 阶，与阶梯形一致。
 :::
 
-::: tip 例 2 · 判定唯一解并求解 {#ex-elem-2}
-**题目**：判定方程组 $\begin{cases}x+y+z=6\\x-y+z=2\\x+y-z=0\end{cases}$ 的解，并求出唯一解。
+::: tip 例 2 · 判唯一解并求解
+**题目**：解方程组 $\begin{cases}x+y+z=6\\ x-y+z=2\\ x+y-z=0\end{cases}$。
 
-<FigBox title="例 2：增广矩阵化阶梯形，三个主元判唯一解" kind="结构" note="左是增广矩阵，右是两步行变换后的阶梯形。竖线右边是常数项，消元时一起变。三个主元分别在 1、−2、−2 三个位置，铺满三列。看图能读出什么：三个未知数都被主元管住，r(A)=r(A|b)=3=n，唯一解。">
-<svg viewBox="0 0 400 190" role="img" aria-label="三行四列增广矩阵经消元得到三个主元的阶梯形，判定唯一解">
-  <defs>
-    <marker id="ex2-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-2)"/>
-    </marker>
-  </defs>
-  <text x="104" y="22" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">增广矩阵</text>
-  <text x="296" y="22" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">阶梯形</text>
-  <line x1="150" y1="40" x2="150" y2="126" stroke="var(--vp-c-divider)" stroke-width="1.4"/>
-  <line x1="332" y1="40" x2="332" y2="126" stroke="var(--vp-c-divider)" stroke-width="1.4"/>
-  <g font-size="13" fill="var(--vp-c-text-1)" text-anchor="middle">
-    <text x="48" y="50">1</text><text x="84" y="50">1</text><text x="120" y="50">1</text><text x="176" y="50">6</text>
-    <text x="48" y="84">1</text><text x="84" y="84">−1</text><text x="120" y="84">1</text><text x="176" y="84">2</text>
-    <text x="48" y="118">1</text><text x="84" y="118">1</text><text x="120" y="118">−1</text><text x="176" y="118">0</text>
-  </g>
-  <g font-size="13" fill="var(--vp-c-text-1)" text-anchor="middle">
-    <text x="232" y="50">1</text><text x="268" y="50">1</text><text x="304" y="50">1</text><text x="360" y="50">6</text>
-    <text x="232" y="84">0</text><text x="268" y="84">−2</text><text x="304" y="84">0</text><text x="360" y="84">−4</text>
-    <text x="232" y="118">0</text><text x="268" y="118">0</text><text x="304" y="118">−2</text><text x="360" y="118">−6</text>
-  </g>
-  <circle cx="48" cy="44" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="84" cy="78" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="120" cy="112" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="232" cy="44" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="268" cy="78" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="304" cy="112" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <line x1="196" y1="84" x2="224" y2="84" stroke="var(--vp-c-text-2)" stroke-width="1.5" marker-end="url(#ex2-arrow)"/>
-  <text x="210" y="74" font-size="10.5" fill="var(--vp-c-text-2)" text-anchor="middle">R₂−R₁, R₃−R₁</text>
-  <text x="200" y="150" font-size="12" fill="var(--vp-c-text-3)" text-anchor="middle">三个主元 → r(A)=r(A|b)=3=n → 唯一解</text>
-</svg>
-</FigBox>
+**先猜**：三个方程互相独立（第 2 式含 $-y$、第 3 式含 $-z$，都不是别式的倍数），系数表多半满秩，$r=n=3$ 该唯一解。
 
-**先想什么**：先消元看秩，不急着回代；确认两秩相等且都等于 3，再回代。
+**再算**：
 
-**步骤**：
-1. 增广矩阵 $\left[\begin{array}{ccc|c}1&1&1&6\\1&-1&1&2\\1&1&-1&0\end{array}\right]$，做 $R_2\leftarrow R_2-R_1$、$R_3\leftarrow R_3-R_1$，得 $\left[\begin{array}{ccc|c}1&1&1&6\\0&-2&0&-4\\0&0&-2&-6\end{array}\right]$；
-2. 三个主元，$r(A)=r(A\mid\mathbf b)=3=n$，唯一解；
-3. 回代：由 $-2z=-6$ 得 $z=3$，由 $-2y=-4$ 得 $y=2$，再由 $x+y+z=6$ 得 $x=1$。
+$$
+\left[\begin{array}{ccc|c}1&1&1&6\\1&-1&1&2\\1&1&-1&0\end{array}\right]
+\xrightarrow{R_2-R_1,\ R_3-R_1}
+\left[\begin{array}{ccc|c}1&1&1&6\\0&-2&0&-4\\0&0&-2&-6\end{array}\right]
+$$
 
-**为什么**：两秩相等且等于未知数个数，说明每个未知数都被一个主元唯一确定，回代每步只剩一个未知数。
+三个主元，$r(A)=r(A\mid\mathbf b)=3=n$，唯一解。由最后一行 $-2z=-6$ 得 $z=3$，第二行 $-2y=-4$ 得 $y=2$，代回第一行 $x+2+3=6$ 得 $x=1$。
 
-**验算**：`[1,2,3]` 代回三式：$1+2+3=6$、$1-2+3=2$、$1+2-3=0$，全成立（node 验算：$A\cdot[1,2,3]=[6,2,0]$）。
+*（为什么从下往上代：最下面那行只含一个新未知数，解出来才能喂给上一行。）*
+
+**再回代**：把 $(1,2,3)$ 代回原方程——$1+2+3=6$、$1-2+3=2$、$1+2-3=0$，三式全成立。
 :::
 
-::: tip 例 3 · 无穷多解：通解 = 特解 + 基础解系 {#ex-elem-3}
-**题目**：求方程组 $\begin{cases}x_1+2x_2+x_3+x_4=1\\2x_1+4x_2+2x_3+3x_4=5\\3x_1+6x_2+3x_3+4x_4=6\end{cases}$ 的全部解。
+::: tip 例 3 · 无穷多解，写通解
+**题目**：求本页那张表对应方程组的全部解：
 
-<FigBox title="例 3：四未知数方程组化阶梯形，两主元判无穷多解" kind="结构" note="左是四未知数的增广矩阵，右是阶梯形：第 1、4 列是主元列（红圈），第 2、3 列是自由列（浅色带），末行被削成 0=0。看图能读出什么：主元 2 个、未知数 4 个，r(A)=r(A|b)=2&lt;4，无穷多解，自由度 4−2=2。">
-<svg viewBox="0 0 460 190" role="img" aria-label="四未知数增广矩阵经消元得两个主元的阶梯形，末行全零，判定无穷多解">
-  <defs>
-    <marker id="ex3-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-2)"/>
-    </marker>
-  </defs>
-  <text x="104" y="22" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">增广矩阵</text>
-  <text x="300" y="22" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">阶梯形</text>
-  <line x1="150" y1="40" x2="150" y2="126" stroke="var(--vp-c-divider)" stroke-width="1.4"/>
-  <line x1="344" y1="40" x2="344" y2="126" stroke="var(--vp-c-divider)" stroke-width="1.4"/>
-  <g font-size="13" fill="var(--vp-c-text-1)" text-anchor="middle">
-    <text x="30" y="50">1</text><text x="62" y="50">2</text><text x="94" y="50">1</text><text x="126" y="50">1</text><text x="176" y="50">1</text>
-    <text x="30" y="84">2</text><text x="62" y="84">4</text><text x="94" y="84">2</text><text x="126" y="84">3</text><text x="176" y="84">5</text>
-    <text x="30" y="118">3</text><text x="62" y="118">6</text><text x="94" y="118">3</text><text x="126" y="118">4</text><text x="176" y="118">6</text>
-  </g>
-  <g font-size="13" fill="var(--vp-c-text-1)" text-anchor="middle">
-    <text x="224" y="50">1</text><text x="256" y="50">2</text><text x="288" y="50">1</text><text x="320" y="50">1</text><text x="370" y="50">1</text>
-    <text x="224" y="84">0</text><text x="256" y="84">0</text><text x="288" y="84">0</text><text x="320" y="84">1</text><text x="370" y="84">3</text>
-    <text x="224" y="118">0</text><text x="256" y="118">0</text><text x="288" y="118">0</text><text x="320" y="118">0</text><text x="370" y="118">0</text>
-  </g>
-  <rect x="246" y="40" width="56" height="86" fill="var(--vp-c-brand-1)" opacity="0.07"/>
-  <text x="274" y="35" font-size="10.5" fill="var(--vp-c-brand-2)">自由列</text>
-  <circle cx="224" cy="44" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <circle cx="320" cy="78" r="13" fill="none" stroke="#e5484d" stroke-width="1.6"/>
-  <line x1="188" y1="84" x2="216" y2="84" stroke="var(--vp-c-text-2)" stroke-width="1.5" marker-end="url(#ex3-arrow)"/>
-  <text x="202" y="74" font-size="10.5" fill="var(--vp-c-text-2)" text-anchor="middle">R₂−2R₁, R₃−3R₁, R₃−R₂</text>
-  <text x="230" y="150" font-size="12" fill="var(--vp-c-text-3)" text-anchor="middle">两个主元 → r(A)=r(A|b)=2&lt;4 → 无穷多解，自由度 2</text>
-</svg>
-</FigBox>
+$$
+\begin{cases}x_1+2x_2-x_3+x_4=1\\ 2x_1+4x_2-3x_3+2x_4=2\\ 3x_1+6x_2-4x_3+3x_4=3\end{cases}
+$$
 
-**先想什么**：看到第 2、3 行是第 1 行的倍数，猜秩只有 2；消元验证后，自由变量取单位值回代求基础解系。
+**先猜**：第 2、3 行像是第 1 行改了一点，秩应小于 3；右端也跟着改（$2$、$3$），两秩很可能相等。
 
-**步骤**：
-1. 增广矩阵做 $R_2\leftarrow R_2-2R_1$、$R_3\leftarrow R_3-3R_1$，再 $R_3\leftarrow R_3-R_2$，得阶梯形 $\left[\begin{array}{cccc|c}1&2&1&1&1\\0&0&0&1&3\\0&0&0&0&0\end{array}\right]$；
-2. 两秩相等且等于 2，$n=4$，无穷多解，自由度 $n-r=2$；主变量是 $x_1,x_4$，自由变量是 $x_2,x_3$；
-3. 回代：$x_4=3$，$x_1+2x_2+x_3+x_4=1\Rightarrow x_1=-2-2x_2-x_3$；
-4. 令 $x_2=c_1,\ x_3=c_2$，通解 $\mathbf x=\begin{bmatrix}-2-2c_1-c_2\\c_1\\c_2\\3\end{bmatrix}=\begin{bmatrix}-2\\0\\0\\3\end{bmatrix}+c_1\begin{bmatrix}-2\\1\\0\\0\end{bmatrix}+c_2\begin{bmatrix}-1\\0\\1\\0\end{bmatrix}$。
+**再算**：化成阶梯形与最简形（第二节已走完）：
 
-**为什么**：特解取自由变量为 0 得 $\eta^\*=(-2,0,0,3)$；基础解系让自由变量 $(x_2,x_3)$ 轮流取 $(1,0)$ 和 $(0,1)$，回代得 $\xi_1=(-2,1,0,0)$、$\xi_2=(-1,0,1,0)$，两者线性无关，正好 $n-r=2$ 个。
+$$
+\left[\begin{array}{cccc|c}1&2&0&1&1\\0&0&1&0&0\\0&0&0&0&0\end{array}\right]
+$$
 
-**验算**：`rank(A)=2`、`rank([A|b])=2`；`A·特解=[1,5,6]`；`A·ξ1=[0,0,0]`、`A·ξ2=[0,0,0]`，全部成立（node 验算）。代回原方程组也逐一吻合。
+两秩相等且 $r=2$，$n=4$，所以无穷多解，自由度 $4-2=2$；主变量 $x_1,x_3$，自由变量 $x_2,x_4$。按第四节的三步取特解 $\eta=(1,0,0,0)$、$\xi_1=(-2,1,0,0)$、$\xi_2=(-1,0,0,1)$，得
+
+$$
+\mathbf x=(1,0,0,0)+c_1(-2,1,0,0)+c_2(-1,0,0,1)
+$$
+
+*（为什么这样取：自由变量轮流取 $1$，每支只在一个自由变量上有分量。）*
+
+**再回代**：取 $c_1=3$、$c_2=5$ 得 $x=(-10,3,0,5)$，代回原方程组：$-10+6+0+5=1$、$-20+12+0+10=2$、$-30+18+0+15=3$，三式都对；$\xi_1,\xi_2$ 代进齐次方程也都得 $(0,0,0)$。
 :::
 
-## 易错清单 + 自检
+## 这一页带走三句话
 
-- **只消系数矩阵、忘了常数项**：初等行变换必须对增广矩阵整行一起做，竖线右边的 $\mathbf b$ 也要跟着变，否则秩算对了、解算错了。
-- **主元为 0 却不换行**：当前列主元恰好是 0 时，先和下方某行交换换出非零主元，不能硬除；交换行也是合法初等行变换。
-- **把「无解」和「无穷多解」混为一谈**：$0=k$（$k\neq0$）是无解、$0=0$ 是无穷多解，判据是**两秩是否相等**，不是「有没有 0 行」。
-- **自由度算错**：自由度是 $n-r$，其中 $n$ 是**未知数个数**（增广矩阵列数减 1），不是方程个数、不是行数。
-- **基础解系个数不对**：齐次方程 $A\mathbf x=\mathbf 0$ 的基础解系含 $n-r$ 个解向量；漏一个自由变量取单位值，就会少一个、写不全通解。
-- **回代顺序颠倒**：阶梯形必须从最后一行往上代；行最简形则可以每行直接读出一个变量。
+1. 三种初等行变换都可逆，所以整条流水线不改变解集；解方程组只动行，不动列。
+2. 化成行阶梯形后数主元，主元个数就是秩；$r(A)=r(A\mid\mathbf b)$ 才有解，$=n$ 唯一解，$<n$ 无穷多解、自由度 $n-r$。
+3. 无穷多解 = 一个特解 + 齐次解的自由组合（自由变量轮流取 $1$ 得到）；同一套行变换还能把 $(A\mid E)$ 化成 $(E\mid A^{-1})$。
 
-**自检**：任取 $\begin{cases}x+y+z=1\\x+y+z=2\end{cases}$，问自己——$r(A)$ 与 $r(A\mid\mathbf b)$ 各是多少、有无解？再取 $\begin{cases}x+y+z=1\\x+y+z=1\end{cases}$，$r$、$n$、自由度各是多少？两个都能用「化阶梯形、比秩」答出来，这一页就是你的了。
-
-## 接下来
-
-这一章你掌握了「消元求秩、比秩判解」这套标准动作，它和现代版是同一件事的两种讲法：想从几何上看「$0=k$ 为什么是两条平行直线、$n-r$ 个自由变量为什么张成解空间」，顺着读现代版第 3 章 [高斯消元与线性方程组](../linalg/03-elimination) 和第 4 章 [向量空间与四大子空间](../linalg/04-subspaces)。下一章经典版第 4 章《向量组的线性相关性》会把「秩」和「基础解系」换成向量组的语言重新讲一遍，建议紧接着读。
+下一步是 [04 · 向量组的线性相关性](./04-vectors)：本页数出的秩、写出的那几支齐次解，到那里换成向量组的语言再讲一遍。想从几何上看「$0=k$ 为什么就是方程打架」，读现代版第 3 章 [03 · 高斯消元与线性方程组](../linalg/03-elimination)。

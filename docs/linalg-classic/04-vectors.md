@@ -1,377 +1,254 @@
 ---
 title: 04 · 向量组的线性相关性
-description: 对齐同济《线性代数》第四章：线性组合与线性表出、线性相关与线性无关的定义和判定、判相关三步、n 个 n 维向量看行列式、极大线性无关组的求法、向量组的秩与矩阵秩的关系，以及向量空间、子空间、基与维数。
+description: 对齐同济《线性代数》第四章：判一捆向量有没有冗余，用齐次方程、阶梯形主元、行列式三档判法判定，再挑出极大无关组，把向量组的秩与基、维数落到同一个数上。
 ---
 
 # 04 · 向量组的线性相关性
 
-<Meta time="50 min" level="核心" note="最容易错在两处：一是把线性无关误当成『两两都不成比例』，二是把向量组的秩和矩阵的秩当成两个数——其实它们是同一个数" />
+<Meta time="30 min" level="核心" note="最容易错的两处：把线性无关当成『两两不成比例』；求极大无关组时从阶梯形里取列，而不是回原矩阵按主元列号取" />
+
+**这一页要解决的三类题**（只写动作，术语在正文里才出现）：
+
+1. 一捆向量摆在一起，判有没有哪一支是白搭的；有，就写出它被其余几支怎么凑出来的；
+2. 把白搭的挑掉，剩下一组「不多不少」的骨架，数出里面有几支；
+3. 给这捆向量一个数，说清它撑起了多大一块地方。
 
 **对应教材**：同济《线性代数》第四章「向量组的线性相关性」。
 
-**这一页要解决什么**：前面三章你已经会算行列式、会做矩阵初等行变换、会解方程组。这一章把一堆向量打包成一个「向量组」，问它们之间有没有冗余——哪些向量能被其余几个凑出来。读完你应该能：用「判相关三步」判断一组向量线性相关还是线性无关；用行列式秒判 n 个 n 维向量；从向量组里挑出极大无关组、算出向量组的秩；并把「基、维数」这两个词落到「向量组的秩」这一个数上。
-
 ::: tip 读这页之前
-- **需要会**：行列式的计算（经典版第 1 章《行列式》）；矩阵的初等行变换与矩阵的秩（[03 · 矩阵的初等变换与线性方程组](03-elementary.md)）；齐次线性方程组 $A\mathbf x=\mathbf 0$ 有非零解的判别。
-- **符号约定**：向量用 $\alpha_1,\alpha_2,\dots,\alpha_m$、$\beta$、$\gamma$ 表示，都是列向量（写成分量就是竖着的一列数）；实数系数用 $k_i$、$c$；$\mathbf 0$ 是零向量；$\operatorname{rank}(A)$ 或 $r(A)$ 是矩阵的秩，$r(\alpha_1,\dots,\alpha_m)$ 是向量组的秩。完整符号表见 [符号与约定](../guide/notation.md)。
-- **本页术语**：线性组合、线性相关、线性无关、极大无关组、向量组的秩、基、维数，正文首次出现处都会解释。
-- **先建立一个观念**：向量组研究的核心问题是「这捆向量里有没有多余的一个」。线性相关就是有冗余，线性无关就是没有冗余。
+- **需要会**：化行阶梯形、数主元（[03 · 矩阵的初等变换与线性方程组](03-elementary.md)）；$A\mathbf x=\mathbf 0$ 何时有非零解（同一页）；行列式怎么算（[01 · 行列式](01-determinant.md)）。
+- **这一页的记号**：向量写成一列数，$\alpha_1=(1,1,0)^T$ 就是 $\begin{bmatrix}1\\1\\0\end{bmatrix}$；$m$ 是**向量个数**，$n$ 是**分量个数**；$r(A)$ 是矩阵的秩，$r(\alpha_1,\dots,\alpha_m)$ 是向量组的秩。
 :::
 
-把单个向量想成一支箭，把一组向量想成一捆箭。单看一支箭，你只关心它指向哪里、有多长；把一捆箭放一起，你要问的是：这捆箭里，有没有哪一支其实能被另外几支「凑」出来？比如三支箭里有两支方向完全一样，第三支却指向别处——那前两支里必有一支是多余的。这一页就把「凑出来」「多余」这些说法翻译成**线性组合、线性相关、极大无关组、向量组的秩、基与维数**几个词，再告诉你判断和计算的标准动作。
+## 一、把一捆向量摆在一起，看有没有白搭的那一支
 
-## 结论先行
-
-1. **线性组合 = 每个向量乘一个系数再相加**：$\beta$ 能由向量组 $\alpha_1,\dots,\alpha_m$ 线性表出，等价于方程组 $A\mathbf x=\beta$ 有解（$A$ 的列就是这些向量）。
-2. **线性相关 ⇔ 至少一个向量能由其余向量线性表出** ⇔ 存在不全为零的系数 $k_i$ 使 $k_1\alpha_1+\cdots+k_m\alpha_m=\mathbf 0$；否则线性无关。
-3. **判相关三步**：按列排矩阵 → 化行阶梯形数秩 $r$ → $r<m$ 则相关、$r=m$ 则无关。
-4. **n 个 n 维向量线性无关 ⇔ 行列式 ≠ 0**；更省事的一条：**向量个数 > 维数 ⇒ 必相关**。
-5. **极大无关组是「独立、又能表出全体」的骨架**，它的向量个数就是**向量组的秩**，等于对应矩阵的秩，也等于它张成的向量空间的维数。
-
-::: tip 一句话抓住本质，后面全是它的展开
-- **线性相关 = 这捆箭里有冗余**（有人能被别人凑出来）。
-- **极大无关组 = 去掉所有冗余之后剩下的骨架**。
-- **秩 = 骨架里还剩几支箭** = 矩阵的秩 = 生成空间的维数。
-:::
-
-## 一、向量组与线性组合：把箭头打包成一捆
-
-这一节的目标是把你熟悉的「单个向量」升级成「一捆向量」，并说清「一个向量能被这捆向量凑出来」这件事怎么用方程判断。
-
-**n 维向量**就是 n 个有序数排成的一列（列向量）或一行（行向量）。本章统一用列向量：
+取四个三维向量摆成一捆：$\gamma_1=(1,1,0)^T$、$\gamma_2=(0,1,1)^T$、$\gamma_3=(1,0,1)^T$、$\gamma_4=(2,2,2)^T$。光看坐标串看不出关系，那就给每个配一个数，加起来试试：
 
 $$
-\alpha=\begin{bmatrix}a_1\\a_2\\\vdots\\a_n\end{bmatrix}
+\gamma_1+\gamma_2+\gamma_3=(1+0+1,\ 1+1+0,\ 0+1+1)^T=(2,2,2)^T=\gamma_4
 $$
 
-把若干个维数相同的向量放在一起，就得到一个**向量组**（vector group）$\alpha_1,\alpha_2,\dots,\alpha_m$。向量组研究的不再是单支箭，而是这一捆箭整体有没有冗余。
-
-**线性组合**（linear combination）是这捆箭的第一个用法：给每个 $\alpha_i$ 配一个实数系数 $k_i$，再全部加起来，得到的向量
+结果正好落在 $\gamma_4$ 上：第四支不是新东西，它是前三个加起来的结果。这个动作——每个向量乘一个数再全部加起来——叫这组向量的一个**线性组合**。把 $\gamma_4$ 挪到左边：
 
 $$
-k_1\alpha_1+k_2\alpha_2+\cdots+k_m\alpha_m
+\gamma_1+\gamma_2+\gamma_3-\gamma_4=\mathbf 0
 $$
 
-就叫这组向量（关于系数 $k_1,\dots,k_m$）的一个线性组合。如果某个向量 $\beta$ 恰好能写成这种形式，就说 $\beta$ 能由 $\alpha_1,\dots,\alpha_m$ **线性表出**（或 $\beta$ 是它们的线性组合）。
+四个系数 $(1,1,1,-1)$ 里至少有一个不是零，却把这一捆凑成了零向量。一捆向量能自己互相抵消，就叫**线性相关**：存在**不全为零**的系数 $k_1,\dots,k_m$，使 $k_1\alpha_1+\cdots+k_m\alpha_m=\mathbf 0$。反过来，只有「系数全取零」这一种凑法，就叫**线性无关**——没有一支是白搭的。（上一章那两支解向量 $\xi_1,\xi_2$「彼此凑不出对方」，说的就是它们无关。）
 
-线性表出能不能成立，翻译成方程最清楚。把 $\alpha_1,\dots,\alpha_m$ 按列排成矩阵 $A$，系数写成一列 $\mathbf x=(k_1,\dots,k_m)^T$，那么「$\beta$ 能由 $\alpha_1,\dots,\alpha_m$ 线性表出」等价于方程组
+一个偷懒的理解要挡住：线性相关**不等于**「有两个向量成比例」。上面这捆没有两个成比例，照样相关——成比例只是最简单的一种。
 
-$$
-A\mathbf x=\beta
-$$
-
-有解。所以**判断能否线性表出，就是判断一个非齐次方程组有没有解**——这是第三章的工具，这里换个说法再用一次。
-
-有了「凑出来」的说法，下一节就正式定义这捆箭里「有没有人被凑出来」，也就是线性相关与线性无关。
-
-## 二、线性相关与线性无关：定义 + 判相关三步
-
-这一节的目标是给「有冗余 / 无冗余」下一个能用方程验证的定义，并给你一套三步行之有效的判断方法。
-
-**线性相关**（linearly dependent）说的是：向量组 $\alpha_1,\dots,\alpha_m$ 里存在**不全为零**的实数 $k_1,\dots,k_m$，使得
-
-$$
-k_1\alpha_1+k_2\alpha_2+\cdots+k_m\alpha_m=\mathbf 0 .
-$$
-
-这句话的潜台词是「这捆箭里有人是多余的」——只要有这么一组不全为零的系数能把它们凑成零向量，就说明它们彼此牵扯。反过来，如果**只有** $k_1=\cdots=k_m=0$ 这一种（全零）取法才能使上式成立，就说这组向量**线性无关**（linearly independent）——谁也不能被其余几个凑出来。
-
-为什么这个定义等价于「有冗余」？看两条关键定理（判定定理）：
-
-1. **相关 ⇔ 至少一个能被其余表出**：当 $m\ge 2$ 时，$\alpha_1,\dots,\alpha_m$ 线性相关，当且仅当其中**至少有一个向量能由其余 $m-1$ 个线性表出**。这就是「有冗余」的正式说法。反过来，线性无关就是「任何一个都不能由其余表出」。
-2. **向量个数 > 维数 ⇒ 必相关**：任何一组 n 维向量，只要**个数 m 比维数 n 大**，就一定线性相关。因为把它们按列排成 $n\times m$ 矩阵，秩最多是 $n$，而 $n<m$，方程 $A\mathbf x=\mathbf 0$ 必有非零解。这一条是「秒杀」用的：看到 3 个二维向量、4 个三维向量，不用算直接判相关。
-
-<FigBox title="相关 vs 无关：共线就是冗余，不共线才是独立" kind="几何" note="左图两支箭共线（α₂ 是 α₁ 的两倍），存在不全为零的系数把组合凑成零，线性相关；右图两支箭不共线，除非系数全零否则组合不为零，线性无关。看图能读出什么：两个向量的相关/无关，就是看它们是不是躺在同一条过原点的直线上。">
-<svg viewBox="0 0 480 210" role="img" aria-label="左图两个共线向量线性相关，右图两个不共线向量线性无关">
+<FigBox title="相关与无关：两支箭在不在同一条过原点的直线上" kind="几何" note="左图 v=2u 同线，1·v−2·u=0 的系数不全为零；右图 p、q 不同线，只有全取零才行。看图能读出什么：相不相关就看两支箭在不在同一条过原点的直线上。">
+<svg viewBox="0 0 480 288" role="img" aria-label="左图两个共线向量线性相关，右图两个不共线向量线性无关">
   <defs>
-    <marker id="fig41-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <marker id="c4f1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)"/>
     </marker>
+    <marker id="c4f2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-2)"/>
+    </marker>
   </defs>
-  <text x="120" y="22" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--vp-c-text-1)">相关：共线</text>
-  <text x="360" y="22" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--vp-c-text-1)">无关：不共线</text>
-  <line x1="20" y1="160" x2="220" y2="160" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-  <line x1="40" y1="190" x2="40" y2="50" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-  <line x1="40" y1="160" x2="90" y2="110" stroke="#ef4444" stroke-width="2.4" marker-end="url(#fig41-ah)"/>
-  <line x1="40" y1="160" x2="140" y2="60" stroke="#ef4444" stroke-width="2.4" marker-end="url(#fig41-ah)"/>
-  <circle cx="40" cy="160" r="2.6" fill="var(--vp-c-text-2)"/>
-  <text x="92" y="106" font-size="12" fill="#ef4444">α₁</text>
-  <text x="144" y="56" font-size="12" fill="#ef4444">α₂=2α₁</text>
-  <text x="214" y="178" text-anchor="middle" font-size="11" fill="var(--vp-c-text-3)">α₁ 与 α₂ 在同一线上</text>
-  <line x1="260" y1="160" x2="460" y2="160" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-  <line x1="290" y1="190" x2="290" y2="50" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-  <line x1="290" y1="160" x2="360" y2="140" stroke="#16a34a" stroke-width="2.4" marker-end="url(#fig41-ah)"/>
-  <line x1="290" y1="160" x2="310" y2="100" stroke="#3b82f6" stroke-width="2.4" marker-end="url(#fig41-ah)"/>
-  <circle cx="290" cy="160" r="2.6" fill="var(--vp-c-text-2)"/>
-  <text x="366" y="136" font-size="12" fill="#16a34a">β₁</text>
-  <text x="294" y="96" font-size="12" fill="#3b82f6">β₂</text>
-  <text x="360" y="178" text-anchor="middle" font-size="11" fill="var(--vp-c-text-3)">β₁ 与 β₂ 张成整个平面</text>
+  <text x="130" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vp-c-text-1)">左：v 是 u 的两倍（相关）</text>
+  <text x="360" y="20" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vp-c-text-1)">右：两支不成倍数（无关）</text>
+  <line x1="20" y1="186" x2="235" y2="186" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="42" y1="206" x2="42" y2="42" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="42" y1="186" x2="96" y2="132" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#c4f1)"/>
+  <line x1="42" y1="186" x2="150" y2="78" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#c4f1)"/>
+  <circle cx="42" cy="186" r="2.6" fill="var(--vp-c-text-2)"/>
+  <text x="106" y="148" font-size="12.5" fill="var(--vp-c-brand-1)">u</text>
+  <text x="154" y="74" font-size="12.5" fill="var(--vp-c-brand-1)">v=2u</text>
+  <text x="128" y="208" text-anchor="middle" font-size="11.5" fill="var(--vp-c-text-3)">1·v−2·u=0</text>
+  <line x1="255" y1="186" x2="470" y2="186" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="285" y1="206" x2="285" y2="42" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="285" y1="186" x2="355" y2="158" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#c4f2)"/>
+  <line x1="285" y1="186" x2="318" y2="94" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#c4f1)"/>
+  <circle cx="285" cy="186" r="2.6" fill="var(--vp-c-text-2)"/>
+  <text x="358" y="154" font-size="12.5" fill="var(--vp-c-brand-2)">p</text>
+  <text x="322" y="90" font-size="12.5" fill="var(--vp-c-brand-1)">q</text>
+  <text x="360" y="208" text-anchor="middle" font-size="11.5" fill="var(--vp-c-text-3)">只有 0·p+0·q=0</text>
+  <line x1="20" y1="226" x2="470" y2="226" stroke="var(--vp-c-divider)" stroke-width="1"/>
+  <text x="20" y="246" font-size="11.5" fill="var(--vp-c-text-2)">输入：两支箭，都从原点量起。</text>
+  <text x="20" y="262" font-size="11.5" fill="var(--vp-c-text-2)">操作：看一支是不是另一支的倍数。</text>
+  <text x="20" y="278" font-size="11.5" fill="var(--vp-c-text-2)">结果：左能凑出零向量，右不能。</text>
 </svg>
 </FigBox>
 
-判定方法汇成一张表，用哪种看「个数和维数」的关系：
+## 二、判相关：三个动作，一个比一个便宜
 
-| 情形 | 判据 | 结论 |
-| --- | --- | --- |
-| 一般：$m$ 个 $n$ 维向量 | 按列排 $A$，化阶梯形数秩 $r$ | $r<m$ 相关；$r=m$ 无关 |
-| 方阵：$m=n$ | 行列式 $\det A$ | $\det A=0$ 相关；$\det A\ne0$ 无关 |
-| 个数超维数：$m>n$ | 不用算 | 必相关 |
-
-其中第一种就是本章的主干动作「判相关三步」，写成可照做的步骤：
-
-::: tip 判相关三步（计算方法）
-1. **按列排矩阵**：把 $m$ 个 $n$ 维向量 $\alpha_1,\dots,\alpha_m$ 按**列**排成一个 $n\times m$ 矩阵 $A$。
-2. **化行阶梯形**：对 $A$ 只做初等行变换，化成行阶梯形，数非零主元个数，得到秩 $r=\operatorname{rank}(A)$。（等价做法：解齐次方程 $A\mathbf x=\mathbf 0$，看它有没有非零解。）
-3. **下结论**：$r<m$（主元数少于向量个数，即齐次方程有非零解）⇒ 线性相关；$r=m$（只有零解）⇒ 线性无关。特别地 $m>n$ 时 $r\le n<m$，直接判相关，消元都省了。
-:::
-
-这个三步是本章的主干动作，例 1 会完整走一遍。它只依赖第三章的「化行阶梯形、数秩」，不引入任何新算技。下一节看一种不用消元、直接算一个数的特例：n 个 n 维向量。
-
-## 三、n 个 n 维向量：行列式一票定
-
-这一节的目标是给「个数 = 维数」的特例一个最省事的判定：不用消元，算一个行列式就够了。
-
-当向量个数 $m$ 恰好等于维数 $n$ 时，把 $\alpha_1,\dots,\alpha_n$ 按列排成一个 $n$ 阶方阵 $A$。这时判定归结为一句话：**这 $n$ 个向量线性无关，当且仅当**
+定义里那句「存在不全为零的系数」，最直接的判法是把它翻译成方程。把这些向量按**列**排成 $A=[\alpha_1\ \cdots\ \alpha_m]$，那么 $k_1\alpha_1+\cdots+k_m\alpha_m=\mathbf 0$ 就是
 
 $$
-\det A\ne 0 .
+A\mathbf x=\mathbf 0,\qquad \mathbf x=(k_1,\dots,k_m)^T
 $$
 
-反过来，$\det A=0$ 当且仅当它们线性相关。理由一句话：n 个 n 维向量线性无关，等价于齐次方程 $A\mathbf x=\mathbf 0$ 只有零解，而方阵的齐次方程只有零解又等价于 $A$ 可逆、等价于 $\det A\ne 0$——这是第一章行列式和第三章方程解结构两条结论在向量语言下的会师。
+读一遍：$A$ 有 $n$ 行 $m$ 列——行数是分量个数，列数是向量个数；$\mathbf x$ 是 $m$ 个数的一列，乘出来是 $n$ 个数的一列，和右端的 $\mathbf 0$ 对得上。于是「有没有不全为零的系数」变成「这个齐次方程组有没有非零解」，工具借第三章的。同一条翻译还管另一件事：$\beta$ 能不能由这捆向量表出，就是非齐次方程 $A\mathbf x=\beta$ 有没有解。
 
-这一条特别适合「向量个数 = 维数」的场合（平面里两个向量、空间里三个向量）。它和「个数 > 维数必相关」正好互补：个数多了必相关，个数正好就算行列式。例 2 会用行列式判两个平面向量。
-
-有了「相关 / 无关」的判定，下一步就问：一组（可能相关的）向量里，最多能挑出几个彼此无关的？这就是极大无关组。
-
-## 四、极大线性无关组：怎么找「骨架」
-
-这一节的目标是给「去掉冗余之后剩下什么」一个精确名称，并给出把它真找出来的操作。
-
-一个相关向量组里，去掉一些「能被别人凑出来」的向量，剩下一小撮彼此无关、又足以把原来所有向量都表出的向量——这一小撮就是**极大线性无关组**（maximal linearly independent subset），简称**极大无关组**。精确地说，向量组 $\alpha_1,\dots,\alpha_m$ 的一个部分组 $\alpha_{i_1},\dots,\alpha_{i_r}$ 称为极大无关组，要满足两条：
-
-1. **线性无关**：这 $r$ 个向量彼此无关；
-2. **极大**：向量组里**其余任何一个**向量都能由这 $r$ 个向量线性表出（等价说法：再往这 $r$ 个里加任意一个，新组就线性相关了）。
-
-「极大」不是「个数多到不能再多」的模糊说法，而是「能表出全体」的严格说法。一个向量组的极大无关组一般不唯一，但它们的**个数**是唯一确定的——这个数就是下一节的向量组的秩。
-
-怎么求？最常用的操作，还是「按列排 + 化行阶梯形」：
-
-::: tip 求极大无关组的操作
-1. **按列排矩阵**：把 $\alpha_1,\dots,\alpha_m$ 按列排成矩阵 $A$。
-2. **化行阶梯形**：做初等行变换得到行阶梯形，标出主元所在的列号。
-3. **回原矩阵取列**：主元列对应的**原向量组的那些向量**，就构成一个极大无关组。
-:::
-
-为什么「主元列」对应「骨架」？因为初等行变换不改变列向量之间的线性相关关系——阶梯形里哪些列有主元、哪些列是前几列的线性组合，原矩阵里完全相同。所以数主元列，等于数「最多能挑出几个彼此无关的列」。例 3 会完整演示。
-
-极大无关组把「这捆箭里真正独立的骨架」找了出来。骨架里有几支箭，这个数就是下一节的向量组的秩。
-
-## 五、向量组的秩：与矩阵秩是一回事
-
-这一节的目标是给「骨架的个数」一个名字，并说清它和第三章矩阵的秩是同一个数。
-
-**向量组的秩**（rank of a vector group）定义为它的极大无关组所含向量的个数，记作 $r(\alpha_1,\dots,\alpha_m)$。因为极大无关组的个数不随你选哪一组而变，这个定义是良定的。
-
-它和矩阵的秩的关系，是本章最重要的一条定理：
+**动作一（最保险，也最慢）：解一次齐次方程。** 拿上面那捆 $\gamma$ 来试：
 
 $$
-r(\alpha_1,\dots,\alpha_m)=\operatorname{rank}(A)
+A=\begin{bmatrix}1&0&1&2\\1&1&0&2\\0&1&1&2\end{bmatrix}
+\xrightarrow{R_2-R_1}\begin{bmatrix}1&0&1&2\\0&1&-1&0\\0&1&1&2\end{bmatrix}
+\xrightarrow{R_3-R_2}\begin{bmatrix}1&0&1&2\\0&1&-1&0\\0&0&2&2\end{bmatrix}
 $$
 
-其中 $A$ 是把 $\alpha_1,\dots,\alpha_m$ 按列排成的矩阵。也就是：**向量组的秩 = 以这些向量为列的矩阵的秩**。所以上一节「按列排、化阶梯、数主元」一步到位——数出来的主元个数既是矩阵的秩，也是向量组的秩，也是极大无关组里向量的个数。一个数，四个身份：
+三个主元、四个未知数，还剩一个自由变量，所以有非零解、这捆相关。要写出系数：末行给 $x_4=-x_3$，取 $x_3=1$ 得 $x_4=-1$；中行给 $x_2=1$；首行给 $x_1=-x_3-2x_4=1$。于是 $\mathbf x=(1,1,1,-1)^T$，正是第一节那个式子。
 
-| 视角 | 同一个数 |
-| --- | --- |
-| 矩阵的秩 | $\operatorname{rank}(A)$ |
-| 向量组的秩 | $r(\alpha_1,\dots,\alpha_m)$ |
-| 极大无关组的个数 | $r$ |
-| 生成子空间的维数 | $\dim\operatorname{span}\{\alpha_1,\dots,\alpha_m\}$ |
+**动作二（省一半事）：只数主元，不解到底。** 主元个数就是秩 $r$，与向量个数 $m$ 比：$r<m$ 相关，$r=m$ 无关。理由：主元 $r$ 个、未知数 $m$ 个，就有 $m-r$ 个自由变量。这里 $r=3$、$m=4$，直接相关。
 
-由此还能推出两条常用的：
+**动作三（最便宜，只在个数等于分量个数时能用）：算一个行列式。** 当 $m=n$ 时 $A$ 是方阵，齐次方程有非零解等价于 $|A|=0$（$|A|$ 也写作 $\det A$）。用两个二维向量试：$\beta_1=(1,2)^T$、$\beta_2=(2,1)^T$ 排成 $\begin{bmatrix}1&2\\2&1\end{bmatrix}$，$|A|=1\times1-2\times2=-3\ne 0$，所以无关。凭的是第一章那条：$|A|\ne0$ 等价于齐次方程只有零解。
 
-1. 向量组线性无关 ⇔ 它的秩 $r$ 等于向量个数 $m$；
-2. 向量组线性相关 ⇔ 它的秩 $r$ 小于向量个数 $m$。
+**还有一条连算都不用**：$m>n$ 时必定相关。$A$ 只有 $n$ 行、主元最多 $n$ 个，$r\le n<m$。
 
-这就是第二节「判相关三步」里第三步 $r<m$ 判相关、$r=m$ 判无关的理论依据。至此「相关 / 无关 / 极大无关组 / 秩」四件事拧成了一条线：**秩就是这捆箭里独立箭的支数**。
+## 三、挑出骨架：极大无关组为什么必须回原矩阵取列
 
-下一节把视野再放大一级：所有这些向量组张出来的「空间」，它的维数正好就是这个秩。
+一捆相关的向量里一定有白搭的。全挑掉之后剩下的一小撮要满足两条：自己无关，原捆里其余每一个都能由它表出。这样的部分组叫这捆向量的一个**极大线性无关组**，简称**极大无关组**。怎么找？主元在第几列，就回原矩阵取第几列：$\gamma$ 那捆的主元在第 1、2、3 列，所以 $\{\gamma_1,\gamma_2,\gamma_3\}$ 是一组。
 
-## 六、向量空间、子空间、基与维数
+为什么强调「回原矩阵」？初等行变换只动行，**列与列之间的线性关系不变**：阶梯形里第 4 列等于前 3 列之和，原矩阵里也一样；但阶梯形里的列已经被消元改过分量，不再是原来那些向量，拿它们当答案答的不是题目问的那捆。所以要记的是主元**列号**。
 
-这一节的目标是把「一捆向量张成的那片区域」也纳进来，说清基、维数与向量组的秩怎么挂上钩。
+极大无关组一般不唯一，$\{\gamma_1,\gamma_2,\gamma_4\}$ 也是一组；但不管取哪一组，里面的**个数**都是 3。下面这张图画的就是这件事：三支箭首尾相接（虚线是搬过去的两支），落点与 $\gamma_4$ 的落点重合。
 
-**向量空间**（vector space）是一个非空集合 $V$，上面有加法和数乘两种运算，并且对这两种运算封闭、满足八条公理（有零元、有负元、加法可交换可结合、数乘有分配律等）。八条不必背，它们保证的是同一件事：**这个集合里的元素可以像向量一样加加减减、伸缩缩放，而且永远算不出去**。最常见的例子是 $\mathbb R^2$（平面全体向量）、$\mathbb R^3$（空间全体向量），以及更一般的 $\mathbb R^n$。
+<FigBox title="三支箭首尾相接，终点正是 γ₄ 的箭头尖" kind="几何" hint="输入：γ₁、γ₂、γ₃ 三支箭都从原点画；操作：把 γ₂、γ₃ 平行搬到前一支的箭头尖上（虚线）；结果：落点正好是 γ₄ 的箭头尖。" note="看图能读出什么：首尾相接走完三支，落点与 γ₄ 重合，说明第四支没带来新方向。图是三维到平面的线性投影，长度不代表坐标比例，但「三支投影相加 = γ₄ 投影」严格成立。">
+<svg viewBox="0 0 720 380" class="sf" role="img" aria-label="三维到平面的线性投影中，γ1、γ2、γ3 首尾相接，终点正好落在 γ4 的箭头尖上">
+  <defs>
+    <marker id="c4f3a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)"/>
+    </marker>
+    <marker id="c4f3b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-2)"/>
+    </marker>
+    <marker id="c4f3c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-danger-1)"/>
+    </marker>
+    <marker id="c4f3d" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-1)"/>
+    </marker>
+  </defs>
+  <text x="350" y="40" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">输入</text>
+  <text x="386" y="40" font-size="12.5" fill="var(--vp-c-text-2)" class="sf-t">三支箭，都从原点画</text>
+  <text x="350" y="76" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">操作</text>
+  <text x="386" y="76" font-size="12.5" fill="var(--vp-c-text-2)" class="sf-t">后两支搬到前一支的尖上</text>
+  <text x="350" y="112" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">结果</text>
+  <text x="386" y="112" font-size="12.5" fill="var(--vp-c-text-2)" class="sf-t">终点落在 γ₄ 的箭头尖上</text>
+  <line x1="60" y1="340" x2="330" y2="340" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="70" y1="350" x2="70" y2="60" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="70" y1="340" x2="210" y2="260" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#c4f3a)"/>
+  <line x1="70" y1="340" x2="140" y2="220" stroke="var(--vp-c-brand-2)" stroke-width="2" marker-end="url(#c4f3b)"/>
+  <line x1="70" y1="340" x2="90" y2="280" stroke="var(--vp-c-danger-1)" stroke-width="2" marker-end="url(#c4f3c)"/>
+  <line x1="210" y1="260" x2="280" y2="140" stroke="var(--vp-c-brand-2)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#c4f3b)"/>
+  <line x1="280" y1="140" x2="300" y2="80" stroke="var(--vp-c-danger-1)" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#c4f3c)"/>
+  <line x1="70" y1="340" x2="300" y2="80" stroke="var(--vp-c-text-1)" stroke-width="2.8" marker-end="url(#c4f3d)"/>
+  <circle cx="70" cy="340" r="2.8" fill="var(--vp-c-text-2)"/>
+  <circle cx="210" cy="260" r="3" fill="var(--vp-c-brand-1)"/>
+  <circle cx="280" cy="140" r="3" fill="var(--vp-c-brand-2)"/>
+  <circle cx="300" cy="80" r="4" fill="var(--vp-c-danger-1)"/>
+  <text x="150" y="252" font-size="12.5" fill="var(--vp-c-brand-1)" class="sf-t">γ₁</text>
+  <text x="112" y="212" font-size="12.5" fill="var(--vp-c-brand-2)" class="sf-t">γ₂</text>
+  <text x="96" y="286" font-size="12.5" fill="var(--vp-c-danger-1)" class="sf-t">γ₃</text>
+  <text x="196" y="200" font-size="11.5" fill="var(--vp-c-brand-2)" class="sf-t">γ₂ 搬到这里</text>
+  <text x="236" y="120" font-size="11.5" fill="var(--vp-c-danger-1)" class="sf-t">γ₃ 搬到这里</text>
+  <text x="240" y="66" font-size="11.5" fill="var(--vp-c-text-1)" class="sf-t">落点 = γ₄ 的尖</text>
+  <text x="350" y="170" font-size="12.5" font-weight="700" fill="var(--vp-c-text-1)" class="sf-t">γ₄ = γ₁＋γ₂＋γ₃ = (2,2,2)</text>
+  <text x="350" y="204" font-size="12" fill="var(--vp-c-text-2)" class="sf-t">γ₄ 被前三支凑出来了。</text>
+  <line x1="350" y1="228" x2="700" y2="228" stroke="var(--vp-c-divider)" stroke-width="1"/>
+  <text x="350" y="250" font-size="11.5" fill="var(--vp-c-text-3)" class="sf-t">（线性投影示意，长度不代表比例）</text>
+</svg>
+</FigBox>
 
-**子空间**（subspace）是向量空间的一个非空子集，它在同样的加法和数乘下自己也是一个向量空间。判定不用验八条，只要三条：**含零向量、对加法封闭、对数乘封闭**。（与几何直觉的对照，见现代版 [04 · 向量空间与四大子空间](../linalg/04-subspaces)。）
+## 四、向量组的秩：一个数，三种问法
 
-给定一组向量 $\alpha_1,\dots,\alpha_m$，它们的所有线性组合构成的集合是一个子空间，叫这组向量**张成**（或生成）的子空间，记作 $\operatorname{span}\{\alpha_1,\dots,\alpha_m\}$。这个子空间有多大？答案落在基与维数上：
-
-- **基**（basis）是向量空间 $V$ 的一组向量，满足两条：**线性无关**，且能**表出 $V$ 中每一个向量**。基就是「不多不少、恰好够用」的一组生成元。一个向量组的极大无关组，正好就是它张成的子空间的一组基。
-- **维数**（dimension），记作 $\dim V$，就是基里向量的个数。这个数不随你选哪组基而变，是空间本身的属性。
-
-把这条线收拢成一个公式：
+极大无关组里向量的个数，叫这捆向量的**秩**，记 $r(\alpha_1,\dots,\alpha_m)$。它不随选哪一组变，所以能代表这捆向量本身，并且和第三章矩阵的秩是同一个数：
 
 $$
-\dim\operatorname{span}\{\alpha_1,\dots,\alpha_m\}=r(\alpha_1,\dots,\alpha_m)=\operatorname{rank}(A)
+r(\alpha_1,\dots,\alpha_m)=r(A),\qquad A=[\alpha_1\ \cdots\ \alpha_m]
 $$
 
-即：**一组向量张成的子空间的维数 = 这组向量的秩 = 对应矩阵的秩**。基与维数这两个「空间」里的概念，落到计算上，就是第四节求极大无关组、第五节数秩那两件事。工具全部齐了，下面用三道例题把它们各走一遍。
+读一遍：右边是矩阵化成阶梯形后数出来的主元个数，左边是极大无关组里向量的支数。两者相等，因为动作二数主元数的正是「最多能挑出几支无关的列」。所以那个数一次答了三个问题：矩阵的秩、向量组的秩、极大无关组有几支。
+
+最后一个问题：这捆向量撑起了多大一块空间？把系数放开，$k_1\alpha_1+\cdots+k_m\alpha_m$ 能取到的全部向量凑成一个集合，叫这组向量**张成**的子空间；它的一组不多不少的向量叫**基**，基里向量的个数叫**维数**。$\gamma_1,\gamma_2,\gamma_3$ 有 3 个分量又彼此无关，能张成整个 $\mathbb R^3$，所以它们是 $\mathbb R^3$ 的一组基，维数是 3。三个名字、一个数：
+
+$$
+\dim\operatorname{span}\{\alpha_1,\dots,\alpha_m\}=r(\alpha_1,\dots,\alpha_m)=r(A)
+$$
+
+左边是子空间的维数，中间是向量组的秩，右边是矩阵的秩。算的时候只做一件事：按列排、化阶梯形、数主元。
 
 ## 例题
 
-三道题按主线排：例 1 用「判相关三步」判三个平面向量，例 2 用行列式判两个平面向量，例 3 找极大无关组并算向量组的秩。每题先问「该用什么方法」。
+::: tip 例 1 · 三个二维向量：先秒杀，再走完动作 {#ex-vec-1}
+**题目**：判断 $\alpha_1=(1,2)^T$、$\alpha_2=(2,4)^T$、$\alpha_3=(1,1)^T$ 是否线性相关；若相关，给出一组不全为零的系数。
 
-::: tip 例 1 · 判相关三步（三个二维向量） {#ex-vec-1}
-**题目**：判断向量组 $\alpha_1=(1,2)^T$、$\alpha_2=(2,4)^T$、$\alpha_3=(1,3)^T$ 是否线性相关；若相关，给出一组不全为零的系数。
-
-<FigBox title="例 1：三个二维向量，两两之间已有冗余" kind="几何" note="α₁ 与 α₂ 共线（α₂=2α₁，红），α₃ 指向别处（蓝）。三个向量只有二维，必相关。看图能读出什么：平面里塞三个向量，至少有一个能被另外的凑出来——个数比维数多，冗余躲不掉。">
-<svg viewBox="0 0 420 210" role="img" aria-label="三个二维向量，其中两个共线，第三个指向别处，线性相关">
+<FigBox title="例 1：平面里塞三个向量，必有一支冗余" kind="几何" note="红：α₁=(1,2)，虚线是它自己的两倍 α₂；蓝：α₃=(1,1)。输入三个二维向量，操作看有没有两支共线，结果它们只能撑起一个平面。看图能读出什么：二维里最多两支互相独立。">
+<svg viewBox="0 0 440 236" role="img" aria-label="三个二维向量，其中两支共线，第三支指向别处">
   <defs>
-    <marker id="ex1-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <marker id="c4f4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-2)"/>
     </marker>
   </defs>
-  <line x1="30" y1="165" x2="400" y2="165" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-  <line x1="50" y1="195" x2="50" y2="40" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-  <line x1="50" y1="165" x2="100" y2="115" stroke="#ef4444" stroke-width="2.4" marker-end="url(#ex1-ah)"/>
-  <line x1="50" y1="165" x2="150" y2="65" stroke="#ef4444" stroke-width="2.4" marker-end="url(#ex1-ah)"/>
-  <line x1="50" y1="165" x2="80" y2="120" stroke="#3b82f6" stroke-width="2.4" marker-end="url(#ex1-ah)"/>
-  <circle cx="50" cy="165" r="2.6" fill="var(--vp-c-text-2)"/>
-  <text x="102" y="111" font-size="12" fill="#ef4444">α₁=(1,2)</text>
-  <text x="154" y="61" font-size="12" fill="#ef4444">α₂=(2,4)</text>
-  <text x="56" y="116" font-size="12" fill="#3b82f6">α₃=(1,3)</text>
-  <text x="220" y="186" text-anchor="middle" font-size="11" fill="var(--vp-c-text-3)">3 个向量，只有 2 维 → 必相关</text>
+  <line x1="40" y1="160" x2="420" y2="160" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="70" y1="190" x2="70" y2="34" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="70" y1="160" x2="98" y2="104" stroke="var(--vp-c-brand-1)" stroke-width="2.6" marker-end="url(#c4f4)"/>
+  <line x1="70" y1="160" x2="126" y2="48" stroke="var(--vp-c-brand-1)" stroke-width="2.2" stroke-dasharray="6 4" marker-end="url(#c4f4)"/>
+  <line x1="70" y1="160" x2="98" y2="132" stroke="var(--vp-c-brand-2)" stroke-width="2.6" marker-end="url(#c4f4)"/>
+  <circle cx="70" cy="160" r="2.8" fill="var(--vp-c-text-2)"/>
+  <text x="74" y="90" font-size="12.5" fill="var(--vp-c-brand-1)">α₁</text>
+  <text x="130" y="42" font-size="12.5" fill="var(--vp-c-brand-1)">α₂=2α₁</text>
+  <text x="102" y="142" font-size="12.5" fill="var(--vp-c-brand-2)">α₃</text>
+  <line x1="20" y1="194" x2="420" y2="194" stroke="var(--vp-c-divider)" stroke-width="1"/>
+  <text x="20" y="212" font-size="11.5" fill="var(--vp-c-text-2)">输入：三个二维向量，个数多于分量个数。</text>
+  <text x="20" y="228" font-size="11.5" fill="var(--vp-c-text-2)">操作：找倍数关系。结果：α₂=2α₁，α₂ 白搭。</text>
 </svg>
 </FigBox>
 
-**先想什么**：这是 3 个二维向量，个数 3 大于维数 2，按「个数 > 维数必相关」，答案是相关。但为了演示三步，还是完整走一遍；而且题目还要求给出一组具体系数，光靠「必相关」交不了差，还得把关系找出来。
+**先猜**：个数多于分量个数，不用算就是相关；$(2,4)$ 是 $(1,2)$ 的两倍，猜 $\alpha_2=2\alpha_1$。
 
-**第一步，按列排矩阵。** 把 $\alpha_1,\alpha_2,\alpha_3$ 按列排成：
-
-$$
-A=\begin{bmatrix}1&2&1\\2&4&3\end{bmatrix}
-$$
-
-**第二步，化行阶梯形。** 第二行减去第一行的两倍：
+**再算**：按列排成矩阵，第二行减第一行的两倍：
 
 $$
-\begin{bmatrix}1&2&1\\2&4&3\end{bmatrix}\xrightarrow{R_2-2R_1}\begin{bmatrix}1&2&1\\0&0&1\end{bmatrix}
+A=\begin{bmatrix}1&2&1\\2&4&1\end{bmatrix}
+\xrightarrow{R_2-2R_1}\begin{bmatrix}1&2&1\\0&0&-1\end{bmatrix}
 $$
 
-已经是行阶梯形：非零主元在第 1、3 两列，秩 $r=2$。
+*（为什么只做一次行变换：阶梯形只要求主元逐行右移，第二行第一个非零元已落在第 3 列。）* 主元在第 1、3 列，$r=2$，向量个数 $m=3$，$r<m$，相关。
 
-**第三步，下结论。** 向量个数 $m=3$，秩 $r=2$，$r<m$，所以线性相关。
-
-**再给出一组系数**：从阶梯形回代（或直接观察前两列），$\alpha_2=2\alpha_1$，即 $2\alpha_1-\alpha_2+0\cdot\alpha_3=\mathbf 0$。这组系数 $(2,-1,0)$ 不全为零，坐实了相关性。
-
-**验算**：$2\alpha_1-\alpha_2=(2,4)-(2,4)=(0,0)$ ✓；$A$ 的行阶梯形为 $\begin{bmatrix}1&2&1\\0&0&1\end{bmatrix}$，主元 2 个 ✓。（node 验算通过。）
+**再回代**：第二行给 $-x_3=0$；第一行给 $x_1+2x_2+x_3=0$，取 $x_2=1$ 得 $x_1=-2$。于是 $-2\alpha_1+\alpha_2=\mathbf 0$，系数 $(-2,1,0)$ 不全为零。代回去：$-2(1,2)+(2,4)=(0,0)$，与猜测一致。极大无关组由主元列读出：$\{\alpha_1,\alpha_3\}$。
 :::
 
-::: tip 例 2 · n 个 n 维向量用行列式判 {#ex-vec-2}
-**题目**：判断 $\beta_1=(1,2)^T$、$\beta_2=(2,1)^T$ 是否线性无关。
+::: tip 例 2 · 个数等于分量个数：行列式一票定 {#ex-vec-2}
+**题目**：判断 $\gamma_1=(1,1,0)^T$、$\gamma_2=(0,1,1)^T$、$\gamma_3=(1,0,1)^T$ 是否线性无关。
 
-<FigBox title="例 2：两个不共线的向量，张成整个平面" kind="几何" note="β₁ 指向右上，β₂ 指向右下偏上，两者不共线。以它们为边的平行四边形铺满平面。看图能读出什么：两个二维向量不共线 ⇔ 行列式非零 ⇔ 线性无关 ⇔ 是 R² 的一组基。">
-<svg viewBox="0 0 420 210" role="img" aria-label="两个不共线的二维向量，以它们为边张成平行四边形，线性无关">
-  <defs>
-    <marker id="ex2-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-2)"/>
-    </marker>
-  </defs>
-  <line x1="30" y1="165" x2="400" y2="165" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-  <line x1="50" y1="195" x2="50" y2="40" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-  <polygon points="50,165 120,95 220,125 150,195" fill="#3b82f6" fill-opacity="0.10" stroke="none"/>
-  <line x1="50" y1="165" x2="120" y2="95" stroke="#16a34a" stroke-width="2.4" marker-end="url(#ex2-ah)"/>
-  <line x1="50" y1="165" x2="150" y2="195" stroke="#3b82f6" stroke-width="2.4" marker-end="url(#ex2-ah)"/>
-  <line x1="120" y1="95" x2="220" y2="125" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3"/>
-  <line x1="150" y1="195" x2="220" y2="125" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3"/>
-  <circle cx="50" cy="165" r="2.6" fill="var(--vp-c-text-2)"/>
-  <text x="124" y="91" font-size="12" fill="#16a34a">β₁=(1,2)</text>
-  <text x="140" y="210" font-size="12" fill="#3b82f6">β₂=(2,1)</text>
-  <text x="235" y="120" font-size="11" fill="var(--vp-c-text-3)">β₁+β₂</text>
-</svg>
-</FigBox>
+**先猜**：个数正好等于分量个数，可以用动作三；三支各有位置取 0，像坐标轴的错位版，猜无关。
 
-**先想什么**：两个二维向量，个数 = 维数，正是「n 个 n 维」特例，直接算行列式最快。
-
-**第一步，排方阵。** 把 $\beta_1,\beta_2$ 按列排成二阶方阵：
+**再算**：按列排成方阵，按第一章的第一行展开（第一行有个 0，挑它省一次乘法）：
 
 $$
-A=\begin{bmatrix}1&2\\2&1\end{bmatrix}
+B=\begin{bmatrix}1&0&1\\1&1&0\\0&1&1\end{bmatrix},\qquad
+|B|=1\cdot\begin{vmatrix}1&0\\1&1\end{vmatrix}-0+1\cdot\begin{vmatrix}1&1\\0&1\end{vmatrix}=1+1=2
 $$
 
-**第二步，算行列式。**
+$|B|=2\ne0$，所以三支线性无关。
 
-$$
-\det A=1\cdot 1-2\cdot 2=1-4=-3\ne 0
-$$
-
-**第三步，下结论。** $\det A\ne 0$，所以 $\beta_1,\beta_2$ 线性无关；它们张成整个平面 $\mathbb R^2$，并且构成 $\mathbb R^2$ 的一组基，$\dim\mathbb R^2=2$。
-
-**验算**：node 算得 $\det A=-3$ ✓；$\operatorname{rank}(A)=2$（满秩）✓。
+**再回代**：换动作二核对——第二节那份阶梯形的前三列正好三个主元，与 $|B|\ne0$ 一致。三支三维向量无关，它们是 $\mathbb R^3$ 的一组基，维数是 3。
 :::
 
-::: tip 例 3 · 求极大无关组与向量组的秩 {#ex-vec-3}
-**题目**：向量组 $\gamma_1=(1,1,0)^T$、$\gamma_2=(0,1,1)^T$、$\gamma_3=(1,0,1)^T$、$\gamma_4=(2,2,2)^T$。求一个极大无关组，写出其余向量由它的表出式，并算出向量组的秩。
+::: tip 例 3 · 同一捆向量：求极大无关组与秩 {#ex-vec-3}
+**题目**：对 $\gamma_1,\gamma_2,\gamma_3,\gamma_4$ 求一个极大无关组，写出其余向量由它表出的式子，并给出向量组的秩。
 
-<FigBox title="例 3：三个独立向量搭骨架，第四个是它们的和" kind="几何" note="γ₁、γ₂、γ₃ 三支箭不共面，构成极大无关组（骨架）；γ₄ 是对角线，正好是 γ₁+γ₂+γ₃，落在骨架张成的空间里。看图能读出什么：4 个三维向量必相关，去掉那个冗余的 γ₄，剩下的 3 支就是极大无关组，秩 = 3。">
-<svg viewBox="0 0 420 230" role="img" aria-label="三维里三个不共面的向量构成极大无关组，第四个向量是它们的和">
-  <defs>
-    <marker id="ex3-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-2)"/>
-    </marker>
-  </defs>
-  <line x1="70" y1="175" x2="330" y2="175" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-  <line x1="70" y1="175" x2="40" y2="205" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-  <line x1="70" y1="175" x2="70" y2="55" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-  <line x1="70" y1="175" x2="160" y2="120" stroke="#16a34a" stroke-width="2.4" marker-end="url(#ex3-ah)"/>
-  <line x1="70" y1="175" x2="55" y2="145" stroke="#3b82f6" stroke-width="2.4" marker-end="url(#ex3-ah)"/>
-  <line x1="70" y1="175" x2="70" y2="105" stroke="#ef4444" stroke-width="2.4" marker-end="url(#ex3-ah)"/>
-  <line x1="70" y1="175" x2="205" y2="85" stroke="var(--vp-c-text-1)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ex3-ah)"/>
-  <circle cx="70" cy="175" r="2.6" fill="var(--vp-c-text-2)"/>
-  <text x="166" y="116" font-size="12" fill="#16a34a">γ₁</text>
-  <text x="34" y="141" font-size="12" fill="#3b82f6">γ₂</text>
-  <text x="76" y="100" font-size="12" fill="#ef4444">γ₃</text>
-  <text x="212" y="82" font-size="12" fill="var(--vp-c-text-1)">γ₄=γ₁+γ₂+γ₃</text>
-  <text x="200" y="216" text-anchor="middle" font-size="11" fill="var(--vp-c-text-3)">极大无关组 = {γ₁, γ₂, γ₃}，秩 = 3</text>
-</svg>
-</FigBox>
+**先猜**：4 支三维向量必相关（$m=4>n=3$），骨架最多 3 支；第二节主元落在第 1、2、3 列，猜极大无关组是 $\{\gamma_1,\gamma_2,\gamma_3\}$。
 
-**先想什么**：4 个三维向量，个数 4 > 维数 3，必相关；极大无关组最多 3 个。用「按列排、化阶梯、主元列回取」来挑。
+**再算**：沿用第二节的阶梯形，主元在第 1、2、3 列。记住列号，回原矩阵取第 1、2、3 列，得 $\{\gamma_1,\gamma_2,\gamma_3\}$，秩 $r=3$。*（为什么不取第 4 列：它在阶梯形里没有主元，说明是前面几列的组合。）*
 
-**第一步，按列排矩阵并化行阶梯形。**
-
-$$
-A=\begin{bmatrix}1&0&1&2\\1&1&0&2\\0&1&1&2\end{bmatrix}\xrightarrow{R_2-R_1}\begin{bmatrix}1&0&1&2\\0&1&-1&0\\0&1&1&2\end{bmatrix}\xrightarrow{R_3-R_2}\begin{bmatrix}1&0&1&2\\0&1&-1&0\\0&0&2&2\end{bmatrix}
-$$
-
-**第二步，标主元列。** 主元在第 1、2、3 列，所以极大无关组取**原矩阵的前三列**对应的向量：$\gamma_1,\gamma_2,\gamma_3$。向量组的秩 $r=3$。
-
-**第三步，写其余向量的表出式。** 观察或回代：$\gamma_4=\gamma_1+\gamma_2+\gamma_3$（验算：$(1,1,0)+(0,1,1)+(1,0,1)=(2,2,2)$）。这说明 $\gamma_4$ 确实由骨架表出。
-
-另一个极大无关组也能取 $\{\gamma_1,\gamma_2,\gamma_4\}$ 之类，但个数都是 3——极大无关组不唯一，个数唯一。
-
-**验算**：node 算得 $A$ 的行阶梯形为 $\begin{bmatrix}1&0&1&2\\0&1&-1&0\\0&0&2&2\end{bmatrix}$，主元 3 个，秩 $3$ ✓；$\gamma_1+\gamma_2+\gamma_3=(2,2,2)=\gamma_4$ ✓。
+**再回代**：表出式由第一节给出，$\gamma_4=\gamma_1+\gamma_2+\gamma_3$。代回去：$(1,1,0)+(0,1,1)+(1,0,1)=(2,2,2)=\gamma_4$，成立。$\{\gamma_1,\gamma_2,\gamma_4\}$ 也能用（$\gamma_3=\gamma_4-\gamma_1-\gamma_2$），个数仍是 3。
 :::
 
-三道题做完，用一份清单把这一页的坑排一遍。
+## 这一页带走三句话
 
-## 易错清单
+1. 线性相关就是存在不全为零的系数把这捆向量凑成零向量，等价于至少一支能被其余表出；「有两个成比例」只是最简单的一种。
+2. 判相关有三档，一档比一档便宜：解齐次方程 → 数主元与向量个数比 → 个数等于分量个数时算行列式；个数多于分量个数时连算都不用。
+3. 极大无关组要回原矩阵按主元列号取，它的个数就是向量组的秩，也等于矩阵的秩和张成空间的维数。
 
-按踩坑频率从高到低排，格式是「错误做法 → 会得到什么 → 正确做法」。
+## 最容易错的两处
 
-1. **把线性无关误当成「两两不成比例」** → 三个向量可能两两不成比例却整体相关（共面） → 线性无关要求的是「不存在任何一组不全为零的系数使组合为零」，两两不成比例只是必要条件、不充分。
-2. **判相关时把向量按行排、又数「非零行」当无关个数** → 结论会颠倒 → 判向量组相关/无关，向量要按**列**排、数主元列；按行排算的是行向量组的秩，虽然行秩 = 列秩，但「骨架」取法不同，别混用。
-3. **忘了「个数 > 维数必相关」这条秒杀** → 白白消元 → 看到 3 个二维向量、5 个三维向量，先判相关，再决定要不要继续算表出式。
-4. **极大无关组取成了阶梯形里的列** → 拿到的不是原向量组的向量 → 必须**回原矩阵**取主元列对应的原向量，消元改变的是数值不是向量本身。
-5. **以为极大无关组唯一** → 以为只有一个标准答案 → 极大无关组一般不唯一，但它的个数（向量组的秩）唯一。
-6. **把向量组的秩和矩阵的秩当两个数** → 算两遍还对不上 → 向量组的秩 = 以它为列（或行）的矩阵的秩，是同一个数。
+1. **从阶梯形里取那几列当极大无关组** → 那已不是题目给的那捆向量（分量被消元改掉） → 只记主元**列号**，回原矩阵取。
+2. **把「线性无关」当成「两两不成比例」** → 本页的 $\gamma$ 就是反例 → 判据只有一条：$A\mathbf x=\mathbf 0$ 除零解外有没有别的解。
 
-## 自检
-
-1. 4 个三维向量一定线性相关吗？为什么？如果它们张成整个 $\mathbb R^3$，向量组的秩是多少？
-2. 判断：$\alpha_1=(1,0,0)^T$、$\alpha_2=(0,1,0)^T$、$\alpha_3=(1,1,0)^T$ 是否线性相关？给出判定过程和（若相关）一个表出式。
-3. 一个向量空间 $V$ 有两组不同的基，它们的向量个数一定相等吗？这个数叫什么？
-
-## 接下来
-
-这一章的「极大无关组、向量组的秩、基与维数」是后面两章的地基：下一章经典版第 5 章《特征值与特征向量》要找「方向不变、只被拉伸」的特殊向量，靠的正是「$A\mathbf x=\lambda\mathbf x$ 是否有非零解」与行列式；第六章二次型要用「正交基」化标准形，也站在这一章的基与维数之上。想懂「向量空间、子空间」的几何画面，可以看现代版 [04 · 向量空间与四大子空间](../linalg/04-subspaces)。
+下一站是[05 · 特征值与特征向量](05-eigen.md)：那里把「$A\mathbf x$ 与 $\mathbf x$ 只差一个倍数」翻译成齐次方程组，用的正是本页动作一。想看懂向量、张成、子空间的画面，翻现代版 [04 · 向量空间与四大子空间](../linalg/04-subspaces)。

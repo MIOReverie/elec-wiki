@@ -1,380 +1,267 @@
 ---
 title: 04 · 向量空间与四大子空间
-description: 向量空间公理一句带过、子空间判定、列空间（像空间）与零空间、基与维数、秩等于主元数等于像空间维数、秩-零化度定理，以及行空间与左零空间构成的四大子空间全景。
+description: 从一台把平面拍扁的变换出发：先认出「加法和数乘都关得住」的区域（子空间），再给「能到哪些位置」和「哪些箭头被送成零」分别命名（列空间、零空间），用基与维数把两个空间量出来，最后结算秩与 dim C(A)+dim N(A)=n。
 ---
 
 # 04 · 向量空间与四大子空间
 
-<Meta time="45 min" level="核心" note="最容易错在把零空间当成『只有零向量』，以及以为秩等于行数或列数——秩是像空间的维数，等于主元个数，与矩阵是几行几列没有必然相等关系" />
+<Meta time="20 min" level="核心" note="最容易错在把零空间当成「只含零向量的空间」，以及把秩当成「行数或列数」——秩是列空间的维数，只有化成阶梯形数主元才拿到它" />
 
-**这一页要解决什么**：前几页把矩阵当成了「把箭头掰到新位置的变换」，但你只看到单个箭头被送去了哪里。这一页问的是整体：矩阵 A 这张变换，总共能把输入空间压成什么形状？又有哪些箭头会被它压成零向量？读完你应该能对任意矩阵回答四个问题——列空间几维、零空间几维、秩是多少、两者加起来为什么一定等于列数 n，并且能把「求零空间基」「求秩」完整算下来。
+**这一页要解决什么**：上一页你盯的是一支箭被送到了哪，这一页看整体——这台机器总共能到达哪些位置？哪些箭会被它送成零？两个答案各是一块区域；读完你能把这两块区域的大小亲手算出来，也能说出它们各自住在哪一侧。
 
-::: tip 读这页之前
-- **需要会**：向量、线性组合与张成（[01 · 向量、线性组合与张成](01-vectors.md)）；矩阵 = 线性变换、列是基向量的像（[02 · 矩阵与线性变换](02-matrices.md)）；高斯消元与主元（[03 · 高斯消元与线性方程组](03-elimination.md)）。
-- **这一页用到的符号**：$A$（$m\times n$ 矩阵）、$\mathbf x$（$n$ 维输入向量）、$A\mathbf x=\mathbf b$、$\mathbf 0$（零向量）、$C(A)$（列空间）、$N(A)$（零空间）、$\dim$（维数）、$\operatorname{rank}$（秩）、$\mathbb R^n$（$n$ 维实坐标空间）。
-- **先建立的直觉**：矩阵 A 是一台「压路机」，把输入空间里每一个箭头 $\mathbf x$ 送到新位置 $A\mathbf x$。本页只关心两件事——压路机能压出哪些位置（列空间），以及哪些箭头会被压成零向量（零空间）。
+::: tip 读之前
+- **需要会**：线性组合与线性无关（[第 1 章](01-vectors.md)。一句复习：$c\mathbf v+d\mathbf w$ 就是各取几份再加起来；两支箭成倍数就叫有冗余）；$A\mathbf x$ 是把各列按 $\mathbf x$ 的分量加权再相加（[第 2 章](02-matrices.md)）；消元化成阶梯形、认出主元与自由变量（[第 3 章](03-elimination.md)）。
+- **这一页的记号**：$A$ 是 $m\times n$（$m$ 行 $n$ 列）；$C(A)$、$N(A)$、$\operatorname{rank}(A)$、$\dim V$ 分别读作「列空间」「零空间」「秩」「维数」。
 :::
 
-拿一个最简单的压路机 $A=\begin{bmatrix}1&1\\0&0\end{bmatrix}$：它把平面上每个箭头 $\mathbf x=(x,y)$ 都送到 $(x+y,\ 0)$，也就是把整个平面**拍扁到 x 轴上**。现在问两个问题。第一，这台机器总共能扫出哪些位置？答案是只有 x 轴这一条线——平面上 $y\ne 0$ 的点它一个都到不了。第二，哪些箭头会被它压成零向量？答案是满足 $x+y=0$ 的所有箭头，也就是那条斜率 $-1$ 的对角线。第一个问题的答案叫**列空间**，第二个问题的答案叫**零空间**。这一页就讲这两个空间，以及它们和秩、维数怎么挂钩。
+第 2 章把矩阵看成一整台机器：给一支箭 $\mathbf x$，吐出 $A\mathbf x$。这一页不追一支箭，看整张平面发生了什么。拿最简单的 $A_0=\begin{bmatrix}1&1\\0&0\end{bmatrix}$ 试，它第一行算 $x+y$，第二行永远是 $0$：
 
-## 结论先行
+$$
+A_0\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}x+y\\0\end{bmatrix}
+$$
 
-1. 列空间 $C(A)$ 是 A 的列向量张成的空间，也是 A 作为线性变换「能扫到的所有位置」——它的维数就是秩。
-2. 零空间 $N(A)$ 是齐次方程 $A\mathbf x=\mathbf 0$ 的全部解，是「被 A 压到原点 0 的所有箭头」——它的维数叫零化度。
-3. 子空间的判据只有三条：含零向量、对加法封闭、对数乘封闭（后两条其实推出第一条，但三条一起查最稳）。
-4. 秩 = 非零主元个数 = 列空间维数 = 行空间维数。
-5. 秩-零化度定理：$\dim C(A)+\dim N(A)=n$（$n$ 是列数）——列空间与零空间把输入空间的维度瓜分干净，一个都不丢。
+于是 $(1,0)$ 落到 $(1,0)$，$(0,1)$ 也落到 $(1,0)$，$(3,2)$ 落到 $(5,0)$——整张平面被拍到了 $x$ 轴上。这台机器身上有两件事值得问，各要一个名字：它能到达的位置一共多大一块？它把哪些箭弄丢了？两块区域各有大小，稍后我们会学怎样计算。
 
-::: tip 一句话抓住本质，后面全是它的展开
+## 一、先把「自己关得住的那块区域」认出来
 
-- **列空间 = A 能扫出的所有位置**（输出端活下来的维度）。
-- **零空间 = 被 A 压到 0 的所有箭头**（输入端被压没的维度）。
-- **秩 = 活下来的维度数**，**零化度 = 压没的维度数**，两者相加等于输入端总维数 $n$。
+在平面上取一条直线试试。过原点的 $y=2x$：线上任取两支箭相加，和还在这条线上；乘任意实数也还在线上；原点自己也在线上（乘个 $0$ 就得到）。怎么折腾都出不去。把它往上平移一格得 $y=2x+1$，它不含原点（$0=2\cdot0+1$ 不成立），线上两点相加也会跑到线外。
 
-:::
+这种「加法和数乘都关得住」的区域需要一个名字：**子空间**。判断一个集合 $W$ 是不是子空间，查三条：
 
-## 一、向量空间：公理一句带过
+1. $\mathbf 0\in W$：原点在里面；
+2. 若 $\mathbf u,\mathbf v\in W$，则 $\mathbf u+\mathbf v\in W$：怎么加都还在里面；
+3. 若 $\mathbf u\in W$、$c$ 是实数，则 $c\mathbf u\in W$：怎么伸缩都还在里面。
 
-这一节只回答一个问题：为什么值得给「向量空间」单独立一个总名称，而不是把所有东西都直接叫 $\mathbb R^n$。
+三条一起查最省心；课本里「向量空间」的八条公理，本页一条用不到。
 
-**向量空间**（vector space）是一个集合 $V$，上面定义了两个运算——**加法**（两个元素相加结果还在 $V$ 里）和**数乘**（一个元素乘一个实数结果还在 $V$ 里）——并且这两种运算满足八条公理：有零元、每个元素有负元、加法可交换可结合、数乘对加法和实数乘法有分配律等等。这八条不必背，它们保证的是同一件事：**这个集合里的元素可以像普通向量一样加加减减、伸缩缩放，而且永远算不到集合外面去**。几何上，向量空间就是「过原点、能随意拉伸相加、封闭」的一块区域。
-
-最熟的例子是 $\mathbb R^2$（平面上全部箭头）和 $\mathbb R^3$（空间里全部箭头）。但向量空间不一定非得是箭头：全体 $2\times 2$ 矩阵按矩阵加法与数乘也构成一个向量空间，全体多项式按多项式加法与数乘同样构成一个。只要把「加」和「乘数」定义好、公理满足，它就是向量空间。本页只关心 $\mathbb R^n$ 的子集。
-
-有了总名称，才能说清「A 扫出的位置」和「被 A 压扁的箭头」这两团东西到底是什么。下一节先看一类最重要的子集：子空间。
-
-## 二、子空间：三条检验就够了
-
-这一节只回答一个问题：怎么判断 $\mathbb R^n$ 里的一个子集是不是自成一个向量空间。
-
-**子空间**（subspace）是向量空间 $V$ 的一个非空子集 $W$，它**自己**在同样的加法与数乘下也构成一个向量空间。换句话说，子空间是一块「关起门来自给自足」的区域。
-
-判定一个子集是不是子空间，不用去验八条公理，只要验三条：
-
-1. **含零向量**：$\mathbf 0\in W$。
-2. **加法封闭**：若 $\mathbf u,\mathbf v\in W$，则 $\mathbf u+\mathbf v\in W$。
-3. **数乘封闭**：若 $\mathbf u\in W$、$c$ 是任意实数，则 $c\mathbf u\in W$。
-
-严格说后两条已经蕴含第一条——取 $c=0$ 就得到零向量——但三条一起记最不容易漏。
-
-几何对应一目了然：在 $\mathbb R^3$ 里，**过原点的直线和过原点的平面都是子空间；不过原点的直线和平面都不是子空间**，因为它不含零向量，第一条就过不去。
-
-<FigBox title="过原点才算子空间" kind="几何" note="左：过原点的直线，含零向量、加法和数乘封闭，是子空间。右：不过原点的直线，不含零向量，两个点相加会跑到直线外，不是子空间。判据第一条『含零向量』就把后者一票否决。">
-
-<svg viewBox="0 0 420 180" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" role="img">
-  <line x1="40" y1="90" x2="180" y2="90" stroke="var(--vp-c-text-3)"/>
-  <line x1="110" y1="150" x2="110" y2="30" stroke="var(--vp-c-text-3)"/>
-  <line x1="55" y1="120" x2="165" y2="60" stroke="#16a34a" stroke-width="2.4"/>
-  <circle cx="110" cy="90" r="3.5" fill="var(--vp-c-text-1)" stroke="none"/>
-  <text x="110" y="168" text-anchor="middle" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">过原点：是子空间</text>
-  <line x1="250" y1="90" x2="390" y2="90" stroke="var(--vp-c-text-3)"/>
-  <line x1="320" y1="150" x2="320" y2="30" stroke="var(--vp-c-text-3)"/>
-  <line x1="250" y1="80" x2="390" y2="30" stroke="#ef4444" stroke-width="2.4"/>
-  <circle cx="320" cy="90" r="3.5" fill="var(--vp-c-text-3)" stroke="none"/>
-  <text x="320" y="168" text-anchor="middle" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">不过原点：不是子空间</text>
+<FigBox title="三条检验怎么用：过原点的直线过关，平移过的不过关" kind="几何" note="输入：两个候选集合 · 操作：逐条查含零、加法封闭、数乘封闭 · 结果：一个三条全过，一个第一条就被拦下">
+<svg viewBox="0 0 680 246" class="sf" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" role="img">
+  <text x="140" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">输入：两个候选集合</text>
+  <text x="372" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">操作：逐条查三条</text>
+  <text x="580" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">结果</text>
+  <line x1="258" y1="32" x2="258" y2="232" stroke="var(--vp-c-divider)" stroke-dasharray="4 4"/>
+  <line x1="486" y1="32" x2="486" y2="232" stroke="var(--vp-c-divider)" stroke-dasharray="4 4"/>
+  <line x1="60" y1="110" x2="230" y2="110" stroke="var(--vp-c-text-3)"/>
+  <line x1="150" y1="150" x2="150" y2="42" stroke="var(--vp-c-text-3)"/>
+  <line x1="115" y1="150" x2="185" y2="70" stroke="#16a34a" stroke-width="2.4"/>
+  <circle cx="150" cy="110" r="3.6" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="140" y="126" font-size="11" fill="var(--vp-c-text-2)" stroke="none">0</text>
+  <text x="188" y="66" font-size="11.5" fill="#16a34a" stroke="none">过原点</text>
+  <text x="276" y="76" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">① 含零 ✓</text>
+  <text x="276" y="98" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">② 加法封闭 ✓</text>
+  <text x="276" y="120" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">③ 数乘封闭 ✓</text>
+  <text x="520" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#16a34a" stroke="none">是子空间</text>
+  <line x1="60" y1="206" x2="230" y2="206" stroke="var(--vp-c-text-3)"/>
+  <line x1="150" y1="232" x2="150" y2="146" stroke="var(--vp-c-text-3)"/>
+  <line x1="105" y1="216" x2="190" y2="152" stroke="#ef4444" stroke-width="2.4"/>
+  <circle cx="150" cy="206" r="3.6" fill="var(--vp-c-text-2)" stroke="none"/>
+  <text x="158" y="222" font-size="11" fill="var(--vp-c-text-2)" stroke="none">0 不在这条线上</text>
+  <text x="196" y="150" font-size="11.5" fill="#ef4444" stroke="none">不过原点</text>
+  <text x="276" y="176" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">① 含零 ✗</text>
+  <text x="276" y="198" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">② 加法封闭 ✗</text>
+  <text x="276" y="220" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">③ 数乘封闭 ✗</text>
+  <text x="520" y="198" text-anchor="middle" font-size="13" font-weight="700" fill="#ef4444" stroke="none">不是子空间</text>
 </svg>
-
 </FigBox>
 
-为什么这一条这么重要？因为列空间和零空间都是子空间，而判断它们的维数时，要反复用「含零向量 + 封闭」这两条性质。下面看第一个主角：列空间。
+回看这两个例子：过原点的直线、过原点的平面都是子空间，不过原点的都不是——**「过原点」正是第 1 条检验在几何里的长相。**
 
-## 三、列空间：A 能扫出的所有位置
+## 二、这台机器总共能到哪些位置
 
-这一节只回答一个问题：给定矩阵 $A$，所有可能的输出 $A\mathbf x$ 铺满了怎样的一块区域。
-
-**列空间**（column space），记作 $C(A)$，是 $A$ 的各列向量所有线性组合构成的集合。因为 $A\mathbf x$ 正好是把 $A$ 的各列按 $\mathbf x$ 的分量做线性组合：
+回到 $A_0$。它的两列都是 $(1,0)$，记 $\mathbf c_1=\mathbf c_2=(1,0)$。而 $A_0\mathbf x$ 按第 2 章是把各列按 $\mathbf x$ 的分量加权相加，所以两列重合这件事直接决定了输出：
 
 $$
-A\mathbf x=\begin{bmatrix} | & & | \\ \mathbf a_1 & \cdots & \mathbf a_n \\ | & & | \end{bmatrix}\begin{bmatrix}x_1\\ \vdots\\ x_n\end{bmatrix}=x_1\mathbf a_1+\cdots+x_n\mathbf a_n
+A_0\begin{bmatrix}x\\y\end{bmatrix}=x\begin{bmatrix}1\\0\end{bmatrix}+y\begin{bmatrix}1\\0\end{bmatrix}=(x+y)\begin{bmatrix}1\\0\end{bmatrix}
 $$
 
-所以列空间 = 列向量张成的空间 = $A$ 的**像**（image，也叫值域）。几何上它回答开头的问题：把输入空间里**所有**的 $\mathbf x$ 都喂给 $A$，扫出来的所有位置，就是 $C(A)$。
+读一遍这个式子：$A_0$ 是 $2\times2$，$\mathbf x$ 是 $2$ 个数的一列；等号右边是「取 $x$ 份第 1 列、取 $y$ 份第 2 列，再加起来」。两列都指向 $(1,0)$，加来加去出不了这条线——这就是为什么输出的第二个数永远是 $0$。
 
-一句最顺口的话：**列空间是 A 能扫出的所有位置。**
+第一个问题的答案有了：$A_0$ 所有可能的输出就是两列张成的那条 $x$ 轴。给它一个名字：**列空间** $C(A)$，指的是各列的全部线性组合，也就是这台机器能到达的所有位置。$C(A_0)$ 是 $x$ 轴，一维；平面上其余的位置它一个都到不了。
 
-它永远是 $\mathbb R^m$ 的子空间（$m$ 是 $A$ 的行数）：零向量一定在（取 $\mathbf x=\mathbf 0$ 就行），而且两个输出的和还是输出、输出的数乘还是输出。
+## 三、哪些箭头被它送成了零
 
-对 $A=\begin{bmatrix}1&1\\0&0\end{bmatrix}$，列空间是 $\operatorname{span}\{(1,0)\}$，也就是 x 轴——平面上其余位置这台压路机一个都到不了。列空间的孪生兄弟是零空间，下一节的图把两者并排画出来。
+第二个问题：哪些输入会落到原点？解 $A_0\mathbf x=\mathbf 0$，也就是 $x+y=0$。这是一条过原点的直线，方向取 $(1,-1)$（取 $(-1,1)$ 是同一条线）。代进去：$A_0(1,-1)=(0,0)$。
 
-## 四、零空间：被 A 压到 0 的所有箭头
+这个集合也有名字：**零空间**，记作 $N(A)$，指的是 $A\mathbf x=\mathbf 0$ 的全部解，也就是「被送成零的那些箭头」的全体。两点必须当场说清：
 
-这一节只回答一个问题：$A\mathbf x=\mathbf 0$ 的解集长什么样，为什么它也配叫「空间」。
+- 零空间一定含零向量（$\mathbf x=\mathbf 0$ 永远是解），所以它从不空着；只有当各列彼此没有冗余时（第 1 章叫线性无关），它才只剩零向量。
+- 它为什么配叫「空间」：若 $A\mathbf u=\mathbf 0$、$A\mathbf v=\mathbf 0$，则 $A(\mathbf u+\mathbf v)=\mathbf 0$、$A(c\mathbf u)=\mathbf 0$，三条检验自动过关。
 
-**零空间**（null space），记作 $N(A)$，是齐次方程 $A\mathbf x=\mathbf 0$ 的**全部解**构成的集合：
-
-$$
-N(A)=\{\mathbf x\in\mathbb R^n:A\mathbf x=\mathbf 0\}
-$$
-
-几何上：它是所有**被 A 压到原点 0 的箭头**。任何一个 $\mathbf x\in N(A)$，喂给这台压路机，出来的都是零向量。
-
-零空间永远是 $\mathbb R^n$ 的子空间（$n$ 是 $A$ 的**列数**，也是输入向量的维数）。为什么是子空间？它含零向量（$\mathbf x=\mathbf 0$ 是解），而且若 $A\mathbf u=\mathbf 0$、$A\mathbf v=\mathbf 0$，则 $A(\mathbf u+\mathbf v)=A\mathbf u+A\mathbf v=\mathbf 0$、$A(c\mathbf u)=cA\mathbf u=\mathbf 0$——加法和数乘都封闭。这正是矩阵乘法线性的直接结果。
-
-<FigBox title="列空间 vs 零空间" kind="几何" note="左：变换前，零空间是那条斜率 −1 的对角线（x+y=0）。右：变换后整个平面被拍扁到 x 轴（列空间），对角线上每个箭头都被压到原点；i 与 j 两个基向量都落到 (1,0)。">
-
-<svg viewBox="0 0 660 250" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
-  <text x="165" y="22" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--vp-c-text-1)" stroke="none">变换前（ℝ²）</text>
-  <g stroke="var(--vp-c-divider)" stroke-width="1">
-    <line x1="97" y1="62" x2="97" y2="198"/><line x1="131" y1="62" x2="131" y2="198"/>
-    <line x1="165" y1="62" x2="165" y2="198"/><line x1="199" y1="62" x2="199" y2="198"/><line x1="233" y1="62" x2="233" y2="198"/>
-    <line x1="97" y1="62" x2="233" y2="62"/><line x1="97" y1="96" x2="233" y2="96"/>
-    <line x1="97" y1="130" x2="233" y2="130"/><line x1="97" y1="164" x2="233" y2="164"/><line x1="97" y1="198" x2="233" y2="198"/>
-  </g>
-  <line x1="97" y1="130" x2="233" y2="130" stroke="var(--vp-c-text-3)"/>
-  <line x1="165" y1="62" x2="165" y2="198" stroke="var(--vp-c-text-3)"/>
-  <line x1="165" y1="130" x2="199" y2="130" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-  <path d="M199 130 l-8 -3 l0 6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
-  <text x="206" y="146" font-size="12" fill="var(--vp-c-text-1)" stroke="none">i</text>
-  <line x1="165" y1="130" x2="165" y2="96" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-  <path d="M165 96 l-3 8 l6 0 Z" fill="var(--vp-c-text-1)" stroke="none"/>
-  <text x="174" y="92" font-size="12" fill="var(--vp-c-text-1)" stroke="none">j</text>
-  <line x1="111" y1="76" x2="219" y2="184" stroke="#ef4444" stroke-width="2.4"/>
-  <text x="224" y="178" font-size="11.5" fill="#ef4444" stroke="none">零空间 x+y=0</text>
-  <text x="485" y="22" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--vp-c-text-1)" stroke="none">变换后（A 的像）</text>
-  <line x1="417" y1="130" x2="553" y2="130" stroke="#3b82f6" stroke-width="3"/>
-  <line x1="485" y1="70" x2="485" y2="190" stroke="var(--vp-c-divider)" stroke-width="1" stroke-dasharray="4 4"/>
-  <line x1="485" y1="130" x2="519" y2="130" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-  <path d="M519 130 l-8 -3 l0 6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
-  <text x="512" y="150" font-size="11" fill="var(--vp-c-text-1)" stroke="none">i、j 都落到 (1,0)</text>
-  <circle cx="485" cy="130" r="4" fill="#ef4444" stroke="none"/>
-  <text x="485" y="212" text-anchor="middle" font-size="11.5" fill="var(--vp-c-text-2)" stroke="none">零空间箭头全被压到这里</text>
-  <text x="553" y="118" text-anchor="end" font-size="11.5" fill="#3b82f6" stroke="none">列空间 = x 轴</text>
+<FigBox title="A₀ 把整张平面拍到 x 轴上，对角线上的箭头全堆到原点" kind="几何" note="输入：平面上的箭头，标出零空间那条对角线 · 操作：A₀ 把每个箭头送到 (x+y,0)，两支基箭都落到 (1,0) · 结果：输出只剩 x 轴，对角线上所有箭头落在原点（两轴同为每单位 20 像素）">
+<svg viewBox="0 0 700 250" class="sf" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
+  <text x="118" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">输入：平面</text>
+  <text x="330" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">操作：A₀</text>
+  <text x="560" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">结果：只剩 x 轴</text>
+  <line x1="40" y1="176" x2="216" y2="176" stroke="var(--vp-c-text-3)"/>
+  <line x1="110" y1="228" x2="110" y2="76" stroke="var(--vp-c-text-3)"/>
+  <line x1="60" y1="226" x2="176" y2="110" stroke="#ef4444" stroke-width="2.2" stroke-dasharray="5 4"/>
+  <text x="178" y="106" font-size="11" fill="#ef4444" stroke="none">零空间 x+y=0</text>
+  <line x1="110" y1="176" x2="130" y2="176" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <path d="M130 176 l-8 -3 l0 6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="136" y="172" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">i</text>
+  <line x1="110" y1="176" x2="110" y2="156" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <path d="M110 156 l-3 8 l6 0 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="118" y="152" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">j</text>
+  <line x1="110" y1="176" x2="170" y2="136" stroke="var(--vp-c-text-2)" stroke-width="1.8"/>
+  <circle cx="170" cy="136" r="3" fill="var(--vp-c-text-2)" stroke="none"/>
+  <text x="176" y="132" font-size="11" fill="var(--vp-c-text-2)" stroke="none">(3,2)</text>
+  <line x1="232" y1="176" x2="286" y2="176" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <path d="M286 176 l-8 -3.4 l0 6.8 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="259" y="160" text-anchor="middle" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">(x,y) ↦ (x+y,0)</text>
+  <text x="259" y="200" text-anchor="middle" font-size="11" fill="var(--vp-c-text-2)" stroke="none">i、j 都落到 (1,0)</text>
+  <line x1="404" y1="176" x2="640" y2="176" stroke="#3b82f6" stroke-width="3"/>
+  <circle cx="404" cy="176" r="4" fill="#ef4444" stroke="none"/>
+  <circle cx="424" cy="176" r="3.4" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="424" y="166" text-anchor="middle" font-size="11" fill="var(--vp-c-text-1)" stroke="none">(1,0)</text>
+  <text x="404" y="212" font-size="11" fill="#ef4444" stroke="none">零空间里的箭头全堆到这里</text>
+  <text x="640" y="164" text-anchor="end" font-size="11.5" fill="#3b82f6" stroke="none">列空间 = x 轴（1 维）</text>
 </svg>
-
 </FigBox>
 
-看图能读出什么：**列空间是变换后还活着的那条线，零空间是变换后被压没了的那条线**。两者的维数相加，后面会证明恰好等于输入空间的维数 $n$。而「零空间是几维」这件事，就是秩-零化度定理的一半。下一节先补工具：怎么度量一个空间的大小。
+看图能读出两件事：输出侧活下来的只有那条线（列空间），输入侧有一条被压没的对角线（零空间）。这里先保留这个画面，下一节给两块区域的大小一个算法。
 
-## 五、基与维数：生成又要独立
+## 四、数一数它有多大：基、维数、秩
 
-这一节只回答一个问题：怎么数一个向量空间有多大。
+一条直线里最少要几支箭才能走遍它？一支。一张平面里呢？两支，不许共线。这个「不多不少、恰好够用」的组有个名字：**基**。一组箭是空间 $V$ 的基，要同时满足两条：能张成 $V$（$V$ 里每支箭都能用它们凑出来），且其中没有一支能由其余向量线性组合出来（第 1 章的线性无关）。
 
-**基**（basis）是一组向量，满足两个条件：**能张成整个空间**（空间里任何向量都能写成它们的线性组合），而且**线性无关**（组里没有一个能由其余几个表示出来）。基就是「不多不少、恰好够用」的那一组生成元——少一个就张不满，多一个就冗余。（张成与线性无关的定义见[01 · 向量、线性组合与张成](01-vectors.md)。）
+**维数**就是一组基里箭的个数，记作 $\dim V$。它与选哪组基无关：平面上拿 $(1,0),(0,1)$ 是一组基，拿 $(3,2),(1,2)$ 也是一组（后者不共线，$c(3,2)+d(1,2)=\mathbf 0$ 只有 $c=d=0$），所以 $\dim\mathbb R^2=2$。
 
-**维数**（dimension），记作 $\dim$，就是基里向量的个数。这个数不随你选哪组基而变：一个空间里任何两组基，个数都相等。所以「维数」是空间本身的属性，不是「某组向量」的属性。
+现在把维数对准列空间：$\dim C(A)$ 是「这台机器能到达的位置有几维」，它值一个专门的名字：**秩**，记作 $\operatorname{rank}(A)$。
 
-标准例子：$\mathbb R^2$ 的维数是 2（标准基 $\mathbf i,\mathbf j$，或者任意两个不共线的向量都能当基）；$\mathbb R^3$ 的维数是 3。只含零向量的空间 $\{\mathbf 0\}$ 维数规定为 0。
+怎么不靠眼睛把秩算出来？数主元。把 $A$ 化成阶梯形，主元的个数就是秩。理由一句话：行变换只动行，不动列与列之间的凑法——原矩阵里「第 3 列 = 第 1 列 + 第 2 列」这类关系，化完之后依然成立。所以「哪几列真正独立」看主元列就够了。但**列空间的基要回原矩阵去取**那几列：阶梯形里的列已经被行变换改过，不再是原来的列。
 
-给 $A=\begin{bmatrix}1&2&3\\2&4&6\end{bmatrix}$ 求零空间基时就会用到这套说法：先求出一组「生成零空间、又彼此独立」的向量，数一数个数就是零空间的维数。而列空间的维数也有专门的名字，就是下一节的秩。
+$A_0$ 的阶梯形就是它自己，主元只有一个，秩 $1$，与「列空间是 $x$ 轴」对得上。换一台更难看的机器：$A_1=\begin{bmatrix}1&2&3\\2&5&7\\3&7&10\end{bmatrix}$。它的三列 $\mathbf c_1=(1,2,3)$、$\mathbf c_2=(2,5,7)$、$\mathbf c_3=(3,7,10)$ 里，$\mathbf c_3=\mathbf c_1+\mathbf c_2$，所以独立列最多两支，秩最多 $2$。确切数字要消元才定得下来，例 1、例 2 把这台机器算完。
 
-## 六、秩：主元数 = 像空间维数
+## 五、两笔账加起来正好是输入的维数
 
-这一节只回答一个问题：列空间到底几维，以及怎么不靠肉眼、光靠消元把它算出来。
-
-**秩**（rank），记作 $\operatorname{rank}(A)$，是 $A$ 的列空间的维数，也就是 $A$ 的线性无关列向量的个数：
-
-$$
-\operatorname{rank}(A)=\dim C(A)
-$$
-
-关键结论：**秩 = 主元数**。把 $A$ 用高斯消元化到行阶梯形，非零主元的个数就是秩。为什么？因为行变换**不改变列之间的线性相关关系**：原来「第 3 列 = 第 1 列 + 第 2 列」这种关系，消元后依然成立，反过来也成立。所以数「哪些列独立」这件事，看阶梯形里「哪些列有主元」就够了，主元列对应的原矩阵列就是列空间的一组基。
-
-于是下面四条是同一个数：
-
-1. 秩 = 非零主元个数；
-2. 秩 = 线性无关列的个数；
-3. 秩 = 列空间（像空间）的维数；
-4. 秩 = 行空间（$C(A^T)$）的维数，即线性无关行的个数——第八节补全。
-
-对 $A=\begin{bmatrix}1&1\\0&0\end{bmatrix}$：阶梯形就是它自己，主元只有第 1 行的 1，秩 = 1，列空间是 1 维的直线，与图一致。
-
-算秩是例 2 的主角。但只有秩还不够：秩只告诉我们「输出能铺满几维」，零空间「被压没了几维」还要另一个数。下一节把两者合起来。
-
-## 七、秩-零化度定理：两半拼成 n
-
-这一节只回答一个问题：输入空间 $\mathbb R^n$ 被 A 分成了怎样的两半。
-
-**秩-零化度定理**（rank-nullity theorem）：
+先看 $A_0$：列空间 $1$ 维，零空间 $1$ 维，$1+1=2$，而输入是平面上 $2$ 个数的一列。这不是巧合：
 
 $$
 \dim C(A)+\dim N(A)=n
 $$
 
-其中 $n$ 是 $A$ 的**列数**（输入空间的维数）。等号左边第一项是列空间（像）的维数，第二项是零空间（核）的维数，所以它常写成：
+读一遍：$n$ 是 $A$ 的列数，也就是输入那一列里数的个数；左边第一项是「能到达的位置有几维」，第二项是「被送成零的方向有几维」。依据只是一条数数：把 $A$ 化成阶梯形后，$n$ 列被分成带主元的和不带主元的两拨——带主元的列有 $\operatorname{rank}(A)$ 个，不带主元的列有 $n-\operatorname{rank}(A)$ 个，两拨加起来还是 $n$；而不带主元的每一列都带来一个自由变量，也就带来一个被送成零的独立方向。所以这两个维数相加只能是 $n$。
 
-$$
-\operatorname{rank}(A)+\operatorname{nullity}(A)=n
-$$
+对 $A_1$：秩若是 $2$，零空间就是 $3-2=1$ 维（例 2 的回代会核对）。
 
-这里的 $\operatorname{nullity}$ 读作**零化度**，就是零空间的维数。
+还有两个名字你迟早遇到，本页只给名字、不算例题：把 $A$ 沿主对角线翻面得到 $A^T$（第 2 章的转置），$A^T$ 也有自己的列空间与零空间。四个放到一张表里：
 
-几何解释最漂亮：把 $\mathbb R^n$ 想成一块 $n$ 维的输入大陆，A 这张压路机把它压成一块 $\dim C(A)$ 维的输出大陆，而**被压没的那部分维度**正好是 $\dim N(A)$。压出来的维数 + 压没的维数 = 原来的总维数 $n$。一个维度都不会凭空消失，只会要么变成输出的维数，要么变成零空间的维数。
-
-对 $A=\begin{bmatrix}1&1\\0&0\end{bmatrix}$：$\dim C(A)=1$，$\dim N(A)=1$，$1+1=2=n$，吻合。例 3 会用消元完整走一遍这条定理。
-
-这是全页最重要的一条公式。第八节把最后两个子空间补上，凑成四大子空间的全景图。
-
-## 八、四大子空间全景：补上后两个
-
-这一节只回答一个问题：除了列空间和零空间，还有哪两个子空间，四者怎么摆成一张图。
-
-把 $A$（$m\times n$）转置一下，$A^T$ 也有自己的列空间和零空间，它们就是剩下的两个：
-
-- **行空间** $C(A^T)$：$A$ 的各行张成的空间，是 $\mathbb R^n$ 的子空间，维数也等于 $\operatorname{rank}(A)$（行秩 = 列秩）。
-- **左零空间** $N(A^T)$：满足 $A^T\mathbf y=\mathbf 0$ 的 $\mathbf y$，等价于 $\mathbf y^T A=\mathbf 0$——零向量乘在 $A$ 的左边，所以叫「左」零空间。它是 $\mathbb R^m$ 的子空间，维数是 $m-\operatorname{rank}(A)$。
-
-四者的维数一张表记全：
-
-| 子空间 | 记号 | 生活在 | 维数 |
+| 空间 | 记号 | 住在哪一侧 | 维数 |
 | --- | --- | --- | --- |
-| 列空间（像） | $C(A)$ | $\mathbb R^m$ | $r=\operatorname{rank}(A)$ |
-| 零空间（核） | $N(A)$ | $\mathbb R^n$ | $n-r$ |
+| 列空间 | $C(A)$ | $\mathbb R^m$（输出那一侧） | $r=\operatorname{rank}(A)$ |
+| 零空间 | $N(A)$ | $\mathbb R^n$（输入那一侧） | $n-r$ |
 | 行空间 | $C(A^T)$ | $\mathbb R^n$ | $r$ |
 | 左零空间 | $N(A^T)$ | $\mathbb R^m$ | $m-r$ |
 
-一句话全景：**列空间和左零空间住在输出空间 $\mathbb R^m$，零空间和行空间住在输入空间 $\mathbb R^n$；在输入端，行空间 + 零空间 = n；在输出端，列空间 + 左零空间 = m**。本页重点在 $C(A)$ 与 $N(A)$，$C(A^T)$ 与 $N(A^T)$ 到 06、07 章用正交与投影时再展开。
-
-工具齐了，接下来用三道例题把「求零空间基」和「求秩」各走一遍。
+第三行是各行张成的空间，第四行是 $A^T\mathbf y=\mathbf 0$ 的解。这两行认得名字就行，本页后面用不到。盯住前两行的「住在哪一侧」：列空间在输出那一侧、零空间在输入那一侧，这是最容易把 $m$ 和 $n$ 用反的地方。
 
 ## 例题
 
-三道题按难度排：例 1 求零空间的基（两个自由变量），例 2 用消元求秩与列空间的基，例 3 把两者合起来验证秩-零化度定理。每题先问「该求哪个空间」。
+::: tip 例 1 · 求 A₁ 的零空间的基
+**题目**：$A_1=\begin{bmatrix}1&2&3\\2&5&7\\3&7&10\end{bmatrix}$，求 $N(A_1)$ 的一组基与它的维数。
 
-::: tip 例 1 · 求零空间的基 {#ex-null-basis}
-**题目**：$A=\begin{bmatrix}1&2&3\\2&4&6\end{bmatrix}$。求零空间 $N(A)$ 的一组基和它的维数。
+**先猜**：$A_1$ 三行三列，但三列里有一支是另两支的和，所以秩最多 $2$，零空间至少有 $3-2=1$ 维。会不会更多？只有算完才知道，先按一条线去算。
 
-<FigBox title="例 1：A 把 R³ 压成一条直线，零空间是一个平面" kind="几何" note="输入是三维空间，输出只有一维（列空间是 R² 里的直线，秩 1）。被压到原点的所有箭头构成一个过原点的平面（零空间，维数 2）。维数关系 2+1=3。" >
+**再算**：
 
-<svg viewBox="0 0 560 210" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
-  <polygon points="90,130 150,140 140,190 80,180" fill="#ef4444" fill-opacity="0.12" stroke="#ef4444" stroke-width="1.4"/>
-  <line x1="90" y1="130" x2="180" y2="152" stroke="var(--vp-c-text-3)"/>
-  <line x1="90" y1="130" x2="60" y2="162" stroke="var(--vp-c-text-3)"/>
-  <line x1="90" y1="130" x2="90" y2="40" stroke="var(--vp-c-text-3)"/>
-  <circle cx="90" cy="130" r="3" fill="var(--vp-c-text-1)" stroke="none"/>
-  <text x="150" y="166" text-anchor="middle" font-size="11" fill="#ef4444" stroke="none">零空间（过原点的平面，维 2）</text>
-  <text x="132" y="42" text-anchor="middle" font-size="12" fill="var(--vp-c-text-1)" stroke="none">ℝ³</text>
-  <line x1="205" y1="102" x2="298" y2="102" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-  <path d="M298 102 l-9 -3.2 l0 6.4 Z" fill="var(--vp-c-text-1)" stroke="none"/>
-  <text x="251" y="90" text-anchor="middle" font-size="13" font-weight="700" fill="var(--vp-c-text-1)" stroke="none">A</text>
-  <line x1="330" y1="140" x2="500" y2="140" stroke="var(--vp-c-text-3)"/>
-  <line x1="415" y1="185" x2="415" y2="55" stroke="var(--vp-c-text-3)"/>
-  <line x1="330" y1="140" x2="500" y2="140" stroke="#3b82f6" stroke-width="3"/>
-  <circle cx="415" cy="140" r="3" fill="var(--vp-c-text-1)" stroke="none"/>
-  <text x="415" y="202" text-anchor="middle" font-size="11" fill="#3b82f6" stroke="none">列空间（直线，维 1）</text>
-  <text x="500" y="60" text-anchor="end" font-size="12" fill="var(--vp-c-text-1)" stroke="none">ℝ²</text>
+1. 解 $A_1\mathbf x=\mathbf 0$，消元只动行：$R_2-2R_1$ 得 $(0,1,1)$，$R_3-3R_1$ 也得 $(0,1,1)$，再 $R_3-R_2$ 得全零行。阶梯形是 $\begin{bmatrix}1&2&3\\0&1&1\\0&0&0\end{bmatrix}$。*（为什么只动行：每一步都能倒回去，解集不变，第 3 章。）*
+2. 读回方程：主元在第 1、2 列，所以 $x_1,x_2$ 是主元变量，$x_3$ 是自由变量。第二行给 $x_2+x_3=0$，即 $x_2=-x_3$；代回第一行 $x_1+2x_2+3x_3=0$，得 $x_1=-x_3$。
+3. 自由变量取一个好算的值 $x_3=1$：$\mathbf v=(-1,-1,1)$。
+
+<FigBox title="例 1 的阶梯形：两个主元，第三列是自由变量" kind="结构" note="输入：A₁ 的三行三列 · 操作：三次行变换，只动行 · 结果：主元 2 个（秩 2），第 3 列没有主元，对应自由变量 x₃">
+<svg viewBox="0 0 660 210" class="sf" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
+  <text x="112" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">输入 A₁</text>
+  <path d="M56 46 L46 46 L46 168 L56 168" stroke="var(--vp-c-text-3)"/>
+  <path d="M168 46 L178 46 L178 168 L168 168" stroke="var(--vp-c-text-3)"/>
+  <text x="90" y="76" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="126" y="76" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">2</text>
+  <text x="160" y="76" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">3</text>
+  <text x="90" y="112" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">2</text>
+  <text x="126" y="112" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">5</text>
+  <text x="160" y="112" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">7</text>
+  <text x="90" y="148" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">3</text>
+  <text x="126" y="148" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">7</text>
+  <text x="160" y="148" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">10</text>
+  <line x1="196" y1="106" x2="272" y2="106" stroke="var(--vp-c-text-1)" stroke-width="1.8"/>
+  <path d="M272 106 l-9 -3.2 l0 6.4 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="234" y="92" text-anchor="middle" font-size="11" fill="var(--vp-c-text-2)" stroke="none">R₂−2R₁</text>
+  <text x="234" y="126" text-anchor="middle" font-size="11" fill="var(--vp-c-text-2)" stroke="none">R₃−3R₁、R₃−R₂</text>
+  <text x="430" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">结果：阶梯形</text>
+  <rect x="438" y="44" width="34" height="114" fill="#3b82f6" fill-opacity="0.1" stroke="none"/>
+  <path d="M372 46 L362 46 L362 168 L372 168" stroke="var(--vp-c-text-3)"/>
+  <path d="M484 46 L494 46 L494 168 L484 168" stroke="var(--vp-c-text-3)"/>
+  <circle cx="383" cy="60" r="13" stroke="#3b82f6" stroke-width="1.8"/>
+  <circle cx="419" cy="96" r="13" stroke="#3b82f6" stroke-width="1.8"/>
+  <text x="383" y="65" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="419" y="65" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">2</text>
+  <text x="455" y="65" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">3</text>
+  <text x="383" y="101" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="419" y="101" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="455" y="101" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="383" y="137" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="419" y="137" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="455" y="137" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="455" y="188" text-anchor="middle" font-size="11" fill="#3b82f6" stroke="none">第 3 列无主元 → 自由变量 x₃</text>
+  <text x="383" y="188" text-anchor="middle" font-size="11" fill="#3b82f6" stroke="none">主元 2 个</text>
+  <text x="540" y="80" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">秩 = 主元数 = 2</text>
+  <text x="540" y="104" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">零空间 = 3 − 2 = 1 维</text>
 </svg>
-
 </FigBox>
 
-**先想什么**：$A$ 是 $2\times 3$，输入 $\mathbf x$ 是 3 维，输出是 2 维。两行方程、三个未知数，解集一般不止零向量——零空间多半有正维数。*（列数减秩就是零空间维数，先预估一下不会懵。）*
-
-**第一步，列齐次方程。** $A\mathbf x=\mathbf 0$ 展开：
-
-$$
-\begin{aligned}
-x_1+2x_2+3x_3&=0\\
-2x_1+4x_2+6x_3&=0
-\end{aligned}
-$$
-
-第二行是第一行的两倍，冗余，真正独立的只有一条：$x_1+2x_2+3x_3=0$。
-
-**第二步，分主元变量与自由变量。** 矩阵已经是阶梯形（主元是第 1 行第 1 列的 1，第 2 行全零）。所以 $x_1$ 是主元变量，$x_2,x_3$ 是自由变量（可以随便取）。解出：
-
-$$
-x_1=-2x_2-3x_3
-$$
-
-**第三步，写通解，拆出基。** 让自由变量各取一组值：先取 $(x_2,x_3)=(1,0)$，再取 $(0,1)$：
-
-$$
-\mathbf x=x_2\begin{bmatrix}-2\\1\\0\end{bmatrix}+x_3\begin{bmatrix}-3\\0\\1\end{bmatrix}
-$$
-
-所以零空间的一组基是 $\mathbf v_1=(-2,1,0)$ 与 $\mathbf v_2=(-3,0,1)$，维数 $\dim N(A)=2$。
-
-**验算**：$A\mathbf v_1=\begin{bmatrix}1&2&3\\2&4&6\end{bmatrix}\begin{bmatrix}-2\\1\\0\end{bmatrix}=\begin{bmatrix}-2+2+0\\-4+4+0\end{bmatrix}=\begin{bmatrix}0\\0\end{bmatrix}$ ✓；$A\mathbf v_2=\begin{bmatrix}-3+0+3\\-6+0+6\end{bmatrix}=\begin{bmatrix}0\\0\end{bmatrix}$ ✓。（数值已用 node 验算。）
+**再回代**：$A_1\mathbf v=(-1-2+3,\,-2-5+7,\,-3-7+10)=(0,0,0)$ ✓。零空间就是这条线，$\dim N(A_1)=1$；秩 $=3-1=2$，与「最多两支独立」的猜测吻合。
 :::
 
-::: tip 例 2 · 用消元求秩 {#ex-rank}
-**题目**：$A=\begin{bmatrix}1&2&3\\2&4&6\\1&1&2\end{bmatrix}$。求 $\operatorname{rank}(A)$ 与列空间的一组基。
+::: tip 例 2 · 用同一份阶梯形读出秩和列空间的基
+**题目**：接例 1，求 $\operatorname{rank}(A_1)$ 与 $C(A_1)$ 的一组基。
 
-<FigBox title="例 2：秩 2，列空间是 R³ 里的一个平面" kind="几何" note="三个列向量里 c₃ = c₁ + c₂，只有两个独立。列空间是 c₁、c₂ 张成的过原点平面（维数 2），秩 = 2；c₃ 是这个平行四边形的一条对角线。" >
+**先猜**：阶梯形有两个主元，所以秩是 $2$；列空间的基应该是主元对应的**原矩阵**那两列，也就是 $\mathbf c_1,\mathbf c_2$。
 
-<svg viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
-  <line x1="120" y1="140" x2="260" y2="150" stroke="var(--vp-c-text-3)"/>
-  <line x1="120" y1="140" x2="60" y2="175" stroke="var(--vp-c-text-3)"/>
-  <line x1="120" y1="140" x2="120" y2="45" stroke="var(--vp-c-text-3)"/>
-  <polygon points="120,140 250,110 280,155 150,185" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.2"/>
-  <line x1="120" y1="140" x2="250" y2="110" stroke="#3b82f6" stroke-width="2.2"/>
-  <path d="M250 110 l-8 -3 l0 6 Z" fill="#3b82f6" stroke="none"/>
-  <line x1="120" y1="140" x2="150" y2="185" stroke="#3b82f6" stroke-width="2.2"/>
-  <path d="M150 185 l-1 8.4 l-6.2 -5.8 Z" fill="#3b82f6" stroke="none"/>
-  <line x1="120" y1="140" x2="280" y2="155" stroke="var(--vp-c-text-1)" stroke-width="2" stroke-dasharray="5 4"/>
-  <path d="M280 155 l-8.2 -2 l1.8 6.4 Z" fill="var(--vp-c-text-1)" stroke="none"/>
-  <circle cx="120" cy="140" r="3" fill="var(--vp-c-text-1)" stroke="none"/>
-  <text x="262" y="108" font-size="12" fill="#3b82f6" stroke="none">c₁</text>
-  <text x="142" y="202" font-size="12" fill="#3b82f6" stroke="none">c₂</text>
-  <text x="290" y="158" font-size="12" fill="var(--vp-c-text-1)" stroke="none">c₃ = c₁ + c₂</text>
-  <text x="120" y="216" text-anchor="middle" font-size="11" fill="var(--vp-c-text-2)" stroke="none">列空间 = 过原点的平面（维 2）</text>
+**再算**：数主元得 $\operatorname{rank}(A_1)=2$；回原矩阵拿第 1、2 列，$\mathbf c_1=(1,2,3)$、$\mathbf c_2=(2,5,7)$；剩下那列 $\mathbf c_3=\mathbf c_1+\mathbf c_2$，落在 $\mathbf c_1,\mathbf c_2$ 张成的平面里，不提供新方向。
+
+<FigBox title="三列里有一支是另两支的和：列空间是三维空间里的一个平面" kind="几何" note="输入：三个列向量 c₁、c₂、c₃ · 操作：把 c₃ 与 c₁+c₂ 比一比 · 结果：c₃ 落在 c₁、c₂ 张成的平面上，独立方向只有两个">
+<svg viewBox="0 0 460 240" class="sf" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
+  <text x="230" y="20" text-anchor="middle" font-size="11.5" fill="var(--vp-c-text-2)" stroke="none">三维示意：列空间 = 过原点的平面</text>
+  <line x1="120" y1="160" x2="330" y2="184" stroke="var(--vp-c-text-3)"/>
+  <line x1="120" y1="160" x2="56" y2="196" stroke="var(--vp-c-text-3)"/>
+  <line x1="120" y1="160" x2="120" y2="56" stroke="var(--vp-c-text-3)"/>
+  <polygon points="120,160 246,116 276,158 150,202" fill="#3b82f6" fill-opacity="0.1" stroke="#3b82f6" stroke-width="1.2"/>
+  <line x1="120" y1="160" x2="246" y2="116" stroke="#3b82f6" stroke-width="2.2"/>
+  <path d="M246 116 l-9 -2 l1.2 6.4 Z" fill="#3b82f6" stroke="none"/>
+  <text x="252" y="110" font-size="12" fill="#3b82f6" stroke="none">c₁</text>
+  <line x1="120" y1="160" x2="150" y2="202" stroke="#3b82f6" stroke-width="2.2"/>
+  <path d="M150 202 l-1.4 8.4 l-6 -5.6 Z" fill="#3b82f6" stroke="none"/>
+  <text x="132" y="220" font-size="12" fill="#3b82f6" stroke="none">c₂</text>
+  <line x1="120" y1="160" x2="276" y2="158" stroke="var(--vp-c-text-1)" stroke-width="2" stroke-dasharray="5 4"/>
+  <path d="M276 158 l-8.4 -2 l1.4 6.4 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="284" y="162" font-size="12" fill="var(--vp-c-text-1)" stroke="none">c₃ = c₁ + c₂</text>
+  <circle cx="120" cy="160" r="3.4" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="112" y="150" text-anchor="end" font-size="11" fill="var(--vp-c-text-2)" stroke="none">原点</text>
+  <text x="286" y="196" text-anchor="middle" font-size="11" fill="var(--vp-c-text-2)" stroke="none">秩 2，零空间 1 维</text>
 </svg>
-
 </FigBox>
 
-**先想什么**：数秩就是数「线性无关的列有几个」。三个列向量 $\mathbf c_1=(1,2,1)$、$\mathbf c_2=(2,4,1)$、$\mathbf c_3=(3,6,2)$，肉眼能看出 $\mathbf c_3=\mathbf c_1+\mathbf c_2$，所以最多两个独立。但肉眼不可靠，用消元给出确定答案。
-
-**第一步，化行阶梯形。** 对 $A$ 做行变换（只动行，列之间的线性关系不变）：
-
-$$
-\begin{bmatrix}1&2&3\\2&4&6\\1&1&2\end{bmatrix}\xrightarrow{R_2-2R_1}\begin{bmatrix}1&2&3\\0&0&0\\1&1&2\end{bmatrix}\xrightarrow{R_3-R_1}\begin{bmatrix}1&2&3\\0&0&0\\0&-1&-1\end{bmatrix}
-$$
-
-交换第 2、3 行，并把第 2 行除以 $-1$，得到行阶梯形：
-
-$$
-\begin{bmatrix}1&2&3\\0&1&1\\0&0&0\end{bmatrix}
-$$
-
-**第二步，数主元。** 主元在第 1 列与第 2 列，共 2 个，所以 $\operatorname{rank}(A)=2$。
-
-**第三步，列空间的一组基。** 主元列对应的**原矩阵**列：$\mathbf c_1=(1,2,1)$ 与 $\mathbf c_2=(2,4,1)$。它们线性无关，构成 $C(A)$ 的一组基，$\dim C(A)=2$。而 $\mathbf c_3=\mathbf c_1+\mathbf c_2=(3,6,2)$ 确实落在 $\mathbf c_1,\mathbf c_2$ 张成的平面里。
-
-**验算**：node 算出的行最简形是 $\begin{bmatrix}1&0&1\\0&1&1\\0&0&0\end{bmatrix}$，与手推一致，主元 2 个 ✓。
+**再回代**：$\mathbf c_1,\mathbf c_2$ 不成倍数，所以独立；$\mathbf c_3$ 确实是它俩的和。于是 $C(A_1)$ 是三维空间里过原点的一个平面，$\dim C(A_1)=2$，而 $2+1=3=n$ ✓。
 :::
 
-::: tip 例 3 · 秩-零化度定理的验证 {#ex-rank-nullity}
-**题目**：接例 2 的 $A$，求零空间的维数，验证 $\dim C(A)+\dim N(A)=3$。
+::: tip 例 3 · 这三个集合，哪个是子空间
+**题目**：判断 (a) 直线 $y=2x$ 上的全部箭头；(b) 直线 $y=2x+1$ 上的全部箭头；(c) 闭第一象限（含两条坐标轴）里的全部箭头。
 
-**先想什么**：例 2 已经得到 $\operatorname{rank}(A)=2$，而 $n=3$，按定理零空间维数应该是 $3-2=1$。现在把它真算出来，看是不是一条线。
+**先猜**：(a) 过原点，应该过；(b) 不过原点，大概第一条就被拦；(c) 看着是一整块，可负数乘可能要出事。
 
-**第一步，解 $A\mathbf x=\mathbf 0$。** 用例 2 的行阶梯形（与原方程组同解）：
+**再算**：(a) 含零（$0=2\cdot0$）；两支斜率 2 的箭相加，斜率还是 2；乘任意实数还是斜率 2。三条全过，是子空间。(b) 不含零（$0\ne2\cdot0+1$），第一条就不过，不是子空间。(c) 含零（按「闭第一象限含边界」的约定，原点算在里面），加法也封闭，但数乘不封闭：$(1,1)$ 在里面，$-1\cdot(1,1)=(-1,-1)$ 不在。
 
-$$
-\begin{bmatrix}1&2&3\\0&1&1\\0&0&0\end{bmatrix}\begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix}=\begin{bmatrix}0\\0\\0\end{bmatrix}
-$$
-
-即 $x_2+x_3=0$ 与 $x_1+2x_2+3x_3=0$。由第一式 $x_2=-x_3$，代入第二式得 $x_1+2(-x_3)+3x_3=x_1+x_3=0$，故 $x_1=-x_3$。
-
-**第二步，写通解。** $\mathbf x=x_3(-1,-1,1)$，零空间是一维，基是 $\mathbf v=(-1,-1,1)$。
-
-**第三步，验证定理。**
-
-$$
-\dim C(A)+\dim N(A)=2+1=3=n
-$$
-
-**验算**：$A\mathbf v=\begin{bmatrix}1&2&3\\2&4&6\\1&1&2\end{bmatrix}\begin{bmatrix}-1\\-1\\1\end{bmatrix}=\begin{bmatrix}-1-2+3\\-2-4+6\\-1-1+2\end{bmatrix}=\begin{bmatrix}0\\0\\0\end{bmatrix}$ ✓。（node 验算通过。）
+**再回代**：给 (b) 补一个具体反例。$(0,1)$ 与 $(1,3)$ 都在 $y=2x+1$ 上（$1=0+1$、$3=2+1$），加起来是 $(1,4)$，而 $4\ne2\cdot1+1=3$，跑出线外 ✓。三个里只有 (a) 是子空间。
 :::
 
-三道题做完，再用一份清单把这一页的坑排一遍。
+## 这一页带走三句话
 
-## 易错清单
+1. 子空间就是「含原点、加法与数乘都关得住」的一块区域；不过原点的直线、平面都不是。
+2. 列空间是这台变换能到达的所有位置，零空间是被它送成零的所有箭头；两者的维数相加等于输入的列数 $n$。
+3. 秩 = 主元个数 = 列空间的维数；列空间的基回原矩阵取主元列，零空间的基靠自由变量取 $1$。
 
-按踩坑频率从高到低排，格式是「错误做法 → 会得到什么 → 正确做法」。
+::: warning 最容易错的两处
+- **以为秩等于行数或列数。** 秩是列空间的维数，只有各列彼此独立时才等于列数；$A_0$ 是两行两列，秩只有 $1$。
+- **拿阶梯形的列当列空间的基。** 行变换把列改过了，必须回原矩阵取主元所在的列。
+:::
 
-1. **把零空间当成「只有零向量」** → 漏掉无穷多解，秩-零化度定理对不上 → 零空间是齐次方程的全部解；当且仅当 A 的列线性无关时才只有零向量。
-2. **以为秩等于行数或列数** → 把「满秩」当成默认 → 秩 = 主元数 = 列空间维数，只在列满秩时才等于列数，只在行满秩时才等于行数。
-3. **数秩时看阶梯形里「哪些列」而不是「哪些主元列」** → 拿阶梯形的列当列空间基 → 必须回原矩阵取主元列对应的列，消元改变的是数值不是列向量本身。
-4. **忘了先验「含零向量」就判断子空间** → 把不过原点的直线/平面当成子空间 → 子空间第一条就是含零向量，一票否决。
-5. **把列空间和零空间的「生活空间」搞混** → 维数公式 $m$、$n$ 用反 → 列空间住在 $\mathbb R^m$（行数），零空间住在 $\mathbb R^n$（列数），公式是 $\dim C(A)+\dim N(A)=n$。
-6. **自由变量取成了主元变量** → 基向量不独立或张不满 → 只有主元列定主元变量，其余都是自由变量，自由变量逐个取 1、其余取 0。
-
-## 自检
-
-1. $A$ 是 $3\times 5$ 矩阵，秩为 2。列空间和零空间各是几维？各住在 $\mathbb R^m$ 还是 $\mathbb R^n$？
-2. 判断：平面 $x+y+z=0$ 是不是 $\mathbb R^3$ 的子空间？平面 $x+y+z=1$ 呢？为什么？
-3. 一个 $2\times 2$ 矩阵把整个平面压成一条直线。它的秩是多少？零空间是几维？秩-零化度定理给出什么等式？
-
-## 下一步
-
-这一页的秩、零空间、列空间是后面所有章节的公共语言：下一章[05 · 行列式：面积缩放的因子](05-determinant.md)用它们解释「变换到底把面积/体积放大了几倍」，再往后[06 · 特征值、特征向量与对角化](06-eigenvalues.md)找「方向不变、只被拉伸」的特殊向量。
+下一站是[第 5 章 · 行列式](05-determinant.md)：它给这台变换配一个数，回答面积被放大了几倍。想按教材章号把「求秩、求基础解系」练成步骤，去经典版第 3、4 章。

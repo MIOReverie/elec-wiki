@@ -1,401 +1,278 @@
 ---
 title: 05 · 行列式：面积缩放的因子
-description: 行列式的几何意义（二维=平行四边形面积缩放倍数，三维=体积，负号=翻转方向），三条性质，代数余子式展开，三角矩阵行列式，det=0 等价不可逆，克拉默法则一句话。
+description: 给一台变换配一个数：它把面积（三维是体积）放大了几倍、有没有翻面、有没有压扁。从单位正方形被拉成平行四边形出发，用三条性质推出 ad−bc，再学三阶按一行展开与化成三角，最后落在 det=0 与克拉默法则上。
 ---
 
 # 05 · 行列式：面积缩放的因子
 
-<Meta time="45 min" level="核心" note="行列式不是一串要背的运算，而是『线性变换把面积/体积放大了多少倍』这一个数；最容易错的是交换两行后忘了变号" />
+<Meta time="18 min" level="核心" note="最容易错的是把行列式当成「面积」——它其实是面积被放大的倍数，还带符号；交换两行之后忘了变号是第二大坑" />
 
-**这一页要解决什么**：前面几章你已经把矩阵看成一个「变换」——它把箭头掰到新位置、把网格拉伸成新网格。这一页给这个变换配一个唯一的数字：**行列式（determinant）**，记作 $\det A$ 或 $|A|$。它回答一个非常具体的问题：这个变换把图形（先从平面里的面积说起）放大或缩小了多少倍。读完你应该能：说出 2×2 行列式的几何含义、用三条性质快速算行列式、理解为什么 $\det A=0$ 意味着变换把空间「压扁」，并会在算完后用性质自检符号。
+**这一页要解决什么**：上一页知道了变换会把空间压扁或者压不扁，那是定性的话。这一页给每台变换配一个数：面积被放大了几倍、有没有翻面、有没有压扁。读完你能把这个数对二阶、三阶矩阵都算出来，能看清它为零时几何上发生了什么，还能用它解一个二元方程组。
 
-::: tip 读这页之前
-- **需要会**：向量的列坐标与线性组合（[01 · 向量、线性组合与张成](./01-vectors.md)）；矩阵作为线性变换、列就是基向量的像（[02 · 矩阵与线性变换](./02-matrices.md)）；高斯消元把矩阵化成上三角（[03 · 高斯消元与线性方程组](./03-elimination.md)）；列空间与零空间的一层直觉（[04 · 向量空间与四大子空间](./04-subspaces.md)）。
-- **高中数学里已经埋好的伏笔**：两条向量张成的平行四边形面积，等于两列作「叉积」的绝对值，三角形面积是它的一半。这一页就是把这个面积公式升级成矩阵的语言。
-- **这一页用到的符号**：$A$（矩阵）、$\det A$ 或 $|A|$（行列式）、$A^T$（转置）、$A^{-1}$（逆）、$I$（单位矩阵）。约定见[符号与约定](../guide/notation.md)。
-- **先给两个直觉**：「面积缩放的倍数」和「翻转方向」。这一页全部内容都是这两个直觉的展开。
+::: tip 读之前
+- **需要会**：矩阵的两列就是 $\mathbf i=(1,0)$、$\mathbf j=(0,1)$ 被送到的地方（[第 2 章](02-matrices.md)）。一句复习：$A$ 的第一列是 $A\mathbf i$，第二列是 $A\mathbf j$，整个图形由这两列张成。
+- **需要会**：「有非零箭头被送成零」这件事（[第 4 章](04-subspaces.md)的零空间）。一句复习：零空间里除了零向量还有别的东西，就说明这台机器把某个方向压没了。
+- **这一页的记号**：$\det A$ 和 $|A|$ 是同一个东西，都读作「$A$ 的行列式」，本页两种写法都用、首次出现在这里；$I$ 是单位矩阵；$A^T$ 是转置；$A^{-1}$ 是逆。
 :::
 
-**场景引入**：想象你在屏幕上画了一个单位正方形——四个角是 $(0,0)$、$(1,0)$、$(1,1)$、$(0,1)$，面积正好是 $1$。现在让矩阵
+先在屏幕上画一个单位正方形：四个角是 $(0,0)$、$(1,0)$、$(1,1)$、$(0,1)$，面积正好是 $1$。它的两条边就是 $\mathbf i$ 和 $\mathbf j$。
+
+现在让第 2 章那台机器 $A=\begin{bmatrix}2&1\\0&3\end{bmatrix}$ 作用上去：$\mathbf i$ 被送到 $(2,0)$，$\mathbf j$ 被送到 $(1,3)$。正方形于是被拉成一个平行四边形，四个角是 $(0,0)$、$(2,0)$、$(3,3)$、$(1,3)$。
+
+先猜它的面积：底边从 $(0,0)$ 到 $(2,0)$，长 $2$；另一条边从 $(0,0)$ 到 $(1,3)$，它把图形抬到高度 $3$。底乘高，$2\times3=6$。所以面积从 $1$ 变成了 $6$。
+
+## 一、先量一量：面积被放大了几倍
+
+那个「$1$ 变 $6$」的倍数，就是这一页的主角：**行列式**，记作 $\det A$（也写作 $|A|$，本页两种都用，指的是同一个数）。
+
+对二阶矩阵，它有一个一步就能算的公式：
 
 $$
-A=\begin{bmatrix}3&1\\2&4\end{bmatrix}
+\det A=\begin{vmatrix}a&b\\c&d\end{vmatrix}=ad-bc=2\times3-1\times0=6
 $$
 
-作用上去：底边 $\mathbf i=(1,0)$ 被掰到 $\mathbf a=(3,2)$，左边 $\mathbf j=(0,1)$ 被掰到 $\mathbf b=(1,4)$，于是整个正方形被「拉伸 + 倾斜」成一个平行四边形，顶点变成 $0,\ \mathbf a,\ \mathbf a+\mathbf b,\ \mathbf b$。它不再是正方形，面积也变了——**新的面积是 $10$**。这个从 $1$ 到 $10$ 的倍数，就是 $A$ 的行列式：
+读一遍：$a=2$、$b=1$ 是第一行的两个数，$c=0$、$d=3$ 是第二行的两个数；但更该按列读——第一列是 $(a,c)=(2,0)$，也就是 $A\mathbf i$，第二列是 $(b,d)=(1,3)$，也就是 $A\mathbf j$。于是 $ad$ 是「第一列的横坐标 × 第二列的纵坐标」，$bc$ 是「第一列的纵坐标 × 第二列的横坐标」，两者相减就是这两列张出的平行四边形的（带符号）面积。$2\times3-1\times0=6$，与数格子的结果一致。
 
-$$
-\det A = 3\times 4 - 2\times 1 = 10
-$$
+为什么一个数就能管住所有图形？因为线性变换把每个小方格都按同一比例拉，任何图形都是小方格拼起来的，所以面积的大小统一乘上 $|\det A|$——注意是绝对值，面积本身没有负的；带符号的 $\det A$ 额外记录了有没有翻面。正方形、三角形、圆，面积乘的都是同一个 $|\det A|$。
 
-<FigBox title="单位正方形被变换拉伸成平行四边形：面积从 1 变成 det" kind="几何" note="左边是变换前的单位正方形，面积 1；右边是 A 作用后的平行四边形，由列向量 a=(3,2) 与 b=(1,4) 张成，面积 det A = 3×4 − 2×1 = 10。行列式就是『面积被放大的倍数』。" >
-<svg viewBox="0 0 340 214" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
-<defs>
-<marker id="detArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-<path d="M0 0 L10 5 L0 10 z" fill="var(--vp-c-text-1)"/>
-</marker>
-</defs>
-<line x1="40" y1="158" x2="114" y2="158"/>
-<line x1="64" y1="184" x2="64" y2="118"/>
-<rect x="64" y="132" width="26" height="26" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-text-1)"/>
-<line x1="64" y1="158" x2="90" y2="158" marker-end="url(#detArrow)"/>
-<line x1="64" y1="158" x2="64" y2="132" marker-end="url(#detArrow)"/>
-<text x="90" y="174" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t  sf-it ">i</text>
-<text x="46" y="128" text-anchor="end" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t  sf-it ">j</text>
-<text x="77" y="150" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">面积=1</text>
-<text x="64" y="204" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t   ">变换前</text>
-<line x1="188" y1="158" x2="326" y2="158"/>
-<line x1="236" y1="184" x2="236" y2="60"/>
-<path d="M236 158 L278 130 L292 74 L250 102 Z" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-text-1)"/>
-<line x1="236" y1="158" x2="278" y2="130" marker-end="url(#detArrow)"/>
-<line x1="236" y1="158" x2="250" y2="102" marker-end="url(#detArrow)"/>
-<text x="282" y="144" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">a=(3,2)</text>
-<text x="224" y="92" text-anchor="end" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">b=(1,4)</text>
-<text x="268" y="96" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">面积=det=10</text>
-<text x="236" y="204" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t   ">变换后</text>
+<FigBox title="单位正方形被拉成平行四边形：面积从 1 变成 det A = 6" kind="几何" note="输入：单位正方形，两条边是 i 与 j，面积 1 · 操作：A 把 i 送到 (2,0)、把 j 送到 (1,3) · 结果：平行四边形，底 2 高 3（两轴同为每单位 30 像素），面积 6，就是 det A">
+<svg viewBox="0 0 660 250" class="sf" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
+  <text x="110" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">输入：单位正方形（面积 1）</text>
+  <text x="330" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">操作：A</text>
+  <text x="545" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">结果：平行四边形</text>
+  <line x1="46" y1="176" x2="206" y2="176" stroke="var(--vp-c-text-3)"/>
+  <line x1="80" y1="220" x2="80" y2="80" stroke="var(--vp-c-text-3)"/>
+  <rect x="80" y="124" width="52" height="52" fill="#3b82f6" fill-opacity="0.13" stroke="#3b82f6" stroke-width="1.8"/>
+  <line x1="80" y1="176" x2="132" y2="176" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <path d="M132 176 l-8 -3 l0 6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="138" y="180" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">i</text>
+  <line x1="80" y1="176" x2="80" y2="124" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <path d="M80 124 l-3 8 l6 0 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="86" y="118" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">j</text>
+  <text x="106" y="150" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-1)" stroke="none">面积 1</text>
+  <line x1="232" y1="176" x2="288" y2="176" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <path d="M288 176 l-8 -3.4 l0 6.8 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="260" y="146" text-anchor="middle" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">i ↦ (2,0)</text>
+  <text x="260" y="200" text-anchor="middle" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">j ↦ (1,3)</text>
+  <line x1="400" y1="186" x2="600" y2="186" stroke="var(--vp-c-text-3)"/>
+  <line x1="420" y1="216" x2="420" y2="66" stroke="var(--vp-c-text-3)"/>
+  <polygon points="420,186 480,186 510,96 450,96" fill="#3b82f6" fill-opacity="0.13" stroke="#3b82f6" stroke-width="1.8"/>
+  <line x1="450" y1="96" x2="450" y2="186" stroke="var(--vp-c-text-3)" stroke-dasharray="4 3"/>
+  <text x="456" y="146" font-size="11" fill="var(--vp-c-text-2)" stroke="none">高 3</text>
+  <text x="450" y="206" text-anchor="middle" font-size="11" fill="var(--vp-c-text-2)" stroke="none">底 2</text>
+  <text x="482" y="202" text-anchor="middle" font-size="11" fill="var(--vp-c-text-1)" stroke="none">(2,0)</text>
+  <text x="444" y="88" text-anchor="end" font-size="11" fill="var(--vp-c-text-1)" stroke="none">(1,3)</text>
+  <text x="518" y="92" font-size="11.5" fill="#3b82f6" stroke="none">面积 6</text>
 </svg>
 </FigBox>
 
-**看图能读出什么**：左图的单位正方形面积是 1；右图同一个正方形被掰成平行四边形后，面积变成 10。行列式就是那个「10」。它不是随便定义出来的数字，而是变换自带的一个客观属性——你可以数格子数出来。
+## 二、负号说的是翻面，零说的是压扁
 
-## 结论先行
+换一台机器看符号。$B=\begin{bmatrix}1&2\\3&4\end{bmatrix}$，它的两列是 $(1,3)$ 与 $(2,4)$，$\det B=1\times4-2\times3=-2$。
 
-1. 行列式是一个数，它度量线性变换对**面积（二维）或体积（三维）的缩放倍数**；$\det I = 1$，因为恒等变换什么都不缩放。
-2. 行列式的**符号**表示方向是否翻转：负号意味着变换把平面「翻了个面」，图形的定向反了。
-3. 三条性质撑起全部计算：交换两行变号、某一行是另外几行的线性组合则行列式为 0、行列式对每一行都是线性的。
-4. 三角矩阵的行列式等于对角线元素相乘——这是高斯消元之后最省事的算法。
-5. $\det A = 0$ 与「不可逆」等价，几何上就是变换把空间**压扁**（零空间非平凡）。
+面积放大倍数取绝对值：$|{-2}|=2$。负号说的是另一件事：**平面被翻了个面**。判断方法看两列的前后顺序。变换前从 $\mathbf i$ 转到 $\mathbf j$ 是逆时针；变换后从 $(1,3)$ 转到 $(2,4)$ 变成了顺时针——顺序反了，符号就负。
 
-一句话收尾：所有计算规则都从「面积缩放倍数」这一个几何事实推导出来，后面只是把它们串成可以手算的步骤。
+零则更严重。拿 $S=\begin{bmatrix}2&4\\1&2\end{bmatrix}$，两列 $(2,1)$ 与 $(4,2)$ 成倍数，$\det S=2\times2-4\times1=0$。这时平行四边形退化成一条线段，面积塌成 $0$。同一个矩阵还藏着一个非零箭头：$S(-2,1)=(0,0)$。所以下面三句话说的是同一件事：
 
-## 一、几何图景：行列式是面积缩放的因子
+- 两列成倍数（整个平面被拍到一条线上）；
+- 零空间里有非零箭头（第 4 章的说法）；
+- 这台机器没有逆，拍扁了就做不回去。
 
-这一节只回答一个问题：为什么一个数字能完整描述「变换对面积做了什么」。
-
-对于一个 2×2 矩阵 $A=\begin{bmatrix}a&b\\c&d\end{bmatrix}$，它的两列就是两个向量 $\mathbf a=(a,c)$、$\mathbf b=(b,d)$。这两个向量张成一个平行四边形，它的（带符号）面积就是：
-
-$$
-\det A = ad - bc
-$$
-
-为什么是这个式子？把两个向量并排写成两列，$ad-bc$ 正是「第一列横 × 第二列纵 − 第一列纵 × 第二列横」——也就是两列作叉积的 $z$ 分量。当 $\mathbf a,\mathbf b$ 不共线时，它的绝对值就是平行四边形面积；当两列共线时面积塌成 0，行列式也正好是 0。
-
-这里有个关键点值得现在就记下：**行列式不是「计算之后才知道面积」，而是它本来就等于面积**。任何图形（不一定是正方形）经 $A$ 变换后，面积都乘以同一个数 $\det A$——三角形、圆、不规则形状全都一样，因为线性变换把「小方格」都按同一比例拉伸，再对面积积分（求和取极限）就得到这个公共倍数。这个「所有图形共享一个缩放因子」的事实，正是下一节能定义体积版行列式的根据。
-
-## 二、负号与定向：翻转方向的记录
-
-这一节只回答一个问题：行列式为什么会出现负数，负数到底意味着什么。
-
-面积本身没有正负，但 $\det A$ 可以取负。负号记录的不是「面积变小」，而是**定向（orientation）翻转**：变换把平面「翻了个面」。
-
-怎么判断翻转了没有？看两个基向量的相对顺序。变换前，$\mathbf i=(1,0)$ 在右、$\mathbf j=(0,1)$ 在上，从 $\mathbf i$ 转到 $\mathbf j$ 是**逆时针**；变换后看 $\mathbf a=A\mathbf i$ 与 $\mathbf b=A\mathbf j$：如果从 $\mathbf a$ 转到 $\mathbf b$ 还是逆时针，$\det A>0$；如果变成了**顺时针**，$\det A<0$，说明整个平面被翻转了。
-
-<FigBox title="负号 = 定向翻转" kind="几何" note="左图：i 在上方、j 在右侧，i 到 j 逆时针，det>0。右图：变换后 a=(1,2) 在 b=(3,4) 的『上方』（角度更大），从 a 到 b 变成顺时针，det = 1×4 − 3×2 = −2，平面被翻了个面。" >
-<svg viewBox="0 0 340 180" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
-<defs>
-<marker id="detArrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-<path d="M0 0 L10 5 L0 10 z" fill="var(--vp-c-text-1)"/>
-</marker>
-</defs>
-<line x1="70" y1="150" x2="128" y2="150"/>
-<line x1="70" y1="162" x2="70" y2="108"/>
-<line x1="70" y1="150" x2="110" y2="150" marker-end="url(#detArrow2)"/>
-<line x1="70" y1="150" x2="70" y2="110" marker-end="url(#detArrow2)"/>
-<path d="M92 148 A22 22 0 0 0 72 128" stroke-dasharray="4 3"/>
-<text x="110" y="150" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t  sf-it ">i</text>
-<text x="70" y="106" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t  sf-it ">j</text>
-<text x="70" y="146" text-anchor="end" dominant-baseline="middle" font-size="10" stroke="none" fill="var(--vp-c-text-3)" class="sf-t   ">逆时针 → det>0</text>
-<line x1="240" y1="150" x2="322" y2="150"/>
-<line x1="240" y1="162" x2="240" y2="60"/>
-<line x1="240" y1="150" x2="260" y2="110" marker-end="url(#detArrow2)"/>
-<line x1="240" y1="150" x2="300" y2="70" marker-end="url(#detArrow2)"/>
-<path d="M262 116 A20 20 0 0 1 292 78" stroke-dasharray="4 3"/>
-<text x="262" y="104" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">a=(1,2)</text>
-<text x="302" y="68" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">b=(3,4)</text>
-<text x="240" y="146" text-anchor="end" dominant-baseline="middle" font-size="10" stroke="none" fill="var(--vp-c-text-3)" class="sf-t   ">顺时针 → det<0</text>
+<FigBox title="负号 = 翻面：两列的前后顺序反了" kind="几何" note="输入：i 转到 j 是逆时针 · 操作：B 把 i 送到 (1,3)、把 j 送到 (2,4) · 结果：从 (1,3) 转到 (2,4) 变成顺时针，det B = −2；两轴同为每单位 24 像素，斜率 3 与 2 按原比例画">
+<svg viewBox="0 0 660 210" class="sf" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
+  <text x="112" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">输入：i 到 j 是逆时针</text>
+  <text x="330" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">操作：B</text>
+  <text x="545" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">结果：变成顺时针</text>
+  <line x1="48" y1="150" x2="196" y2="150" stroke="var(--vp-c-text-3)"/>
+  <line x1="76" y1="190" x2="76" y2="80" stroke="var(--vp-c-text-3)"/>
+  <line x1="76" y1="150" x2="100" y2="150" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <path d="M100 150 l-8 -3 l0 6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="106" y="154" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">i</text>
+  <line x1="76" y1="150" x2="76" y2="126" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <path d="M76 126 l-3 8 l6 0 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="84" y="122" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">j</text>
+  <path d="M100 146 A24 24 0 0 0 80 128" stroke-dasharray="4 3" stroke="var(--vp-c-text-3)"/>
+  <text x="110" y="104" font-size="10.5" fill="var(--vp-c-text-2)" stroke="none">逆时针 → det&gt;0</text>
+  <line x1="230" y1="150" x2="286" y2="150" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <path d="M286 150 l-8 -3.4 l0 6.8 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="258" y="132" text-anchor="middle" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">det B = −2</text>
+  <line x1="420" y1="180" x2="620" y2="180" stroke="var(--vp-c-text-3)"/>
+  <line x1="440" y1="200" x2="440" y2="60" stroke="var(--vp-c-text-3)"/>
+  <line x1="440" y1="180" x2="464" y2="108" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <path d="M464 108 l-1.6 -8.4 l-6.2 4.8 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="436" y="102" text-anchor="end" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">(1,3)</text>
+  <line x1="440" y1="180" x2="488" y2="84" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <path d="M488 84 l-8.2 -1.6 l1.8 6.6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="492" y="80" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">(2,4)</text>
+  <path d="M464 114 A24 24 0 0 1 486 92" stroke-dasharray="4 3" stroke="#ef4444"/>
+  <text x="500" y="124" font-size="10.5" fill="#ef4444" stroke="none">顺时针：平面被翻面</text>
 </svg>
 </FigBox>
 
-**看图能读出什么**：翻转不是「图形被压扁」，而是「里外调了个」——把纸翻过来看，所有顺时针都变成逆时针。所以面积大小看 $|\det A|$，方向是否翻面看 $\det A$ 的符号。平面里的直觉建立后，把「面积」换成「体积」，行列式就自动升级到三维。
+## 三、不用画图也能算：三条性质
 
-## 三、三维与 n 维：体积缩放，一次类推
+画图只能量二阶，而且量不出三阶。要把计算交出去，只需要下面三条性质——它们是行列式的全部规则，其余公式都由它们推出来。
 
-这一节只回答一个问题：3×3 行列式的几何含义是什么，更高维怎么类推。
+- **起点**：$\det I=1$。恒等变换什么都不动，面积倍数当然是 $1$。
+- **交换两行或两列，符号变**。二阶可以直接验：$\det\begin{bmatrix}1&2\\3&4\end{bmatrix}=-2$，交换两列得 $\det\begin{bmatrix}2&1\\4&3\end{bmatrix}=2\times3-1\times4=2$，正好差一个负号。
+- **对每一行（每一列）是线性的**：把某一行的每个数都乘 $k$，整个行列式乘 $k$；把某一行写成两组数之和，行列式就是两个行列式之和。
 
-三维里，矩阵 $A$ 的三列是三个向量 $\mathbf a,\mathbf b,\mathbf c$，它们张成一个**平行六面体（parallelepiped）**。它的（带符号）体积就是 $\det A$：
+由这三条能推出两条日常用的规则：
 
-$$
-\det A = \text{三列张成平行六面体的带符号体积}
-$$
+1. **两行（或两列）成倍数，行列式为 $0$**。两行一样时交换一下，矩阵没变而符号反了，只好等于 $0$；成倍数时先把倍数提出来，回到「两行一样」。
+2. **把一行的 $k$ 倍加到另一行，行列式不变**。这是消元那一步，拆开之后多出来的那个行列式两行成倍数、等于 $0$，所以白加。
 
-符号仍由定向决定，三维里的定向用右手定则判断：$\mathbf a\to\mathbf b\to\mathbf c$ 满足右手定则则 $\det A>0$，反过来则 $\det A<0$。上一页你见过两列张成面积的 2×2 公式，这里三列作「混合积」$\mathbf a\cdot(\mathbf b\times\mathbf c)$ 就是体积——这和 2×2 的 $ad-bc$ 是同一个思想。
-
-再往 $n$ 维推：$n\times n$ 矩阵的行列式是「$n$ 维超体积被放大的倍数」。$n$ 维超体积没法画，但规则完全一样：单位 $n$ 维立方体（超体积 1）经 $A$ 变换后被拉伸成 $n$ 维平行体，其超体积就是 $\det A$。几何图景在二维、三维看清之后，更高维只是「照此办理」。
-
-有了几何含义，接下来必须回答「怎么算」。计算不靠硬背 $n!$ 个乘积，而是靠三条性质——它们是行列式的「宪法」，一切公式都由它们推出。
-
-## 四、三条性质：一切计算的根基
-
-这一节给出三条性质，并说明每一条都来自「面积缩放」这个几何事实。
-
-**性质 0（起点）：$\det I = 1$。** 单位矩阵不动任何图形，缩放倍数当然是 1。
-
-**性质 1：交换两行（或两列），行列式变号。**
+有了这些，$ad-bc$ 就不必背了。把第一列写成 $a(1,0)+c(0,1)$、第二列写成 $b(1,0)+d(0,1)$，按「对每一列线性」拆成四项：
 
 $$
-\det\begin{bmatrix}c&d\\a&b\end{bmatrix}=cb-ad=-(ad-bc)=-\det\begin{bmatrix}a&b\\c&d\end{bmatrix}
+\det A=ab\det[\mathbf e_1,\mathbf e_1]+ad\det[\mathbf e_1,\mathbf e_2]+cb\det[\mathbf e_2,\mathbf e_1]+cd\det[\mathbf e_2,\mathbf e_2]
 $$
 
-几何上，交换两列等于把 $\mathbf a,\mathbf b$ 调个顺序，定向翻转，面积大小不变、符号相反。**这是最容易忘的一条**：每交换一次就乘一个 $-1$。
+这里 $\det[\ \cdot\ ,\ \cdot\ ]$ 表示把这两列并排作列算出的行列式，$\mathbf e_1=(1,0)$、$\mathbf e_2=(0,1)$。两个有两列相同的项按「成倍数为零」得 $0$；$\det[\mathbf e_1,\mathbf e_2]=\det I=1$；交换一列变号，得 $\det[\mathbf e_2,\mathbf e_1]=-1$。四项收拾起来就是 $ad-bc$。
 
-**性质 2：若两行相等（或成比例，更一般地某一行是其他行的线性组合），则行列式为 0。** 两列共线时平行四边形压成一条线段，面积自然是 0。
+三角矩阵（上三角或下三角）可以直接乘对角线：$\begin{vmatrix}d_1&*&*\\0&d_2&*\\0&0&d_3\end{vmatrix}=d_1d_2d_3$。理由是沿第一列展开只有 $d_1$ 那一项活下来，剩下的又是一个三角行列式，一层层剥下去就剩对角线相乘。所以「化成三角、乘对角线」是手算最快的路，而化三角用的正是上面那条「倍加不变」。顺带一句：转置不改变这个数，$\det A^T=\det A$。
 
-**性质 3：行列式对每一行都是线性的。** 把某一行乘 $k$，行列式也乘 $k$；把某一行拆成两个向量之和，行列式对应拆成两个行列式之和：
+## 四、三阶怎么算：沿一行展开
 
-$$
-\det\begin{bmatrix}ka&kb\\c&d\end{bmatrix}=k\det\begin{bmatrix}a&b\\c&d\end{bmatrix}
-$$
+三阶有六个乘积项，硬背容易漏。手算靠的是「沿一行展开」，只要认出两个词：
 
-这三条合起来推出两个「免费」的推论，也是计算时真正用的：
-
-- **行替换不改变行列式**：把某一行的 $k$ 倍加到另一行上，$\det$ 不变（由性质 2、3 推出）。这正是高斯消元里的那一步——所以消元可以放心用来化简行列式。
-- **乘法与逆**：$\det(AB)=\det A\det B$（复合变换的缩放倍数等于两个倍数的乘积）；$\det A^T=\det A$（转置不翻转定向）；若 $A$ 可逆，$\det A^{-1}=\dfrac{1}{\det A}$。
-
-这三条性质是「宪法」，下面两节的计算公式只是它的「实施细则」。先看最经典的一条：代数余子式展开。
-
-## 五、计算：2×2 公式与代数余子式展开
-
-这一节把 2×2 公式推广到 n×n，并解释「代数余子式」这个词。
-
-2×2 是地基：
+- **余子式** $M_{ij}$：把第 $i$ 行、第 $j$ 列划掉，剩下那个二阶行列式；
+- **代数余子式** $C_{ij}$：给余子式配上符号，$C_{ij}=(-1)^{i+j}M_{ij}$。符号像棋盘一样交错，左上角是 $+$。
 
 $$
-\det\begin{bmatrix}a&b\\c&d\end{bmatrix}=ad-bc
+\det A=a_{i1}C_{i1}+a_{i2}C_{i2}+a_{i3}C_{i3}
 $$
 
-3×3 呢？把第一行展开，每一项是「元素 × 它划掉所在行列后剩下的 2×2 行列式 × 一个正负号」：
+读一遍：$a_{i1}$ 是第 $i$ 行第 1 列那个数，$C_{i1}$ 是它自己的代数余子式（划掉它所在行列，算二阶行列式，再乘符号）；整句读作「沿这一行，把每个数乘上它自己的代数余子式，再加起来」。沿任意一行、任意一列展开都得到同一个数，所以**挑零最多的那一行或一列**，能省掉一整项。
 
-$$
-\det\begin{bmatrix}a_{11}&a_{12}&a_{13}\\a_{21}&a_{22}&a_{23}\\a_{31}&a_{32}&a_{33}\end{bmatrix}
-=a_{11}\begin{vmatrix}a_{22}&a_{23}\\a_{32}&a_{33}\end{vmatrix}
--a_{12}\begin{vmatrix}a_{21}&a_{23}\\a_{31}&a_{33}\end{vmatrix}
-+a_{13}\begin{vmatrix}a_{21}&a_{22}\\a_{31}&a_{32}\end{vmatrix}
-$$
+## 五、顺带一个用处：解方程时它坐在分母上
 
-这里先引入两个词。**余子式（minor）** $M_{ij}$：划掉第 $i$ 行第 $j$ 列后剩下的子矩阵的行列式。**代数余子式（cofactor）** $C_{ij}$：给余子式配上符号，$C_{ij}=(-1)^{i+j}M_{ij}$——符号像棋盘一样交错，左上角 $+$。于是沿第 $i$ 行展开就是：
-
-$$
-\det A = a_{i1}C_{i1}+a_{i2}C_{i2}+\dots+a_{in}C_{in}
-$$
-
-也可以沿任意一列展开，结果相同。**选零最多的一行或一列展开**，计算量最小——这是手算的第一个技巧。
-
-顺带交代符号为什么长这样：n×n 行列式有一个「大公式」，把所有 $n$ 个排列的项加起来，每项是 $n$ 个元素相乘再乘一个 $\pm 1$，符号由该排列的**逆序（inversion）**的个数决定——「逆序」指排列中「前一个数比后一个数大」这样的一对，逆序个数是奇数就取负号。代数余子式展开正是这个大公式按第一行分组重排后的写法。这个公式我们不在这一页展开，只要知道它存在，且它解释了 $(-1)^{i+j}$ 的来历。
-
-代数余子式展开对 3×3、4×4 还好，但复杂度随 $n$ 增长得极快（约 $n!$），20×20 靠它手算是不现实的。有没有更快的路？有——回到高斯消元。
-
-## 六、三角矩阵：对角线相乘，消元后最省事
-
-这一节说明为什么「消元到三角」是算行列式最快的路。
-
-**三角矩阵（上三角或下三角）的行列式等于对角线元素相乘**：
-
-$$
-\det\begin{bmatrix}d_1&*&*\\0&d_2&*\\0&0&d_3\end{bmatrix}=d_1d_2d_3
-$$
-
-为什么？看 2×2 就懂：$\det\begin{bmatrix}d_1&*\\0&d_2\end{bmatrix}=d_1d_2-0=d_1d_2$。几何上，三角矩阵的列依次「只沿一个新的坐标方向伸展」，每一步的缩放倍数独立相乘，乘积就是对角线之积。
-
-于是算行列式的通用算法呼之欲出：**用行替换（不改变 det）把 $A$ 化成上三角，途中每交换一次行就记一次变号，最后乘对角线**。这与[03 · 高斯消元](./03-elimination.md)里的消元是同一套动作，只是多了「记录交换次数」这一步。例如：
-
-$$
-\begin{bmatrix}1&2&1\\2&5&2\\1&2&3\end{bmatrix}
-\xrightarrow{R_2-2R_1}
-\begin{bmatrix}1&2&1\\0&1&0\\1&2&3\end{bmatrix}
-\xrightarrow{R_3-R_1}
-\begin{bmatrix}1&2&1\\0&1&0\\0&0&2\end{bmatrix}
-\;\Rightarrow\;\det A=1\times1\times2=2
-$$
-
-三角化之后，行列式只剩一个数字，而且顺带回答了下节要问的最重要的问题：这个矩阵到底可不可逆。
-
-## 七、det = 0：空间被压扁，不可逆
-
-这一节把 $\det A=0$ 与「不可逆」「零空间非平凡」这三件事钉在一起。
-
-**可逆（invertible）**：存在矩阵 $A^{-1}$ 使 $A^{-1}A=AA^{-1}=I$，即变换可以被完全「还原」回去。可逆的变换必须是「一对一的」——每个输出只有一个输入，面积不会塌掉。
-
-下面五句话说的是同一件事，任意一条成立其余都成立：
-
-1. $\det A=0$。
-2. $A$ 的列线性相关（某列是其余列的线性组合）。
-3. 变换把空间**压扁**：平行四边形/平行六面体面积/体积为 0。
-4. 存在非零向量 $\mathbf x$ 使 $A\mathbf x=0$，即**零空间非平凡**（不只是 $\mathbf 0$）。
-5. $A$ 不可逆。
-
-<FigBox title="det=0：两个列向量共线，平行四边形压成一条线段" kind="几何" note="两列成比例时（这里是 (2,1) 与 (4,2)，后者是前者的 2 倍），平行四边形退化成一维线段，面积=0。面积塌掉意味着有非零向量被压到原点，变换不可逆。" >
-<svg viewBox="0 0 340 170" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
-<defs>
-<marker id="detArrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-<path d="M0 0 L10 5 L0 10 z" fill="var(--vp-c-text-1)"/>
-</marker>
-</defs>
-<line x1="60" y1="140" x2="300" y2="140"/>
-<line x1="90" y1="156" x2="90" y2="80"/>
-<line x1="90" y1="140" x2="250" y2="60" stroke-dasharray="4 3" stroke="var(--vp-c-text-3)"/>
-<line x1="90" y1="140" x2="134" y2="118" marker-end="url(#detArrow3)"/>
-<line x1="90" y1="140" x2="178" y2="96" marker-end="url(#detArrow3)"/>
-<text x="138" y="114" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">a=(2,1)</text>
-<text x="182" y="92" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">b=(4,2)=2a</text>
-<text x="200" y="150" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t   ">平行四边形退化：面积=0 → det=0</text>
-</svg>
-</FigBox>
-
-**看图能读出什么**：当两列落在同一条直线上时，它们再也扫不出二维区域，面积塌成 0。此时变换不是一对一的——整条「垂直于这条线的方向」都被压到原点，所以零空间里塞满了非零向量。这就是 $\det A=0$ 的几何真相。
-
-反过来，$\det A\neq0$ 时变换没有压扁任何方向，可以还原，$A$ 可逆。这个等价关系是下一章特征值那套 $\det(A-\lambda I)=0$ 的入口。行列式在历史上还有一个著名应用，值得用一句话点到。
-
-## 八、克拉默法则：一句话，不展开
-
-这一节只告诉你克拉默法则是什么、什么时候用得上，不展开推导。
-
-**克拉默法则（Cramer's rule）**：当 $\det A\neq0$ 时，方程组 $A\mathbf x=\mathbf b$ 的唯一解是
-
-$$
-x_i=\frac{\det A_i}{\det A}
-$$
-
-其中 $A_i$ 是把 $A$ 的第 $i$ 列换成 $\mathbf b$ 得到的矩阵。一句话记住：**每个未知数的解，等于「把那一列换成常数项后的行列式」除以「原行列式」**。它很漂亮，但计算量巨大（要算 $n+1$ 个行列式），工程上几乎不用它解大规模方程组——知道它存在、能看懂它在说什么就够了。
-
-到这里，几何含义、三条性质、两种算法、det=0 的判定、克拉默法则的一句话都齐了。下面三道例题把「算」和「为什么」连起来。
+前面算出了 $\det A=6\ne0$，所以 $A\mathbf x=\mathbf b$ 有唯一解。对这样的方程组，**克拉默法则**直接给出 $x_i=\det A_i/\det A$：$A_i$ 是把 $A$ 的第 $i$ 列换成右端 $\mathbf b$，其他列不动的矩阵。比如 $\mathbf b=(8,9)$，换第 1 列得 $\det A_1=15$，换第 2 列得 $\det A_2=18$，所以 $x_1=15/6=2.5$、$x_2=18/6=3$。回代 $A(2.5,3)=(8,9)$ 成立；若 $\det A=0$，分母为零，这套公式就不能用了。
 
 ## 例题
 
-三道题按顺序排：例 1 是 2×2 的几何意义 + 公式，例 2 是 3×3 的代数余子式展开，例 3 用性质把计算化简到只剩一步。
+::: tip 例 1 · 两法算同一个数，再验符号
+**题目**：$A=\begin{bmatrix}2&1\\0&3\end{bmatrix}$，求 $\det A$ 并说出它的几何含义；再把两列交换，看符号怎么变。
 
-::: tip 例 1 · 2×2 行列式：面积从 1 到 10 {#ex-det-1}
-**题目**：$A=\begin{bmatrix}3&1\\2&4\end{bmatrix}$。求 $\det A$，并说明它的几何含义。
+**先猜**：单位正方形面积是 $1$，$A$ 把底边拉到 $2$、把另一条边抬到高度 $3$，面积大概 $6$；两列顺序没动过，符号应该是正的。
 
-<FigBox title="例 1 的平行四边形：数格子读出面积 10" kind="几何" note="列向量 a=(3,2)、b=(1,4) 张成平行四边形。det = 3×4 − 2×1 = 10，也就是这个平行四边形的面积；网格每格是 1。" >
-<svg viewBox="0 0 340 190" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
-<g stroke="var(--vp-c-divider)" stroke-width="1">
-<line x1="60" y1="150" x2="60" y2="42"/>
-<line x1="78" y1="150" x2="78" y2="60"/>
-<line x1="96" y1="150" x2="96" y2="78"/>
-<line x1="114" y1="150" x2="114" y2="96"/>
-<line x1="132" y1="150" x2="132" y2="114"/>
-<line x1="60" y1="150" x2="150" y2="150"/>
-<line x1="60" y1="132" x2="168" y2="132"/>
-<line x1="60" y1="114" x2="186" y2="114"/>
-<line x1="60" y1="96" x2="204" y2="96"/>
-<line x1="60" y1="78" x2="222" y2="78"/>
-<line x1="60" y1="60" x2="240" y2="60"/>
-</g>
-<path d="M60 150 L114 114 L132 42 L78 78 Z" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-text-1)"/>
-<defs>
-<marker id="detArrow4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-<path d="M0 0 L10 5 L0 10 z" fill="var(--vp-c-text-1)"/>
-</marker>
-</defs>
-<line x1="60" y1="150" x2="114" y2="114" marker-end="url(#detArrow4)"/>
-<line x1="60" y1="150" x2="78" y2="78" marker-end="url(#detArrow4)"/>
-<text x="116" y="126" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">a=(3,2)</text>
-<text x="66" y="72" text-anchor="end" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">b=(1,4)</text>
-<text x="118" y="104" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">det=10</text>
+**再算**：$\det A=2\times3-1\times0=6$。几何上：平行四边形四个角是 $(0,0)$、$(2,0)$、$(3,3)$、$(1,3)$，底 $2$ 乘高 $3$ 得 $6$，与公式同一个数。*（为什么两个数必须相等：这个变换把每个小方格都放大 $6$ 倍，正方形面积 $1$ 当然变成 $6$。）*
+
+**再回代**：交换两列得 $\begin{bmatrix}1&2\\3&0\end{bmatrix}$，$\det=1\times0-2\times3=-6$，正好是原来的相反数，与「交换两列变号」对上；负号也说明这一版把平面翻了个面。
+:::
+
+::: tip 例 2 · 三阶沿第一行展开
+**题目**：$M=\begin{bmatrix}3&0&0\\1&2&5\\4&1&3\end{bmatrix}$，求 $\det M$。
+
+**先猜**：第一行有两个 $0$，沿它展开只剩一项，答案应该是 $3$ 乘上某个二阶行列式，量级在 $10$ 以内；而二阶行列式的两个数都不大，所以猜个位数。
+
+**再算**：沿第一行展开，符号依次是 $+,-,+$：
+
+$$
+\det M=3\begin{vmatrix}2&5\\1&3\end{vmatrix}-0\begin{vmatrix}1&5\\4&3\end{vmatrix}+0\begin{vmatrix}1&2\\4&1\end{vmatrix}=3\times(6-5)-0+0=3
+$$
+
+<FigBox title="例 2 的符号棋盘：沿第一行展开只活下来一项" kind="结构" note="输入：M 的三行三列，第一行有两个 0 · 操作：套符号棋盘 + − + / − + − / + − +，沿第一行展开 · 结果：只剩 3 × (2×3 − 5×1) = 3">
+<svg viewBox="0 0 660 210" class="sf" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
+  <text x="118" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">输入：M</text>
+  <rect x="56" y="44" width="126" height="34" fill="#3b82f6" fill-opacity="0.12" stroke="none"/>
+  <path d="M62 40 L52 40 L52 170 L62 170" stroke="var(--vp-c-text-3)"/>
+  <path d="M176 40 L186 40 L186 170 L176 170" stroke="var(--vp-c-text-3)"/>
+  <text x="82" y="68" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">3</text>
+  <text x="118" y="68" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="154" y="68" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="82" y="108" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="118" y="108" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">2</text>
+  <text x="154" y="108" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">5</text>
+  <text x="82" y="148" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">4</text>
+  <text x="118" y="148" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="154" y="148" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">3</text>
+  <line x1="204" y1="106" x2="268" y2="106" stroke="var(--vp-c-text-1)" stroke-width="1.8"/>
+  <path d="M268 106 l-9 -3.2 l0 6.4 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="236" y="90" text-anchor="middle" font-size="11" fill="var(--vp-c-text-2)" stroke="none">沿第一行展开</text>
+  <text x="236" y="130" text-anchor="middle" font-size="11" fill="var(--vp-c-text-2)" stroke="none">乘符号棋盘</text>
+  <path d="M300 40 L290 40 L290 170 L300 170" stroke="var(--vp-c-text-3)"/>
+  <path d="M414 40 L424 40 L424 170 L414 170" stroke="var(--vp-c-text-3)"/>
+  <text x="330" y="68" text-anchor="middle" font-size="14" fill="#16a34a" stroke="none">+</text>
+  <text x="366" y="68" text-anchor="middle" font-size="14" fill="#ef4444" stroke="none">−</text>
+  <text x="402" y="68" text-anchor="middle" font-size="14" fill="#16a34a" stroke="none">+</text>
+  <text x="330" y="108" text-anchor="middle" font-size="14" fill="#ef4444" stroke="none">−</text>
+  <text x="366" y="108" text-anchor="middle" font-size="14" fill="#16a34a" stroke="none">+</text>
+  <text x="402" y="108" text-anchor="middle" font-size="14" fill="#ef4444" stroke="none">−</text>
+  <text x="330" y="148" text-anchor="middle" font-size="14" fill="#16a34a" stroke="none">+</text>
+  <text x="366" y="148" text-anchor="middle" font-size="14" fill="#ef4444" stroke="none">−</text>
+  <text x="402" y="148" text-anchor="middle" font-size="14" fill="#16a34a" stroke="none">+</text>
+  <text x="514" y="72" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">det M = 3 × (2×3 − 5×1)</text>
+  <text x="514" y="96" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">= 3 × 1 = 3</text>
+  <text x="514" y="126" font-size="11" fill="var(--vp-c-text-2)" stroke="none">另外两项的系数都是 0</text>
 </svg>
 </FigBox>
 
-**先想什么**：2×2 直接用 $ad-bc$，但先想清楚两列是什么——第一列 $(3,2)$、第二列 $(1,4)$。
-
-**计算**：
-
-$$
-\det A=\begin{vmatrix}3&1\\2&4\end{vmatrix}=3\times4-1\times2=12-2=10
-$$
-
-**为什么是面积**：两列张成的平行四边形面积就是 $10$。单位正方形经 $A$ 变换后面积从 $1$ 变成 $10$，所以 $\det A=10$。$10>0$ 说明从 $(3,2)$ 到 $(1,4)$ 仍是逆时针，平面没有被翻面。
-
-**验算（node）**：`3*4 - 1*2` 得 `10`。用交换两列检查符号：$\det\begin{bmatrix}1&3\\4&2\end{bmatrix}=1\times2-3\times4=2-12=-10$，正好是 $-10$，符合性质 1。
+**再回代**：换沿第二行展开再算一遍：$-1\times\begin{vmatrix}0&0\\1&3\end{vmatrix}+2\times\begin{vmatrix}3&0\\4&3\end{vmatrix}-5\times\begin{vmatrix}3&0\\4&1\end{vmatrix}=0+18-15=3$，符号 $-+-$ 用对了，两条路线同一个答案 ✓。
 :::
 
-::: tip 例 2 · 3×3 行列式：沿零最多的一列展开 {#ex-det-2}
-**题目**：求 $\det A$，其中
+::: tip 例 3 · 先用性质化简成三角
+**题目**：$N=\begin{bmatrix}1&2&1\\2&5&2\\1&2&3\end{bmatrix}$，求 $\det N$。
+
+**先猜**：元素都在 $1$ 到 $5$ 之间，第二行几乎就是第一行的两倍，行列式应该是个不大的整数；先把第一列下方清成 $0$，最后乘对角线就完事。
+
+**再算**：$R_2-2R_1$ 得 $(0,1,0)$，$R_3-R_1$ 得 $(0,0,2)$。两次都是「一行的倍数加到另一行」，行列式不变，也没有交换过行，所以符号是正的。矩阵化成上三角后：
 
 $$
-A=\begin{bmatrix}1&2&3\\0&4&5\\1&0&6\end{bmatrix}
+\det N=1\times1\times2=2
 $$
 
-**先想什么**：3×3 用代数余子式展开，先挑零最多的行或列。第 2 列只有一个非零元素（$a_{12}=2$），沿它展开最省；也可以沿第 1 列展开（有一个 0）。这里沿第 1 列展开示范。
+<FigBox title="例 3 的两步倍加：化成上三角后只剩对角线" kind="结构" note="输入：N 的三行 · 操作：R₂−2R₁、R₃−R₁，都是倍加，行列式不变、也没有交换行 · 结果：上三角，对角线 1、1、2，乘起来是 2">
+<svg viewBox="0 0 660 200" class="sf" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
+  <text x="106" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">输入：N</text>
+  <path d="M52 40 L42 40 L42 164 L52 164" stroke="var(--vp-c-text-3)"/>
+  <path d="M162 40 L172 40 L172 164 L162 164" stroke="var(--vp-c-text-3)"/>
+  <text x="72" y="72" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="107" y="72" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">2</text>
+  <text x="142" y="72" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="72" y="112" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">2</text>
+  <text x="107" y="112" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">5</text>
+  <text x="142" y="112" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">2</text>
+  <text x="72" y="152" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="107" y="152" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">2</text>
+  <text x="142" y="152" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">3</text>
+  <line x1="190" y1="102" x2="252" y2="102" stroke="var(--vp-c-text-1)" stroke-width="1.8"/>
+  <path d="M252 102 l-9 -3.2 l0 6.4 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="222" y="82" text-anchor="middle" font-size="11" fill="var(--vp-c-text-2)" stroke="none">R₂−2R₁</text>
+  <text x="222" y="126" text-anchor="middle" font-size="11" fill="var(--vp-c-text-2)" stroke="none">R₃−R₁</text>
+  <text x="386" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">结果：上三角</text>
+  <path d="M320 40 L310 40 L310 164 L320 164" stroke="var(--vp-c-text-3)"/>
+  <path d="M430 40 L440 40 L440 164 L430 164" stroke="var(--vp-c-text-3)"/>
+  <text x="340" y="72" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="375" y="72" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">2</text>
+  <text x="410" y="72" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="340" y="112" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="375" y="112" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="410" y="112" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="340" y="152" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="375" y="152" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="410" y="152" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">2</text>
+  <circle cx="340" cy="68" r="12" stroke="#3b82f6" stroke-width="1.6"/>
+  <circle cx="375" cy="108" r="12" stroke="#3b82f6" stroke-width="1.6"/>
+  <circle cx="410" cy="148" r="12" stroke="#3b82f6" stroke-width="1.6"/>
+  <text x="520" y="82" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">det N = 1 × 1 × 2</text>
+  <text x="520" y="106" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">= 2</text>
+  <text x="520" y="136" font-size="11" fill="var(--vp-c-text-2)" stroke="none">没有交换行，所以不用变号</text>
+</svg>
+</FigBox>
 
-**沿第 1 列展开**：$a_{11}=1,\ a_{21}=0,\ a_{31}=1$，余子式符号依次 $+,-,+$：
-
-$$
-\det A = 1\cdot\begin{vmatrix}4&5\\0&6\end{vmatrix}-0\cdot(\cdots)+1\cdot\begin{vmatrix}2&3\\4&5\end{vmatrix}
-$$
-
-$$
-=1\times(4\times6-5\times0)+1\times(2\times5-3\times4)=24+(10-12)=24-2=22
-$$
-
-**验算（node）**：手写 3×3 展开 `1*(4*6-5*0) - 0 + 1*(2*5-3*4)` 得 `22`。换沿第 2 列展开再验一次：$a_{12}=2$（符号 $-$）、$a_{22}=4$（符号 $+$）、$a_{32}=0$：
-
-$$
-\det A=-2\begin{vmatrix}0&5\\1&6\end{vmatrix}+4\begin{vmatrix}1&3\\1&6\end{vmatrix}=(-2)(0\times6-5\times1)+4(1\times6-3\times1)=(-2)(-5)+4\times3=10+12=22
-$$
-
-两条路线结果一致 ✓。
-
-**这一题最该带走的一句**：**选零最多的一行/一列展开**，把三阶拆成两三个二阶，比硬背大公式快得多。
+**再回代**：直接展开核对：$1\times(5\times3-2\times2)-2\times(2\times3-2\times1)+1\times(2\times2-5\times1)=11-8-1=2$ ✓。三角化与硬展开同一个答案，而三角化只做了两步加法。
 :::
 
-::: tip 例 3 · 用性质简化：三角化与成比例行 {#ex-det-3}
-**题目**：分别求（a）$\det\begin{bmatrix}1&2&1\\2&5&2\\1&2&3\end{bmatrix}$ 与（b）$\det\begin{bmatrix}2&4&6\\1&2&3\\5&7&9\end{bmatrix}$。
+## 这一页带走三句话
 
-**先想什么**：（a）不急着展开，先用**行替换**（不改变 det）化成三角；（b）一眼看第 2 行是第 1 行的一半——两行成比例，det 直接是 0。
+1. 行列式是面积（二维）或体积（三维）被放大的倍数，负号表示翻面；面积本身的大小乘的是 $|\det A|$，带符号的 $\det A$ 只是额外记下了有没有翻面。
+2. 三条性质（$\det I=1$、交换两行变号、对每行线性）撑起全部计算：由此能推出 $ad-bc$、成倍数行为 $0$、倍加不变、三角等于对角线。
+3. $\det A=0$ ⇔ 有非零箭头被送成零 ⇔ 没有逆；方程组有没有解还要另外看右端，两件事别混。
 
-**（a）三角化**：$R_2-2R_1$、$R_3-R_1$：
-
-$$
-\begin{bmatrix}1&2&1\\2&5&2\\1&2&3\end{bmatrix}
-\to
-\begin{bmatrix}1&2&1\\0&1&0\\1&2&3\end{bmatrix}
-\to
-\begin{bmatrix}1&2&1\\0&1&0\\0&0&2\end{bmatrix}
-$$
-
-无交换，所以 $\det A=1\times1\times2=2$。
-
-**验算（node）**：直接 3×3 展开 `1*(5*3-2*2) - 2*(2*3-2*1) + 1*(2*2-5*1)` 得 `11 - 8 - 1 = 2` ✓，与三角化结果一致。
-
-**（b）成比例行**：第 1 行 $[2,4,6]$ 是第 2 行 $[1,2,3]$ 的 2 倍，两行成比例 ⇒ 行列式为 0。
-
-**验算（node）**：直接展开得 `0` ✓。同时 $\det A=0$ 意味着这个矩阵不可逆、零空间非平凡——事实上 $\mathbf x=(1,-2,1)$ 满足 $A\mathbf x=\mathbf 0$（三行点积都是 0），零空间里确有非零向量。
-
-**这一题最该带走的一句**：**能先用性质化简就先化简**——行替换 + 三角化把一个 3×3 化简到「乘三个数」，而成比例行一眼判 0，比展开快得多。
+::: warning 最容易错的两处
+- **把 $|A|$ 当成绝对值。** 它只是行列式的另一种记号，可以是负数；面积大小才是 $|\det A|$。
+- **交换两行后忘了变号。** 每交换一次乘一个 $-1$，最后回代时先数交换次数再定符号。
 :::
 
-三道题做完，用一份清单把这一页的坑排一遍。
-
-## 易错清单
-
-按踩坑频率从高到低排，格式是「错误做法 → 会得到什么 → 正确做法」。
-
-1. **交换两行后忘了变号** → 符号反了，绝对值对但答案错 → 每交换一次就乘一个 $-1$，用「交换次数是奇是偶」记最终符号。
-2. **把 $|A|$ 当成绝对值** → 行列式为负时强行取正 → $|A|$ 在这里是行列式记号，可以是负的；面积/体积的大小才是 $|\det A|$。
-3. **代数余子式符号记错** → 展开时某一项少个负号，结果整个错 → 符号是棋盘 $(-1)^{i+j}$，左上角为正，交错排列。
-4. **把「某行乘 k」与「整个矩阵乘 k」搞混** → 3×3 里差 $k^3$ 倍 → 只乘一行行列式乘 $k$；整个矩阵每行都乘 $k$，则 $\det(kA)=k^n\det A$。
-5. **以为 $\det(A+B)=\det A+\det B$** → 误用线性性 → 行列式只对**每一行**线性，不对整个矩阵相加线性；乘法才是 $\det(AB)=\det A\det B$。
-6. **det=0 就以为「没解」** → 与方程组判定混淆 → det=0 对应 $A\mathbf x=\mathbf b$ **可能无解也可能无穷多解**（取决于 $\mathbf b$ 是否在列空间），而 $A\mathbf x=0$ 必有非零解。
-
-## 自检
-
-1. 矩阵 $A=\begin{bmatrix}2&0\\0&3\end{bmatrix}$ 把单位正方形变成什么形状？面积是多少？$\det A$ 是多少？
-2. 交换 $A$ 的两列之后，行列式变成多少？为什么？
-3. 一个 3×3 矩阵有两行完全相同，它的行列式是多少？这说明了什么（可逆吗、零空间平凡吗）？
-4. 三角矩阵 $\begin{bmatrix}4&1&9\\0&-2&7\\0&0&5\end{bmatrix}$ 的行列式是多少？
-
-## 下一步
-
-行列式回答了「变换把面积/体积放大了多少倍、有没有翻面、有没有压扁」。下一章把它用在最关键的地方：找那些「方向不变、只被拉伸」的向量——特征向量，而判定依据正是 $\det(A-\lambda I)=0$。
-
-下一章：[06 · 特征值、特征向量与对角化](./06-eigenvalues.md)
+下一站是[第 6 章 · 特征值](06-eigenvalues.md)：那里要问「哪些箭头被变换之后方向没变」，判据正是 $\det(A-\lambda I)=0$——这一页的 $\det$ 会直接上岗。想按教材把三阶展开、克拉默练成手速，去经典版第 1 章。

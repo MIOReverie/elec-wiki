@@ -1,375 +1,267 @@
 ---
 title: 01 · 向量、线性组合与张成
-description: 把向量先看成平面与空间里的箭头，再落到列坐标；用箭头建立线性组合、张成、线性无关与标准基的几何图景，最后用 node 验算把数字坐实。
+description: 从一段位移出发，把一支箭记成两个数；用接起来走和按倍数拉长拼出新箭，再用解二元方程组回答反问题：给定终点，两个方向各走几遍。最后用同一套解方程的本事判断哪一支是多余的。
 ---
 
 # 01 · 向量、线性组合与张成
 
-<Meta time="40 min" level="核心" note="全页只有一句话：箭头与列坐标是同一个东西的两面，线性组合、张成、线性无关全是从这句话长出来的" />
+<Meta time="22 min" level="核心" note="最容易错的一处：把 (3,2) 当成「(3,2) 那个点」——它记的是「怎么走到 (3,2)」那一段位移" />
 
-**这一页要解决什么**：你见过向量、也背过「线性相关」的定义，但一看到两个箭头就发懵——它们到底「扫出」了什么？读完这一页，你应该能：把平面里的箭头和它的列坐标自由切换；说出两个向量相加、数乘、线性组合在图上各是什么动作；判断两个（以及一组）向量什么时候张成直线、什么时候张成整个平面；并一眼看出「线性无关」的几何含义——没有一个箭头躺在别的箭头扫出的线里。
+**这一页要解决什么**：你画得出箭，也算得动两个数，但一看到「这两支箭能凑出什么、能不能凑到某个位置」就停住。读完这一页，你能把一支箭和它的两个读数来回翻译；能说清两个方向各走几遍可以到达某个终点；也能看出给出的几支箭里有没有哪一支是多余的。
 
-::: tip 读这页之前
-- **需要会**：高中数学里的平面向量（箭头、坐标、平行四边形法则）与三元一次方程组的代入消元。这是本板块第一章，没有更靠前的前置章；后面每一章都会从这里的概念长出来。
-- **这一页用到的符号**：向量用小写粗体 $\mathbf v$、$\mathbf w$，标量用普通小写 $c$、$k$；$c_1\mathbf v_1+c_2\mathbf v_2$ 读作「$c_1$ 倍的 $\mathbf v_1$ 加 $c_2$ 倍的 $\mathbf v_2$」。本章正文里每个术语第一次出现都当场解释，不要求你提前记得。
+::: tip 读之前
+- 需要会：平面直角坐标（一个位置用两个数表示）、二元一次方程组的代入消元。这两样本页都会当场重算一遍，忘了也能跟上。
+- 本页记号：粗体小写 $\mathbf v$ 表示一段位移；普通小写 $c,d$ 是标量，就是「几倍」里的那个倍数；$\begin{bmatrix}3\\2\end{bmatrix}$ 这种竖排的两个数叫列坐标，读作「三、二」；$\mathbf 0$ 是零向量，两个分量都是 0，表示哪也不去。
 :::
 
-先想象一个具体场景。你在纸上画了一个箭头，从原点指向 $(3,2)$ 那个点；你又画了第二个箭头指向 $(1,2)$。现在问你：这两个箭头加起来是什么？你隐约记得「平行四边形法则」，但更想知道——这两个箭头「扫」出来的是一整片区域，还是一条线？如果再加一个箭头，情况会不会变？这一页就是把这几个词——**线性组合、张成、线性无关、基**——全部翻译成「箭头扫过哪里」的画面，再告诉你每个画面对应的那行坐标怎么算。
+你在方格纸上从某一格走到另一格：向右 3 格、向上 2 格。这趟走法和从哪一格出发没有关系——换个起点，走完还是「右 3、上 2」。那么，能不能只用两个数就把这趟走法记下来？能。而且记下来之后，两趟可以接起来走，一趟也可以走两遍、走一半、或者掉头。
 
-## 结论先行
+## 一、一支箭、两个读数，还有第三样容易混的东西
 
-1. **向量先看图、再看坐标**：一个向量就是平面（或空间）里一段「有方向、有长度」的箭头；写成列向量 $\begin{bmatrix}3\\2\end{bmatrix}$ 只是把箭头的落点记下来，两者是同一个东西。
-2. **加法和数乘都是「掰箭头」**：加法是首尾相接走折线（平行四边形对角线），数乘是把箭头拉伸 $c$ 倍、$c<0$ 时掉头，坐标上就是逐分量加、逐分量乘。
-3. **线性组合 = 每个箭头先拉伸、再相加**：$c_1\mathbf v_1+c_2\mathbf v_2$ 里让两个系数各自跑遍所有实数，箭头扫出的就是**张成**。
-4. **两个向量的张成只有三种结局**：都为零向量 → 一个点；共线 → 一条直线；不共线 → 整个平面。
-5. **线性无关 = 谁也不在别人扫出的线上**：一组向量线性无关，等价于「只有全零系数才能让它们的组合等于零向量」，也等价于它们张成的空间维数等于向量个数。
-
-## 一、向量：先看见箭头，再写坐标
-
-这一节的目标是让你在「几何箭头」和「列坐标」之间来回切换不费力——先记住向量是一段箭头，然后明白坐标只是箭头的落点记录。
-
-**向量**（vector）是两个信息的组合：**方向**和**长度**（长度也叫模或范数）。在平面上它就是一段箭头，从某一点出发，指向另一点；和物理里的「位移」同源——从 A 走到 B，方向是 A 指向 B，长度是两点的距离。与它相对的是**标量**（scalar）：一个孤零零的实数，只有大小、没有方向，比如温度、质量、或者是下面马上要用来「拉伸」箭头的那几个系数。
-
-把箭头放进坐标系，就有了最省事的记录方式：**列向量**（column vector）只记箭头末端相对于原点的坐标。箭头从原点 $O$ 指向 $(3,2)$，就写成
+把起点摆到原点上，箭尖落在横 3 纵 2 的位置，这趟走法就记成
 
 $$
-\mathbf v = \begin{bmatrix}3\\2\end{bmatrix}
+\mathbf v=\begin{bmatrix}3\\2\end{bmatrix}
 $$
 
-第一行是横坐标（沿 $x$ 轴走多远），第二行是纵坐标（沿 $y$ 轴走多远）。**这两个数不是「点的坐标」，而是「怎么从原点走到箭头尖」的路线**：先向右 3、再向上 2。
+逐项读：左边 $\mathbf v$ 是这段位移的名字；右边上面的 3 是「沿横轴走 3」，下面的 2 是「沿纵轴走 2」；上下排列加方括号只表示「一个整体」。所以它读作「先右 3、再上 2 的那一趟走法」。
 
-<FigBox title="同一个向量：左边是箭头，右边是列坐标" kind="几何" note="箭头从原点出发落到 (3,2)；两条虚线分别是它向 x 轴、y 轴的投影，落点 3 和 2 就是列向量的两个分量。看图能读出什么：向量完全由方向和长度决定，把它平移到任何起点都不变——所以习惯上都把起点放在原点，只记终点的两个数。">
-<svg viewBox="0 0 340 220" role="img" aria-label="坐标系里的向量箭头，从原点指向 3,2，虚线标出横坐标 3 与纵坐标 2">
+把它搬到别的起点，方向没变、长度没变，它还是同一段位移。**这正是「位移」和「位置」的区别：位移不绑在某一格上，它只回答「往哪走、走多远」。** 数学里给这个东西一个名字：**向量**（vector）。跟它对照的是**标量**（scalar）——一个只有大小的数，比如「3 倍」里的那个倍数，本页的 $c,d$ 全是标量。
+
+<FigBox title="同一段位移摆在两个起点，读数只有一个" kind="几何" note="输入：一段「右 3、上 2」的位移。操作：图①起点摆在原点，图②把同一段位移挪到别处，起点记作 P。结果：图①可以直接读出 (3,2)，图②要先挪回原点，读数仍是 (3,2)。看图能读出什么：位移与起点无关，读数才是相对这两根轴的东西。">
+<svg viewBox="0 0 520 210" role="img" aria-label="同一段位移摆在两个起点：左图起点在原点读出横 3 纵 2，右图起点在别处但仍是同一段位移">
 <defs>
-  <marker id="fig1-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+  <marker id="m1-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
+  <marker id="m1-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
+  </marker>
 </defs>
-<line x1="20" y1="188" x2="328" y2="188" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<line x1="44" y1="210" x2="44" y2="14" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<text x="332" y="192" font-size="11" fill="var(--vp-c-text-3)">x</text>
-<text x="50" y="18" font-size="11" fill="var(--vp-c-text-3)">y</text>
-<line x1="164" y1="108" x2="164" y2="188" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3" />
-<line x1="164" y1="108" x2="44" y2="108" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3" />
-<line x1="44" y1="188" x2="164" y2="108" stroke="var(--vp-c-brand-1)" stroke-width="2.6" marker-end="url(#fig1-ah)" />
-<text x="170" y="104" font-size="12.5" font-weight="600" fill="var(--vp-c-brand-1)">v = (3, 2)</text>
-<text x="160" y="202" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">3</text>
-<text x="36" y="112" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="end">2</text>
-<circle cx="44" cy="188" r="2.6" fill="var(--vp-c-text-2)" />
+<text x="112" y="22" font-size="12" font-weight="600" fill="var(--vp-c-text-2)" text-anchor="middle">① 起点放在原点：读得出两个数</text>
+<text x="390" y="22" font-size="12" font-weight="600" fill="var(--vp-c-text-2)" text-anchor="middle">② 换个起点：还是同一段位移</text>
+<line x1="30" y1="170" x2="205" y2="170" stroke="var(--vp-c-divider)" stroke-width="1.2" />
+<line x1="60" y1="192" x2="60" y2="40" stroke="var(--vp-c-divider)" stroke-width="1.2" />
+<line x1="150" y1="110" x2="150" y2="170" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3" />
+<line x1="150" y1="110" x2="60" y2="110" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3" />
+<line x1="60" y1="170" x2="150" y2="110" stroke="var(--vp-c-brand-1)" stroke-width="2.6" marker-end="url(#m1-a)" />
+<text x="158" y="106" font-size="12.5" font-weight="600" fill="var(--vp-c-brand-1)">v = (3, 2)</text>
+<text x="150" y="186" font-size="11" fill="var(--vp-c-text-3)" text-anchor="middle">3</text>
+<text x="52" y="114" font-size="11" fill="var(--vp-c-text-3)" text-anchor="end">2</text>
+<text x="48" y="186" font-size="11" fill="var(--vp-c-text-3)">O</text>
+<circle cx="60" cy="170" r="2.6" fill="var(--vp-c-text-2)" />
+<line x1="266" y1="20" x2="266" y2="196" stroke="var(--vp-c-divider)" stroke-width="1.2" stroke-dasharray="5 4" />
+<line x1="270" y1="170" x2="500" y2="170" stroke="var(--vp-c-divider)" stroke-width="1.2" />
+<line x1="300" y1="192" x2="300" y2="40" stroke="var(--vp-c-divider)" stroke-width="1.2" />
+<line x1="300" y1="170" x2="390" y2="110" stroke="var(--vp-c-text-3)" stroke-width="1.8" stroke-dasharray="5 3" marker-end="url(#m1-b)" />
+<line x1="330" y1="140" x2="420" y2="80" stroke="var(--vp-c-brand-1)" stroke-width="2.6" marker-end="url(#m1-a)" />
+<text x="326" y="156" font-size="11" fill="var(--vp-c-text-3)">P</text>
+<circle cx="330" cy="140" r="2.8" fill="var(--vp-c-text-2)" />
+<text x="505" y="70" font-size="12" fill="var(--vp-c-brand-1)" text-anchor="end">还是右 3、上 2</text>
+<text x="424" y="196" font-size="11" fill="var(--vp-c-text-3)" text-anchor="end">虚线：搬到原点再读</text>
+<circle cx="300" cy="170" r="2.6" fill="var(--vp-c-text-2)" />
+<text x="288" y="186" font-size="11" fill="var(--vp-c-text-3)">O</text>
 </svg>
 </FigBox>
 
-把向量当成「路线」而不是「点」，是后面一切直觉的地基：加两个向量，就是先走第一段路、再走第二段路；数乘一个向量，就是把这段路按比例拉长或掉头。下面两节就是这两个动作的图上画法和坐标算法。
+还有第三样更容易混的东西：**列坐标**是「按两根轴各走多少」的读数，前提是先选定两根轴。同一个「右 3、上 2」，换一对斜着的轴去读，读数就变成另外两个数——位移没变，读数变了。所以读数跟着轴走，位移不跟。
 
-## 二、向量加减与数乘：平行四边形与拉伸
+**位置向量**专指起点摆在原点的那支箭；它只是向量的一种画法，不是定义。
 
-这一节的目标是搞清两个最基础的动作——把两个箭头「接起来走」是加法，把箭头「按比例拉长」是数乘——并且让图上动作与坐标算法一一对应。
+## 二、接起来走、拉长、掉头
 
-**加法**的几何规则是**首尾相接**：要算 $\mathbf v+\mathbf w$，把 $\mathbf w$ 的起点搬到 $\mathbf v$ 的终点，再走完 $\mathbf w$，总位移就是 $\mathbf v+\mathbf w$。因为平移不改变向量，也可以把两个向量都从原点出发，用它们作邻边补成一个平行四边形——**对角线就是和**，这就是高中数学里的平行四边形法则。坐标上就是**逐分量相加**：两个列向量把对应位置的两个数各自加起来。
+两趟走法可以接起来走。先走 $\mathbf v$（右 3、上 2），从它的终点再走 $\mathbf w$（右 1、上 2），总位移就是「右 4、上 4」：
 
-**数乘**（scalar multiplication）是「拉伸」：$c\,\mathbf v$ 把箭头的长度变成原来的 $|c|$ 倍，方向不变；$c<0$ 时再掉头 180°，$c=0$ 时缩成零向量 $\mathbf 0$（没有方向、长度为零的特殊向量）。坐标上就是**每个分量都乘 $c$**。
+$$
+\mathbf v+\mathbf w=\begin{bmatrix}3+1\\2+2\end{bmatrix}=\begin{bmatrix}4\\4\end{bmatrix}
+$$
 
-<FigBox title="向量加法：平行四边形，对角线就是和" kind="几何" note="v=(3,1) 与 w=(1,2) 作邻边，阴影是平行四边形，对角线 v+w=(4,3)。两条虚线是「把 w 平移接到 v 的终点」与「把 v 平移接到 w 的终点」，殊途同归到同一个顶点。看图能读出什么：加法与谁先谁后无关，两条虚线指向同一个点，说明 v+w=w+v。">
-<svg viewBox="0 0 340 220" role="img" aria-label="向量加法的平行四边形：v 与 w 为邻边，阴影平行四边形，对角线为 v 加 w">
+逐项读：两个列坐标只在同一行上相加——上面的数管横、下面的数管纵，两条账各算各的。这就是加法可以逐分量做的原因。
+
+图上还有第二种画法：把 $\mathbf v,\mathbf w$ 都从原点出发，用它们作两条邻边补成平行四边形，从原点出发的那条对角线就是 $\mathbf v+\mathbf w$。两条折线的走法顺序不同，所以图里画成一条实线、一条虚线；但它们的起点和终点相同，因此两种画法落在同一个点上。
+
+<FigBox title="加法：两种走法，同一个终点 (4,4)" kind="几何" note="输入：v=(3,2) 与 w=(1,2) 都从原点出发。操作：实线先走 v 再走 w；虚线是另一种走法，先走 w。结果：两种走法都落在 (4,4)，即平行四边形从原点出发的对角线。看图能读出什么：加法与先后无关，所以能逐分量算。">
+<svg viewBox="0 0 380 220" role="img" aria-label="加法平行四边形：v 等于三二，w 等于一二，和为四四">
 <defs>
-  <marker id="fig2-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+  <marker id="m2-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
+  <marker id="m2-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-2)" />
+  </marker>
 </defs>
-<line x1="20" y1="188" x2="328" y2="188" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<line x1="44" y1="210" x2="44" y2="14" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<text x="332" y="192" font-size="11" fill="var(--vp-c-text-3)">x</text>
-<text x="50" y="18" font-size="11" fill="var(--vp-c-text-3)">y</text>
-<polygon points="44,188 164,148 204,68 84,108" fill="var(--vp-c-brand-1)" opacity="0.12" />
-<line x1="44" y1="188" x2="84" y2="108" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#fig2-ah)" />
-<text x="50" y="104" font-size="12" fill="var(--vp-c-brand-2)">w</text>
-<line x1="44" y1="188" x2="164" y2="148" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#fig2-ah)" />
-<text x="168" y="152" font-size="12" fill="var(--vp-c-brand-1)">v</text>
-<line x1="164" y1="148" x2="204" y2="68" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 3" />
-<line x1="84" y1="108" x2="204" y2="68" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 3" />
-<line x1="44" y1="188" x2="204" y2="68" stroke="var(--vp-c-brand-1)" stroke-width="2.6" marker-end="url(#fig2-ah)" />
-<text x="210" y="66" font-size="12.5" font-weight="600" fill="var(--vp-c-brand-1)">v + w</text>
-<circle cx="44" cy="188" r="2.6" fill="var(--vp-c-text-2)" />
+<line x1="20" y1="180" x2="360" y2="180" stroke="var(--vp-c-divider)" stroke-width="1.2" />
+<line x1="70" y1="204" x2="70" y2="20" stroke="var(--vp-c-divider)" stroke-width="1.2" />
+<polygon points="70,180 154,124 182,68 98,124" fill="var(--vp-c-brand-1)" opacity="0.12" />
+<line x1="70" y1="180" x2="154" y2="124" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#m2-a)" />
+<text x="158" y="132" font-size="12" fill="var(--vp-c-brand-1)">v</text>
+<line x1="70" y1="180" x2="98" y2="124" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#m2-b)" />
+<text x="76" y="120" font-size="12" fill="var(--vp-c-brand-2)">w</text>
+<line x1="154" y1="124" x2="182" y2="68" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 3" />
+<line x1="98" y1="124" x2="182" y2="68" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 3" />
+<line x1="70" y1="180" x2="182" y2="68" stroke="var(--vp-c-brand-1)" stroke-width="2.6" marker-end="url(#m2-a)" />
+<text x="188" y="64" font-size="12.5" font-weight="600" fill="var(--vp-c-brand-1)">v + w = (4, 4)</text>
+<text x="70" y="200" font-size="11" fill="var(--vp-c-text-3)">O</text>
+<circle cx="70" cy="180" r="2.6" fill="var(--vp-c-text-2)" />
 </svg>
 </FigBox>
 
-<FigBox title="数乘：把箭头拉伸、压短或掉头" kind="几何" note="v=(2,1) 与它的 2 倍、−1 倍落在同一条直线上。看图能读出什么：数乘只改长度和朝向，不改这条直线本身——这也是下一节线性相关判断的种子：一条直线上的向量永远只能扫出这条直线。">
-<svg viewBox="0 0 320 220" role="img" aria-label="数乘示意图：向量 v 及其两倍、负一倍沿同一直线方向拉伸或反向">
+数乘是另一件事：把这段位移按倍数拉长、压短、或者掉头。
+
+$$
+2\mathbf v=\begin{bmatrix}6\\4\end{bmatrix},\qquad
+-\mathbf v=\begin{bmatrix}-3\\-2\end{bmatrix},\qquad
+0\,\mathbf v=\begin{bmatrix}0\\0\end{bmatrix}
+$$
+
+读法：$c\mathbf v$ 里 $c$ 是倍数。正数只改长度不改方向；负数先改长度再掉头 180°；$c=0$ 把整段位移压成零向量。坐标上是两个分量同时乘 $c$——只乘一个，箭头就歪了，这是本页最常见的错。
+
+顺带记两个最小的走法：$\mathbf i=\begin{bmatrix}1\\0\end{bmatrix}$ 是「向右一格」，$\mathbf j=\begin{bmatrix}0\\1\end{bmatrix}$ 是「向上一格」；任何一趟走法都是「几个 $\mathbf i$ 加几个 $\mathbf j$」。
+
+## 三、线性组合，以及它的反问题
+
+先算一个具体的：$2\mathbf v+3\mathbf w$。按字面做，各拉各的，再相加：
+
+$$
+2\mathbf v+3\mathbf w
+=2\begin{bmatrix}3\\2\end{bmatrix}+3\begin{bmatrix}1\\2\end{bmatrix}
+=\begin{bmatrix}6\\4\end{bmatrix}+\begin{bmatrix}3\\6\end{bmatrix}
+=\begin{bmatrix}9\\10\end{bmatrix}
+$$
+
+「给每个方向配一个倍数，各自拉长，再全部接起来」这个动作叫**线性组合**（linear combination）。$c\mathbf v+d\mathbf w$ 就是「$\mathbf v$ 走 $c$ 遍、$\mathbf w$ 走 $d$ 遍，两段位移接起来」。这里「线性」没有别的意思，就是说只许做两件事：乘一个数、相加；出现平方或者两支箭相乘，就不叫线性组合了。
+
+<FigBox title="组合就是接起来走：先 2 个 v，再 3 个 w，落到 (9,10)" kind="几何" note="输入：两段位移 v=(3,2) 与 w=(1,2)。操作：先沿 v 走两遍到 (6,4)，再从那里沿 w 走三遍。结果：终点 (9,10)，与直接把系数代进坐标算出来的一致（虚线是直达的一条，实线是两段折线）。看图能读出什么：组合式里的两个系数，就是两条折线各走几遍。">
+<svg viewBox="0 0 380 230" role="img" aria-label="线性组合 2v 加 3w 的折线路径，终点为九、十">
 <defs>
-  <marker id="fig3-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+  <marker id="m3-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
+  <marker id="m3-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-2)" />
+  </marker>
+  <marker id="m3-c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-danger-1)" />
+  </marker>
 </defs>
-<line x1="16" y1="140" x2="310" y2="140" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<line x1="120" y1="210" x2="120" y2="14" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<line x1="60" y1="170" x2="240" y2="80" stroke="var(--vp-c-divider)" stroke-width="1.2" stroke-dasharray="4 3" />
-<line x1="120" y1="140" x2="180" y2="110" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#fig3-ah)" />
-<text x="150" y="104" font-size="12" fill="var(--vp-c-brand-1)">v</text>
-<line x1="120" y1="140" x2="240" y2="80" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#fig3-ah)" />
-<text x="244" y="78" font-size="12" fill="var(--vp-c-brand-2)">2v</text>
-<line x1="120" y1="140" x2="60" y2="170" stroke="var(--vp-c-danger-1)" stroke-width="2.4" marker-end="url(#fig3-ah)" />
-<text x="28" y="178" font-size="12" fill="var(--vp-c-danger-1)">−v</text>
-<circle cx="120" cy="140" r="2.6" fill="var(--vp-c-text-2)" />
+<line x1="30" y1="195" x2="360" y2="195" stroke="var(--vp-c-divider)" stroke-width="1.2" />
+<line x1="55" y1="216" x2="55" y2="10" stroke="var(--vp-c-divider)" stroke-width="1.2" />
+<line x1="55" y1="195" x2="163" y2="123" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#m3-a)" />
+<text x="120" y="130" font-size="12" fill="var(--vp-c-brand-1)">2v</text>
+<line x1="163" y1="123" x2="217" y2="15" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#m3-b)" />
+<text x="176" y="72" font-size="12" fill="var(--vp-c-brand-2)">3w</text>
+<line x1="55" y1="195" x2="217" y2="15" stroke="var(--vp-c-danger-1)" stroke-width="2.4" stroke-dasharray="5 3" marker-end="url(#m3-c)" />
+<text x="226" y="30" font-size="12" font-weight="600" fill="var(--vp-c-danger-1)">b = (9, 10)</text>
+<text x="55" y="212" font-size="11" fill="var(--vp-c-text-3)">O</text>
+<circle cx="55" cy="195" r="2.6" fill="var(--vp-c-text-2)" />
+<circle cx="163" cy="123" r="2.6" fill="var(--vp-c-text-2)" />
 </svg>
 </FigBox>
 
-代数上两件事都「傻到不用记公式」：加法逐分量加，数乘逐分量乘。比如 $\mathbf v=\begin{bmatrix}3\\1\end{bmatrix}$、$\mathbf w=\begin{bmatrix}1\\2\end{bmatrix}$，则 $\mathbf v+\mathbf w=\begin{bmatrix}3+1\\1+2\end{bmatrix}=\begin{bmatrix}4\\3\end{bmatrix}$，$2\mathbf v=\begin{bmatrix}6\\2\end{bmatrix}$。这两个动作之所以重要，是因为它们能「拼」出任何新箭头——把「拉伸」和「相加」串起来，就得到本页的核心概念：线性组合。下面这一节就把这两个动作合成一个词。
-
-## 三、线性组合：每个箭头先拉伸，再相加
-
-这一节的目标是把前两节的两个动作打包成一个词——线性组合——并说清它在图上是「扫过一片区域」，而不是随便算出一个点。
-
-**线性组合**（linear combination）就是：给一组向量 $\mathbf v_1,\mathbf v_2,\dots$ 各配一个标量系数 $c_1,c_2,\dots$，先各自拉伸、再把结果相加：
+反过来问才有意思：如果终点是 $(9,10)$，问「$\mathbf v$ 走几遍、$\mathbf w$ 走几遍能到那里」？也就是求两个倍数 $c,d$：
 
 $$
-c_1\mathbf v_1 + c_2\mathbf v_2 + \cdots
+c\begin{bmatrix}3\\2\end{bmatrix}+d\begin{bmatrix}1\\2\end{bmatrix}
+=\begin{bmatrix}9\\10\end{bmatrix}
+\qquad\Longleftrightarrow\qquad
+\begin{cases}3c+d=9\\ 2c+2d=10\end{cases}
 $$
 
-「线性」的意思正是「只许拉伸 + 相加」，不许出现 $\mathbf v_1^2$、$\mathbf v_1\mathbf v_2$、$\sin(\mathbf v_1)$ 这类非线性操作。系数就是每个箭头的「音量旋钮」：转大一点，这个箭头贡献多；设成零，这个箭头退场；设成负，这个箭头反向拉伸。
+逐项读这个转换：上下两个分量各自相等，所以一个向量方程拆成两个普通方程。上面那行是横坐标的账（$3c$ 里的 3 来自 $\mathbf v$ 的横坐标，$d$ 里的 1 来自 $\mathbf w$ 的横坐标），下面那行是纵坐标的账。
 
-图上的读法是：让两个系数各自独立地跑遍所有实数，$c_1\mathbf v_1+c_2\mathbf v_2$ 的终点就**扫过一片区域**。先把两个系数都限制在 $0\le c\le1$，扫出的恰好是以 $\mathbf v_1,\mathbf v_2$ 为邻边的平行四边形；放开限制，这片平行四边形沿两个方向无限铺开，盖满一块更大的地方——那块地方就是下一节要定义的「张成」。
+这两个方程初中就会解。第一式给 $d=9-3c$，代入第二式：$2c+2(9-3c)=10$，即 $18-4c=10$，得 $c=2$；再回代 $d=3$。所以 $(9,10)=2\mathbf v+3\mathbf w$——正是刚才正着算出来的那一组数。正着算是组合，反着解是解二元方程组，同一件事的两个方向。
 
-<FigBox title="线性组合：先拉伸再相加，扫出平行四边形" kind="几何" note="v₁=(2,1)、v₂=(−1,2)。阴影是 0≤c₁,c₂≤1 时所有组合扫出的平行四边形；红色虚线是具体一个组合 2v₁+v₂=(3,4)，它落在了平行四边形之外——系数超过 1 就能扫到外面去。看图能读出什么：改变两个系数，终点能在整个平面里游走，游走范围就是这两个箭头的张成。">
-<svg viewBox="0 0 340 220" role="img" aria-label="线性组合示意图：两个向量扫出的阴影平行四边形，以及一个具体组合 2v1 加 v2 的虚线箭头">
+那什么时候反着问会出问题？看这两个方程代表的两条直线：不平行就有一个交点，给唯一的一组系数；平行或重合时，要么没有系数、要么有一整排系数。这件事得有个专门的说法，下一节就给它。
+
+## 四、系数放开能扫到哪，以及哪一支是多余的
+
+把 $c,d$ 从「这一组具体的数」放开成「任取实数」，$c\mathbf v+d\mathbf w$ 的终点就会扫过一片地方。这片地方叫 $\mathbf v,\mathbf w$ 的**张成**（span）。
+
+在这个平面上，两支不共线的时候扫出来就是整个平面：随便给一个终点，横纵两笔账总解得出唯一的一组 $c,d$。但只要有一支躺在另一支那条直线上——比如把 $\mathbf w$ 换成 $\mathbf w'=\begin{bmatrix}6\\4\end{bmatrix}=2\mathbf v$——两笔账并成一笔，扫出来的只剩那一条直线，直线外的位置永远到不了。
+
+<FigBox title="系数放开后扫到哪：一条线，还是整个平面" kind="几何" note="输入：左边是 v=(3,2) 与它的两倍 w′=(6,4)，右边是 v=(3,2) 与 w=(1,2)。操作：让两个系数各自取遍所有实数，把所有组合的终点画出来。结果：左边全被钉在那条虚线上，右边阴影里每一点都到得了，放开系数就铺满整张纸。看图能读出什么：能扫多大，只看两支箭是否指向不同方向。">
+<svg viewBox="0 0 400 200" role="img" aria-label="共线时只能扫出一条直线，不共线时能扫满整个平面">
 <defs>
-  <marker id="fig4-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+  <marker id="m4-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
+  <marker id="m4-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-2)" />
+  </marker>
 </defs>
-<line x1="16" y1="188" x2="328" y2="188" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<line x1="60" y1="210" x2="60" y2="14" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<polygon points="60,188 132,152 96,80 24,116" fill="var(--vp-c-brand-1)" opacity="0.14" />
-<line x1="132" y1="152" x2="96" y2="80" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3" />
-<line x1="24" y1="116" x2="96" y2="80" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3" />
-<line x1="60" y1="188" x2="132" y2="152" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#fig4-ah)" />
-<text x="140" y="154" font-size="12" fill="var(--vp-c-brand-1)">v₁</text>
-<line x1="60" y1="188" x2="24" y2="116" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#fig4-ah)" />
-<text x="4" y="112" font-size="12" fill="var(--vp-c-brand-2)">v₂</text>
-<line x1="60" y1="188" x2="168" y2="44" stroke="var(--vp-c-danger-1)" stroke-width="2.4" marker-end="url(#fig4-ah)" stroke-dasharray="5 3" />
-<text x="174" y="46" font-size="12" fill="var(--vp-c-danger-1)">2v₁ + v₂ = (3,4)</text>
-<circle cx="60" cy="188" r="2.6" fill="var(--vp-c-text-2)" />
+<text x="96" y="24" font-size="12" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">共线 → 只剩一条线</text>
+<text x="300" y="24" font-size="12" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">不共线 → 铺满平面</text>
+<line x1="196" y1="10" x2="196" y2="190" stroke="var(--vp-c-divider)" stroke-width="1.4" stroke-dasharray="5 4" />
+<line x1="26" y1="192" x2="176" y2="92" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="6 4" />
+<line x1="46" y1="178" x2="102" y2="140" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#m4-a)" />
+<text x="106" y="136" font-size="11" fill="var(--vp-c-brand-1)">v</text>
+<line x1="46" y1="178" x2="158" y2="102" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#m4-b)" />
+<text x="110" y="98" font-size="11" fill="var(--vp-c-brand-2)">w′ = 2v</text>
+<circle cx="46" cy="178" r="2.4" fill="var(--vp-c-text-2)" />
+<polygon points="240,168 300,138 336,80 276,110" fill="var(--vp-c-brand-1)" opacity="0.14" />
+<line x1="240" y1="168" x2="300" y2="138" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#m4-a)" />
+<text x="304" y="140" font-size="11" fill="var(--vp-c-brand-1)">v</text>
+<line x1="240" y1="168" x2="276" y2="110" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#m4-b)" />
+<text x="262" y="104" font-size="11" fill="var(--vp-c-brand-2)">w</text>
+<circle cx="240" cy="168" r="2.4" fill="var(--vp-c-text-2)" />
+<text x="300" y="186" font-size="11" fill="var(--vp-c-text-3)" text-anchor="middle">放开系数后铺满整张纸</text>
 </svg>
 </FigBox>
 
-线性组合的威力在于「参数化」：一个组合式里藏着无穷多个结果，转动系数就能走遍一片区域。于是自然的问题来了——这片区域到底有多大？是一条线、一个平面、还是整个空间？这就是下一节要回答的问题，也是「张成」这个词的全部内容。
+这里说的是「平面里两支箭」的情形。支数更多时规则不变，但张成有多大由「能扫出几个互不重复的方向」决定，不由支数决定——空间里三支箭若都躺在同一张平面上，扫出的就是那张平面，多一支不会自动多一个方向。
 
-## 四、张成 span：两个箭头扫出线、面还是空间
+于是有了本页最后一个词。一组方向里，如果有一支能被其余几支凑出来（$\mathbf w'=2\mathbf v$ 就是），这一支是多余的，这组叫**线性相关**（linearly dependent）；反过来，谁也不能被其余几支凑出来，就叫**线性无关**（linearly independent）。
 
-这一节的目标是给「张成」下一个能算的定义，并记住两个向量扫出的三种结局——零向量扫出点、共线扫出直线、不共线扫出平面。
-
-**张成**（span）是一组向量所有线性组合组成的集合：
+判断有没有多余，用的还是同一套解方程的本事。把倍数配上去凑零向量，问「除了全取 0，还有没有别的解」：
 
 $$
-\operatorname{span}\{\mathbf v_1,\mathbf v_2,\dots\}
-= \bigl\{\,c_1\mathbf v_1+c_2\mathbf v_2+\cdots \,\bigm|\, c_i\in\mathbb R \,\bigr\}
+c\mathbf v+d\mathbf w=\mathbf 0
 $$
 
-换句话说，张成就是「把系数旋钮全部转到最大自由度，箭头尖能到达的所有地方」。单独一个非零向量，数乘只能沿它自己那根直线伸缩，所以 span 是一条过原点的直线；两个向量就不一定了，分三种情况：
+- 只有 $c=d=0$ 这一个解：没有多余的方向，线性无关。
+- 还有别的解：有冗余，线性相关。
 
-- 两个都为零向量：只能组合出原点这一个点；
-- 两个共线（一个是另一个的倍数）：所有组合仍在同一根直线上，span 还是一条线；
-- 两个不共线：两个方向各铺一条直线，组合起来盖满整个平面，span 是整个 $\mathbb R^2$。
+逐项读这条判据：左边是一段位移，右边是「哪也不去」。两支箭指向不同方向时，想让合位移为零只能两段都不走；它们在同一条直线上时，一段走两格、另一段反着走一格就抵掉了。拿本页的数字试：$\mathbf v=(3,2)$、$\mathbf w=(1,2)$ 时，$3c+d=0$ 与 $2c+2d=0$ 只有 $c=d=0$，无关；换成 $\mathbf w'=(6,4)$，取 $c=-2$、$d=1$ 就有 $-2\mathbf v+\mathbf w'=\mathbf 0$，非零解出现，相关。
 
-<FigBox title="张成的两种结局：共线扫直线，不共线扫平面" kind="几何" note="左：v₁=(2,4) 与 v₂=(1,2) 共线，所有组合都被钉在同一条直线上；右：v₁=(2,1) 与 v₂=(−1,3) 不共线，阴影平行四边形沿两个方向铺开，盖满整个平面。看图能读出什么：能否扫出平面，只取决于两个箭头是否「指向不同方向」。">
-<svg viewBox="0 0 340 210" role="img" aria-label="张成对比图：左侧共线两个向量只扫出直线，右侧不共线两个向量扫出整个平面">
-<defs>
-  <marker id="fig5-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
-    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
-  </marker>
-</defs>
-<text x="90" y="24" font-size="12" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">共线 → 一条线</text>
-<text x="270" y="24" font-size="12" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">不共线 → 平面</text>
-<line x1="180" y1="10" x2="180" y2="200" stroke="var(--vp-c-divider)" stroke-width="1.4" stroke-dasharray="5 4" />
-<!-- 左：共线 -->
-<line x1="40" y1="180" x2="130" y2="0" stroke="var(--vp-c-divider)" stroke-width="1.2" stroke-dasharray="4 3" />
-<line x1="55" y1="150" x2="115" y2="30" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#fig5-ah)" />
-<line x1="55" y1="150" x2="85" y2="90" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#fig5-ah)" />
-<text x="120" y="32" font-size="11" fill="var(--vp-c-brand-1)">v₁</text>
-<text x="88" y="92" font-size="11" fill="var(--vp-c-brand-2)">v₂</text>
-<circle cx="55" cy="150" r="2.4" fill="var(--vp-c-text-2)" />
-<!-- 右：不共线 -->
-<polygon points="250,150 298,126 274,54 226,78" fill="var(--vp-c-brand-1)" opacity="0.16" />
-<line x1="250" y1="150" x2="298" y2="126" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#fig5-ah)" />
-<text x="302" y="128" font-size="11" fill="var(--vp-c-brand-1)">v₁</text>
-<line x1="250" y1="150" x2="226" y2="78" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#fig5-ah)" />
-<text x="206" y="76" font-size="11" fill="var(--vp-c-brand-2)">v₂</text>
-<line x1="298" y1="126" x2="274" y2="54" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3" />
-<line x1="226" y1="78" x2="274" y2="54" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3" />
-<circle cx="250" cy="150" r="2.4" fill="var(--vp-c-text-2)" />
-</svg>
-</FigBox>
+顺带一个名字：像 $\mathbf i,\mathbf j$ 这样「够用又没有多余」的一组方向，叫平面的一组**基**（basis）。正式定义第 4 章给，本页不展开。
 
-所以「两个箭头能扫出多大地方」完全由「它们是否指向同一根直线」决定。这个「是否共线」的判断，正是下一节的**线性无关/线性相关**——它把刚才的几何观察升级成一个可以推广到任意多个向量的代数判据。
+## 例题
 
-## 五、线性无关与线性相关：谁也别躺在别人扫出的线上
+::: tip 例 1 · 正着算一遍，反着再解一遍
+**题目**：取 $\mathbf v=\begin{bmatrix}3\\2\end{bmatrix}$、$\mathbf w=\begin{bmatrix}1\\2\end{bmatrix}$、$\mathbf b=\begin{bmatrix}9\\10\end{bmatrix}$。（a）求 $2\mathbf v+3\mathbf w$；（b）把 $\mathbf b$ 写成 $\mathbf v,\mathbf w$ 的组合，求两个倍数。
 
-这一节的目标是给「共线」这件事一个可计算的判据：线性无关，并且说清为什么「无关」是后面基与维数的地基。
+**先猜**：两列分量都为正，倍数应当也是正数；纵坐标 10 是 2 的五倍，纵方向那支要多走几遍。
 
-先给术语。**线性相关**（linearly dependent）：这组向量里，至少有一个向量能被其余向量的线性组合表示出来——换句话说，有一个向量「躺在」别人扫出的空间里，它是多余的。**线性无关**（linearly independent）：组里没有任何一个向量能被其余向量组合出来——谁也不是多余的，每个向量都给张成增加一个新的独立方向。
+**再算**：
+1. （a）各拉各的再相加：$2\mathbf v=\begin{bmatrix}6\\4\end{bmatrix}$、$3\mathbf w=\begin{bmatrix}3\\6\end{bmatrix}$，合起来 $(9,10)$。*（为什么：两条账互不干扰。）*
+2. （b）设 $\mathbf b=c\mathbf v+d\mathbf w$，拆成 $\begin{cases}3c+d=9\\ 2c+2d=10\end{cases}$。*（为什么能拆：向量相等就是上下两个分量分别相等。）*
+3. 由第一式 $d=9-3c$，代入第二式：$2c+2(9-3c)=10$，$18-4c=10$，$c=2$，回代得 $d=3$。
 
-判据用零向量写最干净：一组向量 $\mathbf v_1,\dots,\mathbf v_n$ 线性无关，当且仅当方程
-
-$$
-c_1\mathbf v_1+c_2\mathbf v_2+\cdots+c_n\mathbf v_n=\mathbf 0
-$$
-
-**只有零解**（$c_1=c_2=\cdots=c_n=0$）。若存在一组不全为零的系数也能把它凑成零向量，就是线性相关。两个向量的特例最直观：$\mathbf v_1,\mathbf v_2$ 线性相关 $\iff$ 共线（一个是另一个的倍数）$\iff$ 它们围出的平行四边形面积为 0；无关 $\iff$ 不共线 $\iff$ 面积不为 0。面积在坐标上有一个现成的计算：把两个向量当列排成 $2\times2$ 矩阵，**行列式**（determinant，记作 $\det$）的绝对值就是那面积——行列式的完整讲法在后面章节，这里只借用「面积为零」这一句。
-
-有了「无关」才有「基」：无关保证没有冗余，张成保证够用。下面最后一节把这两个条件合起来，给出全平面最顺手的一组基。
-
-## 六、标准基：两根坐标轴上的单位箭头
-
-这一节的目标是引出「基」这个词，并用 $\mathbf i,\mathbf j$ 说明任何一个平面向量都能唯一地写成它们的线性组合。
-
-**基**（basis）是一组向量，同时满足两条：它**张成**整个空间（组合够用），且**线性无关**（没有冗余）。平面 $\mathbb R^2$ 最自然的一组基是两根坐标轴方向的单位箭头：
-
-$$
-\mathbf e_1=\begin{bmatrix}1\\0\end{bmatrix},\qquad
-\mathbf e_2=\begin{bmatrix}0\\1\end{bmatrix}
-$$
-
-习惯上也记作 $\mathbf i=\begin{bmatrix}1\\0\end{bmatrix}$、$\mathbf j=\begin{bmatrix}0\\1\end{bmatrix}$。任何一个向量都能唯一地拆成它们的线性组合：$\begin{bmatrix}3\\2\end{bmatrix}=3\mathbf i+2\mathbf j$，系数 3 和 2 就是列向量的两个分量——这正是第一节把坐标读作「路线」的由来。
-
-<FigBox title="标准基 i、j：任何向量都能拆成它们的线性组合" kind="几何" note="i=(1,0)、j=(0,1) 是两根轴方向的单位箭头。v=(3,2) 先沿 i 走 3 格（3i），再沿 j 走 2 格（2j），阴影矩形记录这条路线。看图能读出什么：i 和 j 不共线、又够用，所以能唯一地表示平面里每一个向量——「基」就是这一组坐标轴。">
-<svg viewBox="0 0 320 200" role="img" aria-label="标准基示意图：i 和 j 两根单位箭头，向量 v 等于 3 个 i 加 2 个 j">
-<defs>
-  <marker id="fig6-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
-  </marker>
-</defs>
-<line x1="20" y1="172" x2="310" y2="172" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<line x1="60" y1="196" x2="60" y2="12" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<polygon points="60,172 180,172 180,92 60,92" fill="var(--vp-c-brand-1)" opacity="0.1" />
-<line x1="60" y1="172" x2="100" y2="172" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#fig6-ah)" />
-<text x="100" y="190" font-size="11" fill="var(--vp-c-brand-1)" text-anchor="middle">i</text>
-<line x1="60" y1="172" x2="60" y2="132" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#fig6-ah)" />
-<text x="48" y="132" font-size="11" fill="var(--vp-c-brand-2)" text-anchor="end">j</text>
-<line x1="60" y1="172" x2="180" y2="172" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#fig6-ah)" />
-<text x="180" y="190" font-size="11" fill="var(--vp-c-brand-1)" text-anchor="middle">3i</text>
-<line x1="180" y1="172" x2="180" y2="92" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#fig6-ah)" />
-<text x="188" y="120" font-size="11" fill="var(--vp-c-brand-2)">2j</text>
-<line x1="60" y1="172" x2="180" y2="92" stroke="var(--vp-c-brand-1)" stroke-width="2.6" marker-end="url(#fig6-ah)" />
-<text x="186" y="88" font-size="12.5" font-weight="600" fill="var(--vp-c-brand-1)">v = (3,2)</text>
-<circle cx="60" cy="172" r="2.6" fill="var(--vp-c-text-2)" />
-</svg>
-</FigBox>
-
-基的妙处是「唯一」：无关排除了冗余、张成保证了够用，两者合起来，每个向量对基的系数组合**有且只有一种**。这一句是全书最值钱的伏笔——后面讲矩阵、线性变换、坐标变换时，本质都是「换一组基，重新读同一堆箭头」。到这里，概念全部落地，下面三道例题把数字坐实。
-
-## 典型例题（数字均经 node 验算）
-
-::: tip 例 1 · 向量加法与数乘的坐标账
-**题目**：$\mathbf v_1=\begin{bmatrix}3\\2\end{bmatrix}$、$\mathbf v_2=\begin{bmatrix}1\\4\end{bmatrix}$，求 $\mathbf v_1+\mathbf v_2$、$2\mathbf v_1$、$-\mathbf v_1$。
-
-<FigBox title="例 1：平行四边形加法与数乘" kind="几何" note="v₁=(3,2)、v₂=(1,4) 作邻边，对角线 v₁+v₂=(4,6)；同一条直线上的箭头是数乘 2v₁、−v₁。看图能读出什么：加法和数乘在图上互不干扰，加法走对角线，数乘只拉伸方向不变。">
-<svg viewBox="0 0 300 220" role="img" aria-label="例1平行四边形加法：v1 加 v2 等于 4,6，及数乘 2v1 与负 v1">
-<defs>
-  <marker id="ex1-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
-  </marker>
-</defs>
-<line x1="16" y1="200" x2="292" y2="200" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<line x1="56" y1="218" x2="56" y2="12" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<polygon points="56,200 128,152 152,56 80,104" fill="var(--vp-c-brand-1)" opacity="0.12" />
-<line x1="56" y1="200" x2="80" y2="104" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#ex1-ah)" />
-<text x="62" y="100" font-size="11" fill="var(--vp-c-brand-2)">v₂</text>
-<line x1="56" y1="200" x2="128" y2="152" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#ex1-ah)" />
-<text x="134" y="156" font-size="11" fill="var(--vp-c-brand-1)">v₁</text>
-<line x1="128" y1="152" x2="152" y2="56" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 3" />
-<line x1="80" y1="104" x2="152" y2="56" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 3" />
-<line x1="56" y1="200" x2="152" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="2.6" marker-end="url(#ex1-ah)" />
-<text x="158" y="54" font-size="11.5" font-weight="600" fill="var(--vp-c-brand-1)">v₁+v₂=(4,6)</text>
-<circle cx="56" cy="200" r="2.4" fill="var(--vp-c-text-2)" />
-</svg>
-</FigBox>
-
-**先想什么**：加法逐分量加、数乘逐分量乘，没有要背的公式；容易错的是把 $-\mathbf v_1$ 的分量符号漏一个。
-
-**步骤**：
-1. $\mathbf v_1+\mathbf v_2=\begin{bmatrix}3+1\\2+4\end{bmatrix}=\begin{bmatrix}4\\6\end{bmatrix}$；
-2. $2\mathbf v_1=\begin{bmatrix}2\times3\\2\times2\end{bmatrix}=\begin{bmatrix}6\\4\end{bmatrix}$；*（为什么每个分量都乘 2：数乘是把整段箭头按比例拉长，横纵两条腿一起拉。）*
-3. $-\mathbf v_1=\begin{bmatrix}-3\\-2\end{bmatrix}$。*（为什么是负号：负系数等于掉头 180°，两个分量同时取反。）*
-
-**验算**：`[3,2]+[1,4] = [4,6]`、`2*[3,2] = [6,4]`、`-1*[3,2] = [-3,-2]`，与图上平行四边形对角线、同一直线上的拉伸方向一致。
+**再回代**：$c=2,d=3$ 代回两式：$3\times2+3=9$、$2\times2+2\times3=10$，都对上；按组合算 $2\mathbf v+3\mathbf w=(9,10)$，与（a）一致。
 :::
 
-::: tip 例 2 · 线性组合与反向分解
-**题目**：$\mathbf v_1=\begin{bmatrix}2\\1\end{bmatrix}$、$\mathbf v_2=\begin{bmatrix}-1\\3\end{bmatrix}$。（a）求 $2\mathbf v_1+3\mathbf v_2$；（b）把 $\mathbf b=\begin{bmatrix}1\\11\end{bmatrix}$ 写成 $\mathbf v_1,\mathbf v_2$ 的线性组合。
+::: tip 例 2 · 哪一组里有冗余
+**题目**：判断（a）$\mathbf v=\begin{bmatrix}3\\2\end{bmatrix}$ 与 $\mathbf w=\begin{bmatrix}1\\2\end{bmatrix}$；（b）$\mathbf v$ 与 $\mathbf w'=\begin{bmatrix}6\\4\end{bmatrix}$，各是无关还是相关。
 
-<FigBox title="例 2：线性组合的首尾相接分解" kind="几何" note="从原点先走 2v₁，再从它的终点走 3v₂，恰好到达 b=(1,11)。看图能读出什么：解「b 是不是 v₁、v₂ 的组合」就是解「沿这两个方向各走多少步能到 b」，代数上对应解一个二元一次方程组。">
-<svg viewBox="0 0 300 210" role="img" aria-label="例2线性组合分解：2v1 加 3v2 等于向量 b 为 1,11">
-<defs>
-  <marker id="ex2-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
-    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
-  </marker>
-</defs>
-<line x1="16" y1="190" x2="292" y2="190" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<line x1="60" y1="206" x2="60" y2="12" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<line x1="60" y1="190" x2="116" y2="162" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#ex2-ah)" />
-<text x="88" y="178" font-size="11" fill="var(--vp-c-brand-1)">2v₁</text>
-<line x1="116" y1="162" x2="74" y2="36" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#ex2-ah)" />
-<text x="104" y="100" font-size="11" fill="var(--vp-c-brand-2)">3v₂</text>
-<line x1="60" y1="190" x2="74" y2="36" stroke="var(--vp-c-danger-1)" stroke-width="2.4" marker-end="url(#ex2-ah)" stroke-dasharray="5 3" />
-<text x="30" y="40" font-size="11.5" font-weight="600" fill="var(--vp-c-danger-1)">b=(1,11)</text>
-<circle cx="60" cy="190" r="2.4" fill="var(--vp-c-text-2)" />
-</svg>
-</FigBox>
+**先猜**：（a）两支箭方向明显不同，谁也不是谁的倍数，应该无关；（b）$6=2\times3$、$4=2\times2$，一支就是另一支的两倍，应该相关。
 
-**先想什么**：（a）直接逐分量算；（b）本质是解方程组——把 $\mathbf b$ 的横纵坐标分别等于组合式的横纵坐标。
+**再算**：
+1. （a）解 $c\mathbf v+d\mathbf w=\mathbf 0$，即 $3c+d=0$、$2c+2d=0$。$d=-3c$ 代入第二式：$2c-6c=-4c=0$，只有 $c=d=0$。*（为什么这样就够：有非零解才算相关。）*
+2. （b）解 $3c+6d=0$、$2c+4d=0$，两式其实是同一条，取 $d=1$ 得 $c=-2$。
 
-**步骤**：
-1. $2\mathbf v_1+3\mathbf v_2=\begin{bmatrix}4\\2\end{bmatrix}+\begin{bmatrix}-3\\9\end{bmatrix}=\begin{bmatrix}1\\11\end{bmatrix}$；*（为什么先乘后加：线性组合的定义就是「先各自拉伸，再相加」。）*
-2. 设 $\mathbf b=c_1\mathbf v_1+c_2\mathbf v_2$，即 $\begin{bmatrix}2c_1-c_2\\c_1+3c_2\end{bmatrix}=\begin{bmatrix}1\\11\end{bmatrix}$，得方程组 $2c_1-c_2=1,\ c_1+3c_2=11$；
-3. 由第一式 $c_2=2c_1-1$ 代入第二式：$c_1+3(2c_1-1)=11\Rightarrow7c_1=14\Rightarrow c_1=2,\ c_2=3$。*（为什么恰好与（a）的系数相同：同一个组合式，正反两个方向，答案自然一致。）*
-
-**验算**：`2*[2,1]+3*[-1,3] = [1,11]` ✓；回代 $2\times2-3=1$、$2+3\times3=11$ ✓。这也说明（a）（b）是同一件事的两个问法：正着组合、反着分解。
+**再回代**：把 $c=-2,d=1$ 代回组合：$-2\begin{bmatrix}3\\2\end{bmatrix}+\begin{bmatrix}6\\4\end{bmatrix}=\begin{bmatrix}0\\0\end{bmatrix}$，确实凑出了零向量，所以（b）相关；（a）只有全零解，无关。与「是否成倍数」的观察一致。
 :::
 
-::: tip 例 3 · 线性相关的判定
-**题目**：判断（a）$\mathbf v_1=\begin{bmatrix}2\\4\end{bmatrix},\mathbf v_2=\begin{bmatrix}1\\2\end{bmatrix}$；（b）$\mathbf u_1=\begin{bmatrix}2\\1\end{bmatrix},\mathbf u_2=\begin{bmatrix}-1\\3\end{bmatrix}$ 各是否线性无关。
+## 这一页带走三句话
 
-<FigBox title="例 3：共线相关、不共线无关" kind="几何" note="左：(2,4) 与 (1,2) 共线，围成的平行四边形退化成一条线，面积（行列式）为 0，相关；右：(2,1) 与 (−1,3) 不共线，围出面积为 7 的平行四边形，无关。看图能读出什么：线性无关的几何本质就是「两个箭头指向不同方向、能围出一块非零面积」。">
-<svg viewBox="0 0 340 210" role="img" aria-label="例3线性相关判定：左侧共线两个向量围成零面积，右侧不共线围成非零面积">
-<defs>
-  <marker id="ex3-ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
-    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
-  </marker>
-</defs>
-<text x="90" y="24" font-size="12" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">相关：面积 0</text>
-<text x="270" y="24" font-size="12" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">无关：面积 7</text>
-<line x1="180" y1="10" x2="180" y2="200" stroke="var(--vp-c-divider)" stroke-width="1.4" stroke-dasharray="5 4" />
-<line x1="40" y1="180" x2="130" y2="0" stroke="var(--vp-c-divider)" stroke-width="1.2" stroke-dasharray="4 3" />
-<line x1="55" y1="150" x2="115" y2="30" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#ex3-ah)" />
-<text x="120" y="32" font-size="11" fill="var(--vp-c-brand-1)">v₁</text>
-<line x1="55" y1="150" x2="85" y2="90" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#ex3-ah)" />
-<text x="88" y="92" font-size="11" fill="var(--vp-c-brand-2)">v₂</text>
-<circle cx="55" cy="150" r="2.4" fill="var(--vp-c-text-2)" />
-<polygon points="250,150 298,126 274,54 226,78" fill="var(--vp-c-brand-1)" opacity="0.16" />
-<line x1="250" y1="150" x2="298" y2="126" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#ex3-ah)" />
-<text x="302" y="128" font-size="11" fill="var(--vp-c-brand-1)">u₁</text>
-<line x1="250" y1="150" x2="226" y2="78" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#ex3-ah)" />
-<text x="206" y="76" font-size="11" fill="var(--vp-c-brand-2)">u₂</text>
-<line x1="298" y1="126" x2="274" y2="54" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3" />
-<line x1="226" y1="78" x2="274" y2="54" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3" />
-<circle cx="250" cy="150" r="2.4" fill="var(--vp-c-text-2)" />
-</svg>
-</FigBox>
+1. 向量是一段位移，列坐标是它在两根轴上的读数；点只有位置，位移不绑起点。
+2. $c\mathbf v+d\mathbf w$ 就是「各走几遍、接起来」；正着算是组合，反着解是解二元方程组，同一件事。
+3. 系数放开后扫到的地方叫张成；没有哪一支能被其余凑出来叫线性无关，判据是凑零向量只有全零解。
 
-**先想什么**：两个向量时，判断无关只需看「是否共线」，即一个是另一个的倍数；要更机械化，就算它们当列排成的矩阵行列式是否为零。
-
-**步骤**：
-1. （a）$\mathbf v_2=\frac12\mathbf v_1$，共线，所以线性相关；行列式 $\begin{vmatrix}2&1\\4&2\end{vmatrix}=2\times2-4\times1=0$，面积为零，两者互相印证；
-2. （b）$\mathbf u_1,\mathbf u_2$ 没有倍数关系，不共线，线性无关；行列式 $\begin{vmatrix}2&-1\\1&3\end{vmatrix}=2\times3-1\times(-1)=7\neq0$，面积非零。
-
-**验算**：`det([[2,1],[4,2]]) = 0`、`det([[2,-1],[1,3]]) = 7` ✓。（a）中只要取 $c_1=-1,c_2=2$ 就有 $-1\,\mathbf v_1+2\,\mathbf v_2=\mathbf 0$，存在非零解，故相关；（b）中 $c_1\mathbf u_1+c_2\mathbf u_2=\mathbf 0$ 解出只有 $c_1=c_2=0$，故无关。
+::: warning 本页最容易混的三处
+- 把 $\begin{bmatrix}3\\2\end{bmatrix}$ 当成「(3,2) 那个点」。点回答在哪，位移回答怎么走。
+- 数乘只乘了一个分量。$c\mathbf v$ 是两条腿一起乘 $c$。
+- 看到分量不同就说无关。$(3,2)$ 与 $(6,4)$ 数字不同，但一支是另一支的两倍，它们相关。
 :::
 
-## 易错清单 + 自检
-
-- **向量不是点**：$\begin{bmatrix}3\\2\end{bmatrix}$ 不是「$(3,2)$ 这个点」，而是「从原点走到 $(3,2)$ 的路线」。平移不改变向量，所以所有箭头都默认从原点出发。
-- **数乘别只乘一个分量**：$c\mathbf v$ 是把横纵两条腿一起乘 $c$，漏一个分量箭头就「歪」了。
-- **张成三种结局要分清**：零向量 → 点；共线 → 直线；不共线 → 平面。看到「两个向量张成什么」，先看它们是否共线。
-- **相关不等于「完全一样」**：$\begin{bmatrix}2\\4\end{bmatrix}$ 与 $\begin{bmatrix}1\\2\end{bmatrix}$ 不相等，但一个躺在另一个扫出的线上，照样线性相关；判断看方向、看行列式，不看分量是否相等。
-- **零解判据要双向记**：无关 $\iff$ 只有零解；只要找到一组不全为零的系数凑出零向量，就立刻是相关。
-
-**自检**：任取 $\mathbf v_1=\begin{bmatrix}2\\1\end{bmatrix}$，问自己——$\operatorname{span}\{\mathbf v_1\}$ 是什么图形？再加一个 $\mathbf v_2=\begin{bmatrix}4\\2\end{bmatrix}$，span 变没变、为什么？换成 $\mathbf v_2=\begin{bmatrix}-1\\3\end{bmatrix}$ 呢？三个问题都能用「箭头扫过哪里」答上来，这一页就真正是你的了。下一章我们把这套箭头语言用到一个新动作上：把整张坐标网格「掰」到新位置——那就是矩阵与线性变换。
+下一站是[02 · 矩阵与线性变换](./02-matrices.md)：换一个问法——不是「两支箭能凑到哪」，而是「整张纸被一条规则同时搬走」。

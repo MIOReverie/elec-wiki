@@ -1,302 +1,244 @@
 ---
 title: 06 · 二次型：把交叉项配成平方
-description: 二次型就是二次齐次多项式，写成矩阵时交叉项系数对半分到对称位置；配方法与正交变换法两步化成标准形，惯性定理锁定正负项个数，正定性用顺序主子式全正来判。三道 node 验算例题。
+description: 对齐同济《线性代数》第五章后半：把含交叉项的二次多项式写成对称矩阵，用配方法与正交变换法化成标准形，用惯性定理核对正负项个数，再用顺序主子式判正定。
 ---
 
 # 06 · 二次型：把交叉项配成平方
 
-<Meta time="45 min" level="核心" note="全页只有一句话：二次型矩阵必须写成对称矩阵，交叉项系数对半分；化标准形只有两条路——配方法与正交变换法" />
+<Meta time="35 min" level="核心" note="最容易错的两处：交叉项系数忘了对半分；判正定时只看最后一个顺序主子式" />
 
-**这一页对应教材第几章**：对应同济《线性代数》第五章（二次型部分）。前面第五章上半讲的是特征值与对称矩阵的正交对角化，本页把它用到最后一个目标上——把含交叉项的二次多项式「摆正」成只有平方项。
+**这一页要解决的三类题**（只写动作，术语在正文里才出现）：
 
-**这一页要解决什么**：你见过 $x_1^2+x_2^2$ 这种只含平方项的式子，也见过 $2x_1x_2$ 这种交叉项，但一看到它们混在一起就不知道该怎么处理。读完这一页，你应该能：把任意二次型写成对称矩阵；用**配方法**和**正交变换法**两种方法把它化成标准形；用惯性定理检查自己没算错；再用**顺序主子式**判断一个二次型是不是正定。三种题型都有固定的操作步骤，照着做即可。
+1. 一个混着交叉项（像 $2x_1x_2$）的式子，先把它写成一张对称的数表；
+2. 换一次元，把交叉项全消掉、只剩平方项——两种换法各管什么，正文里说；
+3. 判这个式子会不会取到负值。
+
+**对应教材**：同济《线性代数》第五章后半（二次型及其标准形、惯性定理、正定二次型）。
 
 ::: tip 读这页之前
-- **需要会**：矩阵的转置与乘法、行列式的计算（用来算顺序主子式）、特征值与对称矩阵的正交对角化。前两样是本板块第 2、5 章的内容，最后一键是第五章上半的内容；记不清时点回现代版复习：[02 · 矩阵与线性变换](../linalg/02-matrices.md)、[05 · 行列式](../linalg/05-determinant.md)、[06 · 特征值、特征向量与对角化](../linalg/06-eigenvalues.md)。
-- **这一页用到的符号**：$\mathbf x=(x_1,\dots,x_n)^T$ 是列向量，$A$ 是矩阵，$A^T$ 是转置，$Q$ 专指列向量两两正交且单位化的正交矩阵（$Q^T=Q^{-1}$）。二次型统一写成 $\mathbf x^T A\mathbf x$。符号约定见[符号与约定](../guide/notation.md)。
+- **需要会**：转置与矩阵乘法（[02 · 矩阵及其运算](02-matrices.md)）；行列式（[01 · 行列式](01-determinant.md)，算顺序主子式要用）；特征值与实对称矩阵的正交对角化（[05 · 特征值与特征向量](05-eigen.md)）。
+- **这一页的记号**：$\mathbf x=(x_1,\dots,x_n)^T$ 是列向量，$A^T$ 是转置，$D$ 是对角矩阵，$Q$ 是列向量两两垂直且长度为 1 的正交矩阵（$Q^{-1}=Q^T$）；二次型统一写成 $\mathbf x^TA\mathbf x$。
 :::
 
-先看一个具体问题。给你一个三元式子 $f=x_1^2+2x_2^2+5x_3^2+2x_1x_2+2x_1x_3+6x_2x_3$，它里面既有平方项、又有交叉项，很难一眼看出它的性质。这一页做的只有一件事：**通过一次可逆的变量替换，把交叉项全部消掉**，让 $f$ 变成只有平方项的简单形状。消掉交叉项有两条路——配方（代数里就会的「配完全平方」）和正交变换（用第五章的特征值）。下面先把「二次型」这个词说准，再给出两条路的完整步骤。
+## 一、交叉项是怎么进到矩阵里去的
 
-## 结论先行
-
-1. **二次型 = 二次齐次多项式**；写矩阵时**平方项系数放对角线、交叉项系数对半分到对称的两个位置**，这样得到的矩阵必是对称阵。
-2. **标准形 = 只含平方项**（交叉项全清零）；**规范形 = 平方项系数只剩 $+1,-1,0$**，比标准形再规范一步。
-3. 化标准形两条路：**配方法**（有平方项就配、没有先造）；**正交变换法**（矩阵 → 特征值 → 正交矩阵 $Q$，令 $\mathbf x=Q\mathbf y$）。
-4. **惯性定理**：不管用哪种可逆变换化标准形，**正项个数 $p$ 与负项个数 $q$ 永远不变**，标准形可以不一样、但 $p,q$ 不变。
-5. **正定判据**：$f=\mathbf x^T A\mathbf x>0$ 对一切非零 $\mathbf x$ 成立，等价于 $A$ 的**所有顺序主子式全大于零**。
-
-## 一、二次型及其矩阵：交叉项系数对半分
-
-这一节的目标，是让你能把手里的二次型一眼翻译成对称矩阵，并且记住那条最容易错的规则——交叉项系数必须对半分。
-
-**二次型**（quadratic form）是 $n$ 个变量 $x_1,\dots,x_n$ 的**二次齐次多项式**：每一项都是二次的，要么是平方项 $a_{ii}x_i^2$，要么是交叉项 $a_{ij}x_ix_j\ (i\neq j)$，不含一次项、也不含常数项。例如 $x_1^2+2x_1x_2+3x_2^2$ 是二次型，而 $x_1^2+x_1+1$ 不是（多了 $x_1$ 和常数 $1$）。
-
-任何二次型都能写成**矩阵形式**：
+取一个三元式子：
 
 $$
-f = \mathbf x^T A\,\mathbf x = \sum_{i,j} a_{ij}x_ix_j
+f=x_1^2+2x_2^2+5x_3^2+2x_1x_2+2x_1x_3+6x_2x_3
 $$
 
-其中 $\mathbf x=(x_1,\dots,x_n)^T$，$A=(a_{ij})$ 是 $n$ 阶矩阵。关键是 $A$ 要取成**对称矩阵**（symmetric matrix，满足 $A^T=A$）。规则就一条：
+每一项都是二次的：要么平方项 $x_i^2$，要么交叉项 $x_ix_j$（$i\ne j$），没有一次项、没有常数项。这样的式子叫**二次型**。问题先摆在这里：$f$ 会不会取到负值？平方项都带正号，交叉项却可能把总和拉下去，一眼看不出来。
 
-- **平方项系数直接放对角线**：$a_{ii}=$ $x_i^2$ 的系数；
-- **交叉项系数对半分**：$x_ix_j$ 的系数一半给 $a_{ij}$、一半给 $a_{ji}$。
-
-为什么必须对半分？因为展开 $\mathbf x^T A\mathbf x$ 时，$x_ix_j$ 会出现两次（一次来自 $a_{ij}x_ix_j$、一次来自 $a_{ji}x_jx_i$），合并后系数是 $2a_{ij}$。所以反过来，交叉项系数要除以 $2$ 才是 $a_{ij}$ 和 $a_{ji}$。**二次型矩阵必须写成对称矩阵**，这是全页第一铁律——非对称的「矩阵」根本不能用来表示二次型。
-
-举例：$f=x_1^2+2x_2^2+5x_3^2+2x_1x_2+2x_1x_3+6x_2x_3$。平方项系数 $1,2,5$ 放对角线；$2x_1x_2$ 的系数 $2$ 对半分给 $a_{12}=a_{21}=1$，$2x_1x_3$ 对半分给 $a_{13}=a_{31}=1$，$6x_2x_3$ 对半分给 $a_{23}=a_{32}=3$：
+二次型都能写成矩阵乘法的样子：
 
 $$
-A = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \\ 1 & 3 & 5 \end{bmatrix}
+f=\mathbf x^TA\mathbf x=\sum_{i,j}a_{ij}x_ix_j
 $$
 
-<FigBox title="二次型写成对称矩阵：对角线放平方项、对称位置对半分" kind="结构" note="对角线上的 1、2、5 分别来自 x₁²、x₂²、x₃² 的系数；蓝绿色格子成对出现、数值相等，是交叉项系数对半分的产物。看图能读出什么：矩阵关于主对角线对称，a₁₂=a₂₁=1、a₁₃=a₃₁=1、a₂₃=a₃₂=3。">
-<svg viewBox="0 0 360 230" role="img" aria-label="三元二次型的对称矩阵：对角线放平方项系数 1、2、5，对称位置放交叉项系数对半分的 1、1、3">
-<g font-size="16" font-weight="600" text-anchor="middle">
-  <rect x="168" y="58" width="38" height="38" rx="6" fill="var(--vp-c-brand-1)" opacity="0.18" stroke="var(--vp-c-brand-1)" stroke-width="1.2" />
-  <text x="187" y="82" fill="var(--vp-c-text-1)">1</text>
-  <rect x="206" y="58" width="38" height="38" rx="6" fill="var(--vp-c-brand-2)" opacity="0.16" />
-  <text x="225" y="82" fill="var(--vp-c-text-1)">1</text>
-  <rect x="244" y="58" width="38" height="38" rx="6" fill="var(--vp-c-brand-2)" opacity="0.16" />
-  <text x="263" y="82" fill="var(--vp-c-text-1)">1</text>
-  <rect x="168" y="96" width="38" height="38" rx="6" fill="var(--vp-c-brand-2)" opacity="0.16" />
-  <text x="187" y="120" fill="var(--vp-c-text-1)">1</text>
-  <rect x="206" y="96" width="38" height="38" rx="6" fill="var(--vp-c-brand-1)" opacity="0.18" stroke="var(--vp-c-brand-1)" stroke-width="1.2" />
-  <text x="225" y="120" fill="var(--vp-c-text-1)">2</text>
-  <rect x="244" y="96" width="38" height="38" rx="6" fill="var(--vp-c-brand-2)" opacity="0.16" />
-  <text x="263" y="120" fill="var(--vp-c-text-1)">3</text>
-  <rect x="168" y="134" width="38" height="38" rx="6" fill="var(--vp-c-brand-2)" opacity="0.16" />
-  <text x="187" y="158" fill="var(--vp-c-text-1)">1</text>
-  <rect x="206" y="134" width="38" height="38" rx="6" fill="var(--vp-c-brand-2)" opacity="0.16" />
-  <text x="225" y="158" fill="var(--vp-c-text-1)">3</text>
-  <rect x="244" y="134" width="38" height="38" rx="6" fill="var(--vp-c-brand-1)" opacity="0.18" stroke="var(--vp-c-brand-1)" stroke-width="1.2" />
-  <text x="263" y="158" fill="var(--vp-c-text-1)">5</text>
-</g>
-<text x="150" y="206" font-size="12" fill="var(--vp-c-text-2)">主对角线 = 平方项系数</text>
-<rect x="16" y="198" width="14" height="14" rx="3" fill="var(--vp-c-brand-1)" opacity="0.18" stroke="var(--vp-c-brand-1)" stroke-width="1" />
-<rect x="212" y="198" width="14" height="14" rx="3" fill="var(--vp-c-brand-2)" opacity="0.16" />
-<text x="236" y="210" font-size="12" fill="var(--vp-c-text-2)">对称位置 = 交叉项系数 ÷ 2</text>
+规则两条：平方项系数放对角线（$a_{ii}$ 就是 $x_i^2$ 的系数）；交叉项系数**对半分**给 $a_{ij}$ 和 $a_{ji}$。按这条规则，上面的 $f$ 对应
+
+$$
+A=\begin{bmatrix}1&1&1\\1&2&3\\1&3&5\end{bmatrix}
+$$
+
+读一遍这个对应：$x_1^2$、$x_2^2$、$x_3^2$ 的系数 $1,2,5$ 落对角线；$2x_1x_2$ 的系数 2 分给 $a_{12}=a_{21}=1$，$2x_1x_3$ 分给 $a_{13}=a_{31}=1$，$6x_2x_3$ 分给 $a_{23}=a_{32}=3$。
+
+为什么两格各放 1？把 $\mathbf x^TA\mathbf x$ 展开，$x_ix_j$ 会出现两次（$a_{ij}x_ix_j$ 与 $a_{ji}x_jx_i$），合并后的系数是 $a_{ij}+a_{ji}$，只要这个和等于原来的 2 就行。也就是说，同一个 $f$ 也能写成不对称的矩阵——比如把 2 整个塞进 $a_{12}$、让 $a_{21}=0$，展开还是同一个式子。那为什么规定对半分？因为这样得到的那一个矩阵是**唯一**的，而且它是对称矩阵（$A^T=A$），后面求特征值、做正交对角化正好套第五章的实对称结论。所以此后说「二次型的矩阵」都指对半分得到的那个对称矩阵。
+
+<FigBox title="对称矩阵的布局：对角线放平方项，成对位置放交叉项的一半" kind="结构" note="输入是 f 的六项系数；操作是按上面两条规则填格子；结果对角线是 1、2、5，成对位置是 1、1、3。看图能读出什么：矩阵关于主对角线对称，a₁₂=a₂₁ 这类等式是填法的直接后果。">
+<svg viewBox="0 0 400 264" role="img" aria-label="三元二次型的对称矩阵：对角线放平方项系数，成对位置放交叉项系数的一半">
+  <g font-size="16" font-weight="600" text-anchor="middle">
+    <rect x="200" y="46" width="40" height="40" rx="6" fill="var(--vp-c-brand-1)" opacity="0.18" stroke="var(--vp-c-brand-1)" stroke-width="1.2"/>
+    <text x="220" y="72" fill="var(--vp-c-text-1)">1</text>
+    <rect x="240" y="46" width="40" height="40" rx="6" fill="var(--vp-c-brand-2)" opacity="0.16"/>
+    <text x="260" y="72" fill="var(--vp-c-text-1)">1</text>
+    <rect x="280" y="46" width="40" height="40" rx="6" fill="var(--vp-c-brand-2)" opacity="0.16"/>
+    <text x="300" y="72" fill="var(--vp-c-text-1)">1</text>
+    <rect x="200" y="86" width="40" height="40" rx="6" fill="var(--vp-c-brand-2)" opacity="0.16"/>
+    <text x="220" y="112" fill="var(--vp-c-text-1)">1</text>
+    <rect x="240" y="86" width="40" height="40" rx="6" fill="var(--vp-c-brand-1)" opacity="0.18" stroke="var(--vp-c-brand-1)" stroke-width="1.2"/>
+    <text x="260" y="112" fill="var(--vp-c-text-1)">2</text>
+    <rect x="280" y="86" width="40" height="40" rx="6" fill="var(--vp-c-brand-2)" opacity="0.16"/>
+    <text x="300" y="112" fill="var(--vp-c-text-1)">3</text>
+    <rect x="200" y="126" width="40" height="40" rx="6" fill="var(--vp-c-brand-2)" opacity="0.16"/>
+    <text x="220" y="152" fill="var(--vp-c-text-1)">1</text>
+    <rect x="240" y="126" width="40" height="40" rx="6" fill="var(--vp-c-brand-2)" opacity="0.16"/>
+    <text x="260" y="152" fill="var(--vp-c-text-1)">3</text>
+    <rect x="280" y="126" width="40" height="40" rx="6" fill="var(--vp-c-brand-1)" opacity="0.18" stroke="var(--vp-c-brand-1)" stroke-width="1.2"/>
+    <text x="300" y="152" fill="var(--vp-c-text-1)">5</text>
+  </g>
+  <rect x="18" y="188" width="14" height="14" rx="3" fill="var(--vp-c-brand-1)" opacity="0.18" stroke="var(--vp-c-brand-1)" stroke-width="1"/>
+  <text x="40" y="200" font-size="12" fill="var(--vp-c-text-2)">对角线：平方项系数</text>
+  <rect x="18" y="212" width="14" height="14" rx="3" fill="var(--vp-c-brand-2)" opacity="0.16"/>
+  <text x="40" y="224" font-size="12" fill="var(--vp-c-text-2)">成对位置：交叉项系数 ÷ 2</text>
+  <text x="18" y="250" font-size="12" fill="var(--vp-c-text-3)">输入六项系数 → 按两条规则填格 → 得对称矩阵 A</text>
 </svg>
 </FigBox>
 
-把二次型写成矩阵只是第一步；矩阵给了我们一个「抓手」，后面所有操作——配方法也好、正交变换也好——都能说成对矩阵做的事。下面先看我们要把它整理成多简单的形状，那就是标准形。
-
-## 二、标准形与规范形：把交叉项清零
-
-这一节的目标，是说清两个名词——标准形与规范形——的区别，以及怎么从结果里读出一个二次型的关键数字。
-
-**标准形**（canonical form）是**只含平方项**的二次型：
+我们想把 $f$ 整理成什么形状？只剩平方项、交叉项全为零：
 
 $$
-f = d_1y_1^2 + d_2y_2^2 + \cdots + d_ny_n^2
+f=d_1y_1^2+d_2y_2^2+\cdots+d_ny_n^2
 $$
 
-没有 $y_iy_j\ (i\neq j)$ 这种交叉项；系数 $d_i$ 可以是正、负或零（为零的项通常省写）。**规范形**（normal form）再进一步，把每个平方项的系数归一成 $+1$、$-1$ 或 $0$：
+这种形状叫**标准形**；若再把系数归成 $+1$、$-1$、$0$，叫**规范形**。下面两条路都奔着标准形去。
+
+## 二、配方法：一次配掉一个变量
+
+配方法就是初中的配完全平方，只是变量多了，得一个一个来：找平方项 → 把含这个变量的所有项收进一个完全平方 → 剩下的部分不再含这个变量 → 对剩下的变量重复，直到交叉项清零。
+
+拿 $f$ 现场配。含 $x_1$ 的项是 $x_1^2+2x_1x_2+2x_1x_3$，先看 $(x_1+x_2+x_3)^2$ 展开成什么：
 
 $$
-f = z_1^2 + \cdots + z_p^2 - z_{p+1}^2 - \cdots - z_r^2
+(x_1+x_2+x_3)^2=x_1^2+x_2^2+x_3^2+2x_1x_2+2x_1x_3+2x_2x_3
 $$
 
-这里 $r$ 是二次型的**秩**（rank，等于标准形里非零系数的个数，也等于矩阵 $A$ 的秩），$p$ 叫**正惯性指数**（positive index of inertia，正项个数），$q=r-p$ 叫**负惯性指数**（negative index of inertia，负项个数）。**惯性指数**这个词就是「标准形里正项、负项各有多少个」。
+多出来的 $x_2^2+x_3^2+2x_2x_3$ 要减掉，代回去再合并：
 
-一句话分清两者：标准形只要「交叉项清零」，系数可以是任意非零数；规范形要「系数也只留符号」，只剩 $+1,-1,0$。比如 $3y_1^2-\frac12y_2^2$ 是标准形但不是规范形，令 $z_1=\sqrt3\,y_1,\ z_2=\frac{1}{\sqrt2}y_2$ 就得到规范形 $z_1^2-z_2^2$。
+$$
+f=(x_1+x_2+x_3)^2+x_2^2+4x_3^2+4x_2x_3
+$$
 
-标准形人人都想要，但问题是**怎么变过去**。下面两节给两条可操作的路：先讲最贴近「配完全平方」的配方法。
+第一项之外已经没有 $x_1$ 了，这一步的目的达到。再配 $x_2$：$x_2^2+4x_2x_3+4x_3^2=(x_2+2x_3)^2$，所以
 
-## 三、配方法：一次配掉一个变量
+$$
+f=(x_1+x_2+x_3)^2+(x_2+2x_3)^2
+$$
 
-这一节的目标，是给出配方法的完整步骤，并示范怎么一次配掉一个变量，直到交叉项清零。
+令 $y_1=x_1+x_2+x_3$、$y_2=x_2+2x_3$、$y_3=x_3$，标准形就是 $y_1^2+y_2^2$（第三个平方项的系数是 0）。补 $y_3=x_3$ 是为了三个旧变量对三个新变量——换元 $\mathbf x=C\mathbf y$ 必须可逆，少一个就退化了。若二次型一开始没有平方项（比如只剩 $2x_1x_2$），先作替换 $x_1=y_1+y_2$、$x_2=y_1-y_2$ 造出 $y_1^2-y_2^2$，再按上面的步骤配。
 
-配方法（method of completing the square）的思路就是初中的「配完全平方」，只是变量更多。**配方法化标准形步骤**：
-
-1. **找平方项**。看有没有系数非零的平方项；有就先拿它开刀。
-2. **配一个变量**。把含这个变量（比如 $x_1$）的所有项集中起来，配成「（$x_1$ + 其余变量的线性式）$^2$」，配完剩下的部分不再含 $x_1$。
-3. **没有平方项就先造**。若二次型全是交叉项（如 $2x_1x_2$），先作可逆替换 $x_1=y_1+y_2,\ x_2=y_1-y_2$，就有 $x_1x_2=y_1^2-y_2^2$，造出了平方项。
-4. **对剩余变量重复**，直到所有交叉项清零；最后把替换写成 $\mathbf x=C\mathbf y$（要求 $|C|\neq0$ 可逆），标准形就出来了。
-
-::: tip 例 1 · 配方法化标准形
-**题目**：用配方法把 $f=x_1^2+2x_2^2+5x_3^2+2x_1x_2+2x_1x_3+6x_2x_3$ 化成标准形，并写出所用的可逆变换。
-
-<FigBox title="例 1：配方法两步流程" kind="结构" note="每一步都「配掉」一个变量：先配 x₁，剩余部分不含 x₁；再配 x₂，剩余部分只剩平方项。看图能读出什么：配方法就是逐变量消交叉项，配完一个就少一个变量。">
-<svg viewBox="0 0 360 250" role="img" aria-label="配方法两步流程：原始二次型，配 x1，配 x2，得到标准形">
-<rect x="20" y="16" width="320" height="42" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1" />
-<text x="180" y="34" font-size="12" fill="var(--vp-c-text-2)" text-anchor="middle">f = x₁²+2x₂²+5x₃²+2x₁x₂+2x₁x₃+6x₂x₃</text>
-<text x="180" y="52" font-size="11" fill="var(--vp-c-text-3)" text-anchor="middle">原始二次型</text>
-<line x1="180" y1="58" x2="180" y2="72" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#q1-arw)" />
-<text x="192" y="68" font-size="11" fill="var(--vp-c-brand-1)">配 x₁</text>
-<rect x="20" y="76" width="320" height="42" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1" />
-<text x="180" y="94" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">(x₁+x₂+x₃)² + x₂² + 4x₃² + 4x₂x₃</text>
-<text x="180" y="112" font-size="11" fill="var(--vp-c-text-3)" text-anchor="middle">配完 x₁，剩余不含 x₁</text>
-<line x1="180" y1="118" x2="180" y2="132" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#q1-arw)" />
-<text x="192" y="128" font-size="11" fill="var(--vp-c-brand-1)">配 x₂</text>
-<rect x="20" y="136" width="320" height="42" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1" />
-<text x="180" y="154" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle">(x₁+x₂+x₃)² + (x₂+2x₃)²</text>
-<text x="180" y="172" font-size="11" fill="var(--vp-c-text-3)" text-anchor="middle">交叉项清零</text>
-<line x1="180" y1="178" x2="180" y2="192" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#q1-arw)" />
-<text x="192" y="188" font-size="11" fill="var(--vp-c-brand-1)">令 y</text>
-<rect x="20" y="196" width="320" height="42" rx="8" fill="var(--vp-c-brand-1)" opacity="0.1" stroke="var(--vp-c-brand-1)" stroke-width="1.2" />
-<text x="180" y="214" font-size="13" font-weight="600" fill="var(--vp-c-brand-1)" text-anchor="middle">标准形 f = y₁² + y₂²</text>
-<text x="180" y="232" font-size="11" fill="var(--vp-c-text-3)" text-anchor="middle">秩 2 · 正惯性指数 2 · 负惯性指数 0</text>
-<defs>
-  <marker id="q1-arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
-  </marker>
-</defs>
+<FigBox title="配方法：一次配掉一个变量" kind="结构" note="输入是原始六项式；操作是先收 x₁、再收 x₂；结果只剩两个平方。看图能读出什么：每配一次，含该变量的项就全被收进一个括号，交叉项逐层减少。">
+<svg viewBox="0 0 380 250" role="img" aria-label="配方法两步流程">
+  <defs>
+    <marker id="c6f1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)"/>
+    </marker>
+  </defs>
+  <rect x="18" y="14" width="344" height="38" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1"/>
+  <text x="190" y="38" font-size="11.5" fill="var(--vp-c-text-2)" text-anchor="middle">输入：f = x₁²+2x₂²+5x₃²+2x₁x₂+2x₁x₃+6x₂x₃</text>
+  <line x1="190" y1="54" x2="190" y2="70" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#c6f1)"/>
+  <text x="200" y="66" font-size="11" fill="var(--vp-c-brand-1)">收 x₁</text>
+  <rect x="18" y="72" width="344" height="38" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1"/>
+  <text x="190" y="96" font-size="11.5" fill="var(--vp-c-text-1)" text-anchor="middle">(x₁+x₂+x₃)² + x₂² + 4x₃² + 4x₂x₃</text>
+  <line x1="190" y1="112" x2="190" y2="128" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#c6f1)"/>
+  <text x="200" y="124" font-size="11" fill="var(--vp-c-brand-1)">收 x₂</text>
+  <rect x="18" y="130" width="344" height="38" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1"/>
+  <text x="190" y="154" font-size="11.5" fill="var(--vp-c-text-1)" text-anchor="middle">(x₁+x₂+x₃)² + (x₂+2x₃)²</text>
+  <line x1="190" y1="170" x2="190" y2="186" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#c6f1)"/>
+  <text x="200" y="182" font-size="11" fill="var(--vp-c-brand-1)">令 y</text>
+  <rect x="18" y="188" width="344" height="38" rx="8" fill="var(--vp-c-brand-1)" opacity="0.1" stroke="var(--vp-c-brand-1)" stroke-width="1.2"/>
+  <text x="190" y="212" font-size="12.5" font-weight="600" fill="var(--vp-c-brand-1)" text-anchor="middle">结果：f = y₁² + y₂² + 0·y₃²</text>
+  <text x="190" y="240" font-size="11.5" fill="var(--vp-c-text-3)" text-anchor="middle">操作：逐层收变量；结果：交叉项清零</text>
 </svg>
 </FigBox>
 
-**先想什么**：有 $x_1^2$ 这个平方项，直接从 $x_1$ 开始配；不要一上来动所有项，只集中含 $x_1$ 的项。
+配完能回答开头那个问题了：$f$ 是两个平方之和，永远 $\ge0$；只有两个括号同时为 0（$x_2=-2x_3$、$x_1=x_3$）时才等于 0，例如 $(1,-2,1)$。所以 $f$ 不取负值，但会取到 0——这种情形第四节给名字。
 
-**步骤**：
-1. 集中含 $x_1$ 的项 $x_1^2+2x_1x_2+2x_1x_3$，配方：$(x_1+x_2+x_3)^2$ 展开后是 $x_1^2+x_2^2+x_3^2+2x_1x_2+2x_1x_3+2x_2x_3$，于是 $x_1^2+2x_1x_2+2x_1x_3=(x_1+x_2+x_3)^2-x_2^2-x_3^2-2x_2x_3$；
-2. 代回并合并：$f=(x_1+x_2+x_3)^2+x_2^2+4x_3^2+4x_2x_3$；*（为什么剩余不含 $x_1$：配完全平方后，含 $x_1$ 的部分全被收进了那个平方，这正是配方法的目的。）*
-3. 再配 $x_2$：$x_2^2+4x_2x_3+4x_3^2=(x_2+2x_3)^2$，于是 $f=(x_1+x_2+x_3)^2+(x_2+2x_3)^2$；
-4. 令 $y_1=x_1+x_2+x_3,\ y_2=x_2+2x_3,\ y_3=x_3$，得标准形 $f=y_1^2+y_2^2$。*（为什么补一个 $y_3=x_3$：替换必须可逆，三个旧变量要配三个新变量；少一个就退化成不可逆替换。）*
+## 三、正交变换法：标准形的系数就是特征值
 
-反向解出 $\mathbf x=C\mathbf y$：$x_3=y_3,\ x_2=y_2-2y_3,\ x_1=y_1-y_2+y_3$，即
+配方法给的替换 $C$ 一般不正交，换完不保长度、也不保夹角。想要一个保长度、保夹角的换法，就借第五章的正交对角化。
+
+做法三步：① 写对称矩阵 $A$；② 求特征值与单位化的特征向量（对称矩阵不同特征值的特征向量天然垂直，只需各自单位化）；③ 令 $\mathbf x=Q\mathbf y$，标准形的系数就是特征值。
+
+为什么系数正好是特征值，一行式子就够：
 
 $$
-C = \begin{bmatrix} 1 & -1 & 1 \\ 0 & 1 & -2 \\ 0 & 0 & 1 \end{bmatrix}, \qquad |C| = 1 \neq 0
+\mathbf x^TA\mathbf x=(Q\mathbf y)^TA(Q\mathbf y)=\mathbf y^T(Q^TAQ)\mathbf y=\mathbf y^TD\mathbf y=\lambda_1y_1^2+\cdots+\lambda_ny_n^2
 $$
 
-**验算**（node）：随机取若干组 $(x_1,x_2,x_3)$，算 $f$ 与 $y_1^2+y_2^2$ 逐点相等，误差在 $10^{-9}$ 内；$|C|=1\times1\times1=1\neq0$ 可逆。标准形 $y_1^2+y_2^2$ 说明秩 $r=2$、正惯性指数 $p=2$、负惯性指数 $q=0$。
-:::
+读一遍：第一个等号是代入 $\mathbf x=Q\mathbf y$；第二个把 $Q^T$ 与 $Q$ 收在一起；第三个用第五章的 $Q^TAQ=D$；最后一步 $D$ 是对角阵，展开只剩平方项。所以交叉项消失不是碰巧：坐标轴被转到了特征方向上，原先斜着的交叉项在新坐标里对不上任何一对不同的轴。
 
-配方法上手快、不用求特征值，但它给出的变换矩阵 $C$ 一般不是正交的——也就是说，它不保长度、不保角度。如果你想要一个「旋转坐标系」般的正交变换，就换下一节的三步法。
+两条路的区别：配方法快，但换元不保长度；正交变换法多做几步，换完保长度、保夹角（可能是旋转，也可能翻个面），系数直接读特征值。
 
-## 四、正交变换法：三步换成特征值
-
-这一节的目标，是给出正交变换法的三步，用特征值直接写标准形，并说明它和配方法的关系。
-
-正交变换法（orthogonal transformation method，也叫主轴定理）让变换矩阵是**正交矩阵**（orthogonal matrix，满足 $Q^T=Q^{-1}$，即列向量两两正交且都是单位向量），好处是变换保长度、保角度。**正交变换法三步**：
-
-1. **写对称矩阵** $A$（交叉项系数对半分）；
-2. **求特征值与正交单位特征向量**：解 $|A-\lambda I|=0$ 得特征值 $\lambda_1,\dots,\lambda_n$，对每个特征值求特征向量，再把属于不同特征值的特征向量（对称阵的它们天然正交）单位化，排成列得正交矩阵 $Q$；
-3. **代换 $\mathbf x=Q\mathbf y$**，标准形就是 $f=\lambda_1y_1^2+\cdots+\lambda_ny_n^2$，**系数正好是特征值**。
-
-::: tip 例 2 · 正交变换法化标准形
-**题目**：用正交变换把 $f=3x_1^2+3x_2^2+2x_1x_2$ 化成标准形，并写出所用的正交矩阵。
-
-<FigBox title="例 2：正交变换 = 把椭圆的主轴转到坐标轴上" kind="几何" note="左：二次型 3x₁²+3x₂²+2x₁x₂=1 的图形是一个斜放的椭圆，两条虚线是它的主轴（沿特征向量方向）；右：换成 y 坐标后变成正放的椭圆 2y₁²+4y₂²=1。看图能读出什么：正交变换不改变形状，只旋转坐标系，交叉项消失是因为主轴对齐了坐标轴。">
-<svg viewBox="0 0 360 220" role="img" aria-label="正交变换把斜放的椭圆旋转成正放的椭圆：左边斜椭圆带主轴虚线，右边正椭圆">
-<line x1="16" y1="180" x2="164" y2="180" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<line x1="60" y1="200" x2="60" y2="12" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<text x="158" y="196" font-size="11" fill="var(--vp-c-text-3)">x₁</text>
-<text x="66" y="16" font-size="11" fill="var(--vp-c-text-3)">x₂</text>
-<line x1="17.6" y1="152.4" x2="102.4" y2="67.6" stroke="var(--vp-c-brand-2)" stroke-width="1" stroke-dasharray="5 3" />
-<line x1="17.6" y1="67.6" x2="102.4" y2="152.4" stroke="var(--vp-c-brand-2)" stroke-width="1" stroke-dasharray="5 3" />
-<g transform="rotate(-45 60 110)">
-  <ellipse cx="60" cy="110" rx="60" ry="30" fill="var(--vp-c-brand-1)" opacity="0.14" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-</g>
-<text x="60" y="206" font-size="11" fill="var(--vp-c-text-2)" text-anchor="middle">斜放的椭圆</text>
-<line x1="196" y1="180" x2="344" y2="180" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<line x1="240" y1="200" x2="240" y2="12" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-<text x="338" y="196" font-size="11" fill="var(--vp-c-text-3)">y₁</text>
-<text x="246" y="16" font-size="11" fill="var(--vp-c-text-3)">y₂</text>
-<ellipse cx="270" cy="110" rx="60" ry="30" fill="var(--vp-c-brand-1)" opacity="0.14" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-<line x1="210" y1="110" x2="330" y2="110" stroke="var(--vp-c-brand-2)" stroke-width="1" stroke-dasharray="5 3" />
-<line x1="270" y1="50" x2="270" y2="170" stroke="var(--vp-c-brand-2)" stroke-width="1" stroke-dasharray="5 3" />
-<text x="270" y="206" font-size="11" fill="var(--vp-c-text-2)" text-anchor="middle">正放的椭圆</text>
+<FigBox title="正交变换：把斜椭圆的轴转到坐标轴上" kind="几何" note="输入是同一条二次型曲线；操作是把坐标轴转到椭圆的主轴方向；结果斜椭圆变成正椭圆。看图能读出什么：形状没变，变的只是观察方向，交叉项消失是因为主轴对齐了坐标轴。">
+<svg viewBox="0 0 380 226" role="img" aria-label="正交变换把斜放的椭圆旋转成正放的椭圆">
+  <line x1="16" y1="150" x2="170" y2="150" stroke="var(--vp-c-divider)" stroke-width="1.2"/>
+  <line x1="62" y1="186" x2="62" y2="20" stroke="var(--vp-c-divider)" stroke-width="1.2"/>
+  <line x1="24" y1="112" x2="100" y2="188" stroke="var(--vp-c-brand-2)" stroke-width="1" stroke-dasharray="5 3"/>
+  <line x1="24" y1="188" x2="100" y2="112" stroke="var(--vp-c-brand-2)" stroke-width="1" stroke-dasharray="5 3"/>
+  <g transform="rotate(-45 62 150)">
+    <ellipse cx="62" cy="150" rx="52" ry="24" fill="var(--vp-c-brand-1)" opacity="0.14" stroke="var(--vp-c-brand-1)" stroke-width="1.5"/>
+  </g>
+  <text x="62" y="204" font-size="11" fill="var(--vp-c-text-2)" text-anchor="middle">斜放：带交叉项</text>
+  <line x1="206" y1="150" x2="360" y2="150" stroke="var(--vp-c-divider)" stroke-width="1.2"/>
+  <line x1="252" y1="186" x2="252" y2="20" stroke="var(--vp-c-divider)" stroke-width="1.2"/>
+  <ellipse cx="282" cy="150" rx="52" ry="24" fill="var(--vp-c-brand-1)" opacity="0.14" stroke="var(--vp-c-brand-1)" stroke-width="1.5"/>
+  <line x1="214" y1="150" x2="350" y2="150" stroke="var(--vp-c-brand-2)" stroke-width="1" stroke-dasharray="5 3"/>
+  <line x1="282" y1="92" x2="282" y2="208" stroke="var(--vp-c-brand-2)" stroke-width="1" stroke-dasharray="5 3"/>
+  <text x="292" y="204" font-size="11" fill="var(--vp-c-text-2)" text-anchor="middle">转正：只剩平方项</text>
+  <text x="18" y="222" font-size="11.5" fill="var(--vp-c-text-3)">输入同一条曲线 → 换个坐标轴看 → 交叉项消失</text>
 </svg>
 </FigBox>
 
-**先想什么**：先写对称矩阵 $A=\begin{bmatrix}3&1\\1&3\end{bmatrix}$（交叉项 $2x_1x_2$ 的系数 $2$ 对半分给 $a_{12}=a_{21}=1$），再求特征值。
+## 四、惯性定理与正定：正负个数换不掉
 
-**步骤**：
-1. 特征方程 $|A-\lambda I|=\begin{vmatrix}3-\lambda&1\\1&3-\lambda\end{vmatrix}=(3-\lambda)^2-1=\lambda^2-6\lambda+8=0$，得 $\lambda_1=2,\ \lambda_2=4$；
-2. 求特征向量并单位化：$\lambda=2$ 时解 $(A-2I)\mathbf v=\mathbf 0$ 得方向 $(1,-1)^T$，单位化 $\mathbf q_1=\frac{1}{\sqrt2}(1,-1)^T$；$\lambda=4$ 时得方向 $(1,1)^T$，单位化 $\mathbf q_2=\frac{1}{\sqrt2}(1,1)^T$。两向量点积为 $0$、模为 $1$，正交且单位；*（为什么对称阵的不同特征向量天然正交：这是第五章的结论，省去了施密特正交化。）*
-3. 排成正交矩阵 $Q=\frac{1}{\sqrt2}\begin{bmatrix}1&1\\-1&1\end{bmatrix}$，令 $\mathbf x=Q\mathbf y$，即 $x_1=\frac{1}{\sqrt2}(y_1+y_2),\ x_2=\frac{1}{\sqrt2}(-y_1+y_2)$，得标准形
+同一个二次型，用两种方法化出来的标准形系数可以不同，但正项个数、负项个数一定相同：不管用哪种可逆换元，正项个数 $p$ 与负项个数 $q$ 都不变，只由二次型自己决定。这就是**惯性定理**，$p$、$q$ 叫**惯性指数**。
+
+它的第一个用处是验算：两条路各算一遍，正负项个数对不上就说明有一处算错了。回到本页的 $f$：标准形是 $y_1^2+y_2^2+0\cdot y_3^2$，两正、零负、一个零项，所以 $p=2$、$q=0$、秩 2。零项意味着这个二次型在某个非零向量上取到 0，正是第二节算出来的 $(1,-2,1)$。
+
+第二个用处是给「正定」当判据。若对一切非零 $\mathbf x$ 都有 $\mathbf x^TA\mathbf x>0$，就说 $f$（和 $A$）**正定**；只保证 $\ge0$、且有非零向量让它等于 0，叫**半正定**——本页的 $f$ 就是半正定，不是正定。
+
+判正定最省事的办法不看特征值、也不配方，只看左上角那串行列式。$A$ 的 $k$ 阶**顺序主子式** $\Delta_k$ 是左上角 $k\times k$ 子块的行列式：$\Delta_1=a_{11}$，$\Delta_2=\begin{vmatrix}a_{11}&a_{12}\\a_{21}&a_{22}\end{vmatrix}$，一直到 $\Delta_n=|A|$。判据是
 
 $$
-f = 2y_1^2 + 4y_2^2
+A\ \text{正定}\iff \Delta_1>0,\ \Delta_2>0,\ \dots,\ \Delta_n>0
 $$
 
-**验算**（node）：随机取 $(y_1,y_2)$，按上式算出 $(x_1,x_2)$ 代入 $3x_1^2+3x_2^2+2x_1x_2$，与 $2y_1^2+4y_2^2$ 逐点相等；再验 $\mathbf q_1\cdot\mathbf q_2=0$、$|\mathbf q_1|=|\mathbf q_2|=1$。标准形的系数 $2,4$ 正好是特征值，正惯性指数 $p=2$、负惯性指数 $q=0$。
+读一遍：这 $n$ 个数必须**每一个**都是正的，少看一个就会错。用本页的 $A$ 试：$\Delta_1=1$、$\Delta_2=1\times2-1\times1=1$、$\Delta_3=|A|=0$，最后一个是 0，所以 $f$ 不正定，与配方法得到的「有个零系数」一致。
+
+反过来，元素全正的矩阵也可能不正定：$\begin{bmatrix}1&2\\2&1\end{bmatrix}$ 的 $\Delta_1=1>0$，但 $\Delta_2=1-4=-3<0$，它在 $\mathbf x=(1,-1)$ 上取值 $1-4+1=-2<0$。所以「元素都正」不是判据。
+
+## 例题
+
+::: tip 例 1 · 配方法：写出换元矩阵并核对一个点 {#ex-quad-1}
+**题目**：把 $f$ 化成标准形，写出可逆换元 $\mathbf x=C\mathbf y$，并用一个点核对。
+
+**先猜**：两个平方项都带正号，标准形里不会有负号；第三个新变量没有平方项，所以会出现 0 系数，$\Delta_3=|A|$ 应该是 0。
+
+**再算**：第二节已经配出 $y_1=x_1+x_2+x_3$、$y_2=x_2+2x_3$、$y_3=x_3$。反解出 $\mathbf x$：$x_3=y_3$、$x_2=y_2-2y_3$、$x_1=y_1-y_2+y_3$，即
+
+$$
+C=\begin{bmatrix}1&-1&1\\0&1&-2\\0&0&1\end{bmatrix},\qquad |C|=1\cdot1\cdot1=1\ne0
+$$
+
+**再回代**：取 $\mathbf x=(1,2,3)$，则 $y_1=1+2+3=6$、$y_2=2+2\times3=8$。直接算 $f$：$1+8+45+4+6+36=100$；而 $y_1^2+y_2^2=36+64=100$，两边相等。所以 $f$ 的标准形是两正零负：$p=2$、$q=0$、秩 2。
 :::
 
-两条路都能到标准形，但标准形「长什么样」会随方法变吗？换一种配方，中间可能不同。下面用惯性定理回答这个担心——它告诉你什么变了、什么永远不变。
+::: tip 例 2 · 正交变换法：把斜椭圆摆正 {#ex-quad-2}
+**题目**：用正交变换把 $f_2=2x_1^2+2x_1x_2+2x_2^2$ 化成标准形，并写出正交矩阵。
 
-## 五、惯性定理：正负个数改不了
+**先猜**：平方项系数都是 2，交叉项系数 2 对半分给两格 1；对角元相同，两个特征值应该一个比 2 小、一个比 2 大。
 
-这一节的目标，是用一句话记下惯性定理，并说明它在「检查自己算得对不对」时怎么用。
+**再算**：$A=\begin{bmatrix}2&1\\1&2\end{bmatrix}$，$|\lambda E-A|=(\lambda-2)^2-1=(\lambda-1)(\lambda-3)$，得 $\lambda_1=1$、$\lambda_2=3$。求特征向量：$\lambda_1=1$ 时 $E-A=\begin{bmatrix}-1&-1\\-1&-1\end{bmatrix}$，方程 $x_1+x_2=0$，取 $(1,-1)^T$ 并单位化得 $\mathbf q_1=\frac{1}{\sqrt2}(1,-1)^T$；$\lambda_2=3$ 时 $3E-A=\begin{bmatrix}1&-1\\-1&1\end{bmatrix}$，方程 $x_1-x_2=0$，取 $(1,1)^T$ 单位化得 $\mathbf q_2=\frac{1}{\sqrt2}(1,1)^T$。于是 $Q=\frac{1}{\sqrt2}\begin{bmatrix}1&1\\-1&1\end{bmatrix}$，令 $\mathbf x=Q\mathbf y$。
 
-**惯性定理**（Sylvester 惯性定律，law of inertia）：二次型无论用哪种**可逆**线性变换化标准形，标准形里**正项的个数 $p$ 与负项的个数 $q$ 都保持不变**（零项个数也由 $r=p+q$ 锁定）。
-
-也就是说，标准形本身可以不唯一——例 1 的配方若换一种配法，得到的标准形可能不是 $y_1^2+y_2^2$——但正惯性指数 $p$、负惯性指数 $q$ 一定相同。这正是「惯性指数」这个名字的由来：它们是二次型**不随坐标变换而变**的固有属性，就像物体的质量不随你换秤而变。
-
-惯性定理有两个日常用法：一是**验算**——你用配方法和正交变换法算同一个二次型，若两种方法得到的正、负项个数对不上，说明至少有一个算错了；二是**分类**——$p=n$（全正）时二次型是正定的，$q=n$（全负）时是负定的，其余是半定或不定的。
-
-惯性指数里「正项个数 $p$」还有一个重要用途：它直接决定了二次型是不是**正定**的，而正定有一整套只看行列式就能判定的方法，这是下一节。
-
-## 六、正定二次型：顺序主子式全正
-
-这一节的目标，是给出正定的定义，并掌握不用配方、直接看行列式就能判定的顺序主子式法。
-
-**正定**（positive definite）二次型的定义：对任意非零 $\mathbf x\neq\mathbf 0$，都有 $f=\mathbf x^T A\mathbf x>0$，就称 $f$ 为正定二次型，$A$ 为正定矩阵。直观地说，正定二次型「恒取正值」，在二元时它的图形是开口向上的「碗」，三元时是只往上翘的曲面；想懂这层几何意义，见现代版[07 · 正交、投影与二次型](../linalg/07-orthogonality.md)。
-
-判断正定最实用的办法是**顺序主子式判据**（不用解特征值、不用配方）：
-
-> $A$ 正定 $\iff$ $A$ 的所有顺序主子式全大于零。
-
-**顺序主子式**（leading principal minor）是指取 $A$ 左上角 $k\times k$ 子块的行列式，$k=1,2,\dots,n$：$\Delta_1=a_{11}$，$\Delta_2=\begin{vmatrix}a_{11}&a_{12}\\a_{21}&a_{22}\end{vmatrix}$，$\Delta_3=\begin{vmatrix}a_{11}&a_{12}&a_{13}\\a_{21}&a_{22}&a_{23}\\a_{31}&a_{32}&a_{33}\end{vmatrix}$，一直到 $\Delta_n=|A|$。要**每一个**都大于零，少一个都不行。
-
-::: tip 例 3 · 用顺序主子式判断正定
-**题目**：判断二次型 $f=2x_1^2+3x_2^2+2x_3^2+2x_1x_2+2x_2x_3$ 是否正定。
-
-<FigBox title="例 3：三个顺序主子式就是左上角 1×1、2×2、3×3 的行列式" kind="结构" note="红色框从左上角逐层往外扩：Δ₁ 取一个格子，Δ₂ 取左上 2×2，Δ₃ 取整个 3×3。看图能读出什么：顺序主子式只看左上角，且必须一个个从小到大全大于零，缺一不可。">
-<svg viewBox="0 0 360 230" role="img" aria-label="三乘三矩阵的三个顺序主子式，左上角一层层往外扩，标出 Δ1 等于 2、Δ2 等于 5、Δ3 等于 8">
-<g font-size="15" font-weight="600" text-anchor="middle">
-  <rect x="176" y="56" width="40" height="40" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="196" y="82" fill="var(--vp-c-text-1)">2</text>
-  <rect x="216" y="56" width="40" height="40" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="236" y="82" fill="var(--vp-c-text-1)">1</text>
-  <rect x="256" y="56" width="40" height="40" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="276" y="82" fill="var(--vp-c-text-1)">0</text>
-  <rect x="176" y="96" width="40" height="40" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="196" y="122" fill="var(--vp-c-text-1)">1</text>
-  <rect x="216" y="96" width="40" height="40" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="236" y="122" fill="var(--vp-c-text-1)">3</text>
-  <rect x="256" y="96" width="40" height="40" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="276" y="122" fill="var(--vp-c-text-1)">1</text>
-  <rect x="176" y="136" width="40" height="40" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="196" y="162" fill="var(--vp-c-text-1)">0</text>
-  <rect x="216" y="136" width="40" height="40" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="236" y="162" fill="var(--vp-c-text-1)">1</text>
-  <rect x="256" y="136" width="40" height="40" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="276" y="162" fill="var(--vp-c-text-1)">2</text>
-</g>
-<rect x="174" y="54" width="44" height="44" rx="7" fill="none" stroke="var(--vp-c-danger-1)" stroke-width="1.8" />
-<text x="170" y="48" font-size="12" font-weight="600" fill="var(--vp-c-danger-1)">Δ₁=2</text>
-<rect x="174" y="54" width="84" height="84" rx="7" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
-<text x="262" y="74" font-size="12" font-weight="600" fill="var(--vp-c-brand-1)">Δ₂=5</text>
-<rect x="174" y="54" width="124" height="124" rx="7" fill="none" stroke="var(--vp-c-brand-2)" stroke-width="1.8" />
-<text x="304" y="100" font-size="12" font-weight="600" fill="var(--vp-c-brand-2)">Δ₃=8</text>
-<text x="180" y="210" font-size="12" fill="var(--vp-c-text-2)">三个顺序主子式 2、5、8 全大于零，正定</text>
-</svg>
-</FigBox>
-
-**先想什么**：先把 $f$ 写成对称矩阵。平方项系数 $2,3,2$ 放对角线；$2x_1x_2$ 对半分给 $a_{12}=a_{21}=1$，$2x_2x_3$ 对半分给 $a_{23}=a_{32}=1$，没有 $x_1x_3$ 项故 $a_{13}=a_{31}=0$。
-
-**步骤**：
-1. $A=\begin{bmatrix}2&1&0\\1&3&1\\0&1&2\end{bmatrix}$；
-2. 算三个顺序主子式：$\Delta_1=2$；$\Delta_2=\begin{vmatrix}2&1\\1&3\end{vmatrix}=2\times3-1\times1=5$；$\Delta_3=|A|=2\begin{vmatrix}3&1\\1&2\end{vmatrix}-1\begin{vmatrix}1&1\\0&2\end{vmatrix}+0=2(6-1)-1(2-0)=8$；
-3. 三个都大于零，$A$ 正定，故 $f$ 正定。*（为什么不用配方：顺序主子式法直接看行列式，比配方快，判「是不是正定」一步到位。）*
-
-**验算**（node）：`det([[2,1],[1,3]]) = 5`、`det([[2,1,0],[1,3,1],[0,1,2]]) = 8`。作为对照，若取 $B=\begin{bmatrix}1&2\\2&1\end{bmatrix}$，$\Delta_1=1>0$ 但 $\Delta_2=1-4=-3<0$，不满足「全正」，故 $B$ 不正定——这正说明不能只看到一个主子式为正就下结论。
+**再回代**：标准形是 $y_1^2+3y_2^2$。取 $\mathbf x=(1,1)$：直接算 $f_2=2+2+2=6$；而 $\mathbf y=Q^T\mathbf x=\frac{1}{\sqrt2}(0,2)=(0,\sqrt2)$，$y_1^2+3y_2^2=0+3\times2=6$，两边相等。两个系数 1、3 正是特征值，顺序与 $Q$ 的列一致。
 :::
 
-到这里，二次型的主线走完：矩阵表示 → 标准形/规范形 → 两条化标准形的路 → 惯性定理 → 正定判据。下面把全页最容易踩的坑集中列一遍，并给你指路到几何直觉版，把「怎么算」和「为什么」接起来。
+::: tip 例 3 · 顺序主子式判正定 {#ex-quad-3}
+**题目**：判断 $f_3=2x_1^2+2x_2^2+2x_3^2+2x_1x_2+2x_2x_3$ 是否正定。
 
-## 易错清单 + 自检
+**先猜**：平方项系数都是 2，交叉项只连着相邻变量，三个顺序主子式多半都是正的；但要防最后一个不是正数。
 
-- **交叉项系数忘了对半分**：这是本页最高频的错误。$f=2x_1x_2$ 的矩阵是 $\begin{bmatrix}0&1\\1&0\end{bmatrix}$，不是 $\begin{bmatrix}0&2\\0&0\end{bmatrix}$。后者不对称，根本不是二次型的矩阵；写出非对称矩阵，后面一切全错。
-- **配方法漏了「先造平方项」**：二次型全是交叉项时（如 $2x_1x_2$）不能直接配，要先做 $x_1=y_1+y_2,\ x_2=y_1-y_2$ 造出 $y_1^2-y_2^2$，再往下配。
-- **替换必须可逆**：标准形成立的前提是 $\mathbf x=C\mathbf y$ 中 $|C|\neq0$；配完要顺手算一下 $|C|$，不可逆的替换会改变二次型的本质（比如把正定的变成不正定）。
-- **标准形不唯一、但 $p,q$ 唯一**：换一种配方，标准形可能不同，正负项个数却一定相同（惯性定理）。规范形（系数只留 $+1,-1,0$）则是唯一确定的。
-- **顺序主子式是「左上角」，且要全正**：不是任意主子式，而是 $1\times1,2\times2,\dots,n\times n$ 依次左上角子块；有一个 $\le0$ 就立刻不是正定（可能是负定或不定），别看到一个正的就说正定。
-- **正定与特征值全正是一回事**：顺序主子式全正 ⇔ 特征值全正 ⇔ $p=n$。三种说法等价，考试里看哪种数据好算就用哪种。
+**再算**：$A=\begin{bmatrix}2&1&0\\1&2&1\\0&1&2\end{bmatrix}$（$2x_1x_2$、$2x_2x_3$ 的系数各对半分给 1；没有 $x_1x_3$ 项，所以 $a_{13}=a_{31}=0$）。三个顺序主子式：
 
-**自检**：随手写一个含交叉项的三元二次型，先把它写成对称矩阵，再用配方法化标准形，核对正、负项个数；然后求它的对称矩阵特征值，看标准形系数是否等于特征值；最后算顺序主子式，判断是否正定。三条路的结果对得上（$p,q$ 一致、正定与否一致），这一页就真正是你的了。
+$$
+\Delta_1=2,\qquad \Delta_2=\begin{vmatrix}2&1\\1&2\end{vmatrix}=2\times2-1\times1=3,\qquad
+\Delta_3=2\begin{vmatrix}2&1\\1&2\end{vmatrix}-1\begin{vmatrix}1&1\\0&2\end{vmatrix}+0=6-2=4
+$$
 
-**这一页的指路**：想懂二次型「为什么长这样」——为什么正定对应开口向上的碗、为什么标准形就是主轴——回到现代版的[07 · 正交、投影与二次型](../linalg/07-orthogonality.md)，那一页从几何出发讲同一件事；对正交对角化那一步不熟，先回[06 · 特征值、特征向量与对角化](../linalg/06-eigenvalues.md)补第五章上半。至此，经典结构版的行列式 → 矩阵 → 方程组 → 向量组 → 特征值 → 二次型六章全部走完。
+**再回代**：三个都大于零，所以 $A$ 正定，$f_3$ 正定。抽查两点：$\mathbf x=(1,0,0)$ 给 $f_3=2>0$；$\mathbf x=(1,-1,1)$ 给 $2+2+2-2-2=2>0$，没有负值。对照本页的 $f$：它的 $\Delta_3=0$，所以只是半正定——两者差的就是这一个数。
+:::
+
+## 这一页带走三句话
+
+1. 二次型的矩阵必须写成对称矩阵：平方项系数上对角线、交叉项系数对半分，因为展开时 $x_ix_j$ 会出现两次。
+2. 化标准形两条路：配方法逐个变量配平方（快，换元不保长度）；正交变换法让标准形系数直接等于特征值（换元保长度、保夹角）。
+3. 惯性指数不随换元变，可用来验算；正定要求所有顺序主子式全正，半正定只是「不会取负」。
+
+## 最容易错的两处
+
+1. **交叉项系数忘了对半分** → 写出的矩阵不对称，后面求特征值、算顺序主子式就没法套实对称的结论 → $2x_1x_2$ 的矩阵统一写成 $\begin{bmatrix}0&1\\1&0\end{bmatrix}$；$\begin{bmatrix}0&2\\0&0\end{bmatrix}$ 展开也对，但不是那个唯一的对称矩阵。
+2. **判正定时只看最后一个顺序主子式** → 漏掉 $\Delta_1$、$\Delta_2$ 为负的情形 → 从左上角起逐个算，全正才叫正定。
+
+六章到这里走完一条链：算行列式 → 会矩阵运算 → 化成阶梯形判解 → 判相关求秩 → 解特征方程 → 配方判正定。想回头对一遍整条路线，看[经典版路线图](./index.md)；想懂二次型的几何（为什么正定就是碗口朝上），看现代版的 [07 · 正交、投影与二次型](../linalg/07-orthogonality)。

@@ -1,401 +1,286 @@
 ---
 title: 05 · 特征值与特征向量
-description: 特征向量是被矩阵乘后方向不变、只被拉伸的非零向量，特征值是拉伸倍数；特征方程 |λI-A|=0 把求特征值变成解多项式，代入 (λI-A)x=0 解齐次方程组得到特征向量，再拼出 P 完成相似对角化，配特征方向与对角化示意图、三道 node 验算例题。
+description: 对齐同济《线性代数》第五章前半：从「乘完方向不变」引出特征值与特征向量，用特征方程求 λ、代回解齐次方程求特征向量，拼出 P 做相似对角化，实对称矩阵还能正交对角化。
 ---
 
 # 05 · 特征值与特征向量
 
-<Meta time="50 min" level="核心" note="最易错：把特征向量写成零向量，或对角化时 P 的列顺序与 D 对角线上特征值的顺序对不上" />
+<Meta time="35 min" level="核心" note="最容易错的两处：把零向量当特征向量；对角化时 P 的列序与 D 的对角元错位" />
 
-**这一页对应教材第几章**：同济《线性代数》第五章「相似矩阵及二次型」的前半部分——特征值与特征向量、相似矩阵与相似对角化、实对称矩阵的对角化（二次型留到下一章）。
+**这一页要解决的三类题**（只写动作，术语在正文里才出现）：
 
-**这一页要解决什么**：读完你能独立完成三件事：给定一个方阵，第一求它的全部特征值与特征向量，第二判断它能否对角化、并写出 $P$ 与对角矩阵 $D$ 使 $A=PDP^{-1}$，第三对实对称矩阵用正交矩阵把它化成对角形。三件事对应一句口诀「求特征值 → 代入求特征向量 → 对角化」。
+1. 给一个方阵，找出「乘完还躺在原来那条线上」的那几个方向，以及每个方向被拉长几倍；
+2. 判它能不能换成只有对角线有数的样子，能就写出换坐标的那张表；
+3. 对称的那一类方阵，还要把坐标轴转到与那些方向对齐，只转不拉伸。
+
+**对应教材**：同济《线性代数》第五章「相似矩阵及二次型」的前半（第五章第一节的向量内积与正交，以及特征值与特征向量、相似矩阵、实对称矩阵的对角化）。
 
 ::: tip 读这页之前
-- **需要会**：二阶、三阶行列式的计算（见[现代版 · 行列式](../linalg/05-determinant.md)）；矩阵乘法与逆矩阵（见[现代版 · 矩阵与线性变换](../linalg/02-matrices.md)）；解齐次线性方程组（见[现代版 · 高斯消元与线性方程组](../linalg/03-elimination.md)）。
-- **这一页用到的符号**：$\lambda$（特征值）、$\mathbf x$（特征向量，必须非零）、$I$（单位矩阵）、$P$（特征向量排成的方阵）、$D$（对角矩阵）、$\operatorname{tr}A$（迹）、$\det A$（行列式）。通用符号见[符号与约定](../guide/notation.md)。
-- **高中数学**：解一元二次方程（配方或十字相乘）；二阶行列式 $\begin{vmatrix}a&b\\c&d\end{vmatrix}=ad-bc$。
-- **两个术语先给一句话**：**特征向量**（eigenvector）是被 $A$ 乘后方向不变、只被拉伸的向量；**特征值**（eigenvalue）是那个拉伸倍数。
+- **需要会**：行列式怎么算（[01 · 行列式](01-determinant.md)）；矩阵乘法、逆矩阵、转置（[02 · 矩阵及其运算](02-matrices.md)）；解齐次方程组、数秩（[03 · 矩阵的初等变换与线性方程组](03-elementary.md)）。
+- **需要会（可跳读）**：第 4 章的**线性无关**——一组向量里没有哪一支能被其余几支凑出来就叫**无关**，有一支能被凑出来就叫**相关**。跳过 04 也能往下读，要回查就看 [04 · 向量组的线性相关性](04-vectors.md) 第一节。
+- **需要会（忘了也不要紧）**：点积、垂直、长度——本页第四节开头写全，属教材第五章第一节「向量的内积」。
+- **这一页的记号**：$E$ 是单位矩阵（同济写法，教材上也写 $I$）；$\lambda$ 是一个要找的数，$\mathbf x$ 是列向量；$P$ 是特征向量按列排成的方阵，$D$ 是对角矩阵；$\operatorname{tr}A$ 是主对角线元素之和，叫**迹**。
 :::
 
-先看一个数字。矩阵 $A=\begin{pmatrix}3&-1\\-1&3\end{pmatrix}$ 作用在向量 $\mathbf x=(1,1)$ 上：$A(1,1)=(2,2)=2(1,1)$，方向还是 45°，长度变成了 2 倍；作用在 $(1,-1)$ 上：$A(1,-1)=(4,-4)=4(1,-1)$，方向还是 -45°，长度变成 4 倍。**有的向量被矩阵掰弯，有的向量只是被拉长**——后者就是本章的主角。
+## 一、先把矩阵作用在两个方向上看看
 
-## 结论先行
-
-1. **特征向量**是被 $A$ 乘后方向不变、只被拉伸的**非零**向量：$A\mathbf x=\lambda\mathbf x$；**特征值** $\lambda$ 是拉伸倍数，可正可负可为零。
-2. **求特征值走特征方程** $|\lambda I-A|=0$：写成 $\lambda$ 的多项式、解出所有根。
-3. **求特征向量走齐次方程组** $(\lambda I-A)\mathbf x=\mathbf 0$ 的**非零解**：每个 $\lambda$ 代回解一次，永远别把 $\mathbf x=\mathbf 0$ 算进去。
-4. **特征值之和 = 迹、之积 = 行列式**：$\sum\lambda_i=\operatorname{tr}A$、$\prod\lambda_i=\det A$，是每步都能用的自查。
-5. **对角化** $A=PDP^{-1}$：$P$ 的列是 $n$ 个线性无关特征向量，$D$ 对角线是相应特征值；凑不满 $n$ 个就不可对角化，实对称矩阵一定能对角化、还能选正交的 $Q$。
-
-::: tip 一句话抓住本章结构
-整章一条主线：**找方向不变的向量（特征向量）→ 解方程拿到拉伸倍数（特征值）→ 把这些向量排成 $P$（换坐标系）→ 变换变成纯拉伸（对角阵 $D$）**。第五节回答「换坐标系」的正式名字（相似矩阵），第七节讲实对称矩阵的额外福利（正交对角化）。
-:::
-
-## 一、特征值与特征向量：方向不变、只被拉伸
-
-这一节的目标：把「特征值」和「特征向量」两个词的定义钉死，先别急着算。
-
-设 $A$ 是 $n$ 阶方阵，如果存在一个数 $\lambda$ 和一个**非零**列向量 $\mathbf x$，使得
+取 $A=\begin{bmatrix}3&-1\\-1&3\end{bmatrix}$，算两次乘法：
 
 $$
-A\mathbf x = \lambda\mathbf x
+A\begin{bmatrix}1\\1\end{bmatrix}=\begin{bmatrix}3-1\\-1+3\end{bmatrix}=\begin{bmatrix}2\\2\end{bmatrix}=2\begin{bmatrix}1\\1\end{bmatrix},
+\qquad
+A\begin{bmatrix}1\\-1\end{bmatrix}=\begin{bmatrix}3+1\\-1-3\end{bmatrix}=\begin{bmatrix}4\\-4\end{bmatrix}=4\begin{bmatrix}1\\-1\end{bmatrix}
 $$
 
-就称 $\lambda$ 是 $A$ 的一个**特征值（eigenvalue）**，$\mathbf x$ 是 $A$ 的属于 $\lambda$ 的一个**特征向量（eigenvector）**。
+第一个结果还在 45° 那条线上，长度变成 2 倍；第二个在 −45° 那条线上，长度变成 4 倍。换一个向量试：$A\begin{bmatrix}1\\0\end{bmatrix}=\begin{bmatrix}3\\-1\end{bmatrix}$，方向从水平被掰到斜下方，不在原来那条线上了。大多数向量被掰弯，少数方向只被拉长——把它们找出来就是这一页的事。
 
-拆开看这句话：左边 $A\mathbf x$ 是「被矩阵作用后的结果」，右边 $\lambda\mathbf x$ 是「原来那个向量乘一个数」。两者相等，说明**作用的结果还躺在原来那条直线上**——$\lambda>0$ 时同向伸长，$\lambda<0$ 时反向，$\lambda=0$ 时被压成零。但不管怎样，方向（所在的直线）不变，所以叫「特征方向」。
-
-**为什么必须排除 $\mathbf x=\mathbf 0$**：零向量被任何矩阵都映成零，$A\mathbf 0=\lambda\mathbf 0$ 对任意 $\lambda$ 都成立，它会冒充任何数的特征向量，把「特征值」这个概念架空。所以定义里先约定 $\mathbf x\neq\mathbf 0$。
-
-一条有用的小结论：若 $\mathbf x$ 是特征向量，那么**同一条直线上的所有非零倍数** $c\mathbf x$（$c\neq0$）也是特征向量，因为 $A(c\mathbf x)=c\,A\mathbf x=c\,\lambda\mathbf x=\lambda(c\mathbf x)$。所以特征向量**不唯一**，答案给「一个代表」即可。下一节问：怎么把满足 $A\mathbf x=\lambda\mathbf x$ 的 $\lambda$ 找出来。
-
-## 二、特征方程：把求 λ 变成解 |λI-A|=0
-
-这一节的目标：把 $A\mathbf x=\lambda\mathbf x$ 里两个未知量（$\lambda$ 和 $\mathbf x$）拆开，先把 $\lambda$ 解出来。
-
-把 $A\mathbf x=\lambda\mathbf x$ 移项，右边写成矩阵乘向量（$\lambda\mathbf x=\lambda I\mathbf x$）：
+设 $A$ 是 $n$ 阶方阵。如果有一个数 $\lambda$ 和一个**非零**向量 $\mathbf x$，使
 
 $$
-A\mathbf x-\lambda I\mathbf x=\mathbf 0
-\quad\Longrightarrow\quad
-(\lambda I-A)\mathbf x=\mathbf 0
+A\mathbf x=\lambda\mathbf x
 $$
 
-这是一个**齐次线性方程组**。我们要的是**非零解** $\mathbf x$。回忆前面的结论：齐次方程组有非零解，当且仅当系数矩阵的行列式为零。于是：
+就把 $\lambda$ 叫 $A$ 的**特征值**，把 $\mathbf x$ 叫属于 $\lambda$ 的**特征向量**。
+
+读一遍：左边 $A\mathbf x$ 是 $A$ 作用在 $\mathbf x$ 上的新向量，右边 $\lambda\mathbf x$ 是把 $\mathbf x$ 整体乘 $\lambda$ 倍。两边相等，说的是新旧向量在同一条直线上：$\lambda>0$ 同向、$\lambda<0$ 掉头、$\lambda=0$ 被压成零向量。「方向不变」不等于「向量不变」，长度可以变。
+
+为什么强调**非零**：零向量乘完还是零，$A\mathbf 0=\lambda\mathbf 0$ 对任何 $\lambda$ 都成立，不排除它每个数都能冒充特征值。同一线上的非零倍数也是特征向量（$A(c\mathbf x)=cA\mathbf x=\lambda(c\mathbf x)$），所以答案不唯一，写一个代表就行。
+
+<FigBox title="两条特征线上只拉长，别的方向被掰弯" kind="图解" note="输入是 v₁=(1,1)、v₂=(1,−1) 和普通向量 w；操作是各乘 A；结果 v₁、v₂ 只变长，w 被掰弯。看图能读出什么：是不是特征向量，只看 A x 与 x 是否共线。">
+<svg viewBox="0 0 460 360" role="img" aria-label="两条特征方向上的向量被拉长，普通向量被掰弯">
+  <defs>
+    <marker id="c5f1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)"/>
+    </marker>
+    <marker id="c5f2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-2)"/>
+    </marker>
+    <marker id="c5f3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-2)"/>
+    </marker>
+  </defs>
+  <line x1="30" y1="170" x2="430" y2="170" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="90" y1="200" x2="90" y2="34" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="40" y1="220" x2="190" y2="70" stroke="var(--vp-c-brand-1)" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="40" y1="120" x2="190" y2="270" stroke="var(--vp-c-brand-2)" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="90" y1="170" x2="120" y2="140" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#c5f1)"/>
+  <line x1="90" y1="170" x2="150" y2="110" stroke="var(--vp-c-brand-1)" stroke-width="2.6" marker-end="url(#c5f1)"/>
+  <line x1="90" y1="170" x2="120" y2="200" stroke="var(--vp-c-brand-2)" stroke-width="2" marker-end="url(#c5f2)"/>
+  <line x1="90" y1="170" x2="210" y2="290" stroke="var(--vp-c-brand-2)" stroke-width="2.6" marker-end="url(#c5f2)"/>
+  <line x1="90" y1="170" x2="160" y2="140" stroke="var(--vp-c-text-2)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#c5f3)"/>
+  <line x1="90" y1="170" x2="250" y2="136" stroke="var(--vp-c-text-2)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#c5f3)"/>
+  <circle cx="90" cy="170" r="2.6" fill="var(--vp-c-text-2)"/>
+  <text x="104" y="134" font-size="12" fill="var(--vp-c-brand-1)">v₁</text>
+  <text x="140" y="104" font-size="12" fill="var(--vp-c-brand-1)">Av₁=2v₁</text>
+  <text x="104" y="216" font-size="12" fill="var(--vp-c-brand-2)">v₂</text>
+  <text x="216" y="294" font-size="12" fill="var(--vp-c-brand-2)">Av₂=4v₂</text>
+  <text x="150" y="132" font-size="12" fill="var(--vp-c-text-2)">w</text>
+  <text x="256" y="132" font-size="12" fill="var(--vp-c-text-2)">Aw（方向变了）</text>
+  <line x1="20" y1="310" x2="440" y2="310" stroke="var(--vp-c-divider)" stroke-width="1"/>
+  <text x="20" y="328" font-size="11.5" fill="var(--vp-c-text-2)">输入：v₁、v₂ 与 w。</text>
+  <text x="20" y="346" font-size="11.5" fill="var(--vp-c-text-2)">操作：各乘一次 A；结果：v₁、v₂ 只变长，w 被掰弯。</text>
+</svg>
+</FigBox>
+
+## 二、把「方向不变」写成方程，λ 就自己出来了
+
+$A\mathbf x=\lambda\mathbf x$ 里有两个未知：数 $\lambda$ 和向量 $\mathbf x$，一起猜没法猜。先把右边写成矩阵乘向量——$\lambda\mathbf x=\lambda E\mathbf x$——再移项：
 
 $$
-|\lambda I-A|=0
+A\mathbf x-\lambda E\mathbf x=(A-\lambda E)\mathbf x=\mathbf 0
 $$
 
-这个方程叫**特征方程（characteristic equation）**，左边 $|\lambda I-A|$ 展开后是关于 $\lambda$ 的 $n$ 次多项式，叫**特征多项式**，它的根就是全部特征值。
+这一步把两个未知变成一个带参数的齐次方程组，而我们要的是**非零**解。第三章的结论直接可用：齐次方程组有非零解，当且仅当系数矩阵的行列式为零。于是
 
-**这一步为什么是转折**：原来「找一个向量」要同时猜 $\lambda$ 和 $\mathbf x$，现在先只解一个关于 $\lambda$ 的方程，$\lambda$ 到手后再代回 $(\lambda I-A)\mathbf x=\mathbf 0$ 求 $\mathbf x$，两步各自都简单。
+$$
+|\lambda E-A|=0
+$$
 
-> **两个约定**：教材里也常写 $\det(\lambda E-A)=0$（$E$ 即单位矩阵 $I$），或 $\det(A-\lambda I)=0$。$\lambda I-A$ 与 $A-\lambda I$ 只差一个负号，**齐次方程组的解完全相同**，特征值也相同（特征多项式最多差 $(-1)^n$ 倍），做题用哪个都行，本章统一用 $|\lambda I-A|=0$。
+读一遍：$E$ 与 $A$ 同尺寸，$\lambda E$ 把单位矩阵的 1 换成 $\lambda$；$\lambda E-A$ 的对角线上是 $\lambda-a_{ii}$，其余位置是 $-a_{ij}$。整句读作：把 $A$ 的对角线上各减一次 $\lambda$，算这个新矩阵的行列式，让它等于零。左边展开后是关于 $\lambda$ 的 $n$ 次多项式，右边是 0，所以这是「求多项式的根」，不是矩阵方程。这个方程叫**特征方程**，左边叫**特征多项式**。
 
-下面两节把「解出 $\lambda$、代回求 $\mathbf x$」落成可操作的三步。
+（约定：教材上也写 $|A-\lambda E|=0$，两者只差整体一个负号（最多差 $(-1)^n$），等于 0 的根一样，本页统一用 $|\lambda E-A|=0$。）
 
-## 三、计算方法：求特征值与特征向量（三步路线 + 前两步）
+于是做法固定成两步：解特征方程拿到全部 $\lambda$，再把每个 $\lambda$ 代回 $(\lambda E-A)\mathbf x=\mathbf 0$ 取非零解。拿到 $\lambda$ 后先自查两条（对任意 $n$ 阶方阵都成立）：
 
-这一节的目标：给一条死记就能用的步骤，并完整走完前两步。
+$$
+\lambda_1+\cdots+\lambda_n=\operatorname{tr}A,\qquad \lambda_1\lambda_2\cdots\lambda_n=|A|
+$$
 
-整章的算法就一句话：**求特征值 → 代入求特征向量 → 对角化**。前两步是：
+特征值之和等于迹，之积等于行列式。例 1 会当场用它们核对。
 
-**第 1 步 · 求特征值**：写 $\lambda I-A$，算 $|\lambda I-A|$，令它等于 0，解出所有 $\lambda$。
+## 三、换到特征方向上看：对角化到底省了什么
 
-**第 2 步 · 代入求特征向量**：对每个 $\lambda$，把它代进 $(\lambda I-A)\mathbf x=\mathbf 0$，解这个齐次方程组的**非零解**，就是该特征值对应的特征向量。
+先给「换坐标」一个名字：若存在可逆矩阵 $P$ 使 $B=P^{-1}AP$，就说 $A$ 与 $B$ **相似**。$P$ 的列是新坐标轴：$\mathbf x=P\mathbf y$ 把新坐标换成原坐标，$P^{-1}$ 把原坐标读回新坐标，所以 $B=P^{-1}AP$ 的动作依次是「换成原坐标 → $A$ 做变换 → 读回新坐标」。$A$ 与 $B$ 是同一个变换在两套坐标下的两个写法：行列式、迹、秩、特征值都相同，只是坐标变了。
 
-第三步（对角化）在第六节展开。先把前两步走一道例题。
+如果相似的那个矩阵恰好是对角阵，就叫 $A$ **可对角化**：
+
+$$
+A=PDP^{-1},\qquad D=\operatorname{diag}(\lambda_1,\dots,\lambda_n)
+$$
+
+读一遍：$P$ 的每一列是一个特征向量，$D$ 的对角线上是它对应的特征值，**第 $i$ 列配第 $i$ 个对角元**。做法三步：求特征值 → 每个特征值求特征向量、凑够 $n$ 个无关的（**无关**＝这组里没有哪一支能被其余几支凑出来，第 4 章的定义；本页只用这一条）→ 按列排 $P$、按同样顺序填 $D$。
+
+实际动手时更顺手的是把上式右乘 $P$，写成
+
+$$
+AP=PD
+$$
+
+它的意思是逐列相等：左边 $[A\mathbf v_1\ \ A\mathbf v_2]$，右边 $[\lambda_1\mathbf v_1\ \ \lambda_2\mathbf v_2]$，同一列对同一列（下面那张图的右半边）。$A\mathbf v_i=\lambda_i\mathbf v_i$ 本来就是定义，所以这个等式不用额外证明——它只是把 $\lambda$ 与列的对应摆出来，顺序错了立刻看得出来。
+
+省了什么？$A^2=PDP^{-1}PDP^{-1}=PD^2P^{-1}$，所以 $A^{k}=PD^{k}P^{-1}$，而对角阵的 $k$ 次方只是对角线上各自取 $k$ 次方。求高次幂于是变成：$n$ 个数各取 $k$ 次方，再做两次矩阵乘法。第六章化二次型还要再用一次。
+
+什么时候走不通：需要 $n$ 个无关的特征向量。例如 $A=\begin{bmatrix}1&1\\0&1\end{bmatrix}$，$|\lambda E-A|=(\lambda-1)^2$ 只有一个特征值 1；代回解 $(E-A)\mathbf x=\mathbf 0$，即 $-x_2=0$，特征向量只能是 $(1,0)$ 的倍数。1 支凑不够 2 支，所以它不可对角化——这种矩阵只有一条特征方向。
+
+<FigBox title="A 只把两条特征方向拉长；按列配对就得到 AP=PD" kind="图解" note="左：v₁、v₂ 各乘一次 A，分别变 2、4 倍，方向没动；右：两列结果与 P 的两列配对。看图能读出什么：特征向量只改长度，按列排成 P 就把 A 换成对角阵。">
+<svg viewBox="0 0 540 330" role="img" aria-label="两条特征方向上的向量只被拉长，以及 AP 与 PD 的逐列对应">
+  <defs>
+    <marker id="c5f4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)"/>
+    </marker>
+    <marker id="c5f6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-2)"/>
+    </marker>
+  </defs>
+  <text x="140" y="20" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--vp-c-text-1)">左：两条特征方向只变长</text>
+  <line x1="25" y1="170" x2="250" y2="170" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="110" y1="215" x2="110" y2="55" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="55" y1="225" x2="195" y2="85" stroke="var(--vp-c-brand-1)" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="55" y1="115" x2="195" y2="225" stroke="var(--vp-c-brand-2)" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="110" y1="170" x2="138" y2="142" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#c5f4)"/>
+  <line x1="110" y1="170" x2="166" y2="114" stroke="var(--vp-c-brand-1)" stroke-width="2.6" marker-end="url(#c5f4)"/>
+  <line x1="110" y1="170" x2="138" y2="198" stroke="var(--vp-c-brand-2)" stroke-width="2" marker-end="url(#c5f6)"/>
+  <line x1="110" y1="170" x2="222" y2="282" stroke="var(--vp-c-brand-2)" stroke-width="2.6" marker-end="url(#c5f6)"/>
+  <circle cx="110" cy="170" r="2.6" fill="var(--vp-c-text-2)"/>
+  <text x="140" y="120" font-size="12" fill="var(--vp-c-brand-1)">v₁</text>
+  <text x="172" y="108" font-size="12" fill="var(--vp-c-brand-1)">Av₁=2v₁</text>
+  <text x="118" y="208" font-size="12" fill="var(--vp-c-brand-2)">v₂</text>
+  <text x="150" y="306" font-size="12" fill="var(--vp-c-brand-2)">Av₂=4v₂</text>
+  <text x="400" y="20" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--vp-c-text-1)">右：AP 与 PD 逐列对上</text>
+  <text x="270" y="62" font-size="12" fill="var(--vp-c-text-1)">P 的两列 = v₁、v₂</text>
+  <text x="270" y="88" font-size="12" fill="var(--vp-c-text-1)">AP 的两列 = Av₁、Av₂</text>
+  <text x="270" y="114" font-size="12" fill="var(--vp-c-text-1)">= 2v₁、4v₂ = PD 的两列</text>
+  <text x="270" y="140" font-size="12" fill="var(--vp-c-text-1)">D 的对角线就是 2、4</text>
+  <text x="270" y="184" font-size="11.5" fill="var(--vp-c-text-3)">输入：A 与两个特征向量。</text>
+  <text x="270" y="204" font-size="11.5" fill="var(--vp-c-text-3)">操作：算 Av₁、Av₂ 并按列配对。</text>
+  <text x="270" y="224" font-size="11.5" fill="var(--vp-c-text-3)">结果：两列相同，故 AP=PD。</text>
+</svg>
+</FigBox>
+
+## 四、实对称矩阵：特征方向天然垂直，只差单位化
+
+先把「垂直」变成算术：同维两向量逐分量相乘再相加，得数叫**点积**；点积为 $0$ 就说它们**垂直**（也叫正交）；向量与自己的点积开根号就是**长度**。这三条属教材第五章第一节「向量的内积」，本页只用它们。
+
+若 $A^T=A$（沿主对角线翻面不变），它有三条别人没有的好处：特征值全是实数；不同特征值的特征向量互相垂直；一定能对角化，而且能挑出一组**两两垂直、长度为 1** 的特征向量。
+
+把这样一组向量按列排成的矩阵记作 $Q$，它满足 $Q^TQ=E$，也就是 $Q^{-1}=Q^T$——这样的矩阵叫**正交矩阵**。
+
+读一遍 $Q^TQ=E$：$Q$ 的列是 $q_1,\dots,q_n$，$Q^T$ 的行是 $q_1^T,\dots,q_n^T$，相乘后第 $(i,j)$ 位正好是 $q_i$ 与 $q_j$ 的点积。所以它逐条说的是：同一列与自己的点积为 $1$（长度平方为 $1$，即长度为 $1$），不同两列的点积为 $0$（垂直）。一句话——列两两垂直，长度都是 $1$。
+
+对角化式于是写成
+
+$$
+Q^TAQ=D,\qquad A=QDQ^T
+$$
+
+读一遍：$Q$ 的列是单位特征向量，$Q^T$ 就是 $Q^{-1}$，$D$ 是特征值排成的对角阵、顺序与列一一对应。$Q$ 只换坐标轴（最多顺手翻个面），不拉伸不压扁，所以保长度、保夹角——第六章化二次型靠的正是这一点。
+
+所以「单位化」不是可选项：$Q^TQ=E$ 要求每列自己的点积为 $1$；只做到两两垂直时 $Q^TQ$ 只是对角阵，不等于 $E$。
+
+## 例题
+
+例 1 求出全部特征值与特征向量并自查，例 2 用它完成对角化，例 3 换成正交矩阵。
 
 ::: tip 例 1 · 求特征值与特征向量 {#ex-eigen-1}
+**题目**：求 $A=\begin{bmatrix}3&-1\\-1&3\end{bmatrix}$ 的全部特征值与特征向量。
 
-**题干**：求 $A=\begin{pmatrix}3&-1\\-1&3\end{pmatrix}$ 的全部特征值与特征向量。
+**先猜**：$A$ 对称，两个特征值都是实数；迹是 $3+3=6$、行列式是 $9-1=8$，猜两数相加得 6、相乘得 8，也就是 2 和 4。
 
-**先想什么**：先写 $\lambda I-A$，再算行列式；别急着跳到最后一步。
-
-**第 1 步 · 求特征值**：
-
-$$
-\lambda I-A=\begin{pmatrix}\lambda-3&1\\1&\lambda-3\end{pmatrix}
-$$
+**再算**（先求 $\lambda$）：
 
 $$
-|\lambda I-A|=(\lambda-3)^2-1=\lambda^2-6\lambda+8=(\lambda-2)(\lambda-4)=0
+\lambda E-A=\begin{bmatrix}\lambda-3&1\\1&\lambda-3\end{bmatrix},\qquad
+|\lambda E-A|=(\lambda-3)^2-1=\lambda^2-6\lambda+8=(\lambda-2)(\lambda-4)
 $$
 
-解出两个特征值：$\lambda_1=2$、$\lambda_2=4$。
+令它等于零，得 $\lambda_1=2$、$\lambda_2=4$。
 
-**第 2 步 · 代入求特征向量**：
+**再算**（再求特征向量）：$\lambda_1=2$ 时 $2E-A=\begin{bmatrix}-1&1\\1&-1\end{bmatrix}$，方程 $-x_1+x_2=0$，取 $x_1=1$ 得 $\mathbf x_1=(1,1)^T$。$\lambda_2=4$ 时 $4E-A=\begin{bmatrix}1&1\\1&1\end{bmatrix}$，方程 $x_1+x_2=0$，取 $\mathbf x_2=(1,-1)^T$。
 
-对 $\lambda_1=2$，代回 $(\lambda I-A)\mathbf x=\mathbf 0$：
-
-$$
-2I-A=\begin{pmatrix}-1&1\\1&-1\end{pmatrix}
-\quad\Longrightarrow\quad
-\begin{pmatrix}-1&1\\1&-1\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}0\\0\end{pmatrix}
-$$
-
-两行是同一个方程 $-x+y=0$，即 $y=x$。取 $x=1$，得特征向量 $\mathbf x_1=\begin{pmatrix}1\\1\end{pmatrix}$。
-
-对 $\lambda_2=4$：
-
-$$
-4I-A=\begin{pmatrix}1&1\\1&1\end{pmatrix}
-\quad\Longrightarrow\quad
-x+y=0
-$$
-
-即 $y=-x$。取 $x=1$，得 $\mathbf x_2=\begin{pmatrix}1\\-1\end{pmatrix}$。
-
-**为什么强调「非零解」**：$(\lambda I-A)\mathbf x=\mathbf 0$ 永远有零解，但它不是特征向量。我们是在零解之外找一个方向，所以解完总要保证取到的是 $\mathbf x\neq\mathbf 0$。
-
-**验算（node 逐项核对）**：
-
-$$
-A\mathbf x_1=\begin{pmatrix}3&-1\\-1&3\end{pmatrix}\begin{pmatrix}1\\1\end{pmatrix}=\begin{pmatrix}2\\2\end{pmatrix}=2\mathbf x_1
-$$
-
-$$
-A\mathbf x_2=\begin{pmatrix}3&-1\\-1&3\end{pmatrix}\begin{pmatrix}1\\-1\end{pmatrix}=\begin{pmatrix}4\\-4\end{pmatrix}=4\mathbf x_2
-$$
-
-两条都满足 $A\mathbf x=\lambda\mathbf x$。
+**再回代**：$A\mathbf x_1=(2,2)^T=2\mathbf x_1$、$A\mathbf x_2=(4,-4)^T=4\mathbf x_2$，两条定义式都成立；再用两条性质核对：$2+4=6=\operatorname{tr}A$、$2\times4=8=|A|$，与猜测一致。
 :::
 
-<FigBox title="特征方向：变换后方向不变，只被拉伸" kind="图解" note="A = [[3,-1],[-1,3]]。两条特征直线 y=x（λ=2）与 y=-x（λ=4）互相垂直；变换后 v₁ 方向不动、长度 ×2，v₂ 方向不动、长度 ×4。普通向量 w 被掰弯到 A w，方向变了。" >
+::: tip 例 2 · 对角化，并把高次幂写成两个幂次 {#ex-eigen-2}
+**题目**：用例 1 的结果把 $A$ 对角化，并写出 $A^{k}$。
 
-<svg viewBox="0 0 460 360" class="sf" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
-<line x1="60" y1="180" x2="440" y2="180" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-<line x1="80" y1="180" x2="80" y2="24" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-<path d="M 436 175 L 440 180 L 436 185 Z" fill="var(--vp-c-text-3)" stroke="var(--vp-c-text-3)"/>
-<path d="M 75 28 L 80 24 L 85 28 Z" fill="var(--vp-c-text-3)" stroke="var(--vp-c-text-3)"/>
-<text x="444" y="184" font-size="12" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">x</text>
-<text x="74" y="18" font-size="12" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">y</text>
-<line x1="40" y1="220" x2="200" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1" stroke-dasharray="4 4"/>
-<line x1="40" y1="140" x2="200" y2="300" stroke="var(--vp-c-brand-2)" stroke-width="1" stroke-dasharray="4 4"/>
-<line x1="80" y1="180" x2="120" y2="140" stroke="var(--vp-c-brand-1)" stroke-width="2.2"/>
-<path d="M 112 132 L 120 140 L 112 148 Z" fill="var(--vp-c-brand-1)" stroke="var(--vp-c-brand-1)"/>
-<line x1="80" y1="180" x2="160" y2="100" stroke="var(--vp-c-brand-1)" stroke-width="2.6"/>
-<path d="M 152 92 L 160 100 L 152 108 Z" fill="var(--vp-c-brand-1)" stroke="var(--vp-c-brand-1)"/>
-<line x1="80" y1="180" x2="120" y2="220" stroke="var(--vp-c-brand-2)" stroke-width="2.2"/>
-<path d="M 112 212 L 120 220 L 112 228 Z" fill="var(--vp-c-brand-2)" stroke="var(--vp-c-brand-2)"/>
-<line x1="80" y1="180" x2="240" y2="340" stroke="var(--vp-c-brand-2)" stroke-width="2.6"/>
-<path d="M 232 332 L 240 340 L 232 348 Z" fill="var(--vp-c-brand-2)" stroke="var(--vp-c-brand-2)"/>
-<line x1="80" y1="180" x2="160" y2="140" stroke="var(--vp-c-text-2)" stroke-width="1.6" stroke-dasharray="5 4"/>
-<path d="M 155 149 L 160 140 L 150 138 Z" fill="var(--vp-c-text-2)" stroke="var(--vp-c-text-2)"/>
-<line x1="80" y1="180" x2="280" y2="140" stroke="var(--vp-c-text-2)" stroke-width="1.6" stroke-dasharray="5 4"/>
-<path d="M 273 147 L 280 140 L 271 136 Z" fill="var(--vp-c-text-2)" stroke="var(--vp-c-text-2)"/>
-<text x="108" y="128" font-size="12.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700">v₁</text>
-<text x="150" y="88" font-size="12.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700">A v₁ = 2v₁</text>
-<text x="108" y="238" font-size="12.5" stroke="none" fill="var(--vp-c-brand-2)" class="sf-t sf-w700">v₂</text>
-<text x="216" y="330" font-size="12.5" stroke="none" fill="var(--vp-c-brand-2)" class="sf-t sf-w700">A v₂ = 4v₂</text>
-<text x="148" y="150" font-size="12" stroke="none" fill="var(--vp-c-text-2)" class="sf-t sf-it">w</text>
-<text x="286" y="132" font-size="12" stroke="none" fill="var(--vp-c-text-2)" class="sf-t">A w（方向变了）</text>
-</svg>
+**先猜**：例 1 已拿到两支无关的特征向量，$n=2$ 凑够，可对角化；$P$ 按 $\lambda=2,4$ 排，$D$ 的对角线就是 2、4。
 
-</FigBox>
-
-**看图能读出什么**：两条特征直线上的箭头只被拉长、不转弯；而普通向量 $w$ 被掰离原来的直线。判断是不是特征向量，就看 $A\mathbf x$ 与 $\mathbf x$ 是否共线（相差一个倍数），零向量不算。下一节把两个特征值代入 $\lambda$ 的两个特殊性质——「和」与「积」。
-
-## 四、特征值的两个性质：λ 之和 = 迹，λ 之积 = 行列式
-
-这一节的目标：给两个一秒钟就能用的验算公式，边做边自查。
-
-把方阵 $A=(a_{ij})$ 主对角线上的元素加起来，这个和叫**迹（trace）**，记作
+**再算**：$P=\begin{bmatrix}1&1\\1&-1\end{bmatrix}$，$D=\begin{bmatrix}2&0\\0&4\end{bmatrix}$。$|P|=1\times(-1)-1\times1=-2$，所以
 
 $$
-\operatorname{tr}A=a_{11}+a_{22}+\cdots+a_{nn}
+P^{-1}=\frac{1}{-2}\begin{bmatrix}-1&-1\\-1&1\end{bmatrix}=\begin{bmatrix}1/2&1/2\\1/2&-1/2\end{bmatrix}
 $$
 
-特征值有两个「不变量」性质，对任意 $n$ 阶方阵都成立：
+**再回代**：
 
 $$
-\lambda_1+\lambda_2+\cdots+\lambda_n=\operatorname{tr}A
+PD=\begin{bmatrix}2&4\\2&-4\end{bmatrix},\qquad
+PDP^{-1}=\begin{bmatrix}2&4\\2&-4\end{bmatrix}\begin{bmatrix}1/2&1/2\\1/2&-1/2\end{bmatrix}=\begin{bmatrix}3&-1\\-1&3\end{bmatrix}=A
 $$
 
-$$
-\lambda_1\lambda_2\cdots\lambda_n=\det A
-$$
-
-第一行说：特征值之和等于迹；第二行说：特征值之积等于行列式。
-
-用例 1 自查：$A=\begin{pmatrix}3&-1\\-1&3\end{pmatrix}$ 的特征值是 2 和 4，迹是 $3+3=6$，行列式是 $3\cdot3-(-1)(-1)=8$；果然 $2+4=6$、$2\times4=8$，全对。
-
-这两个公式的最大用处是**抓错**：解出特征值后立刻算一遍和与积，只要和 $\operatorname{tr}A$ 或积 $\det A$ 对不上，就是行列式或分解错了。下一节把「$A$ 和它的对角阵」这类换坐标系的关系正式命名。
-
-## 五、相似矩阵与相似不变量
-
-这一节的目标：给「换坐标系」一个正式名字，并列出换坐标不改变的量。
-
-设 $P$ 可逆，称 $B=P^{-1}AP$ 为 $A$ 的**相似矩阵（similar matrix）**，$A$ 与 $B$ 相似。它读作「先换进新坐标系、做变换、再换回来」——所以 $A$ 和 $B$ 是**同一个线性变换在不同坐标系下的写法**，不是两个不同的变换。
-
-**相似不变量**：相似矩阵的这些量完全相同——行列式、迹、特征值、秩。因为它们描述的是同一个变换，这些量不随坐标系变化。**但特征向量会变**：特征向量是坐标系里的具体箭头，换坐标系后坐标自然变。
-
-一句话收尾：**相似矩阵是「同一个变换，两套坐标」**。利用它，下一节把「$A$ 与对角矩阵相似」这件事做成标准动作。
-
-## 六、对角化：条件与做法（三步路线第三步）
-
-这一节的目标：完成第三步「对角化」，并说清什么时候走不通。
-
-**对角化（diagonalization）** 是指：找可逆矩阵 $P$ 和对角矩阵 $D$，使得
-
-$$
-A=PDP^{-1}
-$$
-
-其中 $P$ 的列是 $n$ 个**线性无关**的特征向量，$D$ 的对角线是对应的特征值。
-
-**可对角化的条件**：$n$ 阶矩阵 $A$ 能对角化，当且仅当它有 $n$ 个线性无关的特征向量（等价说法：每个特征值的几何重数都等于代数重数）。两个实用的充分条件：① $A$ 有 $n$ 个**互不相同**的特征值；② $A$ 是**实对称矩阵**。
-
-**对角化的三步做法**：
-
-1. 求出全部特征值 $\lambda_1,\dots,\lambda_n$（含重根）；
-2. 对每个特征值求出对应的特征向量，凑出 $n$ 个线性无关的 $\mathbf x_1,\dots,\mathbf x_n$；
-3. 把 $\mathbf x_i$ 按列排成 $P$，把 $\lambda_i$ 按**同样顺序**放在 $D$ 的对角线上，即得 $A=PDP^{-1}$。
-
-::: tip 例 2 · 对一般矩阵对角化 {#ex-eigen-2}
-
-**题干**：把 $A=\begin{pmatrix}4&-2\\1&1\end{pmatrix}$ 对角化，并验证 $A=PDP^{-1}$。
-
-**先想什么**：这是非对称矩阵，特征向量不一定正交，但照样按「求特征值 → 求特征向量 → 排 P、D」走。
-
-**第 1 步 · 求特征值**：
-
-$$
-\lambda I-A=\begin{pmatrix}\lambda-4&2\\-1&\lambda-1\end{pmatrix}
-$$
-
-$$
-|\lambda I-A|=(\lambda-4)(\lambda-1)+2=\lambda^2-5\lambda+6=(\lambda-2)(\lambda-3)=0
-$$
-
-得 $\lambda_1=2$、$\lambda_2=3$。
-
-**第 2 步 · 求特征向量**：
-
-对 $\lambda_1=2$：$2I-A=\begin{pmatrix}-2&2\\-1&1\end{pmatrix}$，解 $-2x+2y=0$ 得 $y=x$，取 $\mathbf x_1=\begin{pmatrix}1\\1\end{pmatrix}$。
-
-对 $\lambda_2=3$：$3I-A=\begin{pmatrix}-1&2\\-1&2\end{pmatrix}$，解 $-x+2y=0$ 得 $x=2y$，取 $\mathbf x_2=\begin{pmatrix}2\\1\end{pmatrix}$。
-
-**第 3 步 · 排 P 和 D**：
-
-$$
-P=\begin{pmatrix}1&2\\1&1\end{pmatrix},\qquad
-D=\begin{pmatrix}2&0\\0&3\end{pmatrix}
-$$
-
-**为什么顺序要对上**：$P$ 第一列是 $\mathbf x_1=(1,1)$，对应 $\lambda_1=2$，所以 $D$ 第一个对角元是 2；第二列 $\mathbf x_2=(2,1)$ 对应 $\lambda_2=3$。列的顺序和 $\lambda$ 的顺序一一绑定，换列就要同步换 $D$ 的对角线。
-
-**验算（node 逐项核对）**：先求 $P^{-1}$（$\det P=1\cdot1-2\cdot1=-1$）：
-
-$$
-P^{-1}=\frac{1}{-1}\begin{pmatrix}1&-2\\-1&1\end{pmatrix}=\begin{pmatrix}-1&2\\1&-1\end{pmatrix}
-$$
-
-$$
-PD=\begin{pmatrix}1&2\\1&1\end{pmatrix}\begin{pmatrix}2&0\\0&3\end{pmatrix}=\begin{pmatrix}2&6\\2&3\end{pmatrix}
-$$
-
-$$
-PDP^{-1}=\begin{pmatrix}2&6\\2&3\end{pmatrix}\begin{pmatrix}-1&2\\1&-1\end{pmatrix}=\begin{pmatrix}4&-2\\1&1\end{pmatrix}=A
-$$
-
-所以 $A=PDP^{-1}$ 成立，$A$ 可对角化。
+乘回来正是原来的矩阵，所以 $A=PDP^{-1}$，从而 $A^{k}=P\begin{bmatrix}2^k&0\\0&4^k\end{bmatrix}P^{-1}$：只算两个数的 $k$ 次方，比连乘 $k$ 次省得多。顺序核对：$P$ 第 1 列 $(1,1)$ 属于 2，$D$ 第 1 个对角元就是 2；两列一调换 $D$ 也得跟着换。
 :::
-
-<FigBox title="对角化：换到特征向量坐标系，斜切变成沿轴拉伸" kind="图解" note="A = [[4,-2],[1,1]]。左图标准坐标系里，A 把基向量 e₁=(1,0)、e₂=(0,1) 分别送到 (4,1)、(-2,1)，网格被斜切。右图换成特征向量坐标系（v₁=(1,1)、v₂=(2,1) 作轴），同一个变换 D 只沿 v₁ 轴拉 2 倍、沿 v₂ 轴拉 3 倍，方向不变。" >
-
-<svg viewBox="0 0 520 260" class="sf" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
-<text x="18" y="26" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">标准坐标系：A 把基向量斜切</text>
-<line x1="50" y1="190" x2="250" y2="190" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-<line x1="120" y1="190" x2="120" y2="40" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-<path d="M 246 185 L 250 190 L 246 195 Z" fill="var(--vp-c-text-3)" stroke="var(--vp-c-text-3)"/>
-<path d="M 115 44 L 120 40 L 125 44 Z" fill="var(--vp-c-text-3)" stroke="var(--vp-c-text-3)"/>
-<line x1="120" y1="190" x2="150" y2="190" stroke="var(--vp-c-text-2)" stroke-width="1.8" stroke-dasharray="5 4"/>
-<line x1="120" y1="190" x2="120" y2="160" stroke="var(--vp-c-text-2)" stroke-width="1.8" stroke-dasharray="5 4"/>
-<text x="142" y="206" font-size="12" stroke="none" fill="var(--vp-c-text-2)" class="sf-t sf-it">e₁</text>
-<text x="110" y="156" font-size="12" stroke="none" fill="var(--vp-c-text-2)" class="sf-t sf-it">e₂</text>
-<line x1="120" y1="190" x2="240" y2="160" stroke="var(--vp-c-brand-1)" stroke-width="2.4"/>
-<path d="M 233 152 L 240 160 L 232 163 Z" fill="var(--vp-c-brand-1)" stroke="var(--vp-c-brand-1)"/>
-<line x1="120" y1="190" x2="60" y2="160" stroke="var(--vp-c-brand-1)" stroke-width="2.4"/>
-<path d="M 68 157 L 60 160 L 68 163 Z" fill="var(--vp-c-brand-1)" stroke="var(--vp-c-brand-1)"/>
-<text x="244" y="156" font-size="12" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700">A e₁</text>
-<text x="16" y="156" font-size="12" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700">A e₂</text>
-<text x="288" y="26" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">特征向量坐标系：D 只沿轴拉伸</text>
-<line x1="300" y1="190" x2="500" y2="190" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-<line x1="370" y1="190" x2="370" y2="40" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-<path d="M 496 185 L 500 190 L 496 195 Z" fill="var(--vp-c-text-3)" stroke="var(--vp-c-text-3)"/>
-<path d="M 365 44 L 370 40 L 375 44 Z" fill="var(--vp-c-text-3)" stroke="var(--vp-c-text-3)"/>
-<line x1="370" y1="190" x2="400" y2="160" stroke="var(--vp-c-brand-1)" stroke-width="2.2"/>
-<path d="M 393 154 L 400 160 L 394 167 Z" fill="var(--vp-c-brand-1)" stroke="var(--vp-c-brand-1)"/>
-<line x1="370" y1="190" x2="430" y2="130" stroke="var(--vp-c-brand-1)" stroke-width="2.6"/>
-<path d="M 421 124 L 430 130 L 424 138 Z" fill="var(--vp-c-brand-1)" stroke="var(--vp-c-brand-1)"/>
-<line x1="370" y1="190" x2="410" y2="210" stroke="var(--vp-c-brand-2)" stroke-width="2.2"/>
-<path d="M 403 203 L 410 210 L 402 217 Z" fill="var(--vp-c-brand-2)" stroke="var(--vp-c-brand-2)"/>
-<line x1="370" y1="190" x2="460" y2="235" stroke="var(--vp-c-brand-2)" stroke-width="2.6"/>
-<path d="M 453 229 L 460 235 L 451 241 Z" fill="var(--vp-c-brand-2)" stroke="var(--vp-c-brand-2)"/>
-<text x="402" y="150" font-size="12" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700">v₁</text>
-<text x="436" y="120" font-size="12" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700">2v₁</text>
-<text x="414" y="222" font-size="12" stroke="none" fill="var(--vp-c-brand-2)" class="sf-t sf-w700">v₂</text>
-<text x="466" y="248" font-size="12" stroke="none" fill="var(--vp-c-brand-2)" class="sf-t sf-w700">3v₂</text>
-<text x="40" y="232" font-size="11.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">A 把正交网格掰成平行四边形</text>
-<text x="288" y="232" font-size="11.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">D 保持两条轴方向不动，只改长度</text>
-</svg>
-
-</FigBox>
-
-**看图能读出什么**：同一个变换，在标准坐标系里是「斜切」，在特征向量坐标系里是「沿轴拉伸」。对角化就是主动换到「让变换最朴素」的坐标系。但要注意：特征向量坐标系的两条轴一般**不垂直**（本例 $v_1,v_2$ 的夹角不是 90°），只有实对称矩阵才天然垂直——下一节讲这个。
-
-## 七、实对称矩阵与正交对角化（简要）
-
-这一节的目标：把实对称矩阵的「额外福利」说清，并给正交对角化的做法。
-
-若 $A$ 是实对称矩阵（$A=A^T$），它有三条专属性质：
-
-1. $A$ 的特征值全是实数；
-2. 属于**不同**特征值的特征向量**互相正交**；
-3. $A$ 一定能对角化，而且能选出一组**正交且单位**的特征向量，拼成**正交矩阵** $Q$，使 $Q^TAQ=D$（对角阵）。
-
-**正交对角化的做法**：先照常求特征值与特征向量，再把每个特征向量**单位化**（除以它的长度），按列排成 $Q$。因为不同特征值的特征向量已正交，同特征值的特征向量可用施密特正交化处理（本页不展开），最终 $Q$ 满足 $Q^TQ=I$，于是 $Q^{-1}=Q^T$，对角化式变成 $A=QDQ^T$。
 
 ::: tip 例 3 · 实对称矩阵正交对角化 {#ex-eigen-3}
+**题目**：对同一个 $A$ 写出正交矩阵 $Q$ 与 $D$，并验证 $Q^TQ=E$、$Q^TAQ=D$。
 
-**题干**：把 $A=\begin{pmatrix}3&-1\\-1&3\end{pmatrix}$ 正交对角化，写出正交矩阵 $Q$ 与 $D$。
+**先猜**：例 1 的 $\mathbf x_1=(1,1)$、$\mathbf x_2=(1,-1)$ 点积为 $1-1=0$，已经垂直；两支长度都是 $\sqrt2$，各除以 $\sqrt2$ 就够。
 
-**先想什么**：例 1 已经求出特征向量 $(1,1)$（属于 $\lambda=2$）和 $(1,-1)$（属于 $\lambda=4$），它们点积 $1\cdot1+1\cdot(-1)=0$，已经正交，只需各自单位化。
-
-单位化：$\|\mathbf x_1\|=\sqrt{1^2+1^2}=\sqrt2$，$\|\mathbf x_2\|=\sqrt{1^2+(-1)^2}=\sqrt2$。于是
-
-$$
-Q=\begin{pmatrix}\frac{1}{\sqrt{2}}&\frac{1}{\sqrt{2}}\\\frac{1}{\sqrt{2}}&-\frac{1}{\sqrt{2}}\end{pmatrix},\qquad
-D=\begin{pmatrix}2&0\\0&4\end{pmatrix}
-$$
-
-**验算（node 逐项核对）**：$Q$ 是对称矩阵，$Q^TQ=\begin{pmatrix}1&0\\0&1\end{pmatrix}=I$，且
+**再算**：$Q=\frac{1}{\sqrt2}\begin{bmatrix}1&1\\1&-1\end{bmatrix}$，$D=\begin{bmatrix}2&0\\0&4\end{bmatrix}$。
 
 $$
-Q^TAQ=\begin{pmatrix}2&0\\0&4\end{pmatrix}=D
+Q^TQ=\frac12\begin{bmatrix}1&1\\1&-1\end{bmatrix}\begin{bmatrix}1&1\\1&-1\end{bmatrix}=\frac12\begin{bmatrix}2&0\\0&2\end{bmatrix}=E
 $$
 
-所以 $A=QDQ^T$，正交对角化完成。
-:::
-
-<FigBox title="正交对角化：把坐标轴转到两条互相垂直的特征方向" kind="图解" note="A = [[3,-1],[-1,3]]。两条特征直线 y=x（λ=2）与 y=-x（λ=4）恰好垂直，把坐标轴旋转 45° 对齐它们，得到正交矩阵 Q；在新坐标系里 A 变成纯拉伸 D=diag(2,4)。" >
-
-<svg viewBox="0 0 440 320" class="sf" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
-<line x1="40" y1="170" x2="420" y2="170" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-<line x1="80" y1="170" x2="80" y2="24" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
-<path d="M 416 165 L 420 170 L 416 175 Z" fill="var(--vp-c-text-3)" stroke="var(--vp-c-text-3)"/>
-<path d="M 75 28 L 80 24 L 85 28 Z" fill="var(--vp-c-text-3)" stroke="var(--vp-c-text-3)"/>
-<text x="424" y="174" font-size="12" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">x</text>
-<text x="74" y="18" font-size="12" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">y</text>
-<line x1="80" y1="170" x2="180" y2="70" stroke="var(--vp-c-brand-1)" stroke-width="2.2"/>
-<path d="M 173 64 L 180 70 L 174 78 Z" fill="var(--vp-c-brand-1)" stroke="var(--vp-c-brand-1)"/>
-<line x1="80" y1="170" x2="180" y2="270" stroke="var(--vp-c-brand-2)" stroke-width="2.2"/>
-<path d="M 173 262 L 180 270 L 174 278 Z" fill="var(--vp-c-brand-2)" stroke="var(--vp-c-brand-2)"/>
-<line x1="116" y1="134" x2="134" y2="116" stroke="var(--vp-c-text-2)" stroke-width="1.4"/>
-<line x1="134" y1="116" x2="134" y2="134" stroke="var(--vp-c-text-2)" stroke-width="1.4"/>
-<line x1="80" y1="170" x2="40" y2="210" stroke="var(--vp-c-text-2)" stroke-width="1.2" stroke-dasharray="4 4"/>
-<line x1="80" y1="170" x2="40" y2="130" stroke="var(--vp-c-text-2)" stroke-width="1.2" stroke-dasharray="4 4"/>
-<text x="182" y="64" font-size="12.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700">q₁（λ=2）</text>
-<text x="182" y="288" font-size="12.5" stroke="none" fill="var(--vp-c-brand-2)" class="sf-t sf-w700">q₂（λ=4）</text>
-<text x="136" y="128" font-size="12" stroke="none" fill="var(--vp-c-text-2)" class="sf-t">90°</text>
-<text x="26" y="222" font-size="12" stroke="none" fill="var(--vp-c-text-2)" class="sf-t">Q 轴</text>
-<text x="46" y="118" font-size="12" stroke="none" fill="var(--vp-c-text-2)" class="sf-t">Q 轴</text>
+<FigBox title="把坐标轴转到两条互相垂直的特征方向" kind="图解" note="输入是两条特征线 y=x 与 y=−x；操作是把坐标轴旋 45° 对齐它们；结果新轴 q₁、q₂ 互相垂直。看图能读出什么：正交对角化就是把两条特征方向立成新坐标轴。">
+<svg viewBox="0 0 440 300" role="img" aria-label="坐标轴旋转四十五度对齐两条垂直的特征方向">
+  <defs>
+    <marker id="c5f5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)"/>
+    </marker>
+  </defs>
+  <line x1="40" y1="150" x2="400" y2="150" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="90" y1="210" x2="90" y2="30" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
+  <line x1="90" y1="150" x2="190" y2="50" stroke="var(--vp-c-brand-1)" stroke-width="2.2" marker-end="url(#c5f5)"/>
+  <line x1="90" y1="150" x2="190" y2="250" stroke="var(--vp-c-brand-2)" stroke-width="2.2" marker-end="url(#c5f5)"/>
+  <line x1="126" y1="114" x2="144" y2="114" stroke="var(--vp-c-text-2)" stroke-width="1.3"/>
+  <line x1="144" y1="114" x2="144" y2="132" stroke="var(--vp-c-text-2)" stroke-width="1.3"/>
+  <text x="146" y="130" font-size="11" fill="var(--vp-c-text-2)">90°</text>
+  <text x="196" y="46" font-size="12" fill="var(--vp-c-brand-1)">q₁（λ=2）</text>
+  <text x="196" y="264" font-size="12" fill="var(--vp-c-brand-2)">q₂（λ=4）</text>
+  <line x1="20" y1="274" x2="420" y2="274" stroke="var(--vp-c-divider)" stroke-width="1"/>
+  <text x="20" y="292" font-size="11.5" fill="var(--vp-c-text-2)">输入：两条特征线；操作：旋 45° 对齐；结果：新轴垂直。</text>
 </svg>
-
 </FigBox>
 
-**看图能读出什么**：两条特征方向画出了直角，说明特征向量正交；把坐标轴转到这两条方向，$Q$ 就是旋转矩阵（正交矩阵），$A$ 在新坐标系里只做轴拉伸。正交对角化是二次型化标准形的地基，下一章会接过去。到这里，把本章最容易踩的坑列成清单收尾。
+**再回代**：
 
-## 易错清单
+$$
+Q^TAQ=\frac12\begin{bmatrix}1&1\\1&-1\end{bmatrix}\begin{bmatrix}3&-1\\-1&3\end{bmatrix}\begin{bmatrix}1&1\\1&-1\end{bmatrix}=\begin{bmatrix}2&0\\0&4\end{bmatrix}=D
+$$
 
-1. **把 $\mathbf x=\mathbf 0$ 当特征向量**：零向量被任何矩阵映成零，会冒充任何特征值的特征向量。定义里必须排除零向量，做题取非零解。
-2. **漏掉 $\lambda=0$**：$A\mathbf x=0$ 里的 0 是合法特征值，意味着 $A$ 不可逆。解特征方程时别把 0 这个根丢掉。
-3. **$\lambda I-A$ 与 $A-\lambda I$ 写混**：两者只差负号，特征值相同、齐次方程解相同，但**整页要自洽**，别一步用 $\lambda I-A$、下一步又用 $A-\lambda I$ 还不处理符号。
-4. **$P$ 的列和 $D$ 的对角线顺序对不上**：$P$ 第 $i$ 列必须配 $D$ 第 $i$ 个对角元。顺序错了 $PDP^{-1}$ 就不再等于 $A$。
-5. **特征向量没有归一化就写正交矩阵**：正交对角化要求 $Q$ 的列是**单位**向量，光正交不够，还要除以长度。
-6. **以为有重根就一定能或一定不能对角化**：重根只是「危险信号」，能不能对角化看几何重数是否追平代数重数。如 $2I=\begin{pmatrix}2&0\\0&2\end{pmatrix}$ 特征值 2 是二重根，但它本身就是对角阵，任意向量都是特征向量，照样可对角化。
+对角线上的 2、4 正是例 1 的两个特征值，顺序与 $Q$ 的列一致。与例 2 只差一处：那里的 $P$ 不保长度，这里的 $Q$ 只换坐标轴。
+:::
 
-**这一页的指路**：特征值把「复杂矩阵」在特定方向上简化成「缩放」，对角化则把整个变换换成最朴素的样子。想懂它背后的几何图景（特征空间、代数/几何重数的直观），看[现代版 · 特征值、特征向量与对角化](../linalg/06-eigenvalues.md)；想接着学对称矩阵如何把二次型化成标准形、判正定，看[现代版 · 正交、投影与二次型](../linalg/07-orthogonality.md)。
+## 这一页带走三句话
+
+1. 特征向量是「乘完还躺在原来那条线上」的非零向量，特征值是那条线上的伸缩倍数，可为负、可为 0。
+2. 求法是两步：先解 $|\lambda E-A|=0$ 拿到 $\lambda$，再代回 $(\lambda E-A)\mathbf x=\mathbf 0$ 取非零解；拿到 $\lambda$ 后用「和等于迹、积等于行列式」自查。
+3. 对角化用 $n$ 个无关特征向量换坐标，好处是高次幂只剩对角线取幂；实对称矩阵的特征方向天然垂直，单位化后 $Q^{-1}=Q^T$。
+
+## 最容易错的两处
+
+1. **把 $\mathbf x=\mathbf 0$ 当特征向量** → 它对任何 $\lambda$ 都「成立」 → 取解时必须挑非零支。
+2. **$P$ 的列序与 $D$ 的对角线错位** → $PDP^{-1}$ 算出来不是 $A$ → 第 $i$ 列永远配第 $i$ 个对角元。
+
+下一站是[06 · 二次型](06-quadratic.md)：那里把本页的正交对角化用到 $x^TAx$ 上，交叉项靠它消掉。想懂几何画面，翻现代版 [06 · 特征值、特征向量与对角化](../linalg/06-eigenvalues)。
