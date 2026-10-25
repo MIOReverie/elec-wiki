@@ -113,13 +113,13 @@ const TOPICS_SIDEBAR = [
 ]
 
 // ==========================================================================
-// 【临时】线性代数复习板块
+// 【临时】线性代数复习板块（现代结构 /linalg/ 与经典结构 /linalg-classic/ 两版并行）
 // 学完要一键移除时，删掉以下三处即可，不会影响四门电学课：
-//   1. 下面这段 LINALG_SIDEBAR 常量
-//   2. themeConfig.nav 里的「线代（临时）」项
-//   3. themeConfig.sidebar 里的 '/linalg/': LINALG_SIDEBAR 映射
-// 另外还要删掉 docs/index.md 里的一行临时入口说明，以及整个 docs/linalg/ 目录。
-// 注意：catalog.ts 是四门电学课的扫描器，线代不走它，侧栏用手动 LINALG_SIDEBAR。
+//   1. 下面两段 LINALG_SIDEBAR / LINALG_CLASSIC_SIDEBAR 常量
+//   2. themeConfig.nav 里的「线代（临时）」下拉项
+//   3. themeConfig.sidebar 里的 '/linalg/': 与 '/linalg-classic/': 两行映射
+// 另外还要删掉 docs/index.md 里的一行临时入口说明，以及整个 docs/linalg/、docs/linalg-classic/ 目录。
+// 注意：catalog.ts 是四门电学课的扫描器，线代不走它，侧栏用手动常量。
 // ==========================================================================
 /** 线性代数临时板块侧栏：主页 + 7 章，共一个分组 */
 const LINALG_SIDEBAR = [
@@ -134,6 +134,22 @@ const LINALG_SIDEBAR = [
       { text: '05 · 行列式：面积缩放的因子', link: '/linalg/05-determinant' },
       { text: '06 · 特征值、特征向量与对角化', link: '/linalg/06-eigenvalues' },
       { text: '07 · 正交、投影与二次型', link: '/linalg/07-orthogonality' }
+    ]
+  }
+]
+
+/** 线性代数经典结构版侧栏：主页 + 6 章，按同济《线性代数》教学顺序分组 */
+const LINALG_CLASSIC_SIDEBAR = [
+  {
+    text: '线性代数 · 经典结构（临时）',
+    items: [
+      { text: '经典路线图', link: '/linalg-classic/' },
+      { text: '01 · 行列式：从对角线到克拉默法则', link: '/linalg-classic/01-determinant' },
+      { text: '02 · 矩阵及其运算', link: '/linalg-classic/02-matrices' },
+      { text: '03 · 矩阵的初等变换与线性方程组', link: '/linalg-classic/03-elementary' },
+      { text: '04 · 向量组的线性相关性', link: '/linalg-classic/04-vectors' },
+      { text: '05 · 特征值与特征向量', link: '/linalg-classic/05-eigen' },
+      { text: '06 · 二次型：把交叉项配成平方', link: '/linalg-classic/06-quadratic' }
     ]
   }
 ]
@@ -375,7 +391,13 @@ export default defineConfig({
       },
       { text: '学习地图', link: '/map' },
       // 【临时】线代复习入口，学完删掉这一项
-      { text: '线代（临时）', link: '/linalg/' },
+      {
+        text: '线代（临时）',
+        items: [
+          { text: '现代结构', link: '/linalg/' },
+          { text: '经典结构', link: '/linalg-classic/' }
+        ]
+      },
       { text: '关于', link: '/guide/about' }
     ],
 
@@ -388,6 +410,8 @@ export default defineConfig({
       '/topics/': TOPICS_SIDEBAR,
       // 【临时】线代侧栏，学完删掉这一行
       '/linalg/': LINALG_SIDEBAR,
+      // 【临时】线代经典结构侧栏，学完删掉这一行
+      '/linalg-classic/': LINALG_CLASSIC_SIDEBAR,
       '/map': GUIDE_SIDEBAR,
       '/shared/': GUIDE_SIDEBAR,
       '/guide/': GUIDE_SIDEBAR
