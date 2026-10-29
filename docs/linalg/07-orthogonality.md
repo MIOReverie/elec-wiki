@@ -58,15 +58,15 @@ $$
   <line x1="40" y1="220" x2="300" y2="90" stroke="var(--vp-c-text-3)" stroke-dasharray="5 4"/>
   <text x="304" y="86" font-size="11.5" fill="var(--vp-c-text-3)" stroke="none">直线 L</text>
   <line x1="80" y1="200" x2="155" y2="100" stroke="var(--vp-c-text-1)" stroke-width="2.2"/>
-  <path d="M155 100 l-8.4 -1.6 l1.6 6.6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <path d="M155 100 L152.2 109.1 L147 105.3 Z" fill="var(--vp-c-text-1)" stroke="none"/>
   <text x="160" y="96" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">b = (3,4)</text>
   <line x1="80" y1="200" x2="180" y2="150" stroke="#3b82f6" stroke-width="3"/>
   <path d="M180 150 l-8.6 -2 l1.4 6.4 Z" fill="#3b82f6" stroke="none"/>
-  <text x="186" y="146" font-size="11.5" fill="#3b82f6" stroke="none">b̂ = (4,2)</text>
-  <line x1="155" y1="100" x2="180" y2="150" stroke="#ef4444" stroke-width="2" stroke-dasharray="5 4"/>
-  <path d="M180 150 l-8.6 -2 l1.4 6.4 Z" fill="#ef4444" stroke="none"/>
+  <text x="192" y="146" font-size="11.5" fill="#3b82f6" stroke="none">b̂ = (4,2)</text>
+  <line x1="180" y1="150" x2="155" y2="100" stroke="#ef4444" stroke-width="2" stroke-dasharray="5 4"/>
+  <path d="M155 100 L161.9 106.6 L156.2 109.5 Z" fill="#ef4444" stroke="none"/>
   <text x="150" y="126" text-anchor="end" font-size="11.5" fill="#ef4444" stroke="none">e = (−1,2)</text>
-  <path d="M188.9 145.5 L193.4 154.5 L184.5 158.9" fill="none" stroke="#ef4444" stroke-width="1.4"/>
+  <path d="M188.9 145.5 L184.4 136.6 L175.5 141.1" fill="none" stroke="#ef4444" stroke-width="1.4"/>
   <line x1="80" y1="200" x2="130" y2="175" stroke="#16a34a" stroke-width="2.4"/>
   <path d="M130 175 l-8.6 -2 l1.4 6.4 Z" fill="#16a34a" stroke="none"/>
   <text x="96" y="166" text-anchor="end" font-size="11.5" fill="#16a34a" stroke="none">a = (2,1)</text>
@@ -112,16 +112,16 @@ $$
   <path d="M190 120 l-8 -3 l0 6 Z" fill="var(--vp-c-text-2)" stroke="none"/>
   <text x="196" y="124" font-size="11.5" fill="var(--vp-c-text-2)" stroke="none">a₂ = (2,0)</text>
   <line x1="90" y1="120" x2="140" y2="70" stroke="var(--vp-c-text-1)" stroke-width="2.2"/>
-  <path d="M140 70 l-8.4 -1.4 l1.6 6.4 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <path d="M140 70 L135.9 78.6 L131.4 74.1 Z" fill="var(--vp-c-text-1)" stroke="none"/>
   <text x="146" y="66" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">a₁ = 投影 = (1,1)</text>
   <line x1="140" y1="70" x2="190" y2="120" stroke="#ef4444" stroke-width="2" stroke-dasharray="5 4"/>
-  <path d="M190 120 l-8.4 -1.4 l1.6 6.4 Z" fill="#ef4444" stroke="none"/>
+  <path d="M190 120 L181.4 115.9 L185.9 111.3 Z" fill="#ef4444" stroke="none"/>
   <path d="M147 62.9 L154.1 70 L147 77.1" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4"/>
   <line x1="90" y1="120" x2="140" y2="170" stroke="#16a34a" stroke-width="2.4"/>
-  <path d="M140 170 l-8.4 1.4 l4.4 5 Z" fill="#16a34a" stroke="none"/>
+  <path d="M140 170 L131.4 165.9 L135.9 161.4 Z" fill="#16a34a" stroke="none"/>
   <text x="146" y="178" font-size="11.5" fill="#16a34a" stroke="none">u₂ = (1,−1)</text>
   <text x="196" y="96" font-size="10.5" fill="#ef4444" stroke="none">同一支 u₂，接在投影终点上</text>
-  <text x="200" y="70" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">q₁·u₂ = 0</text>
+  <text x="158" y="84" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">q₁·u₂ = 0</text>
 </svg>
 </FigBox>
 
@@ -198,10 +198,10 @@ $$
   <text x="120" y="216" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">1</text>
   <text x="160" y="216" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">2</text>
   <text x="200" y="216" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">3</text>
-  <text x="72" y="174" text-anchor="end" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">1</text>
-  <text x="72" y="144" text-anchor="end" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">2</text>
-  <text x="72" y="114" text-anchor="end" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">3</text>
-  <text x="72" y="84" text-anchor="end" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">4</text>
+  <text x="72" y="170" text-anchor="end" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">1</text>
+  <text x="72" y="140" text-anchor="end" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">2</text>
+  <text x="72" y="110" text-anchor="end" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">3</text>
+  <text x="72" y="80" text-anchor="end" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">4</text>
   <line x1="80" y1="220" x2="224" y2="58" stroke="#3b82f6" stroke-width="2"/>
   <text x="228" y="62" font-size="11.5" fill="#3b82f6" stroke="none">y = 3x/2 − 2/3</text>
   <line x1="120" y1="170" x2="120" y2="175" stroke="#ef4444" stroke-width="2.6"/>

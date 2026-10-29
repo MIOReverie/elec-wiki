@@ -37,34 +37,34 @@ $$
 
 为什么一个数就能管住所有图形？线性变换把每个小方格都按同一比例拉，任何图形都是小方格拼起来的，于是面积统一乘上 $|\det A|$。注意是绝对值，面积本身没有负的；带符号的 $\det A$ 额外记下了有没有翻面。正方形、三角形、圆，面积乘的都是同一个 $|\det A|$。
 
-<FigBox title="单位正方形被拉成平行四边形：面积从 1 变成 det A = 6" kind="几何" note="左边是单位正方形（面积 1），右边是被 A 拉出来的平行四边形：底 2、高 3（两轴同为每单位 30 像素），面积 6。看完该看出 1 进去 6 出来，倍数就是 det A。">
+<FigBox title="单位正方形被拉成平行四边形：面积从 1 变成 det A = 6" kind="几何" note="左边是单位正方形（面积 1），右边是被 A 拉出来的平行四边形：底 2、高 3（两轴同为每单位 40 像素，两图同一刻度），面积 6。看完该看出 1 进去 6 出来，倍数就是 det A。">
 <svg viewBox="0 0 660 250" class="sf" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
   <text x="110" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">输入：单位正方形（面积 1）</text>
   <text x="330" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">操作：A</text>
   <text x="545" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">结果：平行四边形</text>
   <line x1="46" y1="176" x2="206" y2="176" stroke="var(--vp-c-text-3)"/>
   <line x1="80" y1="220" x2="80" y2="80" stroke="var(--vp-c-text-3)"/>
-  <rect x="80" y="124" width="52" height="52" fill="#3b82f6" fill-opacity="0.13" stroke="#3b82f6" stroke-width="1.8"/>
-  <line x1="80" y1="176" x2="132" y2="176" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-  <path d="M132 176 l-8 -3 l0 6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
-  <text x="138" y="180" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">i</text>
-  <line x1="80" y1="176" x2="80" y2="124" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-  <path d="M80 124 l-3 8 l6 0 Z" fill="var(--vp-c-text-1)" stroke="none"/>
-  <text x="86" y="118" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">j</text>
-  <text x="106" y="150" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-1)" stroke="none">面积 1</text>
+  <rect x="80" y="136" width="40" height="40" fill="#3b82f6" fill-opacity="0.13" stroke="#3b82f6" stroke-width="1.8"/>
+  <line x1="80" y1="176" x2="120" y2="176" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <path d="M120 176 l-8 -3 l0 6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="126" y="180" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">i</text>
+  <line x1="80" y1="176" x2="80" y2="136" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <path d="M80 136 l-3 8 l6 0 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="86" y="130" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">j</text>
+  <text x="100" y="160" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-1)" stroke="none">面积 1</text>
   <line x1="232" y1="176" x2="288" y2="176" stroke="var(--vp-c-text-1)" stroke-width="2"/>
   <path d="M288 176 l-8 -3.4 l0 6.8 Z" fill="var(--vp-c-text-1)" stroke="none"/>
   <text x="260" y="146" text-anchor="middle" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">i ↦ (2,0)</text>
   <text x="260" y="200" text-anchor="middle" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">j ↦ (1,3)</text>
   <line x1="400" y1="186" x2="600" y2="186" stroke="var(--vp-c-text-3)"/>
-  <line x1="420" y1="216" x2="420" y2="66" stroke="var(--vp-c-text-3)"/>
-  <polygon points="420,186 480,186 510,96 450,96" fill="#3b82f6" fill-opacity="0.13" stroke="#3b82f6" stroke-width="1.8"/>
-  <line x1="450" y1="96" x2="450" y2="186" stroke="var(--vp-c-text-3)" stroke-dasharray="4 3"/>
-  <text x="456" y="146" font-size="11" fill="var(--vp-c-text-2)" stroke="none">高 3</text>
-  <text x="450" y="206" text-anchor="middle" font-size="11" fill="var(--vp-c-text-2)" stroke="none">底 2</text>
-  <text x="482" y="202" text-anchor="middle" font-size="11" fill="var(--vp-c-text-1)" stroke="none">(2,0)</text>
-  <text x="444" y="88" text-anchor="end" font-size="11" fill="var(--vp-c-text-1)" stroke="none">(1,3)</text>
-  <text x="518" y="92" font-size="11.5" fill="#3b82f6" stroke="none">面积 6</text>
+  <line x1="420" y1="216" x2="420" y2="58" stroke="var(--vp-c-text-3)"/>
+  <polygon points="420,186 500,186 540,66 460,66" fill="#3b82f6" fill-opacity="0.13" stroke="#3b82f6" stroke-width="1.8"/>
+  <line x1="460" y1="66" x2="460" y2="186" stroke="var(--vp-c-text-3)" stroke-dasharray="4 3"/>
+  <text x="466" y="130" font-size="11" fill="var(--vp-c-text-2)" stroke="none">高 3</text>
+  <text x="460" y="204" text-anchor="middle" font-size="11" fill="var(--vp-c-text-2)" stroke="none">底 2</text>
+  <text x="502" y="204" text-anchor="middle" font-size="11" fill="var(--vp-c-text-1)" stroke="none">(2,0)</text>
+  <text x="454" y="62" text-anchor="end" font-size="11" fill="var(--vp-c-text-1)" stroke="none">(1,3)</text>
+  <text x="548" y="96" font-size="11.5" fill="#3b82f6" stroke="none">面积 6</text>
 </svg>
 </FigBox>
 
@@ -93,7 +93,7 @@ $$
   <line x1="76" y1="150" x2="76" y2="126" stroke="var(--vp-c-text-1)" stroke-width="2"/>
   <path d="M76 126 l-3 8 l6 0 Z" fill="var(--vp-c-text-1)" stroke="none"/>
   <text x="84" y="122" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">j</text>
-  <path d="M100 146 A24 24 0 0 0 80 128" stroke-dasharray="4 3" stroke="var(--vp-c-text-3)"/>
+  <path d="M100 150 A24 24 0 0 0 76 126" stroke-dasharray="4 3" stroke="var(--vp-c-text-3)"/>
   <text x="110" y="104" font-size="10.5" fill="var(--vp-c-text-2)" stroke="none">逆时针 → det&gt;0</text>
   <line x1="230" y1="150" x2="286" y2="150" stroke="var(--vp-c-text-1)" stroke-width="2"/>
   <path d="M286 150 l-8 -3.4 l0 6.8 Z" fill="var(--vp-c-text-1)" stroke="none"/>
@@ -101,10 +101,10 @@ $$
   <line x1="420" y1="180" x2="620" y2="180" stroke="var(--vp-c-text-3)"/>
   <line x1="440" y1="200" x2="440" y2="60" stroke="var(--vp-c-text-3)"/>
   <line x1="440" y1="180" x2="464" y2="108" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-  <path d="M464 108 l-1.6 -8.4 l-6.2 4.8 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <path d="M464 108 L464.2 117.6 L458.1 115.5 Z" fill="var(--vp-c-text-1)" stroke="none"/>
   <text x="436" y="102" text-anchor="end" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">(1,3)</text>
   <line x1="440" y1="180" x2="488" y2="84" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-  <path d="M488 84 l-8.2 -1.6 l1.8 6.6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <path d="M488 84 L486.8 93.5 L481.1 90.6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
   <text x="492" y="80" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">(2,4)</text>
   <path d="M464 114 A24 24 0 0 1 486 92" stroke-dasharray="4 3" stroke="#ef4444"/>
   <text x="500" y="124" font-size="10.5" fill="#ef4444" stroke="none">顺时针：平面被翻面</text>
@@ -210,9 +210,9 @@ $$
   <text x="330" y="148" text-anchor="middle" font-size="14" fill="#16a34a" stroke="none">+</text>
   <text x="366" y="148" text-anchor="middle" font-size="14" fill="#ef4444" stroke="none">−</text>
   <text x="402" y="148" text-anchor="middle" font-size="14" fill="#16a34a" stroke="none">+</text>
-  <text x="514" y="72" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">det M = 3 × (2×3 − 5×1)</text>
-  <text x="514" y="96" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">= 3 × 1 = 3</text>
-  <text x="514" y="126" font-size="11" fill="var(--vp-c-text-2)" stroke="none">另外两项的系数都是 0</text>
+  <text x="506" y="72" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">det M = 3 × (2×3 − 5×1)</text>
+  <text x="506" y="96" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">= 3 × 1 = 3</text>
+  <text x="506" y="126" font-size="11" fill="var(--vp-c-text-2)" stroke="none">另外两项的系数都是 0</text>
 </svg>
 </FigBox>
 

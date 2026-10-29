@@ -47,52 +47,9 @@ $$
 
 负载拿到的永远是从电感来的电流，开关只决定电感在哪一段时间被充电。所以输出电压永远不会超过输入电压，这是 Buck 的先天限制。
 
-<FigBox title="Buck 的两个状态与四条电流路径" kind="拓扑" note="左：开关导通，输入直接给电感供电，电流从左向右流过电感与负载。低边二极管反偏截止。右：开关关断，电感要维持电流，只能从地经二极管续流，电流在电感里仍然是同向的，这就是输出永远为正的原因。两条虚线框分别是输入滤波电容与输出滤波电容。">
+<FigBox title="Buck 的两个状态与四条电流路径" kind="拓扑" note="红：状态一（Q1 导通，占 D·T_s），U_in 经 Q1 直接加在电感上，电流沿 U_in → Q1 → L → 负载 走，低边二极管反偏截止。绿：状态二（Q1 关断，占 (1−D)·T_s），电感要维持电流，只能从地经 D1 续流，电流在电感里仍然是同一个方向——这就是输出永远为正的原因。C_in 与 C_out 是输入、输出滤波电容，各自跨在那一段的上下轨之间；D1 的阴极必须接开关节点 SW、阳极接地，接反就是直通短路。">
 
-<svg viewBox="0 0 660 300" role="img" aria-label="Buck 变换器拓扑图与两种工作状态：状态一高边开关导通时电感充电，状态二关断时电流经续流二极管维持">
-<g stroke="var(--vp-c-text-2)" stroke-width="2.2" fill="none">
-  <line x1="160" y1="40" x2="380" y2="40" />
-  <line x1="160" y1="40" x2="160" y2="200" />
-  <line x1="500" y1="40" x2="500" y2="200" />
-  <line x1="160" y1="200" x2="500" y2="200" />
-</g>
-
-<rect x="146" y="76" width="28" height="46" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
-<text x="160" y="66" font-size="11" fill="var(--vp-c-text-1)" text-anchor="middle" font-weight="600">高边开关 Q1</text>
-
-<line x1="380" y1="40" x2="380" y2="78" stroke="var(--vp-c-text-2)" stroke-width="2.2" />
-<path d="M 366 86 C 356 96, 366 106, 380 102 L 380 116" stroke="var(--vp-c-text-2)" stroke-width="2.2" fill="none" />
-<text x="380" y="66" font-size="11" fill="var(--vp-c-text-1)" text-anchor="middle" font-weight="600">电感 L</text>
-
-<path d="M 440 84 L 452 84 L 452 108 L 468 108 L 468 84 L 480 84 L 480 108 L 462 122 L 444 108 Z" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="2" />
-<text x="462" y="68" font-size="11" fill="var(--vp-c-text-1)" text-anchor="middle" font-weight="600">续流二极管</text>
-
-<rect x="230" y="220" width="14" height="38" rx="2" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.6" />
-<line x1="244" y1="220" x2="244" y2="200" stroke="var(--vp-c-divider)" stroke-width="1.8" />
-<line x1="230" y1="220" x2="230" y2="200" stroke="var(--vp-c-divider)" stroke-width="1.8" />
-<text x="200" y="248" font-size="10" fill="var(--vp-c-text-3)">C_out</text>
-
-<rect x="112" y="60" width="14" height="38" rx="2" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.6" />
-<line x1="126" y1="60" x2="126" y2="40" stroke="var(--vp-c-divider)" stroke-width="1.8" />
-<line x1="112" y1="60" x2="112" y2="40" stroke="var(--vp-c-divider)" stroke-width="1.8" />
-<text x="82" y="248" font-size="10" fill="var(--vp-c-text-3)">C_in</text>
-
-<text x="160" y="26" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle" font-weight="600">U_in</text>
-<text x="500" y="26" font-size="12" fill="var(--vp-c-text-1)" text-anchor="middle" font-weight="600">U_o</text>
-<text x="500" y="278" font-size="11" fill="var(--vp-c-text-3)" text-anchor="middle">负载</text>
-
-<g stroke="var(--vp-c-brand-1)" stroke-width="2.4" fill="none">
-  <path d="M 118 40 L 100 40 L 100 200" marker-end="url(#dd-buck-arrow)" />
-  <path d="M 168 40 L 380 40" marker-end="url(#dd-buck-arrow)" />
-</g>
-<text x="176" y="34" font-size="10" fill="var(--vp-c-brand-1)">状态一：导通 D·T_s，i_L 线性上升</text>
-
-<g stroke="var(--vp-c-brand-2)" stroke-width="2.4" fill="none">
-  <path d="M 492 122 L 540 122 L 540 200 L 168 200 L 168 96" marker-end="url(#dd-buck-arrow2)" />
-</g>
-<text x="546" y="150" font-size="10" fill="var(--vp-c-brand-2)">状态二：关断 (1−D)·T_s</text>
-<text x="546" y="166" font-size="10" fill="var(--vp-c-brand-2)">i_L 线性下降</text>
-
+<svg viewBox="0 0 660 300" role="img" aria-label="Buck 变换器拓扑：输入经 Q1 到开关节点 SW，经电感 L 送到输出，D1 从 SW 接到地做续流，阴极朝 SW；输入输出各有一只滤波电容">
 <defs>
   <marker id="dd-buck-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
@@ -101,6 +58,64 @@ $$
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-2)" />
   </marker>
 </defs>
+
+<g stroke="var(--vp-c-text-2)" stroke-width="2" fill="none">
+  <line x1="100" y1="70" x2="320" y2="70" />
+  <line x1="400" y1="70" x2="560" y2="70" />
+  <line x1="100" y1="220" x2="560" y2="220" />
+  <line x1="130" y1="70" x2="130" y2="128" />
+  <line x1="130" y1="136" x2="130" y2="220" />
+  <line x1="470" y1="70" x2="470" y2="128" />
+  <line x1="470" y1="136" x2="470" y2="220" />
+  <line x1="300" y1="70" x2="300" y2="140" />
+  <line x1="300" y1="172" x2="300" y2="220" />
+  <line x1="530" y1="70" x2="530" y2="130" />
+  <line x1="530" y1="170" x2="530" y2="220" />
+</g>
+
+<rect x="180" y="56" width="60" height="28" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="2" />
+<text x="210" y="75" font-size="11" text-anchor="middle" fill="var(--vp-c-text-1)">Q1</text>
+
+<path d="M 320 70 q 10 -16 20 0 q 10 -16 20 0 q 10 -16 20 0 q 10 -16 20 0" fill="none" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<text x="360" y="52" font-size="11" text-anchor="middle" fill="var(--vp-c-text-1)" font-weight="600">L</text>
+
+<g stroke="var(--vp-c-text-2)" stroke-width="2.4">
+  <line x1="112" y1="128" x2="148" y2="128" />
+  <line x1="112" y1="136" x2="148" y2="136" />
+  <line x1="452" y1="128" x2="488" y2="128" />
+  <line x1="452" y1="136" x2="488" y2="136" />
+</g>
+<g stroke="var(--vp-c-text-2)" stroke-width="2" fill="none">
+  <line x1="286" y1="140" x2="314" y2="140" />
+  <path d="M 286 172 L 314 172 L 300 140 Z" fill="var(--vp-c-bg-soft)" />
+</g>
+
+<rect x="518" y="130" width="24" height="40" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="2" />
+
+<circle cx="300" cy="70" r="4" fill="var(--vp-c-text-2)" />
+
+<g stroke="var(--vp-c-brand-1)" stroke-width="2.6" fill="none">
+  <path d="M 110 70 L 174 70" marker-end="url(#dd-buck-arrow)" />
+  <path d="M 404 70 L 458 70" marker-end="url(#dd-buck-arrow)" />
+  <path d="M 530 86 L 530 124" marker-end="url(#dd-buck-arrow)" />
+</g>
+
+<g stroke="var(--vp-c-brand-2)" stroke-width="2.6" fill="none">
+  <path d="M 300 212 L 300 178" marker-end="url(#dd-buck-arrow2)" />
+</g>
+
+<g font-size="10.5" fill="var(--vp-c-text-3)">
+  <text x="100" y="56" font-size="12" fill="var(--vp-c-text-1)" font-weight="600">U_in</text>
+  <text x="560" y="56" font-size="12" fill="var(--vp-c-text-1)" font-weight="600" text-anchor="end">U_o</text>
+  <text x="302" y="58">SW</text>
+  <text x="130" y="158" text-anchor="middle">C_in</text>
+  <text x="470" y="158" text-anchor="middle">C_out</text>
+  <text x="322" y="152" text-anchor="start" fill="var(--vp-c-brand-2)">D1 续流</text>
+  <text x="322" y="170" text-anchor="start">阴极朝 SW</text>
+  <text x="530" y="192" text-anchor="middle">负载</text>
+  <text x="180" y="112" fill="var(--vp-c-brand-1)">状态一：Q1 导通（D·T_s），i_L 线性上升</text>
+  <text x="376" y="204" fill="var(--vp-c-brand-2)">状态二：关断 (1−D)·T_s，D1 续流，i_L 线性下降</text>
+</g>
 </svg>
 
 </FigBox>
@@ -187,35 +202,42 @@ $$
 
 <FigBox title="电感电流是三角波，电容电压是它的镜像" kind="波形" note="上图：电感电流在一个周期内上升再下降，峰峰值就是 Δi_L。若 Δi_L 大于 2·I_o，谷底会跌破零，变换器进入 DCM，图中虚线就是那个零线。下图：输出电容看到的是电感电流减去负载电流的差值在积分，所以它的纹波形状与电感电流相反、幅度小得多。这就是为什么电感叫「心脏」、电容只是「滤细节」。">
 
-<svg viewBox="0 0 660 300" role="img" aria-label="Buck 的电感电流三角波与输出电压纹波波形：电感电流峰峰值为纹波电流，输出电压纹波远小于电感电流">
+<svg viewBox="0 0 660 300" role="img" aria-label="Buck 的电感电流三角波与输出电压纹波：上图 i_L 在 I_o 上下摆动，峰峰值 Δi_L，虚线是 i_L 为零的 DCM 分界；下图 u_o 纹波很小，极性相反">
 <g stroke="var(--vp-c-divider)" stroke-width="1">
-  <line x1="60" y1="120" x2="640" y2="120" />
-  <line x1="60" y1="260" x2="640" y2="260" />
+  <line x1="60" y1="120" x2="620" y2="120" />
+  <line x1="60" y1="200" x2="620" y2="200" />
+  <line x1="60" y1="250" x2="620" y2="250" />
 </g>
 
-<path d="M 60 40 L 180 80 L 300 120 L 420 160 L 540 200 L 620 220" stroke="var(--vp-c-brand-1)" stroke-width="2.4" fill="none" />
-<path d="M 60 200 L 180 160 L 300 120 L 420 80 L 540 40 L 620 30" stroke="var(--vp-c-brand-2)" stroke-width="2.4" fill="none" />
-<path d="M 60 200 L 180 160 L 300 120 L 420 80 L 540 40 L 620 30" stroke="none" />
+<path d="M 60 140 L 200 100 L 340 140 L 480 100 L 620 140" stroke="var(--vp-c-brand-1)" stroke-width="2.4" fill="none" />
 
-<g stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="5 4">
-  <line x1="300" y1="20" x2="300" y2="200" />
-  <line x1="300" y1="30" x2="300" y2="200" />
+<g stroke="var(--vp-c-text-2)" stroke-width="1.3">
+  <line x1="160" y1="100" x2="160" y2="140" marker-start="url(#dd-i-arrow)" marker-end="url(#dd-i-arrow)" />
 </g>
-<text x="306" y="34" font-size="10" fill="var(--vp-c-text-3)">i_L 谷底</text>
 
-<line x1="60" y1="200" x2="640" y2="200" stroke="#ef4444" stroke-width="1.3" stroke-dasharray="4 3" />
-<text x="636" y="212" font-size="10" fill="#ef4444" text-anchor="end">DCM 分界：i_L = 0</text>
+<line x1="60" y1="200" x2="620" y2="200" stroke="var(--vp-c-danger-1)" stroke-width="1.3" stroke-dasharray="4 3" />
 
-<path d="M 60 268 Q 180 246 300 240 Q 420 234 540 240 Q 600 244 640 240" stroke="var(--vp-c-brand-2)" stroke-width="2.2" fill="none" />
-<line x1="60" y1="238" x2="640" y2="238" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3" />
-<text x="636" y="286" font-size="10" fill="var(--vp-c-text-3)" text-anchor="end">输出电压 u_o：纹波只有几十 mV，形状与 i_L 相反</text>
+<path d="M 60 250 Q 95 257 130 257 Q 200 257 270 243 Q 340 243 410 257 Q 480 257 550 243 Q 590 243 620 248"
+      stroke="var(--vp-c-brand-2)" stroke-width="2.2" fill="none" />
 
 <g font-size="10.5" fill="var(--vp-c-text-2)">
-  <text x="66" y="30">导通 D·T_s（i_L 上升）</text>
-  <text x="330" y="30">关断 (1−D)·T_s（i_L 下降）</text>
+  <text x="66" y="60">导通 D·T_s：i_L 上升</text>
+  <text x="230" y="60">关断 (1−D)·T_s：i_L 下降</text>
+  <text x="166" y="154" fill="var(--vp-c-brand-1)">Δi_L</text>
+  <text x="622" y="116">I_o</text>
+  <text x="66" y="82">I_o 是 i_L 的平均值，Δi_L 是它上下摆动的峰峰值</text>
 </g>
-<path d="M 60 120 L 300 120" stroke="var(--vp-c-brand-1)" stroke-width="1" opacity="0.5" />
-<path d="M 300 120 L 620 26" stroke="var(--vp-c-brand-2)" stroke-width="1" opacity="0.5" />
+<g font-size="10.5" fill="var(--vp-c-text-3)">
+  <text x="66" y="196" fill="var(--vp-c-danger-1)">i_L = 0：谷底跌破这条线就进 DCM</text>
+  <text x="66" y="282">u_o 的纹波只有几十 mV，形状与 i_L 反相（电容在积分两者的差）</text>
+  <text x="620" y="232" text-anchor="end">t →</text>
+</g>
+
+<defs>
+  <marker id="dd-i-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-2)" />
+  </marker>
+</defs>
 </svg>
 
 </FigBox>

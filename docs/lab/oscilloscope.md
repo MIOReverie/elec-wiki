@@ -67,47 +67,64 @@ $$C_s = \frac{0.1 \times (100 + 20)}{1 - 0.1} = 13.33\ \text{pF}$$
 
 <FigBox title="10X 探头的等效电路：电阻分压与电容分压必须同时成立" kind="结构" note="左：探头内部是 9 MΩ 串联电阻加可调补偿电容 C_s，示波器输入是 1 MΩ 并联输入电容。低频看电阻分压 10:1，高频看电容分压：C_s 太小欠补偿（圆角），太大过补偿（上冲）。调 C_s 就是让两个分压比在全频段重合。">
 
-<svg viewBox="0 0 560 250" role="img" aria-label="左图 10X 探头等效电路含 9 兆欧串联电阻与补偿电容，右图三种补偿状态的方波形状对比">
+<svg viewBox="0 0 560 250" role="img" aria-label="10X 探头等效电路：9 兆欧与可调电容 C_s 并联后，与示波器输入的 1 兆欧并 20 皮法构成两级分压；右侧是欠补偿、合适、过补偿三种状态的方波形状">
 <defs>
   <marker id="osc-p1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
 </defs>
-<g font-size="11" fill="var(--vp-c-text-1)">
-  <text x="120" y="18" text-anchor="middle" font-weight="700">等效电路</text>
-  <line x1="30" y1="60" x2="70" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <rect x="70" y="48" width="60" height="24" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="100" y="64" text-anchor="middle" fill="var(--vp-c-brand-1)">9 MΩ</text>
-  <line x1="130" y1="60" x2="180" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="150" y1="60" x2="150" y2="80" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
-  <line x1="136" y1="80" x2="164" y2="80" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="136" y1="90" x2="164" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="150" y1="90" x2="150" y2="110" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
-  <text x="176" y="88" fill="var(--vp-c-brand-1)">C_s 可调</text>
-  <line x1="180" y1="60" x2="230" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="230" y1="60" x2="230" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
-  <line x1="216" y1="90" x2="244" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="216" y1="100" x2="244" y2="100" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="230" y1="100" x2="230" y2="130" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
-  <text x="252" y="98" fill="var(--vp-c-brand-1)">1 MΩ ∥ 20 pF</text>
-  <text x="26" y="64" text-anchor="end" fill="var(--vp-c-text-3)">信号</text>
-  <line x1="230" y1="130" x2="30" y2="130" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
-  <line x1="30" y1="130" x2="30" y2="60" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
-  <text x="130" y="152" text-anchor="middle" fill="var(--vp-c-text-3)">R 分压：9:1 → 10:1（低频）</text>
-  <text x="130" y="168" text-anchor="middle" fill="var(--vp-c-text-3)">C 分压：C_s 与后级电容比 → 也要 10:1（高频）</text>
 
-  <text x="420" y="18" text-anchor="middle" font-weight="700">调 C_s 时的方波</text>
-  <line x1="320" y1="30" x2="320" y2="80" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="314" y="60" text-anchor="end" fill="var(--vp-c-text-3)">欠：圆角下陷</text>
-  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" points="322,30 330,58 340,64 360,62 380,58 400,58 420,58 440,58 460,58 480,58" />
-  <line x1="320" y1="130" x2="320" y2="180" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="314" y="160" text-anchor="end" fill="var(--vp-c-text-2)">正：方正平顶</text>
-  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" points="322,130 328,132 332,130 350,130 370,130 390,130 410,130 430,130 450,130 470,130 490,130" />
-  <line x1="320" y1="230" x2="320" y2="180" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="314" y="210" text-anchor="end" fill="var(--vp-c-text-3)">过：上冲振铃</text>
-  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" points="322,230 330,198 338,192 346,206 354,198 362,204 370,198 380,200 400,198 420,198 440,198 460,198 480,198" />
-  <text x="420" y="244" text-anchor="middle" fill="var(--vp-c-text-3)">目标：四角是直角、平顶水平、无过冲无圆角</text>
+<text x="130" y="18" font-size="11" text-anchor="middle" font-weight="700" fill="var(--vp-c-text-1)">等效电路</text>
+
+<circle cx="30" cy="95" r="12" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+<text x="30" y="99" font-size="10" text-anchor="middle" fill="var(--vp-c-text-3)">u_s</text>
+<line x1="30" y1="83" x2="30" y2="60" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+<line x1="30" y1="107" x2="30" y2="130" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+
+<g stroke="var(--vp-c-brand-1)" stroke-width="1.6" fill="none">
+  <line x1="30" y1="60" x2="70" y2="60" />
+  <line x1="130" y1="60" x2="230" y2="60" />
+  <path d="M 62 60 L 62 100 L 92 100" />
+  <path d="M 100 100 L 140 100 L 140 60" />
+  <line x1="230" y1="60" x2="230" y2="90" />
+  <line x1="230" y1="100" x2="230" y2="130" />
 </g>
+<rect x="70" y="48" width="60" height="24" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+<text x="100" y="64" font-size="10.5" text-anchor="middle" fill="var(--vp-c-brand-1)">9 MΩ</text>
+<line x1="92" y1="88" x2="92" y2="112" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+<line x1="100" y1="88" x2="100" y2="112" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+<text x="108" y="128" font-size="10" fill="var(--vp-c-brand-1)">C_s 可调</text>
+<line x1="216" y1="90" x2="244" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+<line x1="216" y1="100" x2="244" y2="100" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+<text x="250" y="96" font-size="10" fill="var(--vp-c-brand-1)">1 MΩ ∥ 20 pF</text>
+<line x1="230" y1="130" x2="30" y2="130" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+<circle cx="62" cy="60" r="3" fill="var(--vp-c-brand-1)" />
+<circle cx="140" cy="60" r="3" fill="var(--vp-c-brand-1)" />
+
+<g font-size="10.5" fill="var(--vp-c-text-3)">
+  <text x="130" y="152" text-anchor="middle">R 分压 9:1 → 10:1（低频准）</text>
+  <text x="130" y="170" text-anchor="middle">C 分压 后级电容 : C_s = 9:1 → 10:1（高频准）</text>
+</g>
+
+<text x="420" y="18" font-size="11" text-anchor="middle" font-weight="700" fill="var(--vp-c-text-1)">调 C_s 时的方波</text>
+
+<g stroke="var(--vp-c-divider)" stroke-width="1">
+  <line x1="320" y1="36" x2="320" y2="80" />
+  <line x1="320" y1="86" x2="320" y2="130" />
+  <line x1="320" y1="136" x2="320" y2="180" />
+</g>
+
+<path d="M 322 80 L 332 80 Q 338 36 360 34 L 420 38 L 500 43" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+<path d="M 322 130 L 332 130 L 336 86 L 500 86" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+<path d="M 322 180 L 332 180 L 336 136 L 342 124 L 348 142 L 354 130 L 360 136 L 368 132 L 380 133 L 500 133" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+
+<g font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="end">
+  <text x="314" y="64">欠：边沿圆、平顶下陷</text>
+  <text x="314" y="114">正好：方正的方波</text>
+  <text x="314" y="164">过：上冲 + 振铃</text>
+</g>
+
+<text x="420" y="206" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">目标：四角是直角、平顶水平、无过冲无圆角</text>
 </svg>
 
 </FigBox>
@@ -156,7 +173,7 @@ $$t_{r,\text{测得}} \approx \sqrt{t_{r,\text{信号}}^2 + t_{r,\text{示波器
 
 <FigBox title="带宽不足如何吃掉一条 5 ns 的边沿" kind="波形" note="三条曲线是同一信号经不同带宽示波器后的样子：100 MHz 时边沿只被拉长一点，读数可信；20 MHz 时边沿被拉成 18 ns，幅度也开始掉。判断标准就是 $t_r \approx 0.35/B$ 与平方和叠加。">
 
-<svg viewBox="0 0 560 240" role="img" aria-label="同一 5 纳秒上升沿经不同带宽示波器后的波形：100 兆赫基本保持，20 兆赫被拉长成 18 纳秒">
+<svg viewBox="0 0 560 262" role="img" aria-label="同一 5 纳秒上升沿经不同带宽示波器后的波形：100 兆赫基本保持，20 兆赫被拉长成 18 纳秒">
 <g font-size="11" fill="var(--vp-c-text-1)">
   <text x="280" y="16" text-anchor="middle" font-weight="700">真实信号上升沿 t_r = 5 ns（灰色为基准）</text>
   <line x1="40" y1="200" x2="540" y2="200" stroke="var(--vp-c-divider)" stroke-width="1.2" />
@@ -198,7 +215,7 @@ $$t_{r,\text{测得}} \approx \sqrt{t_{r,\text{信号}}^2 + t_{r,\text{示波器
   <text x="140" y="16" text-anchor="middle" font-weight="700">触发条件</text>
   <line x1="30" y1="130" x2="270" y2="130" stroke="var(--vp-c-divider)" stroke-width="1" />
   <line x1="30" y1="50" x2="270" y2="50" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="26" y="54" text-anchor="end">3.3 V</text>
+  <text x="27" y="53" text-anchor="end" font-size="9.5">3.3 V</text>
   <text x="26" y="134" text-anchor="end">0 V</text>
   <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" points="30,130 70,130 74,124 78,96 82,60 82,50 122,50 126,56 130,84 134,120 138,130 178,130 182,124 186,96 190,60 190,50 230,50 234,56 238,84 242,120 246,130 270,130" />
   <line x1="30" y1="90" x2="270" y2="90" stroke="var(--vp-c-text-2)" stroke-width="1.4" stroke-dasharray="5 3" />
@@ -217,7 +234,7 @@ $$t_{r,\text{测得}} \approx \sqrt{t_{r,\text{信号}}^2 + t_{r,\text{示波器
   <rect x="320" y="158" width="220" height="52" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
   <text x="330" y="176" fill="var(--vp-c-text-2)">Single</text>
   <text x="330" y="194" fill="var(--vp-c-text-3)">抓一次就停 → 上电浪涌、毛刺、复位沿</text>
-  <text x="420" y="234" text-anchor="middle" fill="var(--vp-c-text-3)">调试先用 Auto 找信号，测量换 Normal，抓偶发用 Single</text>
+  <text x="380" y="234" text-anchor="middle" fill="var(--vp-c-text-3)">调试先用 Auto 找信号，测量换 Normal，抓偶发用 Single</text>
 </g>
 </svg>
 
@@ -251,7 +268,7 @@ GND 耦合算不上测量。它只是把 0 V 那条横线对齐到屏幕上的�
 
 单端示波器的 BNC 外壳、探头地线、后面板的地端子，在仪器内部是连通的；仪器外壳又通过三脚插头中间那根接大地（PE）。所以手里那个鳄鱼夹就是大地：
 
-<FigBox title="地线夹的真实路径：探头地 → 示波器外壳 → 插座 PE → 大地" kind="结构" note="整条绿色路径在仪器内部与电网的地是连通的。把地线夹夹到任何对大地有电压的点上，都等于用这根细地线把这个电压直接对地短路，浪涌电流走的就是这条路。">
+<FigBox title="地线夹的真实路径：探头地 → 示波器外壳 → 插座 PE → 大地" kind="结构" note="整条路径（图中蓝色）在仪器内部与电网的地是连通的。把地线夹夹到任何对大地有电压的点上，都等于用这根细地线把这个电压直接对地短路，浪涌电流走的就是这条路。">
 
 <svg viewBox="0 0 560 200" role="img" aria-label="探头地线经示波器外壳与三脚插头连到插座保护地再到大地的路径图">
 <defs>
@@ -269,7 +286,7 @@ GND 耦合算不上测量。它只是把 0 V 那条横线对齐到屏幕上的�
   <text x="270" y="66" text-anchor="middle">示波器</text>
   <text x="270" y="84" text-anchor="middle" fill="var(--vp-c-text-3)">BNC 外壳 = 机壳</text>
   <line x1="340" y1="70" x2="400" y2="70" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#osc-g1)" />
-  <text x="370" y="60" text-anchor="middle" fill="var(--vp-c-brand-1)">三脚插头 PE 脚</text>
+  <text x="370" y="30" text-anchor="middle" fill="var(--vp-c-brand-1)">三脚插头 PE 脚</text>
   <rect x="400" y="40" width="130" height="60" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
   <text x="465" y="66" text-anchor="middle">墙上插座</text>
   <text x="465" y="84" text-anchor="middle" fill="var(--vp-c-text-3)">保护地 → 大地</text>
@@ -298,7 +315,7 @@ GND 耦合算不上测量。它只是把 0 V 那条横线对齐到屏幕上的�
 1. 地线夹只夹在被测电路真正的参考地，也就是与安全地直接相连的那一点；
 2. 电路里有多个地（模拟地、数字地、功率地）时只选一个点，最好是你自己能确认与大地之间没有电位差的那个；
 3. 要测两个点的电位差，用差分探头，或者两通道相减，绝不拿 1 只探头跨两点；
-4. 确认示波器是三脚头，插座有有效的 PE。有人故意让示波器浮空使用，那就必须用隔离变压器，并且清楚这等于取消了保护。
+4. 确认示波器是三脚头，插座有有效的 PE。让示波器浮空（拔掉 PE 或改用隔离变压器给它供电）等于取消保护地，不要这么做；要测浮地信号，用差分探头，或者隔离被测设备。
 
 > 记一条：整个实验台上，唯一一根夹错了会立刻炸的线，就是示波器的地线夹。别的线接错一般是读数错，它接错往往是器件烧。
 
@@ -367,28 +384,26 @@ $$D = \frac{T_H}{T} \times 100\%$$
 
 <FigBox title="光标怎么放：T_H 在两个 50% 点之间，T 在两个同相边沿之间" kind="波形" note="虚线是 50% 电平，两根竖直光标夹住高电平时间 T_H；周期 T 取两个相邻上升沿同一点。25 kHz 信号时基 10 μs/div 时屏幕正好 2.5 个周期，光标两端都看得清。">
 
-<svg viewBox="0 0 560 230" role="img" aria-label="方波上标注周期与高电平时间的光标测量法，50 百分电平与两根竖直光标">
+<svg viewBox="0 0 560 230" role="img" aria-label="光标测量法：25 kHz 方波，两根竖直光标夹住高电平时间 T_H，周期 T 取两个相邻上升沿的 50% 点">
 <defs>
   <marker id="osc-c1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
   </marker>
 </defs>
-<g font-size="11" fill="var(--vp-c-text-1)">
-  <line x1="30" y1="60" x2="540" y2="60" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <line x1="30" y1="160" x2="540" y2="160" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="26" y="64" text-anchor="end">3.3 V</text>
-  <text x="26" y="164" text-anchor="end">0 V</text>
-  <line x1="30" y1="110" x2="540" y2="110" stroke="var(--vp-c-text-2)" stroke-width="1" stroke-dasharray="4 4" />
-  <text x="544" y="114" fill="var(--vp-c-text-2)">50%</text>
-  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" points="40,160 90,160 95,152 100,72 105,60 185,60 190,68 195,148 200,160 280,160 285,152 290,72 295,60 375,60 380,68 385,148 390,160 470,160 475,152 480,72 485,60 540,60" />
-  <line x1="100" y1="30" x2="100" y2="190" stroke="var(--vp-c-brand-1)" stroke-width="1.2" stroke-dasharray="3 3" />
-  <line x1="195" y1="30" x2="195" y2="190" stroke="var(--vp-c-brand-1)" stroke-width="1.2" stroke-dasharray="3 3" />
-  <line x1="100" y1="22" x2="195" y2="22" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-start="url(#osc-c1)" marker-end="url(#osc-c1)" />
-  <text x="148" y="16" text-anchor="middle" fill="var(--vp-c-brand-1)">光标 Δt = T_H = 5.00 μs</text>
-  <line x1="100" y1="206" x2="290" y2="206" stroke="var(--vp-c-text-2)" stroke-width="1.4" marker-start="url(#osc-c1)" marker-end="url(#osc-c1)" />
-  <text x="195" y="222" text-anchor="middle" fill="var(--vp-c-text-2)">T = 40.0 μs（相邻上升沿同一点）</text>
-  <text x="430" y="222" text-anchor="middle" fill="var(--vp-c-text-3)">D = 5.00 / 40.0 = 12.5%</text>
-</g>
+<line x1="30" y1="60" x2="540" y2="60" stroke="var(--vp-c-divider)" stroke-width="1" />
+<line x1="30" y1="160" x2="540" y2="160" stroke="var(--vp-c-divider)" stroke-width="1" />
+<text x="26" y="64" font-size="10" text-anchor="end">3.3 V</text>
+<text x="26" y="164" font-size="10" text-anchor="end">0 V</text>
+<line x1="30" y1="110" x2="540" y2="110" stroke="var(--vp-c-text-2)" stroke-width="1" stroke-dasharray="4 4" />
+<text x="542" y="114" font-size="10" fill="var(--vp-c-text-2)">50%</text>
+<polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" points="40,160 95,160 100,110 105,60 120,60 125,110 130,160 295,160 300,110 305,60 320,60 325,110 330,160 495,160 500,110 505,60 540,60" />
+<line x1="100" y1="30" x2="100" y2="190" stroke="var(--vp-c-brand-1)" stroke-width="1.2" stroke-dasharray="3 3" />
+<line x1="125" y1="30" x2="125" y2="190" stroke="var(--vp-c-brand-1)" stroke-width="1.2" stroke-dasharray="3 3" />
+<line x1="100" y1="22" x2="125" y2="22" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-start="url(#osc-c1)" marker-end="url(#osc-c1)" />
+<text x="150" y="18" font-size="10.5" fill="var(--vp-c-brand-1)">光标 Δt = T_H = 5.00 μs</text>
+<line x1="100" y1="206" x2="300" y2="206" stroke="var(--vp-c-text-2)" stroke-width="1.4" marker-start="url(#osc-c1)" marker-end="url(#osc-c1)" />
+<text x="195" y="222" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-2)">T = 40.0 μs（相邻上升沿的 50% 点）</text>
+<text x="430" y="222" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">D = 5.00 / 40.0 = 12.5%</text>
 </svg>
 
 </FigBox>
@@ -417,15 +432,20 @@ $$D = \frac{T_H}{T} \times 100\%$$
 - 峰峰值随负载怎么变？开关电源轻载时可能进跳周期模式，纹波反而变大。
 - 有没有尖峰（spike，开关器件反向恢复与寄生电感造成的窄脉冲）？带宽限制下看着不明显，但它会耦合进后级电路。
 
-<FigBox title="一次纹波测量该看到什么：开关纹波 + 尖峰 + 20 MHz 限制后的样子" kind="波形" note="绿色是 AC 耦合、20 MHz 带宽限制后的典型纹波：与开关频率同周期的三角状成分。灰色虚线提示被限制滤掉的窄尖峰，它们仍然存在于电路里，只是这台设置看不见，需要时另开全带宽单独确认。">
+<FigBox title="一次纹波测量该看到什么：开关纹波 + 尖峰 + 20 MHz 限制后的样子" kind="波形" note="蓝线是 AC 耦合、20 MHz 带宽限制后的典型纹波：与开关频率同周期的三角状成分。灰色箭头与虚线提示被限制滤掉的窄尖峰，它们仍然存在于电路里，只是这台设置看不见，需要时另开全带宽单独确认。">
 
 <svg viewBox="0 0 560 220" role="img" aria-label="开关纹波波形：周期性三角纹波叠加窄尖峰，20 兆赫带宽限制后尖峰被滤掉">
+<defs>
+  <marker id="osc-spike" viewBox="0 0 10 10" refX="5" refY="9" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 0 L 5 10 z" fill="var(--vp-c-text-3)" />
+  </marker>
+</defs>
 <g font-size="11" fill="var(--vp-c-text-1)">
   <line x1="30" y1="110" x2="540" y2="110" stroke="var(--vp-c-divider)" stroke-width="1" />
   <text x="26" y="114" text-anchor="end">0</text>
   <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" points="40,86 60,110 80,134 100,110 120,86 140,110 160,134 180,110 200,86 220,110 240,134 260,110 280,86 300,110 320,134 340,110 360,86 380,110 400,134 420,110 440,86 460,110 480,134 500,110 520,86 540,110" />
   <text x="290" y="160" text-anchor="middle" fill="var(--vp-c-brand-1)">开关纹波：与开关频率同周期（如 500 kHz）</text>
-  <line x1="140" y1="60" x2="140" y2="40" stroke="var(--vp-c-text-3)" stroke-width="1" marker-start="url(#osc-c1)" />
+  <line x1="140" y1="60" x2="140" y2="42" stroke="var(--vp-c-text-3)" stroke-width="1" marker-start="url(#osc-spike)" />
   <text x="146" y="36" fill="var(--vp-c-text-3)">窄尖峰位置（被 20 MHz 限制滤掉）</text>
   <text x="290" y="190" text-anchor="middle" fill="var(--vp-c-text-2)">记录：峰峰值 + 当时的负载电流与输入电压，缺一个都无法对比</text>
 </g>
@@ -454,7 +474,7 @@ FFT（fast Fourier transform，快速傅里叶变换）把一段时域波形拆�
 
 <FigBox title="差分测量的三种做法与适用边界" kind="结构" note="A 差分探头：两个输入端都对地高阻，内部仪表放大器只取差值，共模几百伏也能抑制，最贵最正确。B 两通道相减：零成本，但两只探头的地夹必须夹同一点，且共模抑制取决于增益失配，10% 失配在 100 V 共模下残差 10 V。C 隔离技术：取消保护地的方案，新手不要碰。">
 
-<svg viewBox="0 0 560 260" role="img" aria-label="差分测量三种做法的结构框图与优缺点对比">
+<svg viewBox="0 0 560 312" role="img" aria-label="差分测量三种做法的结构框图与优缺点对比">
 <g font-size="11" fill="var(--vp-c-text-1)">
   <rect x="16" y="30" width="160" height="76" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
   <text x="96" y="52" text-anchor="middle" fill="var(--vp-c-brand-1)">A · 差分探头</text>

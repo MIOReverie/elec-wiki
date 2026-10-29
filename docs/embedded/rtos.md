@@ -72,7 +72,7 @@ while (1) {
     <text x="60" y="114" text-anchor="middle" fill="var(--vp-c-text-3)">0</text>
     <text x="402" y="114" text-anchor="middle" fill="var(--vp-c-text-3)">80</text>
     <text x="616" y="114" text-anchor="middle" fill="var(--vp-c-text-3)">130</text>
-    <text x="640" y="114" text-anchor="end" fill="var(--vp-c-text-3)">131 ms</text>
+    <text x="640" y="136" text-anchor="end" fill="var(--vp-c-text-3)">131 ms</text>
 
     <line x1="60" y1="150" x2="60" y2="176" stroke="var(--vp-c-brand-2)" stroke-width="2" marker-end="url(#rt-arrow2)" />
     <text x="60" y="192" text-anchor="middle" fill="var(--vp-c-brand-2)">按键落下</text>
@@ -157,7 +157,8 @@ vTaskStartScheduler();                 // 启动调度器，此后不再返回
     <text x="240" y="182" text-anchor="middle" fill="var(--vp-c-text-3)">恢复 → 回到就绪</text>
     <text x="530" y="120" fill="var(--vp-c-text-3)">阻塞任务不参与</text>
     <text x="530" y="136" fill="var(--vp-c-text-3)">调度，不占 CPU</text>
-    <text x="270" y="196" text-anchor="middle" fill="var(--vp-c-text-3)">时间片到 / 更高优先级任务就绪 → 换人（上下文切换）</text>
+    <path d="M 270 100 L 270 80 L 85 80 L 85 98" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.6" marker-end="url(#rt-st)" />
+    <text x="178" y="70" text-anchor="middle" fill="var(--vp-c-text-3)">时间片到 / 更高优先级任务就绪 → 换人（上下文切换）</text>
   </g>
 </svg>
 
@@ -265,7 +266,10 @@ if (xQueueReceive(q, &b, portMAX_DELAY) == pdTRUE) { /* 处理 b */ }
     <text x="474" y="110" text-anchor="middle">任务 A</text>
     <rect x="548" y="86" width="60" height="40" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
     <text x="578" y="110" text-anchor="middle">任务 B</text>
-    <path d="M 504 106 L 546 106" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#rt-com)" />
+    <line x1="504" y1="106" x2="510" y2="106" stroke="var(--vp-c-brand-1)" stroke-width="2" />
+    <rect x="510" y="92" width="32" height="28" rx="4" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+    <text x="526" y="111" text-anchor="middle" font-size="10.5">锁</text>
+    <line x1="542" y1="106" x2="548" y2="106" stroke="var(--vp-c-brand-1)" stroke-width="2" />
     <text x="526" y="64" text-anchor="middle" fill="var(--vp-c-text-3)">同一把锁</text>
     <text x="526" y="172" text-anchor="middle" fill="var(--vp-c-text-3)">互斥进入临界区</text>
   </g>
@@ -389,13 +393,13 @@ $$\text{栈字节数} = usStackDepth \times 4$$
     <text x="300" y="70" text-anchor="end" fill="var(--vp-c-brand-2)">≈ 1000 B</text>
     <rect x="60" y="88" width="300" height="42" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
     <text x="76" y="114">第 3 层调用帧 + 局部变量</text>
-    <text x="300" y="114" text-anchor="end" fill="var(--vp-c-text-3)">≈ 32 B</text>
+    <text x="300" y="114" text-anchor="end" fill="var(--vp-c-text-3)">≈ 59 B</text>
     <rect x="60" y="132" width="300" height="42" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
     <text x="76" y="158">第 2 层调用帧 + 局部变量</text>
-    <text x="300" y="158" text-anchor="end" fill="var(--vp-c-text-3)">≈ 32 B</text>
+    <text x="300" y="158" text-anchor="end" fill="var(--vp-c-text-3)">≈ 59 B</text>
     <rect x="60" y="176" width="300" height="42" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
     <text x="76" y="202">第 1 层调用帧 + 局部变量</text>
-    <text x="300" y="202" text-anchor="end" fill="var(--vp-c-text-3)">≈ 32 B</text>
+    <text x="300" y="202" text-anchor="end" fill="var(--vp-c-text-3)">≈ 59 B</text>
     <rect x="60" y="220" width="300" height="18" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.4" />
     <text x="76" y="233" font-size="11">栈底：任务入口与保存的寄存器现场</text>
     <line x1="392" y1="230" x2="392" y2="50" stroke="var(--vp-c-text-3)" stroke-width="1.6" marker-end="url(#rt-up)" />

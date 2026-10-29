@@ -55,7 +55,7 @@ $$\text{位时间} = \frac{1}{115200} \approx 8.68\ \mu\text{s},\qquad \text{一
 
 <FigBox title="115200-8-N-1 下一帧的真实波形（发送 0x55）" kind="时序" note="0x55 的二进制是 01010101，但线上从左到右是 1、0、1、0、1、0、1、0——LSB 先发，顺序正好反过来。灰色虚线是接收方的采样点：起始位下降沿之后等半个位时间才采第一次，之后每个位中间采一次。">
 
-<svg viewBox="0 0 700 210" role="img" aria-label="UART 帧波形：起始位低电平，数据位 LSB 先发，停止位回到高电平，虚线为采样点">
+<svg viewBox="0 0 700 210" role="img" aria-label="UART 帧波形：起始位低电平，8 个数据位 LSB 先发（0x55 = 1,0,1,0,1,0,1,0），停止位回到高电平，竖线为采样点">
 <defs>
   <marker id="ua-s" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
@@ -63,29 +63,33 @@ $$\text{位时间} = \frac{1}{115200} \approx 8.68\ \mu\text{s},\qquad \text{一
 </defs>
 <g font-size="11.5" fill="var(--vp-c-text-1)">
   <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2"
-    points="20,60 40,60 40,140 120,140 120,60 200,60 200,140 280,140 280,60 360,60 360,140 440,140 440,60 520,60 520,140 600,140 600,60 680,60" />
-  <line x1="20" y1="60" x2="680" y2="60" stroke="var(--vp-c-divider)" stroke-width="0.8" stroke-dasharray="3 4" />
-  <line x1="20" y1="140" x2="680" y2="140" stroke="var(--vp-c-divider)" stroke-width="0.8" stroke-dasharray="3 4" />
+    points="20,60 40,60 40,140 104,140 104,60 168,60 168,140 232,140 232,60 296,60 296,140 360,140 360,60 424,60 424,140 488,140 488,60 552,60 552,140 616,140 616,60 680,60" />
+  <line x1="20" y1="60" x2="690" y2="60" stroke="var(--vp-c-divider)" stroke-width="0.8" stroke-dasharray="3 4" />
+  <line x1="20" y1="140" x2="690" y2="140" stroke="var(--vp-c-divider)" stroke-width="0.8" stroke-dasharray="3 4" />
   <text x="24" y="50" fill="var(--vp-c-text-3)">高（空闲）</text>
   <text x="24" y="158" fill="var(--vp-c-text-3)">低</text>
-  <text x="80" y="176" text-anchor="middle">起始位</text>
-  <text x="160" y="176" text-anchor="middle">D0=1</text>
-  <text x="240" y="176" text-anchor="middle">D1=0</text>
-  <text x="320" y="176" text-anchor="middle">D2=1</text>
-  <text x="400" y="176" text-anchor="middle">D3=0</text>
-  <text x="480" y="176" text-anchor="middle">D4=1</text>
-  <text x="560" y="176" text-anchor="middle">D5=0</text>
-  <text x="640" y="176" text-anchor="middle">停止位=1</text>
-  <line x1="40" y1="44" x2="120" y2="44" stroke="var(--vp-c-text-3)" stroke-width="1" marker-start="url(#ua-s)" marker-end="url(#ua-s)" />
-  <text x="80" y="36" text-anchor="middle" fill="var(--vp-c-text-3)">位时间 8.68 µs</text>
-  <line x1="100" y1="140" x2="100" y2="112" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <line x1="180" y1="60" x2="180" y2="92" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <line x1="260" y1="140" x2="260" y2="112" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <line x1="340" y1="60" x2="340" y2="92" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <line x1="420" y1="140" x2="420" y2="112" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <line x1="500" y1="60" x2="500" y2="92" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <line x1="580" y1="140" x2="580" y2="112" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <line x1="660" y1="60" x2="660" y2="92" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="72" y="176" text-anchor="middle">起始位</text>
+  <text x="136" y="176" text-anchor="middle">D0=1</text>
+  <text x="200" y="176" text-anchor="middle">D1=0</text>
+  <text x="264" y="176" text-anchor="middle">D2=1</text>
+  <text x="328" y="176" text-anchor="middle">D3=0</text>
+  <text x="392" y="176" text-anchor="middle">D4=1</text>
+  <text x="456" y="176" text-anchor="middle">D5=0</text>
+  <text x="520" y="176" text-anchor="middle">D6=1</text>
+  <text x="584" y="176" text-anchor="middle">D7=0</text>
+  <text x="648" y="176" text-anchor="middle">停止位=1</text>
+  <line x1="40" y1="44" x2="104" y2="44" stroke="var(--vp-c-text-3)" stroke-width="1" marker-start="url(#ua-s)" marker-end="url(#ua-s)" />
+  <text x="72" y="36" text-anchor="middle" fill="var(--vp-c-text-3)">位时间 8.68 µs</text>
+  <line x1="72" y1="140" x2="72" y2="112" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <line x1="136" y1="60" x2="136" y2="92" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <line x1="200" y1="140" x2="200" y2="112" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <line x1="264" y1="60" x2="264" y2="92" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <line x1="328" y1="140" x2="328" y2="112" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <line x1="392" y1="60" x2="392" y2="92" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <line x1="456" y1="140" x2="456" y2="112" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <line x1="520" y1="60" x2="520" y2="92" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <line x1="584" y1="140" x2="584" y2="112" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <line x1="648" y1="60" x2="648" y2="92" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
   <text x="676" y="196" text-anchor="end" fill="var(--vp-c-text-3)">竖线 = 接收方采样点（每个位的中间）</text>
 </g>
 </svg>
@@ -150,11 +154,12 @@ $$\text{位时间} = \frac{1}{115200} \approx 8.68\ \mu\text{s},\qquad \text{一
     <line x1="330" y1="158" x2="330" y2="182" />
   </g>
   <g stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3">
-    <line x1="140" y1="150" x2="140" y2="190" />
-    <line x1="180" y1="150" x2="180" y2="190" />
-    <line x1="220" y1="150" x2="220" y2="190" />
-    <line x1="260" y1="150" x2="260" y2="190" />
-    <line x1="300" y1="150" x2="300" y2="190" />
+    <line x1="120" y1="150" x2="120" y2="190" />
+    <line x1="160" y1="150" x2="160" y2="190" />
+    <line x1="200" y1="150" x2="200" y2="190" />
+    <line x1="240" y1="150" x2="240" y2="190" />
+    <line x1="280" y1="150" x2="280" y2="190" />
+    <line x1="320" y1="150" x2="320" y2="190" />
   </g>
   <text x="215" y="214" text-anchor="middle" fill="var(--vp-c-text-3)">每采一位就向右漂一点，漂过虚线（位边界）就读错 → 这就是偶发乱码的来源</text>
   <text x="345" y="120" fill="var(--vp-c-text-2)">↓ 每帧起始位下降沿把累积清零，只算一帧内的漂移</text>
@@ -321,7 +326,7 @@ $$11520 \times 2\ \mu\text{s} = 23\ \text{ms} \Rightarrow \text{CPU 占用约 } 
     <line x1="440" y1="167" x2="476" y2="167" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#ua-p)" />
     <line x1="535" y1="188" x2="535" y2="224" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#ua-p)" />
     <text x="548" y="210" fill="var(--vp-c-text-3)">校验通过</text>
-    <path d="M 535 146 L 535 120 L 85 120 L 85 142" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#ua-p)" />
+    <path d="M 535 146 L 535 120 L 105 120 L 105 142" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#ua-p)" />
     <text x="300" y="112" text-anchor="middle" fill="var(--vp-c-text-3)">任何一步不合预期（错头 / 长度非法 / 校验失败）→ 退回 ① 重新同步</text>
   </g>
 </g>

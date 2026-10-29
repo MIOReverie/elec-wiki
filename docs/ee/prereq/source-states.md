@@ -56,8 +56,8 @@ $$
   <circle cx="60" cy="50" r="4" fill="var(--vp-c-brand-1)" />
   <circle cx="330" cy="210" r="4" fill="var(--vp-c-brand-1)" />
   <circle cx="82.5" cy="63.3" r="4" fill="var(--vp-c-text-2)" />
-  <text x="74" y="36" text-anchor="middle">开路：U = E = 12 V</text>
-  <text x="330" y="234" text-anchor="middle">短路：I_SC = 24 A</text>
+  <text x="130" y="30" text-anchor="middle">开路：U = E = 12 V</text>
+  <text x="300" y="254" text-anchor="middle">短路：I_SC = 24 A</text>
   <text x="112" y="56">工作点 2 A、11 V</text>
   <line x1="82.5" y1="63.3" x2="82.5" y2="210" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3" />
   <line x1="60" y1="63.3" x2="82.5" y2="63.3" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3" />

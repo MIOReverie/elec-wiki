@@ -52,7 +52,7 @@ $$
     <text x="196" y="118">S（视在）</text>
     <path d="M 108 200 A 48 48 0 0 0 100 171" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.3"/>
     <text x="118" y="184" fill="var(--vp-c-text-3)" font-size="12">φ</text>
-    <text x="60" y="242" text-anchor="middle" fill="var(--vp-c-text-3)" font-size="11.5">cosφ = P / S —— 斜边越长，能干活的比例越低</text>
+    <text x="190" y="242" text-anchor="middle" fill="var(--vp-c-text-3)" font-size="11.5">cosφ = P / S —— 斜边越长，能干活的比例越低</text>
     <text x="60" y="34" fill="var(--vp-c-text-3)" font-size="11.5">容量 S 固定时，负载越感性，Q 越长、P 越短</text>
   </g>
 </svg>

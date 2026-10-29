@@ -40,7 +40,7 @@ $$
 
 工程上把过载能力定成 $\lambda = T_{max}/T_N \approx 2.0\sim2.2$，选型时低于 1.6 就要掂量。
 
-<FigBox title="T-s 特性曲线：两条曲线怎么被参数掰弯" kind="曲线" note="橙线是固有特性。蓝线：R₂ 增大，s_m 右移，T_max 不动但起动转矩从 0.29 涨到 0.80。紫虚线：降压，整条曲线按平方衰减。">
+<FigBox title="T-s 特性曲线：三条曲线怎么被参数掰弯" kind="曲线" note="橙线是固有特性。蓝线：R₂ 增大，s_m 右移，T_max 不动但起动转矩从 0.29 涨到 0.80。紫虚线：降压，整条曲线按平方衰减。">
 <WavePreset kind="torslip" />
 </FigBox>
 
@@ -219,13 +219,15 @@ $$
   <line x1="80" y1="78" x2="120" y2="78" stroke="currentColor"/>
   <path d="M120 52 L120 78" stroke="currentColor" fill="none"/>
   <path d="M120 52 L180 52 L180 78 L120 78" stroke="currentColor" fill="none"/>
-  <line x1="150" y1="52" x2="150" y2="30" stroke="currentColor"/>
-  <line x1="150" y1="30" x2="270" y2="30" stroke="currentColor"/>
-  <line x1="270" y1="30" x2="270" y2="52" stroke="currentColor"/>
+  <line x1="150" y1="52" x2="150" y2="34" stroke="currentColor"/>
+  <line x1="150" y1="34" x2="262" y2="34" stroke="currentColor"/>
+  <line x1="262" y1="34" x2="262" y2="52" stroke="currentColor"/>
+  <line x1="262" y1="52" x2="270" y2="52" stroke="currentColor"/>
   <line x1="180" y1="78" x2="270" y2="78" stroke="currentColor"/>
   <rect x="270" y="40" width="40" height="50" rx="6" fill="none" stroke="currentColor"/>
   <text x="290" y="70" fill="currentColor" stroke="none" font-size="11" text-anchor="middle">电机</text>
-  <text x="150" y="22" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">抽头 k</text>
+  <text x="150" y="65" fill="currentColor" stroke="none" font-size="9.5" text-anchor="middle" dominant-baseline="middle">自耦变压器</text>
+  <text x="150" y="24" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">抽头 k</text>
 </svg>
 
 </FigBox>

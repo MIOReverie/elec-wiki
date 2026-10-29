@@ -150,9 +150,9 @@ $$
 <line x1="30" y1="195" x2="360" y2="195" stroke="var(--vp-c-divider)" stroke-width="1.2" />
 <line x1="55" y1="216" x2="55" y2="10" stroke="var(--vp-c-divider)" stroke-width="1.2" />
 <line x1="55" y1="195" x2="163" y2="123" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#m3-a)" />
-<text x="120" y="130" font-size="12" fill="var(--vp-c-brand-1)">2v</text>
+<text x="114" y="172" font-size="12" fill="var(--vp-c-brand-1)">2v</text>
 <line x1="163" y1="123" x2="217" y2="15" stroke="var(--vp-c-brand-2)" stroke-width="2.4" marker-end="url(#m3-b)" />
-<text x="176" y="72" font-size="12" fill="var(--vp-c-brand-2)">3w</text>
+<text x="200" y="78" font-size="12" fill="var(--vp-c-brand-2)">3w</text>
 <line x1="55" y1="195" x2="217" y2="15" stroke="var(--vp-c-danger-1)" stroke-width="2.4" stroke-dasharray="5 3" marker-end="url(#m3-c)" />
 <text x="226" y="30" font-size="12" font-weight="600" fill="var(--vp-c-danger-1)">b = (9, 10)</text>
 <text x="55" y="212" font-size="11" fill="var(--vp-c-text-3)">O</text>

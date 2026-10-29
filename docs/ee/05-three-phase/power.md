@@ -163,9 +163,9 @@ $\varphi$ 的身份定下来了，可它藏在绕组里量不到。下一节解�
   <text x="72" y="108" text-anchor="end" font-weight="700">B</text>
   <text x="72" y="168" text-anchor="end" font-weight="700">C</text>
   <rect x="108" y="36" width="48" height="16" rx="2" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
-  <text x="132" y="28" text-anchor="middle" fill="var(--vp-c-brand-1)">电流线圈</text>
+  <text x="132" y="28" text-anchor="middle" fill="var(--vp-c-brand-1)">W_A 电流线圈</text>
   <rect x="108" y="156" width="48" height="16" rx="2" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
-  <text x="132" y="190" text-anchor="middle" fill="var(--vp-c-brand-1)">电流线圈</text>
+  <text x="132" y="190" text-anchor="middle" fill="var(--vp-c-brand-1)">W_C 电流线圈</text>
   <rect x="392" y="34" width="62" height="140" rx="8" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.5" />
   <text x="423" y="98" text-anchor="middle">负载</text>
   <text x="423" y="116" text-anchor="middle" fill="var(--vp-c-text-3)">三相</text>
@@ -317,7 +317,7 @@ $$
 
 <FigBox title="两表读数合成三个量" kind="结构" note="两个读数先做和与差：和给出总有功（1800 W），差给出 tanφ 的分子。这里 W_A > W_C，所以 tanφ 为负、负载容性。同一个 tanφ 的绝对值对应两个相位，符号只能靠读数大小判断。">
 
-<svg viewBox="0 0 470 190" role="img" aria-label="结构图：两表读数相加得有功功率，相减得功率因数角的正切，再得无功功率">
+<svg viewBox="0 0 470 202" role="img" aria-label="结构图：两表读数相加得有功功率，相减得功率因数角的正切，再得无功功率">
 <g font-size="11.5" fill="var(--vp-c-text-1)">
   <text x="24" y="34" fill="var(--vp-c-brand-1)">已知两块表的读数：W_A = 1200 W　　W_C = 600 W</text>
   <line x1="24" y1="48" x2="446" y2="48" stroke="var(--vp-c-divider)" stroke-width="1" stroke-dasharray="5 4" />
@@ -325,7 +325,8 @@ $$
   <text x="24" y="96">② 差 = W_C − W_A = −600 W　→　tanφ 的分子</text>
   <text x="24" y="120">③ tanφ = √3 × 差 ÷ 和 = −0.577　→　φ = −30°（负号即容性）</text>
   <text x="24" y="144">④ cosφ = cos(−30°) = 0.866　　Q = P·tanφ = −1039 var</text>
-  <text x="24" y="172" fill="var(--vp-c-text-3)">注意 ② 的符号：W_A 比 W_C 大，所以差为负、负载呈容性；若负载是感性的，两只表的读数会互换。</text>
+  <text x="24" y="166" fill="var(--vp-c-text-3)">注意 ② 的符号：W_A 比 W_C 大，所以差为负、负载呈容性；</text>
+  <text x="24" y="188" fill="var(--vp-c-text-3)">若负载是感性的，两只表的读数会互换。</text>
 </g>
 </svg>
 
@@ -380,8 +381,8 @@ $$
   <line x1="66" y1="100" x2="76" y2="100" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
   <line x1="154" y1="100" x2="144" y2="100" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
   <text x="110" y="126" text-anchor="middle" fill="var(--vp-c-text-3)">W_A</text>
-  <text x="62" y="96" text-anchor="end" fill="var(--vp-c-text-3)">−</text>
-  <text x="158" y="96" text-anchor="start" fill="var(--vp-c-text-3)">+</text>
+  <text x="52" y="96" text-anchor="end" fill="var(--vp-c-text-3)">−</text>
+  <text x="168" y="96" text-anchor="start" fill="var(--vp-c-text-3)">+</text>
   <text x="110" y="172" text-anchor="middle" fill="var(--vp-c-danger-1, #e5484d)">读数 −112 W</text>
   <circle cx="330" cy="100" r="52" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" />
   <path d="M 330 100 L 366 66" stroke="var(--vp-c-brand-1)" stroke-width="2.4" />

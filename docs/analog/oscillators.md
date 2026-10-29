@@ -34,7 +34,7 @@ title: 08 · 波形的发生和变换
 把整个环路拆成「放大器（增益 $A$）」和「选频反馈网络（系数 $F$）」。信号从放大器输入出发，绕一圈回到自己：幅值被乘了 $|AF|$，相位被转了 $\Delta\varphi$。要它自己站住，这两件事都得满足。
 
 <FigBox title="正弦振荡环路：增益、相位、选频、稳幅四件事的位置" kind="结构" note="环路相移 360°（相位条件）与 |AF|≥1（幅值条件）必须同时成立；选频网络负责只在 f_0 处相移为零，稳幅元件负责把 |AF| 从大于 1 压回等于 1。">
-<svg viewBox="0 0 760 320" role="img" aria-label="正弦振荡环路结构框图：选频网络与放大器构成环路，稳幅环节与输出">
+<svg viewBox="0 0 792 320" role="img" aria-label="正弦振荡环路结构框图：选频网络与放大器构成环路，稳幅环节与输出">
 <defs><marker id="aro" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="currentColor" /></marker></defs>
 <rect x="300" y="70" width="150" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.8" />
 <text x="375" y="96" text-anchor="middle" font-size="14" fill="currentColor">放大器</text>
@@ -138,7 +138,7 @@ $Q$（**品质因数**，谐振的尖锐程度）就是把这个尖峰量化成�
 **题目**：$R=10\,\text{k}\Omega$、$C=0.01\,\mu\text{F}$，后级为同相放大器，$R_1=10\,\text{k}\Omega$、反馈电阻 $R_f$ 由设计决定。求振荡频率、$R_f$ 的下限，并说明为什么不能取临界值。
 
 <FigBox title="文氏桥 RC 振荡器：串并联网络 + 同相放大器" kind="结构" note="上支路是 R 串 C、下支路是 C 并 R，构成在 f₀ 处相移为 0、反馈系数 1/3 的选频网络；右侧同相放大器增益须大于 3；二极管并联在 R_f 上做稳幅。">
-<svg viewBox="0 0 760 330" role="img" aria-label="文氏桥 RC 振荡器电路原理图">
+<svg viewBox="0 0 796 330" role="img" aria-label="文氏桥 RC 振荡器电路原理图">
 <defs><marker id="ar5" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="currentColor" /></marker></defs>
 <!-- 上支路 R 串 C -->
 <g stroke="currentColor" stroke-width="2" fill="none">
@@ -221,7 +221,7 @@ $Q$（**品质因数**，谐振的尖锐程度）就是把这个尖峰量化成�
 <text x="153" y="230" text-anchor="middle">L</text>
 <text x="330" y="240" text-anchor="middle">C</text>
 <text x="330" y="60" text-anchor="middle">Rsh（线圈损耗）</text>
-<text x="430" y="80">→ 放大器</text>
+<text x="430" y="94">→ 放大器</text>
 </g>
 <!-- 曲线 -->
 <g stroke="currentColor" fill="none">

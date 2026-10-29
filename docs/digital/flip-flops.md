@@ -137,7 +137,7 @@ JK 是最全的一个，四种操作它一个不缺，所以老教材喜欢拿�
   <polyline points="80,190 140,190 140,160 175,160 175,190 280,190 280,160 300,160 300,190 470,190" fill="none" stroke="#f59e0b" stroke-width="2.2" />
 
   <text x="66" y="232" text-anchor="end" font-size="10.5">Q 边沿触发</text>
-  <polyline points="80,250 280,250 280,220 470,220" fill="none" stroke="#34d399" stroke-width="2.2" />
+  <polyline points="80,250 280,250 280,220 440,220 440,250 470,250" fill="none" stroke="#34d399" stroke-width="2.2" />
 
   <line x1="120" y1="20" x2="120" y2="262" stroke="var(--vp-c-brand-1)" stroke-width="1" stroke-dasharray="4 3" />
   <line x1="280" y1="20" x2="280" y2="262" stroke="var(--vp-c-brand-1)" stroke-width="1" stroke-dasharray="4 3" />
@@ -176,6 +176,11 @@ JK 是最全的一个，四种操作它一个不缺，所以老教材喜欢拿�
 <FigBox title="采样窗口：沿前 t_su、沿后 t_h，数据不许动" kind="时序" note="上：合格数据在窗口外变化，沿到来时值已经稳定。下：数据在保持时间里才变化，踩进了窗口，采到的可能是旧值也可能是新值，甚至两者都不是。中间那段阴影就是窗口的全部，宽度为 t_su 加 t_h。">
 
 <svg viewBox="0 0 480 302" role="img" aria-label="时序图：时钟上升沿前 t_su、沿后 t_h 构成采样窗口，合格的数据在窗口外变化，违规的数据在保持时间内变化">
+<defs>
+  <marker id="ff-su" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
+  </marker>
+</defs>
 <g font-size="11.5" fill="var(--vp-c-text-1)">
   <rect x="200" y="18" width="80" height="248" fill="var(--vp-c-brand-soft)" stroke="none" />
   <line x1="240" y1="18" x2="240" y2="272" stroke="var(--vp-c-brand-1)" stroke-width="1" stroke-dasharray="4 3" />
@@ -192,9 +197,9 @@ JK 是最全的一个，四种操作它一个不缺，所以老教材喜欢拿�
   <polyline points="80,230 250,230 250,200 470,200" fill="none" stroke="#f43f5e" stroke-width="2.2" />
   <text x="258" y="244" font-size="10" fill="#f43f5e">在 t_h 内变化 ✗</text>
 
-  <line x1="200" y1="272" x2="240" y2="272" stroke="var(--vp-c-text-3)" stroke-width="1" marker-start="url(#ff-t1)" marker-end="url(#ff-t1)" />
+  <line x1="200" y1="272" x2="240" y2="272" stroke="var(--vp-c-text-3)" stroke-width="1" marker-start="url(#ff-su)" marker-end="url(#ff-su)" />
   <text x="220" y="286" text-anchor="middle" font-size="10" fill="var(--vp-c-text-3)">t_su</text>
-  <line x1="240" y1="272" x2="280" y2="272" stroke="var(--vp-c-text-3)" stroke-width="1" marker-start="url(#ff-t1)" marker-end="url(#ff-t1)" />
+  <line x1="240" y1="272" x2="280" y2="272" stroke="var(--vp-c-text-3)" stroke-width="1" marker-start="url(#ff-su)" marker-end="url(#ff-su)" />
   <text x="260" y="286" text-anchor="middle" font-size="10" fill="var(--vp-c-text-3)">t_h</text>
 </g>
 </svg>
@@ -230,8 +235,8 @@ JK 是最全的一个，四种操作它一个不缺，所以老教材喜欢拿�
   <line x1="418" y1="102" x2="418" y2="128" stroke="var(--vp-c-text-3)" stroke-width="1.4" marker-end="url(#ff-p1)" />
   <text x="78" y="146" text-anchor="middle" font-size="10" fill="var(--vp-c-text-3)">CLK</text>
   <text x="418" y="146" text-anchor="middle" font-size="10" fill="var(--vp-c-text-3)">CLK</text>
-  <line x1="248" y1="102" x2="248" y2="128" stroke="#f59e0b" stroke-width="1.4" stroke-dasharray="4 3" />
-  <text x="248" y="146" text-anchor="middle" font-size="10" fill="#f59e0b">t_su</text>
+  <line x1="368" y1="102" x2="368" y2="128" stroke="#f59e0b" stroke-width="1.4" stroke-dasharray="4 3" />
+  <text x="368" y="146" text-anchor="middle" font-size="10" fill="#f59e0b">t_su</text>
 
   <text x="40" y="186" font-size="12" fill="var(--vp-c-text-1)">T ≥ t_co + t_comb + t_su</text>
   <text x="40" y="208" font-size="11" fill="var(--vp-c-text-3)">代入例 4 的数：2 + 5 + 1.5 = 8.5 ns，f ≤ 117.6 MHz</text>
@@ -284,7 +289,7 @@ $$
   <text x="256" y="146" font-size="10" fill="#34d399">干脆利落</text>
 
   <text x="66" y="222" text-anchor="end" font-size="10.5">Q（实际）</text>
-  <path d="M80,240 L240,240 C268,240 282,232 296,222 C312,212 322,204 340,202 L470,202" fill="none" stroke="#f43f5e" stroke-width="2.2" />
+  <path d="M80,240 L240,240 C268,240 282,232 296,220 C314,204 326,190 344,184 L470,184" fill="none" stroke="#f43f5e" stroke-width="2.2" />
   <text x="300" y="278" font-size="10" fill="#f43f5e">在不确定区停留了一段指数衰减的时间</text>
 </g>
 </svg>
@@ -358,7 +363,7 @@ $$
 ::: tip 例 1 · JK 的四种操作一次走完 {#ex-ff-1}
 题目：JK 触发器，现态 $Q^n$ 分别取 0 和 1，输入 $(J,K)$ 取四种组合，求次态并归纳功能。
 
-<FigBox title="J 管置 1，K 管清 0，两个都给就翻转" kind="时序" note="四段分别对应保持、清 0、置 1、翻转。注意翻转段：连续四个时钟沿之后，Q 按 0→1→0→1 变化，输出频率正好是时钟的一半。">
+<FigBox title="J 管置 1，K 管清 0，两个都给就翻转" kind="时序" note="四段分别对应保持、清 0、置 1、翻转。翻转段里每来一个时钟沿 Q 就翻一次（0→1→0→1），所以翻转段中 Q 的周期正好是两个时钟周期，输出频率是时钟的一半。">
 
 <svg viewBox="0 0 480 250" role="img" aria-label="JK 触发器四种操作的时序：保持段 Q 不变、清零段 Q 为 0、置一段 Q 为 1、翻转段 Q 每个沿翻转一次">
 <g font-size="11.5" fill="var(--vp-c-text-1)">
@@ -372,10 +377,10 @@ $$
   <text x="410" y="34" text-anchor="middle" font-size="9.5" fill="var(--vp-c-text-3)">1 1 翻转</text>
 
   <text x="66" y="72" text-anchor="end">CLK</text>
-  <polyline points="80,80 100,80 100,56 120,56 120,80 140,80 140,56 160,56 160,80 180,80 180,56 200,56 200,80 220,80 220,56 240,56 240,80 260,80 260,56 280,56 280,80 300,80 300,56 320,56 320,80 340,80 340,56 360,56 360,80 380,80 380,56 400,56 400,80 420,80 420,56 440,56 440,80 470,80" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <polyline points="80,80 125,80 125,56 147,56 147,80 170,80 170,56 192,56 192,80 215,80 215,56 237,56 237,80 260,80 260,56 282,56 282,80 305,80 305,56 327,56 327,80 350,80 350,56 372,56 372,80 395,80 395,56 417,56 417,80 440,80 440,56 462,56 462,80 470,80" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
 
   <text x="66" y="142" text-anchor="end">Q</text>
-  <polyline points="80,130 170,130 170,160 260,160 260,130 350,130 350,160 370,160 370,130 390,130 390,160 410,160 410,130 430,130 430,160 470,160" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
+  <polyline points="80,130 170,130 170,160 260,160 260,130 350,130 350,160 395,160 395,130 440,130 440,160 470,160" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
 
   <text x="125" y="196" text-anchor="middle" font-size="10" fill="var(--vp-c-text-3)">Q 不变</text>
   <text x="215" y="196" text-anchor="middle" font-size="10" fill="var(--vp-c-text-3)">Q 归 0</text>

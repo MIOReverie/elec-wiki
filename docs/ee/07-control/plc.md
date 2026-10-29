@@ -40,7 +40,7 @@ description: PLC 一遍遍循环扫描时到底在做什么，梯形图和逻辑
   <LadderDemo mode="latch" />
 </DemoBox>
 
-<FigBox caption="扫描周期时序：输入在周期「中间」跳变（1.5），采样要等下一个周期开始（2.0），输出刷新又晚半个周期（2.85）">
+<FigBox title="扫描周期时序：输入跳动后要等下一轮采样，输出再晚半个周期" kind="时序" note="输入在周期「中间」跳变（1.5 s），采样要等下一个周期开始（2.0 s），输出刷新又晚半个周期（2.85 s）——所以输出最多滞后输入约一个扫描周期。">
   <WavePreset kind="scancycle" />
 </FigBox>
 

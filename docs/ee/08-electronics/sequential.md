@@ -42,8 +42,8 @@ description: 两个反相器凭什么能存住一位，四种触发器各怎么�
   <polygon points="350,66 298,90 350,114" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
   <circle cx="293" cy="90" r="3.6" fill="none" stroke="var(--vp-c-brand-1)" />
 
-  <path d="M 212 90 L 216 90 L 216 34 L 350 34 L 350 62" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
-  <path d="M 288 90 L 284 90 L 284 158 L 150 158 L 150 118" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+  <path d="M 212 90 L 216 90 L 216 34 L 350 34 L 350 66" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+  <path d="M 289 90 L 284 90 L 284 158 L 150 158 L 150 114" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
 
   <text x="280" y="26" text-anchor="middle" fill="var(--vp-c-brand-1)">Q（反馈到右边反相器的输入）</text>
   <text x="220" y="176" text-anchor="middle" fill="var(--vp-c-brand-1)">Q̅（反馈到左边反相器的输入）</text>
@@ -225,8 +225,8 @@ RS 那条约束不是设计缺陷，是逻辑必然。$S$、$R$ 同时为 1 意�
   <text x="52" y="180" text-anchor="end">Q</text>
 
   <polyline points="60,12 110,12 110,34 148,34 148,12 186,12 186,34 224,34 224,12 262,12 262,34 300,34 300,12 338,12 338,34 376,34 376,12 414,12 414,34 452,34 452,12 466,12" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
-  <polyline points="60,60 186,60 186,84 262,84 262,60 338,60 338,84 466,84" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
-  <polyline points="60,124 110,124 110,100 338,100 338,124 466,124" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
+  <polyline points="60,60 190,60 190,84 266,84 266,60 342,60 342,84 466,84" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
+  <polyline points="60,124 116,124 116,100 342,100 342,124 466,124" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
   <polyline points="60,180 110,180 110,156 186,156 186,180 338,180 338,156 466,156" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" />
 
   <line x1="110" y1="6" x2="110" y2="192" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3" />
@@ -326,7 +326,8 @@ RS 那条约束不是设计缺陷，是逻辑必然。$S$、$R$ 同时为 1 意�
   <text x="452" y="102" text-anchor="middle" fill="var(--vp-c-text-3)">1010</text>
   <line x1="434" y1="69" x2="438" y2="69" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
 
-  <path d="M 452 112 L 452 132 L 41 132 L 41 92" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" stroke-dasharray="6 4" />
+  <path d="M 452 112 L 452 132 L 41 132 L 41 93.3" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" stroke-dasharray="6 4" />
+  <path d="M 41 86 L 37.74 93.3 L 44.26 93.3 Z" fill="var(--vp-c-brand-1)" stroke="none" />
   <text x="200" y="150" text-anchor="middle" fill="var(--vp-c-brand-1)">检测 Q₃Q₁=11（1010）→ R̅_D 拉低 → 立即回 0000</text>
   <text x="200" y="170" text-anchor="middle" fill="var(--vp-c-text-3)">稳定循环只有 0~9；同步清零器件要检测 1001，差一个数</text>
 </g>

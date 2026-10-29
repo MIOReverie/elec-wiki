@@ -44,15 +44,17 @@ description: 电从变压器到插座要过哪几级、导线怎么选，以及 
   <text x="302" y="68" text-anchor="start" fill="var(--vp-c-text-3)">10 kV / 0.4 kV</text>
   <line x1="280" y1="72" x2="280" y2="96" stroke="var(--vp-c-text-1)" stroke-width="2" />
   <line x1="120" y1="96" x2="450" y2="96" stroke="var(--vp-c-text-1)" stroke-width="2.4" />
+  <circle cx="230" cy="96" r="3" fill="var(--vp-c-text-1)" />
+  <circle cx="280" cy="96" r="3" fill="var(--vp-c-text-1)" />
   <text x="120" y="88" text-anchor="start" font-weight="700">低压母线 380/220 V</text>
   <text x="120" y="112" text-anchor="start" fill="var(--vp-c-text-3)">三相四线 / 五线制</text>
-  <line x1="200" y1="96" x2="200" y2="120" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="192" y1="120" x2="208" y2="120" stroke="var(--vp-c-brand-1)" stroke-width="2" />
-  <line x1="186" y1="126" x2="214" y2="126" stroke="var(--vp-c-brand-1)" stroke-width="2" />
-  <line x1="180" y1="132" x2="220" y2="132" stroke="var(--vp-c-brand-1)" stroke-width="2" />
-  <text x="228" y="126" text-anchor="start" fill="var(--vp-c-brand-1)" font-weight="700">中性点接地</text>
-  <text x="228" y="140" text-anchor="start" fill="var(--vp-c-text-3)">TN-S：N 与 PE 由此分开</text>
-  <line x1="280" y1="96" x2="280" y2="250" stroke="var(--vp-c-text-1)" stroke-width="2" />
+  <line x1="230" y1="96" x2="230" y2="120" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <line x1="222" y1="120" x2="238" y2="120" stroke="var(--vp-c-brand-1)" stroke-width="2" />
+  <line x1="216" y1="126" x2="244" y2="126" stroke="var(--vp-c-brand-1)" stroke-width="2" />
+  <line x1="210" y1="132" x2="250" y2="132" stroke="var(--vp-c-brand-1)" stroke-width="2" />
+  <text x="202" y="128" text-anchor="end" fill="var(--vp-c-brand-1)" font-weight="700">中性点接地</text>
+  <text x="202" y="146" text-anchor="end" fill="var(--vp-c-text-3)">TN-S：N 与 PE 由此分开</text>
+  <line x1="280" y1="96" x2="280" y2="272" stroke="var(--vp-c-text-1)" stroke-width="2" />
   <text x="288" y="120" text-anchor="start" fill="var(--vp-c-text-3)">干线</text>
   <circle cx="280" cy="140" r="3" fill="var(--vp-c-text-1)" />
   <line x1="280" y1="140" x2="330" y2="140" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
@@ -66,11 +68,11 @@ description: 电从变压器到插座要过哪几级、导线怎么选，以及 
   <rect x="306" y="227" width="48" height="24" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
   <text x="330" y="243" text-anchor="middle">电动机</text>
   <text x="330" y="263" text-anchor="middle" fill="var(--vp-c-text-3)">L1·L2·L3+PE</text>
-  <line x1="280" y1="250" x2="330" y2="250" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <line x1="330" y1="250" x2="330" y2="272" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <rect x="306" y="272" width="48" height="24" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
-  <text x="330" y="288" text-anchor="middle">插座</text>
-  <text x="330" y="308" text-anchor="middle" fill="var(--vp-c-text-3)">L+N+PE</text>
+  <line x1="280" y1="272" x2="330" y2="272" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <line x1="330" y1="272" x2="330" y2="294" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <rect x="306" y="294" width="48" height="24" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="330" y="310" text-anchor="middle">插座</text>
+  <text x="330" y="330" text-anchor="middle" fill="var(--vp-c-text-3)">L+N+PE</text>
   <text x="130" y="360" text-anchor="start" fill="var(--vp-c-text-3)">单线图：三根相线画成一根，只标电能流向与层级</text>
 </g>
 </svg>
@@ -129,7 +131,7 @@ $P_{js}$ 是计算负荷，也就是用来选导线和变压器的那个负荷�
 
 工频（50 Hz）电流的危险性，一张图就能说清：横轴是通电时间，纵轴是电流，三条线把图分成四个区。
 
-<FigBox caption="工频电流对人体效应（IEC 60479 分区，双对数坐标）：① 无感觉 ② 有感觉能自主摆脱 ③ 痉挛无法自行挣脱 ④ 心室颤动风险。橙线（220V/1kΩ 的触电电流）落在颤动区内">
+<FigBox title="工频电流对人体的效应：IEC 60479 四个分区" kind="曲线" note="双对数坐标，横轴通电时间、纵轴通过人体的电流，三条边界线（感知 0.5 mA、摆脱 10 mA、心室颤动边界）把图分成四个区：① 无感觉 ② 有感觉能自主摆脱 ③ 痉挛无法自行挣脱 ④ 心室颤动风险。图中标出的 220 V / 1 kΩ 触电电流（220 mA）落在颤动区内。">
   <WavePreset kind="humanbody" />
 </FigBox>
 
@@ -158,7 +160,7 @@ $30\ \text{mA} \times 0.1\ \text{s} = 3\ \text{mA}\cdot\text{s}$，只有心室�
 
 跨步电压触电发生在高压线落地或者接地故障点周围。地面电位呈放射状分布，两脚之间的电位差就形成电流。正确做法是并脚跳离，或者单脚跳离，切忌大步跑。
 
-<FigBox caption="跨步电压：接地故障点周围电位按 1/r 衰减（对数横轴上接近一条斜直线）；两脚相距 0.8 m 时的电位差就是跨步电压，离落地点越近，这个差值就越大">
+<FigBox title="跨步电压：离落地点越近，两脚间的电位差越大" kind="曲线" note="接地故障点周围的地面电位按 1/r 衰减（对数横轴上接近一条斜直线）；两脚相距 0.8 m 时的电位差就是跨步电压，离落地点越近，这个差值越大。">
   <WavePreset kind="stepvolt" />
 </FigBox>
 

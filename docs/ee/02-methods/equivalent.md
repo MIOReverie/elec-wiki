@@ -244,22 +244,31 @@ $$I_L = I_S \cdot \frac{R_0}{R_0 + R_L} = 3 \times \frac{4}{4 + 8} = 1\text{A},\
 
 <FigBox title="电桥：四臂围一圈，b–d 跨桥" kind="结构" note="先判平衡：R₁/R₂ = R₃/R₄ 时 b、d 等电位，桥上无电流；若不等，则必须 Y-△ 把四个臂化成星或三角才能继续化简。">
 
-<svg viewBox="0 0 280 200" role="img" aria-label="电桥电路，a 上 c 下接电源，b 左 d 右，b d 之间为桥">
+<svg viewBox="0 0 280 200" role="img" aria-label="电桥电路：E 接在 a、c 两端；R₁ 在 a–b，R₂ 在 b–c，R₃ 在 a–d，R₄ 在 d–c，b–d 之间为桥">
 <g font-size="12" fill="var(--vp-c-text-1)" stroke="var(--vp-c-text-1)" stroke-width="1.4">
-  <line x1="90" y1="40" x2="190" y2="40"/>
-  <line x1="90" y1="160" x2="190" y2="160"/>
+  <line x1="40" y1="40" x2="190" y2="40"/>
+  <line x1="40" y1="160" x2="190" y2="160"/>
+  <line x1="40" y1="40" x2="40" y2="92"/>
+  <line x1="30" y1="92" x2="50" y2="92" stroke-width="2.6"/>
+  <line x1="35" y1="102" x2="45" y2="102" stroke-width="2.6"/>
+  <line x1="40" y1="102" x2="40" y2="160"/>
   <line x1="90" y1="40" x2="90" y2="160"/>
   <line x1="190" y1="40" x2="190" y2="160"/>
   <line x1="90" y1="100" x2="190" y2="100"/>
-  <text x="140" y="32" text-anchor="middle" stroke="none" fill="var(--vp-c-brand-1)">E</text>
-  <text x="74" y="44" text-anchor="end" stroke="none">a</text>
-  <text x="74" y="164" text-anchor="end" stroke="none">c</text>
-  <text x="80" y="103" text-anchor="end" stroke="none">b</text>
-  <text x="200" y="103" text-anchor="start" stroke="none">d</text>
-  <text x="50" y="100" text-anchor="end" stroke="none" fill="var(--vp-c-text-3)">R₁</text>
-  <text x="210" y="100" text-anchor="start" stroke="none" fill="var(--vp-c-text-3)">R₃</text>
-  <text x="140" y="56" text-anchor="middle" stroke="none" fill="var(--vp-c-text-3)">R₂</text>
-  <text x="140" y="156" text-anchor="middle" stroke="none" fill="var(--vp-c-text-3)">R₄</text>
+  <circle cx="90" cy="40" r="3.4" stroke="none"/>
+  <circle cx="90" cy="160" r="3.4" stroke="none"/>
+  <circle cx="90" cy="100" r="3.4" stroke="none"/>
+  <circle cx="190" cy="100" r="3.4" stroke="none"/>
+  <text x="30" y="32" text-anchor="end" stroke="none">a</text>
+  <text x="30" y="168" text-anchor="end" stroke="none">c</text>
+  <text x="24" y="96" text-anchor="end" stroke="none" fill="var(--vp-c-brand-1)">E</text>
+  <text x="78" y="74" text-anchor="end" stroke="none" fill="var(--vp-c-text-3)">R₁</text>
+  <text x="78" y="132" text-anchor="end" stroke="none" fill="var(--vp-c-text-3)">R₂</text>
+  <text x="202" y="74" text-anchor="start" stroke="none" fill="var(--vp-c-text-3)">R₃</text>
+  <text x="202" y="132" text-anchor="start" stroke="none" fill="var(--vp-c-text-3)">R₄</text>
+  <text x="80" y="92" text-anchor="end" stroke="none">b</text>
+  <text x="200" y="92" text-anchor="start" stroke="none">d</text>
+  <text x="140" y="114" text-anchor="middle" stroke="none" fill="var(--vp-c-text-3)">桥</text>
 </g>
 </svg>
 </FigBox>

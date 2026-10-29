@@ -95,7 +95,7 @@ $$
 \boxed{\frac{I}{I_0}=\frac{1}{\sqrt{1+Q^2\left(\eta-\dfrac{1}{\eta}\right)^2}},\qquad \eta=\frac{f}{f_0}}
 $$
 
-<FigBox title="Q 决定曲线的尖与钝" kind="曲线" note="四条曲线只有 Q 不同，谐振频率都在 1。Q = 25 时偏离 10% 电流就掉到四分之一，Q = 2 时几乎平坦——这就是「选择性」与「通频带」的矛盾，也是同一个公式的两种读法。">
+<FigBox title="Q 决定曲线的尖与钝" kind="曲线" note="四条曲线只有 Q 不同，谐振频率都在 1。Q = 25 时偏离 10% 电流就掉到 0.2 倍（约五分之一），Q = 2 时几乎平坦——这就是「选择性」与「通频带」的矛盾，也是同一个公式的两种读法。">
 
 <WavePreset kind="qfamily" />
 
@@ -239,8 +239,8 @@ $$
   <path d="M 208.4 180 L 244 180" fill="none" stroke="var(--vp-c-warning-1, #f59e0b)" stroke-width="3" />
   <text x="226" y="32" text-anchor="middle" fill="var(--vp-c-brand-1)">f₀ = 159.2 Hz</text>
   <text x="226" y="174" text-anchor="middle" fill="var(--vp-c-warning-1, #f59e0b)">BW = 8 Hz</text>
-  <text x="204" y="228" text-anchor="middle" fill="var(--vp-c-text-3)">155.2</text>
-  <text x="250" y="228" text-anchor="middle" fill="var(--vp-c-text-3)">163.2</text>
+  <text x="208" y="244" text-anchor="middle" fill="var(--vp-c-text-3)">155.2</text>
+  <text x="244" y="244" text-anchor="middle" fill="var(--vp-c-text-3)">163.2</text>
   <text x="46" y="93" text-anchor="end" fill="var(--vp-c-text-3)">0.707</text>
   <text x="46" y="44" text-anchor="end" fill="var(--vp-c-text-3)">1.0</text>
   <text x="52" y="228" text-anchor="middle" fill="var(--vp-c-text-3)">120</text>

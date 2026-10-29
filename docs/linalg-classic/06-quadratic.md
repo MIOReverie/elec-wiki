@@ -161,10 +161,8 @@ $$
   </g>
   <text x="62" y="204" font-size="11" fill="var(--vp-c-text-2)" text-anchor="middle">斜放：带交叉项</text>
   <line x1="206" y1="150" x2="360" y2="150" stroke="var(--vp-c-divider)" stroke-width="1.2"/>
-  <line x1="252" y1="186" x2="252" y2="20" stroke="var(--vp-c-divider)" stroke-width="1.2"/>
+  <line x1="282" y1="186" x2="282" y2="20" stroke="var(--vp-c-divider)" stroke-width="1.2"/>
   <ellipse cx="282" cy="150" rx="52" ry="24" fill="var(--vp-c-brand-1)" opacity="0.14" stroke="var(--vp-c-brand-1)" stroke-width="1.5"/>
-  <line x1="214" y1="150" x2="350" y2="150" stroke="var(--vp-c-brand-2)" stroke-width="1" stroke-dasharray="5 3"/>
-  <line x1="282" y1="92" x2="282" y2="208" stroke="var(--vp-c-brand-2)" stroke-width="1" stroke-dasharray="5 3"/>
   <text x="292" y="204" font-size="11" fill="var(--vp-c-text-2)" text-anchor="middle">转正：只剩平方项</text>
   <text x="18" y="222" font-size="11.5" fill="var(--vp-c-text-3)">输入同一条曲线 → 换个坐标轴看 → 交叉项消失</text>
 </svg>

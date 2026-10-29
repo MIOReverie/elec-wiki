@@ -261,20 +261,39 @@ $\sum P = -14.4+7.2+2.88+4.32 = 0$ ✓
 
 <FigBox title="三结点网络：电压源顶结点2、电流源注入结点3" kind="结构" note="结点2 因电压源直接接参考点，电压已知为 10V；结点3 必须补一条 R₃₄ 才构成回路，否则 2A 无处可去。">
 
-<svg viewBox="0 0 280 200" role="img" aria-label="三结点电路，结点2 接电压源到参考点，结点3 接电流源">
+<svg viewBox="0 0 300 210" role="img" aria-label="三结点电路：R₁₂ 接结点1、2；R₂₃ 接结点2、3；R₁₄ 与 R₂₄ 接参考点；电压源 E 与 R₂₄ 一样接在结点2 与参考点之间；R₃₄ 与 2A 电流源一样接在结点3 与参考点之间">
 <g font-size="12" fill="var(--vp-c-text-1)" stroke="var(--vp-c-text-1)" stroke-width="1.4">
-  <circle cx="90" cy="50" r="6"/><text x="76" y="46" text-anchor="end" stroke="none">1</text>
-  <circle cx="190" cy="50" r="6"/><text x="204" y="46" text-anchor="start" stroke="none">2</text>
-  <circle cx="140" cy="120" r="6"/><text x="154" y="124" text-anchor="start" stroke="none">3</text>
-  <circle cx="140" cy="170" r="6"/><text x="154" y="174" text-anchor="start" stroke="none">4(ref)</text>
   <line x1="90" y1="50" x2="190" y2="50"/>
-  <line x1="90" y1="50" x2="140" y2="120"/>
-  <line x1="190" y1="50" x2="140" y2="120"/>
-  <line x1="90" y1="50" x2="140" y2="170"/>
-  <line x1="190" y1="50" x2="140" y2="170"/>
-  <line x1="140" y1="120" x2="140" y2="170"/>
-  <text x="140" y="30" text-anchor="middle" stroke="none" fill="var(--vp-c-brand-1)">E=10V</text>
-  <text x="232" y="125" text-anchor="start" stroke="none" fill="var(--vp-c-brand-1)">2A</text>
+  <line x1="190" y1="50" x2="210" y2="50"/>
+  <line x1="90" y1="50" x2="90" y2="180"/>
+  <line x1="190" y1="50" x2="190" y2="180"/>
+  <line x1="210" y1="50" x2="210" y2="180"/>
+  <line x1="190" y1="50" x2="140" y2="110"/>
+  <line x1="140" y1="110" x2="140" y2="180"/>
+  <line x1="140" y1="110" x2="120" y2="110"/>
+  <line x1="120" y1="110" x2="120" y2="180"/>
+  <line x1="90" y1="180" x2="210" y2="180"/>
+  <circle cx="90" cy="50" r="5"/>
+  <circle cx="190" cy="50" r="5"/>
+  <circle cx="140" cy="110" r="5"/>
+  <circle cx="120" cy="180" r="4"/>
+  <circle cx="140" cy="180" r="4"/>
+  <circle cx="190" cy="180" r="4"/>
+  <text x="76" y="46" text-anchor="end" stroke="none">1</text>
+  <text x="176" y="38" text-anchor="end" stroke="none">2</text>
+  <text x="146" y="114" text-anchor="start" stroke="none">3</text>
+  <text x="216" y="184" text-anchor="start" stroke="none">4(ref)</text>
+  <text x="140" y="40" text-anchor="middle" stroke="none" fill="var(--vp-c-text-3)">R₁₂</text>
+  <text x="78" y="124" text-anchor="end" stroke="none" fill="var(--vp-c-text-3)">R₁₄</text>
+  <text x="182" y="130" text-anchor="end" stroke="none" fill="var(--vp-c-text-3)">R₂₄</text>
+  <text x="156" y="76" text-anchor="end" stroke="none" fill="var(--vp-c-text-3)">R₂₃</text>
+  <text x="148" y="156" text-anchor="start" stroke="none" fill="var(--vp-c-text-3)">R₃₄</text>
+  <text x="216" y="116" text-anchor="start" stroke="none" fill="var(--vp-c-brand-1)">E=10V</text>
+  <text x="216" y="64" text-anchor="start" stroke="none" font-weight="700">+</text>
+  <text x="216" y="168" text-anchor="start" stroke="none" font-weight="700">−</text>
+  <text x="100" y="132" text-anchor="start" stroke="none" fill="var(--vp-c-brand-1)">2A</text>
+  <line x1="120" y1="156" x2="120" y2="147.4"/>
+  <path d="M120 140 L116.74 147.3 L123.26 147.3 Z" fill="var(--vp-c-text-1)" stroke="none"/>
 </g>
 </svg>
 </FigBox>

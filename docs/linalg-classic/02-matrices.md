@@ -226,25 +226,25 @@ $$
   <text x="70" y="34" font-size="12.5" fill="var(--vp-c-text-2)" class="sf-t">一个方阵</text>
   <text x="196" y="34" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">操作</text>
   <text x="232" y="34" font-size="12.5" fill="var(--vp-c-text-2)" class="sf-t">三步，顺序不能换</text>
-  <text x="580" y="34" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">结果</text>
-  <rect x="30" y="80" width="150" height="80" rx="12" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1.4"/>
-  <rect x="216" y="80" width="160" height="80" rx="12" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4"/>
-  <rect x="412" y="80" width="160" height="80" rx="12" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4"/>
-  <rect x="550" y="80" width="150" height="80" rx="12" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1.4"/>
+  <text x="628" y="34" font-size="12.5" font-weight="700" fill="var(--vp-c-brand-1)" class="sf-t">结果</text>
+  <rect x="24" y="80" width="132" height="80" rx="12" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1.4"/>
+  <rect x="196" y="80" width="150" height="80" rx="12" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4"/>
+  <rect x="386" y="80" width="150" height="80" rx="12" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4"/>
+  <rect x="576" y="80" width="126" height="80" rx="12" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1.4"/>
   <g text-anchor="middle" class="sf-t">
-    <text x="105" y="112" font-size="13.5" font-weight="700" fill="var(--vp-c-text-1)">A</text>
-    <text x="105" y="136" font-size="11.5" fill="var(--vp-c-text-2)">方阵</text>
-    <text x="296" y="108" font-size="12.5" font-weight="700" fill="var(--vp-c-text-1)">① 算 |A|</text>
-    <text x="296" y="132" font-size="11.5" fill="var(--vp-c-text-2)">|A| ≠ 0 才继续</text>
-    <text x="492" y="108" font-size="12.5" font-weight="700" fill="var(--vp-c-text-1)">② 求伴随 A*</text>
-    <text x="492" y="132" font-size="11.5" fill="var(--vp-c-text-2)">代数余子式再转置</text>
-    <text x="625" y="108" font-size="12.5" font-weight="700" fill="var(--vp-c-text-1)">A⁻¹ ＝ A* / |A|</text>
-    <text x="625" y="132" font-size="11.5" fill="var(--vp-c-text-2)">逐数相除</text>
+    <text text-anchor="middle" x="90" y="112" font-size="13.5" font-weight="700" fill="var(--vp-c-text-1)">A</text>
+    <text text-anchor="middle" x="90" y="136" font-size="11.5" fill="var(--vp-c-text-2)">方阵</text>
+    <text text-anchor="middle" x="271" y="108" font-size="12.5" font-weight="700" fill="var(--vp-c-text-1)">① 算 |A|</text>
+    <text text-anchor="middle" x="271" y="132" font-size="11.5" fill="var(--vp-c-text-2)">|A| ≠ 0 才继续</text>
+    <text text-anchor="middle" x="461" y="108" font-size="12.5" font-weight="700" fill="var(--vp-c-text-1)">② 求伴随 A*</text>
+    <text text-anchor="middle" x="461" y="132" font-size="11.5" fill="var(--vp-c-text-2)">代数余子式再转置</text>
+    <text text-anchor="middle" x="639" y="108" font-size="12.5" font-weight="700" fill="var(--vp-c-text-1)">A⁻¹ ＝ A* / |A|</text>
+    <text text-anchor="middle" x="639" y="132" font-size="11.5" fill="var(--vp-c-text-2)">逐数相除</text>
   </g>
-  <line x1="184" y1="120" x2="210" y2="120" stroke="var(--vp-c-text-2)" stroke-width="1.6" marker-end="url(#c02-f3-arrow)"/>
-  <line x1="380" y1="120" x2="406" y2="120" stroke="var(--vp-c-text-2)" stroke-width="1.6" marker-end="url(#c02-f3-arrow)"/>
-  <line x1="508" y1="166" x2="560" y2="166" stroke="var(--vp-c-text-2)" stroke-width="1.6" marker-end="url(#c02-f3-arrow)"/>
-  <text x="534" y="196" font-size="11.5" fill="var(--vp-c-text-2)" text-anchor="middle" class="sf-t">③ 除以 |A|</text>
+  <line x1="160" y1="120" x2="192" y2="120" stroke="var(--vp-c-text-2)" stroke-width="1.6" marker-end="url(#c02-f3-arrow)"/>
+  <line x1="350" y1="120" x2="382" y2="120" stroke="var(--vp-c-text-2)" stroke-width="1.6" marker-end="url(#c02-f3-arrow)"/>
+  <line x1="500" y1="166" x2="596" y2="166" stroke="var(--vp-c-text-2)" stroke-width="1.6" marker-end="url(#c02-f3-arrow)"/>
+  <text x="548" y="192" font-size="11.5" fill="var(--vp-c-text-2)" text-anchor="middle" class="sf-t">③ 除以 |A|</text>
 </svg>
 </FigBox>
 

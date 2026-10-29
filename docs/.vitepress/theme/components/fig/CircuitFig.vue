@@ -45,7 +45,7 @@ function nodeLoop(): string {
   s += seg('sourceDC', 560, 62, 560, 152, { label: 'E' })     // 右边（+ 在上）
   s += seg('resistor', 400, 152, 560, 152, { label: 'R₂' })   // 底边
   s += wire(400, 62, 400, 152)                                // 左边
-  s += arrow(400, 100, 400, 138)                              // 电流参考方向（顺时针）
+  s += arrow(400, 100, 400, 138)                              // 电流参考方向（沿左支路向下，与 E 的实际驱动方向一致）
   s += txt(386, 119, 'I', { anchor: 'end', size: 12, italic: true })
   s += txt(480, 30, 'KVL · 对回路', { size: 13, weight: 700 })
   s += txt(480, 196, 'ΣU升 = ΣU降', { size: 12, color: 'var(--vp-c-text-3)' })
@@ -199,11 +199,11 @@ function wyeDelta(): string {
   // ===== 右：△ 接 —— 首尾相接成三角形，60° 斜边 =====
   s += txt(460, 20, '△ 接（角形）', { size: 12.5, weight: 700 })
   const T: [number, number] = [460, 60], L: [number, number] = [385, 190], R: [number, number] = [535, 190]
-  s += seg('resistor', T[0], T[1], L[0], L[1])                 // 左上边 60°
-  s += seg('resistor', T[0], T[1], R[0], R[1])                 // 右上边 60°
-  s += seg('resistor', L[0], L[1], R[0], R[1], { label: 'Z_CA' }) // 底边
-  s += txt(404, 106, 'Z_AB', { size: 11, italic: true })
-  s += txt(516, 106, 'Z_BC', { size: 11, italic: true })
+  s += seg('resistor', T[0], T[1], L[0], L[1])                 // 左上边 A–B
+  s += seg('resistor', T[0], T[1], R[0], R[1])                 // 右上边 A–C
+  s += seg('resistor', L[0], L[1], R[0], R[1], { label: 'Z_BC' }) // 底边 B–C
+  s += txt(404, 106, 'Z_AB', { size: 11, italic: true })       // 贴左上边
+  s += txt(516, 106, 'Z_CA', { size: 11, italic: true })       // 贴右上边
   s += wire(T[0], T[1], T[0], 38); s += txt(448, 49, 'A', { size: 13, weight: 700, anchor: 'end' })
   s += wire(L[0], L[1], L[0] - 30, L[1]); s += txt(347, L[1], 'B', { size: 13, weight: 700, anchor: 'end' })
   s += wire(R[0], R[1], R[0] + 30, R[1]); s += txt(573, R[1], 'C', { size: 13, weight: 700, anchor: 'start' })
@@ -341,6 +341,11 @@ function bridgeRectifier(): string {
   s += seg('diode', R[0], R[1], T[0], T[1])                     // D₂：负半周 R→T
   s += seg('diode', B[0], B[1], R[0], R[1])                     // D₃：正半周 B→R
   s += seg('diode', B[0], B[1], L[0], L[1])                     // D₄：负半周 B→L
+  // 二极管编号：贴在各自外侧，正文用它指代导通路径
+  s += txt(168, 110, 'D₁', { size: 11, italic: true, anchor: 'middle' })
+  s += txt(292, 110, 'D₂', { size: 11, italic: true, anchor: 'middle' })
+  s += txt(292, 232, 'D₃', { size: 11, italic: true, anchor: 'middle' })
+  s += txt(168, 232, 'D₄', { size: 11, italic: true, anchor: 'middle' })
   // 负载（T→B 竖直）
   s += seg('resistor', T[0], T[1], B[0], B[1], { label: 'R_L' })
   // 四顶点结点 + 交流进线

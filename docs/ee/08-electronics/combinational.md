@@ -73,8 +73,8 @@ description: 怎么一眼看出电路有没有记忆，按四步把图读成功�
 
   <rect x="176" y="188" width="120" height="34" rx="7" fill="none" stroke="var(--vp-c-text-3)" stroke-dasharray="5 4" />
   <text x="236" y="210" text-anchor="middle" fill="var(--vp-c-text-3)">存储（触发器）</text>
-  <line x1="236" y1="188" x2="236" y2="164" stroke="var(--vp-c-text-3)" stroke-width="1.4" marker-end="url(#cb-ar2)" />
-  <path d="M 396 160 L 396 205 L 300 205" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#cb-ar2)" />
+  <line x1="236" y1="188" x2="236" y2="161.5" stroke="var(--vp-c-text-3)" stroke-width="1.4" marker-end="url(#cb-ar2)" />
+  <path d="M 396 160 L 396 205 L 297.5 205" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#cb-ar2)" />
   <text x="410" y="196" fill="var(--vp-c-text-3)">反馈</text>
 </g>
 </svg>
@@ -196,7 +196,7 @@ $$
   <line x1="150" y1="10" x2="150" y2="188" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3" />
   <line x1="160" y1="10" x2="160" y2="188" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3" />
   <text x="140" y="204" text-anchor="middle" fill="var(--vp-c-text-3)">两条路径差 t_pd</text>
-  <text x="240" y="140" fill="var(--vp-c-text-3)">← 这里两个输入同时为 0</text>
+  <text x="172" y="140" fill="var(--vp-c-text-3)">← 这里两个输入同时为 0</text>
   <text x="250" y="204" fill="var(--vp-c-text-3)">静态看 Y ≡ 1，实际却冒负脉冲</text>
 </g>
 </svg>
@@ -241,9 +241,9 @@ $$
   <text x="60" y="102" text-anchor="end">A（高位）</text>
   <text x="60" y="130" text-anchor="end">B</text>
   <text x="60" y="158" text-anchor="end">C（低位）</text>
-  <line x1="64" y1="98" x2="164" y2="98" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#dc-ar)" />
-  <line x1="64" y1="126" x2="164" y2="126" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#dc-ar)" />
-  <line x1="64" y1="154" x2="164" y2="154" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#dc-ar)" />
+  <line x1="64" y1="98" x2="166.5" y2="98" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#dc-ar)" />
+  <line x1="64" y1="126" x2="166.5" y2="126" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#dc-ar)" />
+  <line x1="64" y1="154" x2="166.5" y2="154" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#dc-ar)" />
 
   <text x="234" y="205" text-anchor="middle" fill="var(--vp-c-text-3)">G₁ = 1，G̅₂A = 0，G̅₂B = 0（三个使能都要满足）</text>
 
@@ -256,14 +256,14 @@ $$
   <text x="314" y="144" fill="var(--vp-c-brand-1)">Y₅</text>
   <text x="314" y="178" fill="var(--vp-c-text-3)">其余 Y 空着</text>
 
-  <path d="M 310 72 L 360 72 L 360 96" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
-  <path d="M 310 106 L 348 106 L 348 112" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
-  <path d="M 310 140 L 336 140 L 336 128" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
+  <path d="M 310 72 L 320 72 L 320 96 L 336 96" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
+  <path d="M 310 106 L 326 106 L 326 112 L 336 112" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
+  <path d="M 310 140 L 314 140 L 314 128 L 336 128" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
 
-  <path d="M 336 96 L 336 128 L 372 112" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
-  <circle cx="352" cy="112" r="3.4" fill="none" stroke="var(--vp-c-brand-1)" />
-  <text x="352" y="94" text-anchor="middle" fill="var(--vp-c-text-3)">与非门</text>
-  <line x1="376" y1="112" x2="428" y2="112" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#dc-ar)" />
+  <path d="M 336 88 L 356 88 A 24 24 0 0 1 356 136 L 336 136 Z" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <circle cx="384" cy="112" r="4" fill="none" stroke="var(--vp-c-brand-1)" />
+  <text x="352" y="80" text-anchor="middle" fill="var(--vp-c-text-3)">与非门</text>
+  <line x1="388" y1="112" x2="428" y2="112" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#dc-ar)" />
   <text x="434" y="116" fill="var(--vp-c-brand-1)">Y</text>
 </g>
 </svg>

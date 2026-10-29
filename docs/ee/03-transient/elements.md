@@ -229,33 +229,47 @@ $$
 3. 如果 $R_2$ 换成 $1\,\text{k}\Omega$，$u_L(0_+)$ 变成多少
 
 <FigBox title="断电后的续流回路：电流被迫改道" kind="电路" note="电源断开后，线圈里的电流没有去处，只能经过 R₂ 绕一圈回来。这条通路叫续流回路；没有它，电流就只能挤在开关触点的缝隙里，放出电弧。">
-<svg viewBox="0 0 440 250" role="img" aria-label="电感断电后的续流回路：电感 L 串 R2 构成闭合回路，电流方向与断电前相同">
-  <g stroke="var(--vp-c-text-1)" stroke-width="1.7" fill="none" stroke-linecap="round">
-    <line x1="110" y1="70" x2="190" y2="70"/>
-    <rect x="190" y="50" width="90" height="40" rx="5"/>
-    <line x1="280" y1="70" x2="350" y2="70"/>
-    <line x1="350" y1="70" x2="350" y2="105"/>
-    <rect x="330" y="105" width="40" height="45" rx="4"/>
-    <line x1="350" y1="150" x2="350" y2="190"/>
-    <line x1="350" y1="190" x2="110" y2="190"/>
-    <line x1="110" y1="190" x2="110" y2="145"/>
-    <line x1="110" y1="105" x2="110" y2="70"/>
-  </g>
-  <g font-size="12" fill="var(--vp-c-text-1)">
-    <text x="235" y="40" text-anchor="middle">L = 100 mH</text>
-    <text x="398" y="132">R₂</text>
-    <text x="96" y="124" text-anchor="end">开关断开</text>
-    <text x="235" y="215" text-anchor="middle" fill="var(--vp-c-text-3)">断电后电流沿此路径续流，方向与断电前一致</text>
-  </g>
-  <g stroke="var(--vp-c-brand-1)" stroke-width="1.7" fill="none" marker-end="url(#ee2-arr)">
-    <path d="M 300 70 L 316 70"/>
-  </g>
+<svg viewBox="0 0 440 260" role="img" aria-label="电感断电后的续流回路：电源经开关断开，电感 L 与 R2 构成闭合回路，电流方向与断电前相同">
   <defs>
     <marker id="ee2-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)"/>
     </marker>
   </defs>
-  <text x="308" y="58" text-anchor="middle" font-size="13" fill="var(--vp-c-brand-1)" font-style="italic">i</text>
+  <g stroke="var(--vp-c-text-1)" stroke-width="1.7" fill="none" stroke-linecap="round">
+    <line x1="130" y1="64" x2="400" y2="64"/>
+    <line x1="130" y1="64" x2="130" y2="86"/>
+    <line x1="130" y1="116" x2="146" y2="90"/>
+    <line x1="130" y1="116" x2="130" y2="150"/>
+    <line x1="110" y1="150" x2="150" y2="150" stroke-width="2.6"/>
+    <line x1="118" y1="158" x2="142" y2="158" stroke-width="2.6"/>
+    <line x1="130" y1="158" x2="130" y2="204"/>
+    <line x1="130" y1="204" x2="400" y2="204"/>
+    <line x1="265" y1="64" x2="265" y2="96"/>
+    <path d="M 265 96 A 8 8 0 0 1 265 112 A 8 8 0 0 1 265 128 A 8 8 0 0 1 265 144 A 8 8 0 0 1 265 160"/>
+    <line x1="265" y1="160" x2="265" y2="204"/>
+    <line x1="400" y1="64" x2="400" y2="110"/>
+    <rect x="380" y="110" width="40" height="50" rx="5"/>
+    <line x1="400" y1="160" x2="400" y2="204"/>
+  </g>
+  <g fill="var(--vp-c-text-1)">
+    <circle cx="130" cy="86" r="2.2"/>
+    <circle cx="130" cy="116" r="2.2"/>
+    <circle cx="265" cy="64" r="3"/>
+    <circle cx="265" cy="204" r="3"/>
+  </g>
+  <g stroke="var(--vp-c-brand-1)" stroke-width="1.7" fill="none">
+    <path d="M 265 172 L 265 192" marker-end="url(#ee2-arr)"/>
+    <path d="M 400 196 L 400 174" marker-end="url(#ee2-arr)"/>
+  </g>
+  <g font-size="12" fill="var(--vp-c-text-1)">
+    <text x="118" y="100" text-anchor="end">S（断开）</text>
+    <text x="106" y="178" text-anchor="end">E = 12 V</text>
+    <text x="256" y="88" text-anchor="end">L = 100 mH</text>
+    <text x="256" y="106" text-anchor="end">R = 20 Ω</text>
+    <text x="372" y="186" text-anchor="end">R₂ = 50 Ω</text>
+    <text x="274" y="186" font-size="13" fill="var(--vp-c-brand-1)" font-style="italic">i</text>
+    <text x="265" y="238" text-anchor="middle" fill="var(--vp-c-text-3)">断电后电流沿此路径续流，方向与断电前一致</text>
+  </g>
 </svg>
 </FigBox>
 

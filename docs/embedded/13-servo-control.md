@@ -74,7 +74,7 @@ description: 舵机只认 50 Hz、0.5–2.5 ms 的绝对脉宽，角度由脉宽
   <text x="573" y="84">直流电机</text>
   <rect x="526" y="112" width="94" height="34" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)"/>
   <text x="573" y="134">减速齿轮</text>
-  <text x="573" y="172" fill="var(--vp-c-text-3)">输出轴 → 摇臂</text>
+  <text x="573" y="198" font-size="11.5" text-anchor="middle" fill="var(--vp-c-text-3)">输出轴 → 摇臂</text>
 
   <rect x="256" y="160" width="110" height="34" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)"/>
   <text x="311" y="182">电位器</text>
@@ -84,7 +84,7 @@ description: 舵机只认 50 Hz、0.5–2.5 ms 的绝对脉宽，角度由脉宽
   <line x1="260" y1="101" x2="297" y2="101"/>
   <line x1="337" y1="101" x2="378" y2="101"/>
   <line x1="486" y1="101" x2="522" y2="79"/>
-  <line x1="486" y1="101" x2="522" y2="101" stroke-dasharray="4 3"/>
+  <line x1="486" y1="101" x2="522" y2="129" stroke-dasharray="4 3"/>
   <line x1="573" y1="146" x2="573" y2="177"/>
   <line x1="526" y1="177" x2="370" y2="177"/>
 </g>
@@ -301,7 +301,7 @@ STM32 的 IO 是 3.3 V 推挽输出，舵机通常按 5 V 供电。这是最常�
     <text x="66" y="52" fill="var(--vp-c-text-3)">高</text>
     <text x="66" y="146" fill="var(--vp-c-text-3)">低</text>
     <path d="M 60 50 L 100 50 L 100 150 L 620 150" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.4" />
-    <path d="M 620 150 L 620 50 L 660 50" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.4" />
+    <path d="M 620 150 L 620 50 L 636 50" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.4" />
     <line x1="100" y1="50" x2="100" y2="180" stroke="var(--vp-c-brand-2)" stroke-width="1.6" stroke-dasharray="4 3" />
     <text x="104" y="176" fill="var(--vp-c-brand-2)">CCR = 1500</text>
     <text x="80" y="42" text-anchor="middle" fill="var(--vp-c-brand-2)">1.5 ms</text>
@@ -358,19 +358,19 @@ node 验算：`72e6/84 = 857142.857`，`857142.857/20000 = 42.857 Hz`；`84e6/72
   </defs>
   <g font-size="11.5" fill="var(--vp-c-text-1)">
     <text x="20" y="40" fill="var(--vp-c-brand-2)">−50°</text>
-    <path d="M 90 32 L 100 32 L 100 58 L 610 58" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
-    <line x1="90" y1="24" x2="100" y2="24" stroke="var(--vp-c-brand-2)" stroke-width="1.2" marker-start="url(#sv-p)" marker-end="url(#sv-p)" />
-    <text x="95" y="18" text-anchor="middle" fill="var(--vp-c-brand-2)">1.0 ms</text>
+    <path d="M 90 32 L 116 32 L 116 58 L 610 58" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
+    <line x1="90" y1="24" x2="116" y2="24" stroke="var(--vp-c-brand-2)" stroke-width="1.2" marker-start="url(#sv-p)" marker-end="url(#sv-p)" />
+    <text x="103" y="18" text-anchor="middle" fill="var(--vp-c-brand-2)">1.0 ms</text>
 
     <text x="20" y="110" fill="var(--vp-c-brand-2)">0°</text>
-    <path d="M 90 102 L 135 102 L 135 128 L 610 128" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
-    <line x1="90" y1="94" x2="135" y2="94" stroke="var(--vp-c-brand-2)" stroke-width="1.2" marker-start="url(#sv-p)" marker-end="url(#sv-p)" />
-    <text x="112" y="88" text-anchor="middle" fill="var(--vp-c-brand-2)">1.5 ms</text>
+    <path d="M 90 102 L 129 102 L 129 128 L 610 128" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
+    <line x1="90" y1="94" x2="129" y2="94" stroke="var(--vp-c-brand-2)" stroke-width="1.2" marker-start="url(#sv-p)" marker-end="url(#sv-p)" />
+    <text x="109" y="88" text-anchor="middle" fill="var(--vp-c-brand-2)">1.5 ms</text>
 
     <text x="20" y="180" fill="var(--vp-c-brand-2)">+50°</text>
-    <path d="M 90 172 L 190 172 L 190 198 L 610 198" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
-    <line x1="90" y1="164" x2="190" y2="164" stroke="var(--vp-c-brand-2)" stroke-width="1.2" marker-start="url(#sv-p)" marker-end="url(#sv-p)" />
-    <text x="140" y="158" text-anchor="middle" fill="var(--vp-c-brand-2)">2.0 ms</text>
+    <path d="M 90 172 L 142 172 L 142 198 L 610 198" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
+    <line x1="90" y1="164" x2="142" y2="164" stroke="var(--vp-c-brand-2)" stroke-width="1.2" marker-start="url(#sv-p)" marker-end="url(#sv-p)" />
+    <text x="116" y="158" text-anchor="middle" fill="var(--vp-c-brand-2)">2.0 ms</text>
 
     <line x1="90" y1="200" x2="610" y2="200" stroke="var(--vp-c-text-3)" stroke-width="1" marker-start="url(#sv-p)" marker-end="url(#sv-p)" />
     <text x="350" y="218" text-anchor="middle" fill="var(--vp-c-text-3)">周期 20 ms（三条都一样）</text>
@@ -424,6 +424,7 @@ $$T = 0.075 \times 25000\ \mu s = 1875\ \mu s \Rightarrow \theta = \frac{1875 - 
     <text x="20" y="202" fill="var(--vp-c-text-3)">±0.5°</text>
 
     <line x1="120" y1="30" x2="600" y2="30" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="5 4" />
+    <line x1="307" y1="34" x2="307" y2="188" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 4" />
     <rect x="300" y="46" width="14" height="18" fill="var(--vp-c-brand-1)" />
     <text x="330" y="60" fill="var(--vp-c-brand-1)">定时器分辨率 0.09°（1 µs 计数）</text>
     <text x="120" y="60" fill="var(--vp-c-text-3)">CCR 步进</text>
@@ -487,11 +488,12 @@ $$f_{min} = \frac{1\ \text{MHz}}{2^{16}} = 15.26\ \text{Hz}$$
     <text x="90" y="86" text-anchor="middle">电源 6 V</text>
     <text x="90" y="106" text-anchor="middle" fill="var(--vp-c-text-3)">可给 15 A</text>
 
-    <line x1="150" y1="90" x2="250" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#sv-v)" />
-    <text x="200" y="80" text-anchor="middle" fill="var(--vp-c-brand-1)">I = 10 A</text>
-    <rect x="170" y="102" width="60" height="34" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1.5" />
-    <text x="200" y="123" text-anchor="middle" fill="var(--vp-c-text-3)">0.5 Ω</text>
-    <text x="200" y="156" text-anchor="middle" fill="var(--vp-c-brand-2)">压降 5 V</text>
+    <line x1="150" y1="90" x2="168" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="2.4" />
+    <rect x="168" y="74" width="64" height="32" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1.5" />
+    <text x="200" y="95" text-anchor="middle" fill="var(--vp-c-text-3)">0.5 Ω</text>
+    <line x1="232" y1="90" x2="250" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="2.4" marker-end="url(#sv-v)" />
+    <text x="200" y="62" text-anchor="middle" fill="var(--vp-c-brand-1)">I = 10 A</text>
+    <text x="200" y="126" text-anchor="middle" fill="var(--vp-c-brand-2)">压降 5 V</text>
 
     <rect x="256" y="60" width="130" height="60" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.8" />
     <text x="321" y="86" text-anchor="middle">舵机端 1 V</text>

@@ -211,7 +211,7 @@ endmodule
 <svg viewBox="0 0 560 250" role="img" aria-label="两级同步器时序图：第一级触发器进入亚稳态，第二级采样到稳定值">
   <g font-size="11.5" fill="var(--vp-c-text-1)">
     <text x="16" y="42" fill="var(--vp-c-text-3)">clk_b</text>
-    <polyline fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.8" points="70,52 70,36 150,36 150,52 230,52 230,36 310,36 310,52 390,52 390,36 470,36 470,52 545,52" />
+    <polyline fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.8" points="70,52 150,52 150,36 230,36 230,52 310,52 310,36 390,36 390,52 470,52 470,36 545,36" />
     <line x1="150" y1="18" x2="150" y2="62" stroke="var(--vp-c-brand-1)" stroke-width="1.3" stroke-dasharray="4 3" />
     <text x="150" y="14" text-anchor="middle" fill="var(--vp-c-brand-1)">采样沿撞上翻转</text>
 
@@ -342,20 +342,17 @@ else              cnt <= cnt + 1;
     <polyline fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.8" points="70,50 70,36 110,36 110,50 150,50 150,36 190,36 190,50 230,50 230,36 270,36 270,50 310,50 310,36 350,36 350,50 390,50 390,36 430,36 430,50 470,50 470,36 510,36 510,50 545,50" />
 
     <text x="16" y="94" fill="var(--vp-c-text-3)">cnt</text>
-    <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" points="70,150 110,150 110,140 150,140 150,130 190,130 190,120 230,120 230,110 270,110 270,120 310,120 310,130 350,130 350,140 390,140 390,150 430,150 430,140 470,140 470,130 510,130 510,120 545,120" />
-    <text x="88" y="166" text-anchor="middle" fill="var(--vp-c-text-3)">0</text>
-    <text x="128" y="166" text-anchor="middle" fill="var(--vp-c-text-3)">1</text>
-    <text x="168" y="166" text-anchor="middle" fill="var(--vp-c-text-3)">2</text>
-    <text x="208" y="166" text-anchor="middle" fill="var(--vp-c-text-3)">3</text>
-    <text x="248" y="166" text-anchor="middle" fill="var(--vp-c-text-3)">4</text>
-    <text x="288" y="166" text-anchor="middle" fill="var(--vp-c-text-3)">…</text>
-    <text x="328" y="166" text-anchor="middle" fill="var(--vp-c-text-3)">N−1</text>
-    <text x="368" y="166" text-anchor="middle" fill="var(--vp-c-text-3)">0</text>
-    <text x="408" y="166" text-anchor="middle" fill="var(--vp-c-text-3)">1</text>
+    <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" points="70,160 150,160 150,148 230,148 230,136 310,136 310,124 390,124 390,112 470,112 470,160 545,160" />
+    <text x="110" y="178" text-anchor="middle" fill="var(--vp-c-text-3)">0</text>
+    <text x="190" y="178" text-anchor="middle" fill="var(--vp-c-text-3)">1</text>
+    <text x="270" y="178" text-anchor="middle" fill="var(--vp-c-text-3)">2</text>
+    <text x="350" y="178" text-anchor="middle" fill="var(--vp-c-text-3)">…</text>
+    <text x="430" y="178" text-anchor="middle" fill="var(--vp-c-text-3)">N−1</text>
+    <text x="508" y="178" text-anchor="middle" fill="var(--vp-c-text-3)">0</text>
 
     <text x="16" y="200" fill="var(--vp-c-text-3)">tick</text>
-    <polyline fill="none" stroke="var(--vp-c-text-2)" stroke-width="2" points="70,212 70,196 310,196 310,212 545,212" />
-    <text x="340" y="200" fill="var(--vp-c-text-3)">一个周期的高脉冲（每 N 拍一次）</text>
+    <polyline fill="none" stroke="var(--vp-c-text-2)" stroke-width="2" points="70,212 390,212 390,196 470,196 470,212 545,212" />
+    <text x="90" y="202" fill="var(--vp-c-text-3)">tick 只高一拍（每 N 拍一次）</text>
   </g>
 </svg>
 
@@ -417,7 +414,7 @@ else              cnt <= cnt + 1;
     <rect x="268" y="188" width="3" height="10" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.2" />
     <text x="300" y="182" fill="var(--vp-c-text-3)">保持窗口</text>
     <line x1="288" y1="190" x2="288" y2="208" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 3" />
-    <text x="292" y="200" fill="var(--vp-c-text-3)">无偏斜时的目的沿</text>
+    <text x="292" y="200" fill="var(--vp-c-text-3)">偏斜后的实际沿</text>
 
     <g stroke="var(--vp-c-text-3)" stroke-width="1.1">
       <line x1="110" y1="60" x2="128" y2="60" marker-end="url(#vf-ar)" marker-start="url(#vf-ar)" />
@@ -428,8 +425,8 @@ else              cnt <= cnt + 1;
     <g font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">
       <text x="119" y="54">t_cq</text>
       <text x="193" y="54">t_comb</text>
-      <text x="263" y="54">t_su</text>
-      <text x="278" y="50">t_skew</text>
+      <text x="248" y="54">t_su</text>
+      <text x="282" y="50">t_skew</text>
     </g>
   </g>
 </svg>
@@ -473,7 +470,7 @@ $$
     <text x="74" y="34" text-anchor="end" fill="var(--vp-c-text-3)">10²⁹ s</text>
     <text x="74" y="97" text-anchor="end" fill="var(--vp-c-text-3)">10¹⁴ s</text>
     <text x="74" y="162" text-anchor="end" fill="var(--vp-c-text-3)">10⁰ s</text>
-    <text x="44" y="100" text-anchor="middle" fill="var(--vp-c-text-3)">MTBF</text>
+    <text x="20" y="100" text-anchor="middle" fill="var(--vp-c-text-3)">MTBF</text>
     <text x="300" y="182" text-anchor="middle" fill="var(--vp-c-text-3)">同步器级数 n</text>
     <circle cx="130" cy="155" r="5" fill="var(--vp-c-brand-1)" />
     <text x="130" y="145" text-anchor="middle">n = 1</text>
@@ -481,10 +478,10 @@ $$
     <circle cx="270" cy="96" r="5" fill="var(--vp-c-brand-1)" />
     <text x="270" y="86" text-anchor="middle">n = 2</text>
     <text x="270" y="120" text-anchor="middle" fill="var(--vp-c-text-3)">3.0×10¹⁴ s ≈ 9.5×10⁶ 年</text>
-    <circle cx="410" cy="44" r="5" fill="var(--vp-c-brand-1)" />
-    <text x="410" y="34" text-anchor="middle">n = 3</text>
+    <circle cx="410" cy="32" r="5" fill="var(--vp-c-brand-1)" />
+    <text x="410" y="22" text-anchor="middle">n = 3</text>
     <text x="410" y="66" text-anchor="middle" fill="var(--vp-c-text-3)">9.0×10²⁸ s ≈ 2.8×10²¹ 年</text>
-    <path d="M 130 155 Q 200 96 270 96 Q 340 96 410 44" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" stroke-dasharray="5 4" />
+    <path d="M 130 155 Q 200 96 270 96 Q 340 96 410 32" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" stroke-dasharray="5 4" />
   </g>
 </svg>
 

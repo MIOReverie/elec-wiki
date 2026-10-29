@@ -91,9 +91,9 @@ outline: [2, 3]
   <rect x="206" y="48" width="130" height="46" rx="6" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
   <text x="271" y="68" text-anchor="middle">开关电源输入</text>
   <text x="271" y="84" text-anchor="middle" fill="var(--vp-c-text-3)">220 V 只到这一端</text>
-  <rect x="356" y="48" width="130" height="46" rx="6" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.4" stroke-dasharray="5 3" />
-  <text x="421" y="68" text-anchor="middle">隔离变压器（可选）</text>
-  <text x="421" y="84" text-anchor="middle" fill="var(--vp-c-text-3)">隔离被测设备，不隔离示波器</text>
+  <rect x="356" y="48" width="148" height="46" rx="6" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.4" stroke-dasharray="5 3" />
+  <text x="430" y="68" text-anchor="middle">隔离变压器（可选）</text>
+  <text x="430" y="84" text-anchor="middle" font-size="10" fill="var(--vp-c-text-3)">隔离被测设备，不隔离示波器</text>
 
   <rect x="16" y="122" width="528" height="22" rx="4" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
   <text x="280" y="137" text-anchor="middle" fill="var(--vp-c-text-2)">绝缘垫 ≥ 2 mm —— 强电的线不跨过它</text>
@@ -160,7 +160,7 @@ outline: [2, 3]
 
 **限流**设在预计电流的 1.2~1.5 倍，比如板子正常吃 100 mA，就设 120 到 150 mA。整个动作的思路是让电源先学会出多大力气，再去推电路，五步：
 
-<FigBox title="限流设置五步：短路定标 → 撤短接 → 设电压 → 接负载" kind="结构" note="前三步在输出关闭或短接状态下标定限流值，第四步才设目标电压，第五步接负载上电。这样任何接反、短路、装错都表现为电源停在 CC 模式（恒流），而不是把功率灌进电路。">
+<FigBox title="限流设置五步：关输出 → 限流调到最低 → 短路定标 → 设电压 → 接负载" kind="结构" note="前三步在输出关闭或短接状态下标定限流值，第四步才设目标电压，第五步接负载上电。这样任何接反、短路、装错都表现为电源停在 CC 模式（恒流），而不是把功率灌进电路。">
 
 <svg viewBox="0 0 560 180" role="img" aria-label="限流设置五步流程：关输出调零、限流调到最低、短接输出标定、设电压、接负载上电">
 <defs>
@@ -339,7 +339,7 @@ $$E = \frac{1}{2} \times 5\times10^{-9} \times 20^2 = 1.0\ \mu\text{J}$$
 </defs>
 <g font-size="11" fill="var(--vp-c-text-1)">
   <text x="110" y="18" text-anchor="middle" font-weight="700">台子上接大地的设备</text>
-  <rect x="20" y="34" width="190" height="200" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <rect x="20" y="34" width="222" height="200" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
   <text x="36" y="58">· 示波器 BNC 外壳 + 探头地线</text>
   <text x="36" y="84">· 烙铁台金属外壳（部分头也接地）</text>
   <text x="36" y="110">· 防静电台垫 / 手环（经 1 MΩ）</text>
@@ -391,7 +391,7 @@ $$E = \frac{1}{2} \times 5\times10^{-9} \times 20^2 = 1.0\ \mu\text{J}$$
 
 <FigBox title="异常处置流程：冒烟走左边，不冒烟走右边" kind="结构" note="左：冒烟 / 焦味路线，拔电源 → 等 30 s → 电阻放电 → 万用表验证 5 V 以下 → 拔掉所有探头表笔 → 才开始看外观。右：不冒烟但不工作路线，先验证电源与工具，再断电测连接，最后限流上电分段隔离。两条路的共同点：先让电路确认没电，再让手靠近。">
 
-<svg viewBox="0 0 560 280" role="img" aria-label="异常处置双路线流程图：左侧冒烟立即断电路线，右侧不冒烟验证排查路线">
+<svg viewBox="0 0 640 280" role="img" aria-label="异常处置双路线流程图：左侧冒烟立即断电路线，右侧不冒烟验证排查路线">
 <defs>
   <marker id="bn-f1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
@@ -401,29 +401,29 @@ $$E = \frac{1}{2} \times 5\times10^{-9} \times 20^2 = 1.0\ \mu\text{J}$$
   </marker>
 </defs>
 <g font-size="11" fill="var(--vp-c-text-1)">
-  <rect x="16" y="20" width="240" height="34" rx="7" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="136" y="41" text-anchor="middle" fill="var(--vp-c-brand-1)">冒烟 / 异响 / 焦味</text>
-  <line x1="136" y1="54" x2="136" y2="70" stroke="var(--vp-c-brand-1)" stroke-width="1.2" marker-end="url(#bn-f1)" />
-  <rect x="16" y="72" width="240" height="150" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
-  <text x="32" y="96">1. 拔被测电路电源（电源冒烟拔墙上插头）</text>
-  <text x="32" y="122">2. 等 30 s</text>
-  <text x="32" y="148">3. 放电电阻放掉大电容</text>
-  <text x="32" y="174">4. 万用表电压档确认 5 V 以下</text>
-  <text x="32" y="200">5. 拔掉探头 BNC 与所有表笔，再动板子</text>
-  <line x1="256" y1="147" x2="280" y2="147" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-end="url(#bn-f1)" />
-  <rect x="282" y="112" width="120" height="34" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
-  <text x="342" y="133" text-anchor="middle" fill="var(--vp-c-brand-1)">才开始看外观</text>
+  <rect x="16" y="20" width="248" height="34" rx="7" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <text x="140" y="41" text-anchor="middle" fill="var(--vp-c-brand-1)">冒烟 / 异响 / 焦味</text>
+  <line x1="140" y1="54" x2="140" y2="70" stroke="var(--vp-c-brand-1)" stroke-width="1.2" marker-end="url(#bn-f1)" />
+  <rect x="16" y="72" width="248" height="150" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="30" y="96">1. 拔被测电路电源（电源冒烟拔墙上插头）</text>
+  <text x="30" y="122">2. 等 30 s</text>
+  <text x="30" y="148">3. 放电电阻放掉大电容</text>
+  <text x="30" y="174">4. 万用表电压档确认 5 V 以下</text>
+  <text x="30" y="200">5. 拔掉探头 BNC 与所有表笔，再动板子</text>
+  <line x1="264" y1="147" x2="282" y2="147" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-end="url(#bn-f1)" />
+  <rect x="284" y="112" width="120" height="34" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <text x="344" y="133" text-anchor="middle" fill="var(--vp-c-brand-1)">才开始看外观</text>
 
-  <rect x="304" y="20" width="240" height="34" rx="7" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <text x="424" y="41" text-anchor="middle">不冒烟但不工作</text>
-  <line x1="424" y1="54" x2="424" y2="70" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#bn-f2)" />
-  <rect x="304" y="72" width="240" height="150" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
-  <text x="320" y="96">1. 验证电源：CC 灯亮 = 已进限流</text>
-  <text x="320" y="122">2. 验证工具：拿电池确认表读数正常</text>
-  <text x="320" y="148">3. 断电测电源对地电阻（几百欧以上）</text>
-  <text x="320" y="174">4. 限流调小上电，看电流是否异常</text>
-  <text x="320" y="200">5. 分段隔离：从电源往后一段一段接</text>
-  <text x="280" y="252" text-anchor="middle" fill="var(--vp-c-text-2)">一上电就烧保险丝 = 一定有短路：先查短路，绝不换更大的保险丝再试</text>
+  <rect x="416" y="20" width="220" height="34" rx="7" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <text x="526" y="41" text-anchor="middle">不冒烟但不工作</text>
+  <line x1="526" y1="54" x2="526" y2="70" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#bn-f2)" />
+  <rect x="416" y="72" width="220" height="150" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="432" y="96">1. 验证电源：CC 灯亮 = 已进限流</text>
+  <text x="432" y="122">2. 验证工具：拿电池确认表读数正常</text>
+  <text x="432" y="148">3. 断电测电源对地电阻（几百欧以上）</text>
+  <text x="432" y="174">4. 限流调小上电，看电流是否异常</text>
+  <text x="432" y="200">5. 分段隔离：从电源往后一段一段接</text>
+  <text x="320" y="252" text-anchor="middle" fill="var(--vp-c-text-2)">一上电就烧保险丝 = 一定有短路：先查短路，绝不换更大的保险丝再试</text>
 </g>
 </svg>
 

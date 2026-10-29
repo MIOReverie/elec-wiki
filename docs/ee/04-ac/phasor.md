@@ -66,12 +66,12 @@ $$
   <line x1="210" y1="20" x2="210" y2="155" stroke="var(--vp-c-divider)" stroke-width="1.2" />
   <text x="372" y="134" text-anchor="end" fill="var(--vp-c-text-3)">实轴</text>
   <text x="222" y="34" fill="var(--vp-c-text-3)">虚轴</text>
-  <line x1="210" y1="120" x2="330" y2="120" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#ph-rot)" />
-  <text x="336" y="124" fill="var(--vp-c-brand-1)">1</text>
+  <line x1="210" y1="120" x2="300" y2="120" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#ph-rot)" />
+  <text x="306" y="124" fill="var(--vp-c-brand-1)">1</text>
   <line x1="210" y1="120" x2="210" y2="30" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#ph-rot)" />
   <text x="200" y="18" text-anchor="end" fill="var(--vp-c-brand-1)">j</text>
-  <line x1="210" y1="120" x2="90" y2="120" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#ph-rot)" />
-  <text x="84" y="124" text-anchor="end" fill="var(--vp-c-brand-1)">-1</text>
+  <line x1="210" y1="120" x2="120" y2="120" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#ph-rot)" />
+  <text x="114" y="124" text-anchor="end" fill="var(--vp-c-brand-1)">-1</text>
   <path d="M 246 120 A 36 36 0 0 0 210 84" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 3" />
   <path d="M 210 84 A 36 36 0 0 0 174 120" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 3" />
   <text x="252" y="92" fill="var(--vp-c-text-3)">×j → 90°</text>
@@ -132,7 +132,7 @@ $$
   <text x="126" y="188" fill="var(--vp-c-text-3)">53.1°</text>
   <text x="147" y="216" text-anchor="middle">3</text>
   <text x="70" y="112" text-anchor="end">4</text>
-  <text x="118" y="76">模 5</text>
+  <text x="168" y="76" text-anchor="end">模 5</text>
   <text x="222" y="34">3 + j4</text>
 </g>
 </svg>
@@ -389,7 +389,7 @@ $$
   <text x="134" y="232">U₂ = 10∠−60°</text>
   <text x="206" y="184">U = 14.14∠−15°</text>
   <text x="96" y="132" fill="var(--vp-c-text-3)">30°</text>
-  <text x="100" y="170" fill="var(--vp-c-text-3)">−60°</text>
+  <text x="106" y="162" fill="var(--vp-c-text-3)">−60°</text>
   <text x="330" y="30" text-anchor="end" fill="var(--vp-c-text-3)">比例尺：8 px = 1 V</text>
 </g>
 </svg>

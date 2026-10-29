@@ -201,7 +201,7 @@ $$
 <text x="94" y="194" text-anchor="end" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">①</text>
 <text x="336" y="194" text-anchor="start" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">②</text>
 <text x="215" y="36" text-anchor="middle" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">③</text>
-<text x="231" y="144" text-anchor="start" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">④</text>
+<text x="230" y="124" text-anchor="start" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">④</text>
 <text x="215" y="234" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t   ">4 个结点、6 条支路：独立 KCL 3 个 + 独立 KVL 3 个 = 6 个未知支路电流</text>
 </svg>
 
@@ -354,7 +354,7 @@ $R_3$ 阻值最大，耗散最多，所以最热的是它。散热设计看功�
 <path d="M118 168 L122.59 161.44 L125.94 167.04 Z" class="sf-solid"/>
 <text x="96.56" y="196" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t  sf-it ">I</text>
 <text x="104" y="202.6" text-anchor="start" dominant-baseline="middle" font-size="8.64" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">2</text>
-<text x="96" y="196" text-anchor="end" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t   ">= 3 A（流出）</text>
+<text x="118" y="196" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t   ">= 3 A（流出）</text>
 <line x1="200" y1="108" x2="304" y2="186"/>
 <line x1="222" y1="132" x2="277.2" y2="165.12"/>
 <path d="M282 168 L274.06 167.04 L277.41 161.44 Z" class="sf-solid"/>

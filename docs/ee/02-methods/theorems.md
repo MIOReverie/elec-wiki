@@ -241,11 +241,13 @@ $$
   <line x1="60" y1="130" x2="220" y2="130"/>
   <line x1="60" y1="40" x2="60" y2="130"/>
   <line x1="220" y1="40" x2="220" y2="130"/>
-  <circle cx="110" cy="40" r="5"/><circle cx="110" cy="130" r="5"/>
-  <circle cx="170" cy="40" r="5"/><circle cx="170" cy="130" r="5"/>
-  <text x="110" y="24" text-anchor="middle" stroke="none" fill="var(--vp-c-brand-1)">E₁,R₀₁</text>
-  <text x="170" y="24" text-anchor="middle" stroke="none" fill="var(--vp-c-brand-1)">E₂,R₀₂</text>
-  <text x="240" y="90" text-anchor="start" stroke="none" fill="var(--vp-c-brand-1)">R_L</text>
+  <circle cx="60" cy="40" r="5"/><circle cx="60" cy="130" r="5"/>
+  <circle cx="220" cy="40" r="5"/><circle cx="220" cy="130" r="5"/>
+  <text x="60" y="26" text-anchor="middle" stroke="none" fill="var(--vp-c-brand-1)">E₁,R₀₁</text>
+  <text x="220" y="26" text-anchor="middle" stroke="none" fill="var(--vp-c-brand-1)">E₂,R₀₂</text>
+  <text x="74" y="58" text-anchor="start" stroke="none" font-weight="700">+</text>
+  <text x="204" y="58" text-anchor="start" stroke="none" font-weight="700">+</text>
+  <text x="248" y="90" text-anchor="start" stroke="none" fill="var(--vp-c-brand-1)">R_L</text>
   <line x1="220" y1="40" x2="240" y2="40"/><line x1="240" y1="40" x2="240" y2="130"/><line x1="220" y1="130" x2="240" y2="130"/>
 </g>
 </svg>

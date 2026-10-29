@@ -31,7 +31,7 @@ description: 真器件凭什么能换成理想符号、电位电压电动势差�
 <line x1="232" y1="76" x2="340" y2="76"/>
 <text x="210" y="60" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t  sf-it ">小灯泡</text>
 <line x1="340" y1="200" x2="340" y2="164"/>
-<g transform="translate(340 138) rotate(-90)">
+<g transform="translate(340 138) rotate(90)">
 <line x1="-26" y1="0" x2="-5" y2="0"/>
 <line x1="-5" y1="-11" x2="-5" y2="11" stroke-width="2.6"/>
 <line x1="5" y1="-6" x2="5" y2="6" stroke-width="2.6"/>
@@ -43,8 +43,8 @@ description: 真器件凭什么能换成理想符号、电位电压电动势差�
 <text x="352" y="120" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">E₂ 1.5 V</text>
 <text x="64" y="80" text-anchor="end" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">+</text>
 <text x="64" y="196" text-anchor="end" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">−</text>
-<text x="356" y="196" text-anchor="start" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">+</text>
-<text x="356" y="80" text-anchor="start" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">−</text>
+<text x="356" y="196" text-anchor="start" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">−</text>
+<text x="356" y="80" text-anchor="start" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">+</text>
 <text x="210" y="130" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-3)" class="sf-t   ">I = 0（没有电流）</text>
 </svg>
 
@@ -276,8 +276,8 @@ $$
 <text x="78" y="147" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t  sf-it ">R₀</text>
 <line x1="60" y1="66" x2="160" y2="66"/>
 <line x1="60" y1="174" x2="160" y2="174"/>
-<line x1="160" y1="66" x2="160" y2="100"/>
-<line x1="160" y1="140" x2="160" y2="174"/>
+<line x1="160" y1="66" x2="160" y2="112"/>
+<line x1="160" y1="128" x2="160" y2="174"/>
 <line x1="151" y1="112" x2="169" y2="112" stroke-dasharray="3 3"/>
 <line x1="151" y1="128" x2="169" y2="128" stroke-dasharray="3 3"/>
 <text x="166" y="62" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">A</text>
@@ -427,9 +427,9 @@ $$
 <line x1="110" y1="76" x2="144.4" y2="76"/>
 <path d="M150 76 L142.7 79.26 L142.7 72.74 Z" class="sf-solid"/>
 <text x="130" y="42" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t  sf-it ">I</text>
-<text x="207.56" y="178" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t  sf-it ">U</text>
-<text x="215" y="184.6" text-anchor="start" dominant-baseline="middle" font-size="8.64" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">F</text>
-<text x="215" y="156" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t   ">≈ 2 V</text>
+<text x="370" y="158" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t  sf-it ">U</text>
+<text x="377.44" y="164.6" text-anchor="start" dominant-baseline="middle" font-size="8.64" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">F</text>
+<text x="390" y="158" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t   ">≈ 2 V</text>
 </svg>
 
 </FigBox>
@@ -574,8 +574,10 @@ $$
 <line x1="110" y1="76" x2="144.4" y2="76"/>
 <path d="M150 76 L142.7 79.26 L142.7 72.74 Z" class="sf-solid"/>
 <text x="130" y="58" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t  sf-it ">I</text>
-<text x="210.88" y="236" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t  sf-it ">U</text>
-<text x="218.32" y="242.6" text-anchor="start" dominant-baseline="middle" font-size="8.64" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">S</text>
+<text x="296" y="142" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t  sf-it ">U</text>
+<text x="303.44" y="148.6" text-anchor="start" dominant-baseline="middle" font-size="8.64" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   ">S</text>
+<text x="322" y="116" text-anchor="middle" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">+</text>
+<text x="322" y="164" text-anchor="middle" dominant-baseline="middle" font-size="13" stroke="none" fill="var(--vp-c-text-1)" class="sf-t   sf-w700">−</text>
 </svg>
 
 </FigBox>

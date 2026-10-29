@@ -29,7 +29,7 @@ $$
 <FigBox title="同一个元件，两种参考方向" kind="电路" note="参考方向是画在图上的箭头，不是物理事实。关联方向下公式没有负号，非关联方向下要自己带上负号。这一条贯穿后面所有章节。">
 
 <svg viewBox="0 0 470 230" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
-  <text x="60" y="24" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">关联方向 → U = RI</text>
+  <text x="60" y="14" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">关联方向 → U = RI</text>
   <line x1="120" y1="52" x2="188" y2="52"/>
   <polyline points="188,52 202,40 216,64 230,40 244,64 258,52"/>
   <line x1="258" y1="52" x2="320" y2="52"/>
@@ -44,7 +44,7 @@ $$
 
   <line x1="30" y1="116" x2="440" y2="116" stroke-dasharray="5 4" stroke-width="1"/>
 
-  <text x="60" y="156" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">非关联方向 → U = −RI</text>
+  <text x="60" y="146" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">非关联方向 → U = −RI</text>
   <line x1="120" y1="184" x2="188" y2="184"/>
   <polyline points="188,184 202,172 216,196 230,172 244,196 258,184"/>
   <line x1="258" y1="184" x2="320" y2="184"/>

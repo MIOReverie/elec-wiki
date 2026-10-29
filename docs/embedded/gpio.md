@@ -94,7 +94,7 @@ $$I=\frac{V_{CC}}{R_{pu}}$$
   <line x1="470" y1="86" x2="470" y2="105"/>
   <text x="488" y="78" font-size="10" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">R_pu（外部）</text>
   <circle cx="470" cy="105" r="3" class="sf-dot"/>
-  <line x1="470" y1="105" x2="540" y2="105"/>
+  <line x1="450" y1="105" x2="540" y2="105"/>
   <circle cx="540" cy="105" r="3.5" class="sf-dot"/>
   <text x="548" y="109" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">PA0</text>
   <text x="460" y="240" text-anchor="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">写 1 = 放开引脚，高电平只能靠 R_pu</text>
@@ -246,7 +246,6 @@ F4 及以后把这 4 位拆成几个独立寄存器，更好理解：`MODER`（�
   <text x="238" y="104" font-size="10.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">PA0</text>
   <line x1="170" y1="100" x2="170" y2="114"/>
   <circle cx="170" cy="114" r="2.6" class="sf-dot"/>
-  <line x1="170" y1="146" x2="170" y2="114" stroke-dasharray="0"/>
   <line x1="170" y1="118" x2="184" y2="142"/>
   <line x1="170" y1="146" x2="170" y2="162"/>
   <circle cx="170" cy="146" r="2.6" class="sf-dot"/>
@@ -255,11 +254,7 @@ F4 及以后把这 4 位拆成几个独立寄存器，更好理解：`MODER`（�
   <line x1="165" y1="174" x2="175" y2="174"/>
   <line x1="320" y1="30" x2="470" y2="30"/>
   <text x="320" y="22" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">VCC</text>
-  <line x1="385" y1="100" x2="385" y2="66"/>
-  <line x1="385" y1="34" x2="385" y2="30"/>
-  <line x1="378" y1="38" x2="392" y2="38"/>
-  <line x1="385" y1="38" x2="385" y2="46"/>
-  <line x1="381" y1="46" x2="389" y2="46"/>
+  <line x1="385" y1="30" x2="385" y2="52"/>
   <circle cx="385" cy="52" r="2.6" class="sf-dot"/>
   <line x1="385" y1="52" x2="399" y2="76"/>
   <circle cx="385" cy="80" r="2.6" class="sf-dot"/>
@@ -368,7 +363,7 @@ $$R_{pu} \le \frac{t_r}{2.2C} = \frac{300\ \text{ns}}{2.2 \times 100\ \text{pF}}
   <text x="60" y="36" font-size="10" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">① 手指真正的动作</text>
   <path d="M 60 62 L 96 62 L 96 84 L 580 84" stroke="var(--vp-c-brand-1)" stroke-width="2.2"/>
   <text x="60" y="118" font-size="10" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">② 触点实际电平（抖动）</text>
-  <path d="M 60 130 L 96 130 L 102 156 L 110 130 L 118 156 L 128 130 L 140 156 L 154 130 L 168 156 L 180 156 L 580 156" stroke="var(--vp-c-brand-2)" stroke-width="2"/>
+  <path d="M 60 130 L 96 130 L 100 156 L 106 130 L 112 156 L 118 130 L 126 156 L 580 156" stroke="var(--vp-c-brand-2)" stroke-width="2"/>
   <text x="96" y="176" font-size="9.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">5~20 ms 内反复弹跳</text>
   <text x="60" y="204" font-size="10" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">③ 软件判定（连续两次读到低）</text>
   <path d="M 60 206 L 158 206 L 158 228 L 580 228" stroke="var(--vp-c-brand-1)" stroke-width="2.2"/>
@@ -505,6 +500,7 @@ $$f_{\text{拐点}} = \frac{0.35}{t_r}:\quad t_r=50\ \text{ns} \Rightarrow 7\ \t
   <line x1="210" y1="152" x2="210" y2="176"/>
   <line x1="196" y1="176" x2="224" y2="176"/>
   <line x1="200" y1="182" x2="220" y2="182"/>
+  <line x1="203" y1="188" x2="217" y2="188"/>
   <text x="238" y="166" font-size="9.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">10k 下拉</text>
   <line x1="240" y1="80" x2="240" y2="120" stroke-width="2.4"/>
   <line x1="240" y1="88" x2="276" y2="62"/>
@@ -520,7 +516,7 @@ $$f_{\text{拐点}} = \frac{0.35}{t_r}:\quad t_r=50\ \text{ns} \Rightarrow 7\ \t
   <line x1="266" y1="188" x2="276" y2="188"/>
   <line x1="340" y1="26" x2="340" y2="34"/>
   <line x1="334" y1="34" x2="346" y2="34"/>
-  <path d="M 334 34 L 346 34 L 340 46 Z" class="sf-solid"/>
+  <path d="M 334 46 L 346 46 L 340 34 Z" class="sf-solid"/>
   <line x1="340" y1="46" x2="340" y2="62"/>
   <line x1="276" y1="62" x2="340" y2="62"/>
   <circle cx="276" cy="62" r="2.6" class="sf-dot"/>

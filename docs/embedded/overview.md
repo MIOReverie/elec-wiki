@@ -271,7 +271,7 @@ STM32  F   103   C    8    T    6
 ::: tip 例 2 · 估算一个项目的资源够不够 {#ex-emb-ov-2}
 **题目**：需求是采集 4 路传感器（ADC）、驱动一块 128×64 的 OLED（I²C）、串口上报（UART）、跑 FreeRTOS 管理 3 个任务。手上一颗 `STM32F103C8T6`（64 KB Flash / 20 KB SRAM），够吗？
 
-<FigBox title="例 2 的 RAM 预算：8.5 KB 是怎么堆出来的" kind="结构" note="每一格都是最坏情况而不是平均值：任务栈按最大调用深度算，缓冲按整帧算。20 KB 里已用 8.5 KB，余量约 57%，看起来宽松；但只要任务栈翻倍、再开一路 DMA 双缓冲，余量就会掉到四分之一。">
+<FigBox title="例 2 的 RAM 预算：8.5 KB 是怎么堆出来的" kind="结构" note="每一格都是最坏情况而不是平均值：任务栈按最大调用深度算，缓冲按整帧算。20 KB 里已用 8.5 KB，余量约 57%，看起来宽松；但只要任务栈翻倍、再开一路 DMA 双缓冲，余量就会掉到 39%。">
 
 <svg viewBox="0 0 700 240" role="img" aria-label="20 KB SRAM 的预算条：任务栈 1.5 KB、内核与堆 4 KB、缓冲区 2 KB、全局变量 1 KB，合计 8.5 KB，余量 11.5 KB">
 <g font-size="11.5" fill="var(--vp-c-text-1)">
@@ -280,12 +280,12 @@ STM32  F   103   C    8    T    6
   <rect x="72" y="44" width="128" height="34" fill="var(--vp-c-brand-1)" opacity="0.6" />
   <rect x="200" y="44" width="64" height="34" fill="var(--vp-c-brand-1)" opacity="0.4" />
   <rect x="264" y="44" width="32" height="34" fill="var(--vp-c-brand-1)" opacity="0.25" />
-  <rect x="296" y="44" width="344" height="34" fill="none" stroke="var(--vp-c-border)" stroke-width="1.2" stroke-dasharray="5 4" />
-  <text x="48" y="66" text-anchor="middle" font-size="10" fill="#fff">1.5</text>
-  <text x="136" y="66" text-anchor="middle" font-size="10" fill="#fff">4</text>
-  <text x="232" y="66" text-anchor="middle" font-size="10" fill="#fff">2</text>
-  <text x="280" y="66" text-anchor="middle" font-size="10" fill="#fff">1</text>
-  <text x="468" y="66" text-anchor="middle" fill="var(--vp-c-text-3)">余量 11.5 KB（约 57%）</text>
+  <rect x="296" y="44" width="368" height="34" fill="none" stroke="var(--vp-c-border)" stroke-width="1.2" stroke-dasharray="5 4" />
+  <text x="48" y="66" text-anchor="middle" font-size="10" fill="var(--vp-c-white)">1.5</text>
+  <text x="136" y="66" text-anchor="middle" font-size="10" fill="var(--vp-c-white)">4</text>
+  <text x="232" y="66" text-anchor="middle" font-size="10" fill="var(--vp-c-white)">2</text>
+  <text x="280" y="66" text-anchor="middle" font-size="10" fill="var(--vp-c-white)">1</text>
+  <text x="480" y="66" text-anchor="middle" fill="var(--vp-c-text-3)">余量 11.5 KB（约 57%）</text>
 
   <text x="24" y="106" font-size="10.5" fill="var(--vp-c-text-3)">1.5 KB 任务栈　4 KB 内核与堆　2 KB 串口 + OLED 显存　1 KB 全局与 ADC 缓冲</text>
 
@@ -293,17 +293,17 @@ STM32  F   103   C    8    T    6
   <rect x="24" y="166" width="96" height="30" fill="var(--vp-c-brand-1)" opacity="0.85" />
   <rect x="120" y="166" width="128" height="30" fill="var(--vp-c-brand-1)" opacity="0.6" />
   <rect x="248" y="166" width="64" height="30" fill="var(--vp-c-brand-1)" opacity="0.4" />
-  <rect x="312" y="166" width="96" height="30" fill="var(--vp-c-brand-1)" opacity="0.25" />
-  <rect x="408" y="166" width="32" height="30" fill="var(--vp-c-brand-1)" opacity="0.18" />
-  <rect x="440" y="166" width="200" height="30" fill="none" stroke="var(--vp-c-border)" stroke-width="1.2" stroke-dasharray="5 4" />
-  <text x="408" y="206" text-anchor="middle" font-size="10" fill="var(--vp-c-text-3)">已用 13.75 KB，余量 31%</text>
-  <text x="540" y="186" text-anchor="middle" fill="var(--vp-c-text-3)">仍在安全区，但已逼近 30% 警戒线</text>
+  <rect x="312" y="166" width="32" height="30" fill="var(--vp-c-brand-1)" opacity="0.25" />
+  <rect x="344" y="166" width="72" height="30" fill="var(--vp-c-brand-1)" opacity="0.18" />
+  <rect x="416" y="166" width="248" height="30" fill="none" stroke="var(--vp-c-border)" stroke-width="1.2" stroke-dasharray="5 4" />
+  <text x="300" y="206" text-anchor="middle" font-size="10" fill="var(--vp-c-text-3)">已用 12.25 KB，余量 39%</text>
+  <text x="564" y="206" text-anchor="middle" fill="var(--vp-c-text-3)">仍在安全区，但已逼近 30% 警戒线</text>
 </g>
 </svg>
 
 </FigBox>
 
-图上已经把两种情形并排画了：8.5 KB 在 20 KB 里时余量 57%，任务栈一翻倍、再开一路 DMA 双缓冲，余量就掉到 31%。改两处配置就吃掉一半。
+图上已经把两种情形并排画了：8.5 KB 在 20 KB 里时余量 57%，任务栈一翻倍（+1.5 KB）、再开一路 DMA 双缓冲（+2.25 KB），余量就掉到 39%。两处配置吃掉 3.75 KB。
 
 这里要做的不是算一个数，是把每项开销按最坏情况累加，再看剩下的余量安不安全。RAM 的每一项都得问一句「最大会是多少」，而不是「平时是多少」。*（为什么先算 RAM 而不是 Flash：Flash 不够可以删功能、砍库，RAM 不够只能换芯片；而且 RAM 会在最深的调用栈上突然爆掉，症状是随机死机。）*
 

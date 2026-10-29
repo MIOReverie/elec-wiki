@@ -83,7 +83,7 @@ $$
 
 也就是说，三个电压 $U_R$、$U_L$、$U_C$ 与总电压 $U$ 之间不是代数相加，而 $I$ 是三者共用的那一个量。串联的总阻抗写成 $Z = R + j(X_L - X_C)$，虚部就是净电抗；它的模与角分别是 $|Z| = \sqrt{R^2 + X^2}$ 和 $\varphi = \arctan\dfrac{X_L - X_C}{R}$。
 
-<FigBox title="电压三角形与阻抗三角形" kind="曲线" note="以 İ 为参考：U_R 水平、U_L 竖直向上、U_C 竖直向下，总电压是它们的矢量和。整个三角形各边同除以 I 就得到阻抗三角形 —— 两个三角形相似，这是全章最值钱的图像。">
+<FigBox title="电压与电流的相位关系：电压三角形由此而来" kind="曲线" note="以 i 为参考：u_R 与 i 完全重合（同相）、u_L 超前 90°、u_C 滞后 90°。把这个相位关系画成相量再首尾相接，就得到电压三角形——U_R 水平、U_L 竖直向上、U_C 竖直向下，总电压是它们的矢量和；三角形各边同除以 I 就得到阻抗三角形，两个三角形相似，这是全章最值钱的图像。">
 <WavePreset kind="phasorref" />
 </FigBox>
 
@@ -264,21 +264,29 @@ $$
 题干：$Z_1 = 3 + j4\ \Omega$、$Z_2 = 4 - j3\ \Omega$ 并联，求等效阻抗。
 
 <FigBox title="并联的两个阻抗：端电压相同，电流各自不同" kind="电路" note="并联支路上电压相同，但两个阻抗一个感性一个容性，等效之后互相补偿，结果比同值电阻并联还大。">
-<svg viewBox="0 0 460 240" role="img" aria-label="两个阻抗并联：同一对端子之间上下各接一个阻抗">
+<svg viewBox="0 0 460 250" role="img" aria-label="两个阻抗并联：同一对端子 A、B 之间上下各接一个阻抗">
   <g stroke="var(--vp-c-text-1)" stroke-width="1.7" fill="none" stroke-linecap="round">
-    <line x1="90" y1="60" x2="370" y2="60"/>
-    <line x1="90" y1="180" x2="370" y2="180"/>
-    <line x1="90" y1="60" x2="90" y2="100"/>
-    <line x1="90" y1="140" x2="90" y2="180"/>
-    <rect x="200" y="100" width="60" height="40" rx="5"/>
-    <line x1="370" y1="60" x2="370" y2="180"/>
+    <line x1="110" y1="56" x2="350" y2="56"/>
+    <line x1="110" y1="196" x2="350" y2="196"/>
+    <line x1="180" y1="56" x2="180" y2="104"/>
+    <line x1="180" y1="148" x2="180" y2="196"/>
+    <rect x="158" y="104" width="44" height="44" rx="5"/>
+    <line x1="290" y1="56" x2="290" y2="104"/>
+    <line x1="290" y1="148" x2="290" y2="196"/>
+    <rect x="268" y="104" width="44" height="44" rx="5"/>
+  </g>
+  <g fill="var(--vp-c-text-1)">
+    <circle cx="180" cy="56" r="3"/>
+    <circle cx="290" cy="56" r="3"/>
+    <circle cx="180" cy="196" r="3"/>
+    <circle cx="290" cy="196" r="3"/>
   </g>
   <g font-size="12" fill="var(--vp-c-text-1)">
-    <text x="230" y="86" text-anchor="middle">Z₁ = 3 + j4 Ω</text>
-    <text x="230" y="212" text-anchor="middle">Z₂ = 4 − j3 Ω</text>
-    <text x="66" y="120" text-anchor="end">A</text>
-    <text x="66" y="212" text-anchor="end">B</text>
-    <text x="230" y="34" text-anchor="middle" fill="var(--vp-c-text-3)">两端电压相同 → 用导纳相加最省事</text>
+    <text x="150" y="122" text-anchor="end">Z₁ = 3 + j4 Ω</text>
+    <text x="320" y="122" text-anchor="start">Z₂ = 4 − j3 Ω</text>
+    <text x="100" y="50" text-anchor="end">A</text>
+    <text x="100" y="202" text-anchor="end">B</text>
+    <text x="230" y="232" text-anchor="middle" fill="var(--vp-c-text-3)">两端电压相同 → 用导纳相加最省事</text>
   </g>
 </svg>
 </FigBox>

@@ -145,7 +145,7 @@ $$
 <g font-size="11" fill="var(--vp-c-text-1)">
   <line x1="70" y1="230" x2="440" y2="230" stroke="var(--vp-c-divider)" stroke-width="1.2" />
   <line x1="70" y1="230" x2="70" y2="40" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-  <text x="446" y="234" font-size="9.5" fill="var(--vp-c-text-3)">输入 u_i</text>
+  <text x="436" y="234" text-anchor="end" font-size="9.5" fill="var(--vp-c-text-3)">输入 u_i</text>
   <text x="70" y="32" font-size="9.5" fill="var(--vp-c-text-3)">输出 u_o</text>
 
   <line x1="70" y1="190" x2="440" y2="190" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3" />
@@ -185,10 +185,10 @@ $$
   <line x1="52" y1="60" x2="546" y2="60" stroke="var(--vp-c-divider)" stroke-width="1" />
   <polyline points="52,60 78,58 96,50 112,55 130,42 148,47 166,34 184,39 202,28 220,32 240,24 260,28 280,32 300,38 320,44 340,50 360,56 380,52 400,46 420,50 440,56 460,60 480,64 500,66 520,62 546,60" fill="none" stroke="#f59e0b" stroke-width="1.8" />
   <text x="60" y="20" font-size="9.5" fill="#f59e0b">锯齿（缓慢上升）+ 高频抖动</text>
-  <line x1="52" y1="34" x2="546" y2="34" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3" />
-  <text x="540" y="30" text-anchor="end" font-size="8.5" fill="var(--vp-c-text-3)">V_TH = 6 V</text>
-  <line x1="52" y1="76" x2="546" y2="76" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3" />
-  <text x="540" y="88" text-anchor="end" font-size="8.5" fill="var(--vp-c-text-3)">V_TL = 3 V</text>
+  <line x1="52" y1="36" x2="546" y2="36" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3" />
+  <text x="540" y="32" text-anchor="end" font-size="8.5" fill="var(--vp-c-text-3)">V_TH = 6 V</text>
+  <line x1="52" y1="48" x2="546" y2="48" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3" />
+  <text x="540" y="46" text-anchor="end" font-size="8.5" fill="var(--vp-c-text-3)">V_TL = 3 V</text>
 
   <line x1="10" y1="112" x2="550" y2="112" stroke="var(--vp-c-divider)" stroke-width="1" stroke-dasharray="5 4" />
   <text x="10" y="130" font-size="10" fill="var(--vp-c-text-3)">普通比较器</text>
@@ -199,8 +199,8 @@ $$
   <line x1="10" y1="196" x2="550" y2="196" stroke="var(--vp-c-divider)" stroke-width="1" stroke-dasharray="5 4" />
   <text x="10" y="214" font-size="10" fill="var(--vp-c-text-3)">施密特</text>
   <line x1="52" y1="248" x2="546" y2="248" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <polyline points="52,248 200,248 200,218 300,218 300,248 546,248" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
-  <text x="300" y="240" font-size="9.5" fill="var(--vp-c-brand-1)">一个周期只翻 2 次</text>
+  <polyline points="52,248 192,248 192,218 333,218 333,248 546,248" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
+  <text x="262" y="240" text-anchor="middle" font-size="9.5" fill="var(--vp-c-brand-1)">一个周期只翻 2 次</text>
 </g>
 </svg>
 
@@ -259,9 +259,9 @@ $$
   <text x="10" y="72" font-size="10" fill="var(--vp-c-text-3)">u_i</text>
   <line x1="34" y1="68" x2="150" y2="68" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#ps-c)" />
   <polygon points="150,34 200,84 150,134" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <text x="164" y="80" font-size="9.5">−</text>
-  <text x="164" y="98" font-size="9.5">+</text>
-  <text x="176" y="112" font-size="9" fill="var(--vp-c-text-3)">运放</text>
+  <text x="158" y="64" font-size="9.5">−</text>
+  <text x="158" y="130" font-size="9.5">+</text>
+  <text x="176" y="96" font-size="9" fill="var(--vp-c-text-3)">运放</text>
   <line x1="200" y1="84" x2="258" y2="84" stroke="var(--vp-c-brand-1)" stroke-width="1.8" marker-end="url(#ps-c)" />
   <text x="262" y="80" font-size="10" fill="var(--vp-c-brand-1)">u_o = ±U_Z</text>
 
@@ -269,16 +269,16 @@ $$
   <line x1="150" y1="176" x2="240" y2="176" stroke="var(--vp-c-brand-1)" stroke-width="1.3" />
   <rect x="150" y="164" width="46" height="24" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
   <text x="173" y="180" text-anchor="middle" font-size="9.5">R₁</text>
-  <line x1="150" y1="176" x2="150" y2="150" stroke="var(--vp-c-brand-1)" stroke-width="1.3" />
-  <circle cx="150" cy="140" r="3" fill="var(--vp-c-brand-1)" />
-  <line x1="150" y1="140" x2="150" y2="124" stroke="var(--vp-c-brand-1)" stroke-width="1.3" />
+  <line x1="150" y1="176" x2="150" y2="124" stroke="var(--vp-c-brand-1)" stroke-width="1.3" />
 
-  <line x1="150" y1="176" x2="150" y2="212" stroke="var(--vp-c-text-2)" stroke-width="1.3" />
-  <rect x="150" y="188" width="46" height="24" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <text x="173" y="204" text-anchor="middle" font-size="9.5">R₂</text>
-  <line x1="150" y1="212" x2="150" y2="230" stroke="var(--vp-c-text-2)" stroke-width="1.3" />
+  <rect x="140" y="184" width="20" height="30" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="166" y="203" font-size="9.5">R₂</text>
+  <line x1="150" y1="176" x2="150" y2="184" stroke="var(--vp-c-text-2)" stroke-width="1.3" />
+  <line x1="150" y1="214" x2="150" y2="230" stroke="var(--vp-c-text-2)" stroke-width="1.3" />
   <line x1="136" y1="230" x2="164" y2="230" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <text x="120" y="234" font-size="9.5" fill="var(--vp-c-text-3)">地</text>
+  <line x1="141" y1="235" x2="159" y2="235" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <line x1="146" y1="240" x2="154" y2="240" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+  <text x="118" y="234" font-size="9.5" fill="var(--vp-c-text-3)">地</text>
 
   <text x="280" y="150" font-size="10.5">同相端电压：</text>
   <text x="280" y="170" font-size="11" fill="var(--vp-c-brand-1)">u₊ = R₂/(R₁+R₂) · u_o</text>
@@ -344,6 +344,8 @@ $$
   <text x="92" y="88" font-size="9">5 kΩ</text>
   <text x="92" y="154" font-size="9">5 kΩ</text>
   <text x="92" y="220" font-size="9">5 kΩ</text>
+  <line x1="76" y1="112" x2="76" y2="122" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
+  <line x1="76" y1="178" x2="76" y2="188" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
   <line x1="76" y1="244" x2="76" y2="292" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
   <line x1="40" y1="292" x2="520" y2="292" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
   <text x="10" y="296" font-size="9.5">GND（1 脚）</text>
@@ -355,7 +357,7 @@ $$
   <text x="10" y="192" font-size="9.5" fill="var(--vp-c-brand-1)">1/3 Vcc</text>
   <line x1="76" y1="188" x2="150" y2="188" stroke="var(--vp-c-brand-1)" stroke-width="1.3" marker-end="url(#p5m)" />
 
-  <text x="6" y="116" font-size="9.5" fill="var(--vp-c-text-3)">TH（6 脚）</text>
+  <text x="94" y="108" font-size="9.5" fill="var(--vp-c-text-3)">TH（6 脚）</text>
   <line x1="52" y1="112" x2="150" y2="112" stroke="var(--vp-c-text-2)" stroke-width="1.3" marker-end="url(#p5m)" />
   <polygon points="152,74 202,102 152,130" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.5" />
   <text x="158" y="90" font-size="9">+</text>
@@ -394,8 +396,8 @@ $$
   <text x="504" y="232" font-size="9.5" fill="var(--vp-c-brand-1)">DIS（7 脚）</text>
   <line x1="425" y1="250" x2="425" y2="292" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
 
-  <text x="392" y="270" font-size="9" fill="var(--vp-c-text-3)">Q̄ 控制放电管：</text>
-  <text x="392" y="284" font-size="9" fill="var(--vp-c-text-3)">输出低 → 导通 → 电容放电</text>
+  <text x="256" y="272" font-size="9" fill="var(--vp-c-text-3)">Q̄ 控制放电管：</text>
+  <text x="256" y="286" font-size="9" fill="var(--vp-c-text-3)">输出低 → 导通 → 电容放电</text>
 
   <line x1="14" y1="316" x2="546" y2="316" stroke="var(--vp-c-divider)" stroke-width="1" stroke-dasharray="5 4" />
   <text x="14" y="336" font-size="9.5" fill="var(--vp-c-text-3)">CV（5 脚）接在 2/3Vcc 那个节点上：外加一个电压就能把上阈值改掉，不用时可以并一只 10 nF 到地防干扰</text>
@@ -437,18 +439,22 @@ $$
 </defs>
 <g font-size="10.5" fill="var(--vp-c-text-1)">
   <text x="16" y="18" font-size="10.5" fill="var(--vp-c-brand-1)">① 单稳态</text>
+  <text x="82" y="24" font-size="8.5" fill="var(--vp-c-text-3)">Vcc</text>
   <line x1="76" y1="26" x2="76" y2="34" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
   <rect x="58" y="34" width="36" height="26" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.3" />
   <text x="76" y="51" text-anchor="middle" font-size="9">R</text>
   <line x1="76" y1="60" x2="76" y2="76" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <line x1="76" y1="76" x2="76" y2="88" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
   <line x1="62" y1="88" x2="90" y2="88" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
   <line x1="62" y1="95" x2="90" y2="95" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
   <text x="96" y="96" font-size="9">C</text>
   <line x1="76" y1="95" x2="76" y2="112" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <text x="76" y="126" text-anchor="middle" font-size="9" fill="var(--vp-c-text-3)">地</text>
+  <line x1="62" y1="112" x2="90" y2="112" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <line x1="67" y1="117" x2="85" y2="117" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <line x1="72" y1="122" x2="80" y2="122" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+  <text x="76" y="134" text-anchor="middle" font-size="9" fill="var(--vp-c-text-3)">地</text>
   <circle cx="76" cy="76" r="2.6" fill="var(--vp-c-brand-1)" />
   <line x1="76" y1="76" x2="140" y2="76" stroke="var(--vp-c-brand-1)" stroke-width="1.2" marker-end="url(#p5b)" />
-  <line x1="76" y1="76" x2="140" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.2" marker-end="url(#p5b)" />
   <rect x="142" y="46" width="60" height="44" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
   <text x="172" y="73" text-anchor="middle" font-weight="700">555</text>
   <line x1="202" y1="60" x2="240" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#p5b)" />
@@ -457,12 +463,13 @@ $$
   <text x="12" y="30" font-size="9" fill="var(--vp-c-text-3)">触发</text>
   <line x1="34" y1="34" x2="34" y2="60" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
   <line x1="34" y1="60" x2="140" y2="60" stroke="var(--vp-c-text-2)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#p5b)" />
-  <text x="66" y="24" font-size="8.5" fill="var(--vp-c-text-3)">6、7 脚 → C</text>
+  <text x="96" y="72" font-size="8.5" fill="var(--vp-c-text-3)">6、7 脚</text>
   <text x="16" y="146" font-size="9" fill="var(--vp-c-text-3)">来一次触发，出一个定宽脉冲</text>
 
   <line x1="10" y1="160" x2="550" y2="160" stroke="var(--vp-c-divider)" stroke-width="1" stroke-dasharray="5 4" />
 
   <text x="16" y="180" font-size="10.5" fill="var(--vp-c-brand-1)">② 多谐振荡器</text>
+  <text x="84" y="192" font-size="8.5" fill="var(--vp-c-text-3)">Vcc</text>
   <line x1="76" y1="188" x2="76" y2="196" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
   <rect x="58" y="196" width="36" height="24" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.3" />
   <text x="76" y="212" text-anchor="middle" font-size="9">R₁</text>
@@ -475,11 +482,12 @@ $$
   <line x1="76" y1="258" x2="76" y2="266" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
   <circle cx="76" cy="266" r="2.6" fill="var(--vp-c-brand-1)" />
   <line x1="76" y1="266" x2="140" y2="266" stroke="var(--vp-c-brand-1)" stroke-width="1.2" marker-end="url(#p5b)" />
+  <line x1="76" y1="266" x2="76" y2="278" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
   <line x1="62" y1="278" x2="90" y2="278" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
   <line x1="62" y1="284" x2="90" y2="284" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
   <text x="96" y="285" font-size="9">C</text>
   <line x1="76" y1="284" x2="76" y2="296" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <rect x="142" y="212" width="60" height="44" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
+  <rect x="142" y="212" width="60" height="56" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
   <text x="172" y="239" text-anchor="middle" font-weight="700">555</text>
   <line x1="202" y1="228" x2="240" y2="228" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#p5b)" />
   <text x="244" y="224" font-size="9">OUT</text>
@@ -549,18 +557,18 @@ $$
   <line x1="72" y1="182" x2="546" y2="182" stroke="var(--vp-c-divider)" stroke-width="1" />
   <line x1="72" y1="136" x2="546" y2="136" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3" />
   <text x="546" y="132" text-anchor="end" font-size="9" fill="var(--vp-c-text-3)">2/3 Vcc</text>
-  <polyline points="118,182 161,168 204,157 247,150 290,145 333,142 376,140 419,139 462,138 505,137.6 546,137.5" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
-  <circle cx="546" cy="137.5" r="3" fill="var(--vp-c-brand-1)" />
-  <text x="430" y="152" font-size="9" fill="var(--vp-c-brand-1)">指数爬升，永远到不了 Vcc</text>
+  <polyline points="118,182 148,175 178,169 208,163 238,158 268,154 298,150 328,146 358,143 388,140 418,137 430,136 430,182 546,182" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
+  <text x="196" y="124" font-size="9" fill="var(--vp-c-brand-1)">指数爬升，永远到不了 Vcc</text>
+  <text x="436" y="160" font-size="9" fill="var(--vp-c-text-3)">2/3Vcc 处瞬间放光</text>
   <text x="8" y="200" font-size="9" fill="var(--vp-c-text-3)">0 V</text>
 
   <line x1="8" y1="212" x2="552" y2="212" stroke="var(--vp-c-divider)" stroke-width="1" stroke-dasharray="5 4" />
   <text x="8" y="240" font-size="10" fill="var(--vp-c-text-3)">OUT</text>
   <line x1="72" y1="256" x2="546" y2="256" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <polyline points="72,256 118,256 118,228 546,228" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
-  <line x1="118" y1="268" x2="546" y2="268" stroke="var(--vp-c-text-2)" stroke-width="1.3" marker-end="url(#p5w)" />
-  <line x1="546" y1="268" x2="118" y2="268" stroke="var(--vp-c-text-2)" stroke-width="1.3" marker-end="url(#p5w)" />
-  <text x="300" y="264" text-anchor="middle" font-size="10" fill="var(--vp-c-text-2)">t_W = 1.1 RC</text>
+  <polyline points="72,256 118,256 118,228 430,228 430,256 546,256" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
+  <line x1="118" y1="268" x2="430" y2="268" stroke="var(--vp-c-text-2)" stroke-width="1.3" marker-end="url(#p5w)" />
+  <line x1="430" y1="268" x2="118" y2="268" stroke="var(--vp-c-text-2)" stroke-width="1.3" marker-end="url(#p5w)" />
+  <text x="274" y="264" text-anchor="middle" font-size="10" fill="var(--vp-c-text-2)">t_W = 1.1 RC</text>
 </g>
 </svg>
 
@@ -635,25 +643,25 @@ $$
   <line x1="56" y1="116" x2="592" y2="116" stroke="var(--vp-c-divider)" stroke-width="1" />
   <text x="8" y="120" font-size="9" fill="var(--vp-c-text-3)">0</text>
 
-  <polyline points="60,86.7 105,79.2 150,73.0 195,67.8 240,63.3 271,70.8 302,77.0 332,82.3 363,86.7 408,79.2 453,73.0 498,67.8 543,63.3 570,68.5 592,74.0" fill="none" stroke="#f59e0b" stroke-width="2.2" />
+  <polyline points="60,80 230,46 280,80 450,46 500,80 592,61.6" fill="none" stroke="#f59e0b" stroke-width="2.2" />
   <text x="120" y="60" font-size="9" fill="#f59e0b">充电（走 R₁+R₂）</text>
-  <text x="248" y="60" font-size="9" fill="var(--vp-c-text-3)">放电（只走 R₂）</text>
-  <text x="400" y="60" font-size="9" fill="#f59e0b">充电</text>
+  <text x="214" y="96" font-size="9" fill="var(--vp-c-text-3)">放电（只走 R₂）</text>
+  <text x="350" y="96" font-size="9" fill="#f59e0b">充电</text>
 
   <line x1="8" y1="140" x2="592" y2="140" stroke="var(--vp-c-divider)" stroke-width="1" stroke-dasharray="5 4" />
   <text x="8" y="166" font-size="10" fill="var(--vp-c-text-3)">OUT</text>
   <line x1="56" y1="196" x2="592" y2="196" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <polyline points="56,196 60,196 60,166 240,166 240,196 363,196 363,166 543,166 543,196 592,196" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.4" />
+  <polyline points="60,166 230,166 230,196 280,196 280,166 450,166 450,196 500,196 500,166 592,166" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.4" />
 
-  <line x1="60" y1="216" x2="240" y2="216" stroke="var(--vp-c-text-2)" stroke-width="1.3" marker-end="url(#p5d)" />
-  <line x1="240" y1="216" x2="60" y2="216" stroke="var(--vp-c-text-2)" stroke-width="1.3" marker-end="url(#p5d)" />
-  <text x="150" y="212" text-anchor="middle" font-size="9.5" fill="var(--vp-c-text-2)">t_高</text>
-  <line x1="240" y1="216" x2="363" y2="216" stroke="var(--vp-c-text-2)" stroke-width="1.3" marker-end="url(#p5d)" />
-  <line x1="363" y1="216" x2="240" y2="216" stroke="var(--vp-c-text-2)" stroke-width="1.3" marker-end="url(#p5d)" />
-  <text x="300" y="212" text-anchor="middle" font-size="9.5" fill="var(--vp-c-text-2)">t_低</text>
-  <line x1="60" y1="234" x2="363" y2="234" stroke="var(--vp-c-brand-1)" stroke-width="1.3" marker-end="url(#p5d)" />
-  <line x1="363" y1="234" x2="60" y2="234" stroke="var(--vp-c-brand-1)" stroke-width="1.3" marker-end="url(#p5d)" />
-  <text x="210" y="230" text-anchor="middle" font-size="9.5" fill="var(--vp-c-brand-1)">T = t_高 + t_低</text>
+  <line x1="60" y1="216" x2="230" y2="216" stroke="var(--vp-c-text-2)" stroke-width="1.3" marker-end="url(#p5d)" />
+  <line x1="230" y1="216" x2="60" y2="216" stroke="var(--vp-c-text-2)" stroke-width="1.3" marker-end="url(#p5d)" />
+  <text x="145" y="212" text-anchor="middle" font-size="9.5" fill="var(--vp-c-text-2)">t_高</text>
+  <line x1="230" y1="216" x2="280" y2="216" stroke="var(--vp-c-text-2)" stroke-width="1.3" marker-end="url(#p5d)" />
+  <line x1="280" y1="216" x2="230" y2="216" stroke="var(--vp-c-text-2)" stroke-width="1.3" marker-end="url(#p5d)" />
+  <text x="255" y="212" text-anchor="middle" font-size="9.5" fill="var(--vp-c-text-2)">t_低</text>
+  <line x1="60" y1="234" x2="280" y2="234" stroke="var(--vp-c-brand-1)" stroke-width="1.3" marker-end="url(#p5d)" />
+  <line x1="280" y1="234" x2="60" y2="234" stroke="var(--vp-c-brand-1)" stroke-width="1.3" marker-end="url(#p5d)" />
+  <text x="170" y="230" text-anchor="middle" font-size="9.5" fill="var(--vp-c-brand-1)">T = t_高 + t_低</text>
 
   <text x="400" y="212" font-size="9" fill="var(--vp-c-brand-1)">D = t_高/T = (R₁+R₂)/(R₁+2R₂)</text>
   <text x="400" y="228" font-size="9" fill="var(--vp-c-text-3)">充电路径永远多一个 R₁，所以 D 恒大于 50%</text>
@@ -702,8 +710,9 @@ $$
   <text x="8" y="34" font-size="10" fill="var(--vp-c-text-3)">按键</text>
   <line x1="66" y1="60" x2="546" y2="60" stroke="var(--vp-c-divider)" stroke-width="1" />
   <polyline points="66,60 100,60 100,36 108,36 108,60 116,60 116,36 126,36 126,60 134,60 134,36 142,36 142,60 152,60 152,36 160,36 160,60 170,60 170,36 178,36 178,60 186,60 186,36 194,36 194,60 300,60 300,36 546,36" fill="none" stroke="#f43f5e" stroke-width="1.8" />
-  <text x="200" y="76" font-size="9" fill="#f43f5e">触点在 10 ms 内弹跳十几次</text>
-  <text x="320" y="76" font-size="9" fill="var(--vp-c-text-3)">然后稳定闭合</text>
+  <text x="96" y="76" font-size="9" fill="#f43f5e">触点在 10 ms 内弹跳十几次</text>
+  <text x="248" y="76" font-size="9" fill="var(--vp-c-text-3)">稳定闭合</text>
+  <text x="330" y="76" font-size="9" fill="var(--vp-c-text-3)">松开</text>
 
   <line x1="8" y1="94" x2="552" y2="94" stroke="var(--vp-c-divider)" stroke-width="1" stroke-dasharray="5 4" />
   <text x="8" y="124" font-size="10" fill="var(--vp-c-text-3)">整形后</text>
@@ -782,7 +791,7 @@ PWM（pulse width modulation，脉冲宽度调制）在[08 章](./ad-da.md)已�
   <line x1="8" y1="160" x2="552" y2="160" stroke="var(--vp-c-divider)" stroke-width="1" stroke-dasharray="5 4" />
   <text x="8" y="186" font-size="10" fill="var(--vp-c-text-3)">发射</text>
   <line x1="66" y1="210" x2="546" y2="210" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <polyline points="66,210 130,210 130,186 136,186 136,210 142,210 142,186 148,186 148,210 154,210 154,186 160,186 160,210 166,210 166,186 172,186 172,210 178,210 178,186 184,186 184,210 190,210 190,186 196,186 196,210 202,210 202,186 208,186 208,210 210,210 210,186 300,186 300,210 360,210 360,186 366,186 366,210 372,210 372,186 378,186 378,210 384,210 384,186 390,186 390,210 396,210 396,186 402,186 402,210 408,210 408,186 414,186 414,210 420,210 420,186 426,186 426,210 430,210 430,186 500,186 500,210 546,210" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+  <polyline points="66,210 130,210 130,186 136,186 136,210 142,210 142,186 148,186 148,210 154,210 154,186 160,186 160,210 166,210 166,186 172,186 172,210 178,210 178,186 184,186 184,210 190,210 190,186 196,186 196,210 202,210 202,186 208,186 208,210 300,210 300,186 306,186 306,210 312,210 312,186 318,186 318,210 324,210 324,186 330,186 330,210 336,210 336,186 342,186 342,210 348,210 348,186 354,186 354,210 360,210 430,210 430,186 436,186 436,210 442,210 442,186 448,186 448,210 454,210 454,186 460,186 460,210 466,210 466,186 472,186 472,210 478,210 478,186 484,186 484,210 490,210 490,186 496,186 496,210 546,210" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
   <text x="240" y="200" font-size="9" fill="var(--vp-c-brand-1)">只有门控为高时才发出载波</text>
 </g>
 </svg>

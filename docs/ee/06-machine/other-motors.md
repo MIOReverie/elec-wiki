@@ -216,20 +216,26 @@ $K$ 是电压-转速常数，单位 V/(r/min)。转速上升，输出电压跟�
 
 <FigBox title="并励直流电机接线：电枢与励磁并联" kind="概念" note="电枢回路（U–Ra–E）与励磁回路并联在电源两端。起动时在电枢回路串入 Rst 限流；励磁绕组全程不得断开，否则 Φ→0 飞车。">
 
-<svg viewBox="0 0 300 140" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <line x1="40" y1="30" x2="40" y2="120" stroke="currentColor"/>
-  <line x1="40" y1="30" x2="120" y2="30" stroke="currentColor"/>
-  <line x1="40" y1="120" x2="120" y2="120" stroke="currentColor"/>
-  <rect x="120" y="20" width="50" height="22" rx="4" fill="none" stroke="currentColor"/>
-  <text x="145" y="35" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">Rst</text>
-  <rect x="180" y="20" width="50" height="22" rx="4" fill="none" stroke="currentColor"/>
-  <text x="205" y="35" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">Ra</text>
-  <circle cx="230" cy="31" r="6" fill="none" stroke="currentColor"/>
-  <text x="245" y="35" fill="currentColor" stroke="none" font-size="10">E</text>
-  <line x1="120" y1="120" x2="260" y2="120" stroke="currentColor"/>
-  <line x1="260" y1="120" x2="260" y2="90" stroke="currentColor"/>
-  <rect x="230" y="90" width="60" height="20" rx="4" fill="none" stroke="currentColor"/>
-  <text x="260" y="104" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">励磁绕组</text>
+<svg viewBox="0 0 330 170" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="并励直流电机接线：电枢支路（起动电阻 Rst 串电枢电阻 Ra 与反电动势 E）与励磁绕组并联接在电源 U 两端">
+  <line x1="40" y1="40" x2="40" y2="75" stroke="currentColor"/>
+  <line x1="40" y1="95" x2="40" y2="130" stroke="currentColor"/>
+  <circle cx="40" cy="85" r="10" fill="none" stroke="currentColor"/>
+  <text x="24" y="89" fill="currentColor" stroke="none" font-size="11" text-anchor="end">U</text>
+  <line x1="40" y1="40" x2="70" y2="40" stroke="currentColor"/>
+  <rect x="70" y="30" width="50" height="20" rx="4" fill="none" stroke="currentColor"/>
+  <text x="95" y="44" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">Rst</text>
+  <line x1="120" y1="40" x2="135" y2="40" stroke="currentColor"/>
+  <rect x="135" y="30" width="50" height="20" rx="4" fill="none" stroke="currentColor"/>
+  <text x="160" y="44" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">Ra</text>
+  <line x1="185" y1="40" x2="205" y2="40" stroke="currentColor"/>
+  <circle cx="215" cy="40" r="10" fill="none" stroke="currentColor"/>
+  <text x="215" y="44" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">E</text>
+  <line x1="225" y1="40" x2="290" y2="40" stroke="currentColor"/>
+  <line x1="290" y1="40" x2="290" y2="62" stroke="currentColor"/>
+  <rect x="262" y="62" width="56" height="30" rx="4" fill="none" stroke="currentColor"/>
+  <text x="290" y="77" fill="currentColor" stroke="none" font-size="9.5" text-anchor="middle" dominant-baseline="middle">励磁绕组</text>
+  <line x1="290" y1="92" x2="290" y2="130" stroke="currentColor"/>
+  <line x1="40" y1="130" x2="290" y2="130" stroke="currentColor"/>
 </svg>
 
 </FigBox>
@@ -291,16 +297,23 @@ $$
 
 <FigBox title="串励直流电机接线：励磁绕组与电枢串联" kind="概念" note="励磁绕组 Rse 与电枢 Ra 串联在电源回路，故 If = Ia，磁通随负载变。负载一变轻，Ia 变小、Φ 变弱，由 n=(U−IaR)/(KeΦ) 知转速飙升，空载即飞车。">
 
-<svg viewBox="0 0 300 110" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <line x1="40" y1="55" x2="80" y2="55" stroke="currentColor"/>
-  <rect x="80" y="44" width="50" height="22" rx="4" fill="none" stroke="currentColor"/>
-  <text x="105" y="59" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">Rse</text>
-  <line x1="130" y1="55" x2="170" y2="55" stroke="currentColor"/>
-  <rect x="170" y="44" width="50" height="22" rx="4" fill="none" stroke="currentColor"/>
-  <text x="195" y="59" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">Ra</text>
-  <line x1="220" y1="55" x2="260" y2="55" stroke="currentColor"/>
-  <circle cx="260" cy="55" r="6" fill="none" stroke="currentColor"/>
-  <text x="270" y="59" fill="currentColor" stroke="none" font-size="10">E</text>
+<svg viewBox="0 0 320 130" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="串励直流电机接线：励磁绕组 Rse 与电枢电阻 Ra、反电动势 E 全部串联在电源 U 的回路里">
+  <line x1="40" y1="40" x2="40" y2="60" stroke="currentColor"/>
+  <line x1="40" y1="80" x2="40" y2="110" stroke="currentColor"/>
+  <circle cx="40" cy="70" r="10" fill="none" stroke="currentColor"/>
+  <text x="24" y="74" fill="currentColor" stroke="none" font-size="11" text-anchor="end">U</text>
+  <line x1="40" y1="40" x2="60" y2="40" stroke="currentColor"/>
+  <rect x="60" y="30" width="60" height="20" rx="4" fill="none" stroke="currentColor"/>
+  <text x="90" y="44" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">Rse</text>
+  <line x1="120" y1="40" x2="150" y2="40" stroke="currentColor"/>
+  <rect x="150" y="30" width="60" height="20" rx="4" fill="none" stroke="currentColor"/>
+  <text x="180" y="44" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">Ra</text>
+  <line x1="210" y1="40" x2="240" y2="40" stroke="currentColor"/>
+  <circle cx="250" cy="40" r="10" fill="none" stroke="currentColor"/>
+  <text x="250" y="44" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">E</text>
+  <line x1="260" y1="40" x2="290" y2="40" stroke="currentColor"/>
+  <line x1="290" y1="40" x2="290" y2="110" stroke="currentColor"/>
+  <line x1="40" y1="110" x2="290" y2="110" stroke="currentColor"/>
 </svg>
 
 </FigBox>

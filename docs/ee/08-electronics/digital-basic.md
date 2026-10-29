@@ -75,8 +75,8 @@ description: 电压落在哪条带子里才算 0 或 1，同一串 0/1 怎么读
   <text x="361" y="113" text-anchor="middle" font-size="16" font-weight="700">1</text>
   <text x="410" y="113" text-anchor="middle" font-size="16" font-weight="700">0</text>
 
-  <rect x="40" y="82" width="205" height="48" rx="8" fill="none" stroke="var(--vp-c-brand-1)" stroke-dasharray="5 4" />
-  <rect x="236" y="82" width="205" height="48" rx="8" fill="none" stroke="var(--vp-c-text-3)" stroke-dasharray="5 4" />
+  <rect x="41" y="82" width="198" height="48" rx="8" fill="none" stroke="var(--vp-c-brand-1)" stroke-dasharray="5 4" />
+  <rect x="240" y="82" width="196" height="48" rx="8" fill="none" stroke="var(--vp-c-text-3)" stroke-dasharray="5 4" />
   <text x="130" y="152" text-anchor="middle" fill="var(--vp-c-brand-1)">高位 4 位 → B（= 11）</text>
   <text x="340" y="152" text-anchor="middle" fill="var(--vp-c-text-3)">低位 4 位 → 6</text>
 
@@ -217,7 +217,7 @@ BCD（Binary-Coded Decimal，二-十进制编码）属于第二种读法：它�
   <rect x="300" y="46" width="150" height="66" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" />
   <text x="375" y="72" text-anchor="middle">5 V TTL</text>
   <text x="375" y="92" text-anchor="middle" fill="var(--vp-c-text-3)">输入：V_IH ≥ 2.0 V</text>
-  <line x1="172" y1="79" x2="296" y2="79" stroke="var(--vp-c-brand-1)" stroke-width="1.8" marker-end="url(#db-ar)" />
+  <line x1="170" y1="79" x2="299" y2="79" stroke="var(--vp-c-brand-1)" stroke-width="1.8" marker-end="url(#db-ar)" />
   <text x="234" y="66" text-anchor="middle" fill="var(--vp-c-text-3)">3.2 − 2.0 = 1.2 V</text>
   <text x="234" y="98" text-anchor="middle" fill="var(--vp-c-brand-1)">可行 ✓</text>
   <text x="235" y="140" text-anchor="middle" fill="var(--vp-c-text-3)">反过来：TTL 的 V_OH 只保证 2.4 V，对 2.31 V 只剩 0.09 V</text>

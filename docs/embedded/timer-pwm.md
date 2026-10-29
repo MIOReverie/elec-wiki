@@ -187,52 +187,56 @@ $$\text{duty} = \frac{CCR}{ARR+1},\qquad f_{PWM} = \frac{f_{cnt}}{ARR+1},\qquad 
 
 <FigBox title="一个 PWM 周期里各寄存器怎么对上图" kind="时序" note="同一个计数器同时被三样东西引用：PSC 决定每个刻度多宽，ARR+1 决定刻度总数（周期），CCR 决定高电平段占多少个刻度（占空比）。图中 ARR+1 = 10、CCR = 3，所以占空比 30%、频率为计数频率的十分之一。" >
 
-<svg viewBox="0 0 620 190" role="img" aria-label="PWM 波形与 PSC、ARR、CCR 的对应关系">
+<svg viewBox="0 0 620 190" role="img" aria-label="PWM 波形与 PSC、ARR、CCR 的对应关系：ARR+1 = 10 个计数、CCR = 3 个计数，占空比 30%">
   <defs>
     <marker id="tpw-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" />
     </marker>
   </defs>
   <g stroke="var(--vp-c-divider)" stroke-width="1">
-    <line x1="60" y1="40" x2="600" y2="40" />
-    <line x1="60" y1="96" x2="600" y2="96" />
+    <line x1="60" y1="40" x2="560" y2="40" />
+    <line x1="60" y1="96" x2="560" y2="96" />
     <line x1="60" y1="34" x2="60" y2="104" />
-    <line x1="132" y1="34" x2="132" y2="104" stroke-dasharray="3 3" />
-    <line x1="204" y1="34" x2="204" y2="104" stroke-dasharray="3 3" />
-    <line x1="276" y1="34" x2="276" y2="104" stroke-dasharray="3 3" />
-    <line x1="348" y1="34" x2="348" y2="104" stroke-dasharray="3 3" />
-    <line x1="420" y1="34" x2="420" y2="104" stroke-dasharray="3 3" />
-    <line x1="492" y1="34" x2="492" y2="104" stroke-dasharray="3 3" />
-    <line x1="564" y1="34" x2="564" y2="104" stroke-dasharray="3 3" />
+    <line x1="110" y1="34" x2="110" y2="104" stroke-dasharray="3 3" />
+    <line x1="160" y1="34" x2="160" y2="104" stroke-dasharray="3 3" />
+    <line x1="210" y1="34" x2="210" y2="104" stroke-dasharray="3 3" />
+    <line x1="260" y1="34" x2="260" y2="104" stroke-dasharray="3 3" />
+    <line x1="310" y1="34" x2="310" y2="104" stroke-dasharray="3 3" />
+    <line x1="360" y1="34" x2="360" y2="104" stroke-dasharray="3 3" />
+    <line x1="410" y1="34" x2="410" y2="104" stroke-dasharray="3 3" />
+    <line x1="460" y1="34" x2="460" y2="104" stroke-dasharray="3 3" />
+    <line x1="510" y1="34" x2="510" y2="104" stroke-dasharray="3 3" />
   </g>
   <text x="6" y="44" font-size="11" fill="var(--vp-c-text-3)">高</text>
   <text x="6" y="100" font-size="11" fill="var(--vp-c-text-3)">低</text>
-  <path d="M 60 40 L 204 40 L 204 96 L 636 96" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.5" />
+  <path d="M 60 40 L 210 40 L 210 96 L 560 96" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.5" />
   <g stroke="var(--vp-c-brand-2)" stroke-width="1.5" fill="none">
-    <line x1="60" y1="14" x2="204" y2="14" marker-end="url(#tpw-arrow)" />
-    <line x1="204" y1="14" x2="636" y2="14" marker-end="url(#tpw-arrow)" />
+    <line x1="60" y1="14" x2="560" y2="14" marker-start="url(#tpw-arrow)" marker-end="url(#tpw-arrow)" />
+    <line x1="60" y1="30" x2="210" y2="30" marker-end="url(#tpw-arrow)" />
   </g>
-  <text x="86" y="10" font-size="11" fill="var(--vp-c-text-2)">高电平 = CCR = 3 个计数</text>
-  <text x="360" y="10" font-size="11" fill="var(--vp-c-text-2)">一个周期 = ARR+1 = 10 个计数</text>
+  <text x="310" y="10" text-anchor="middle" font-size="11" fill="var(--vp-c-text-2)">一个周期 = ARR+1 = 10 个计数</text>
+  <text x="66" y="26" font-size="11" fill="var(--vp-c-text-2)">高电平 = CCR = 3 个计数</text>
   <g font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">
-    <text x="96" y="112">CNT 0</text>
-    <text x="168" y="112">CNT 2</text>
-    <text x="240" y="112">3</text>
-    <text x="312" y="112">4</text>
-    <text x="384" y="112">5</text>
-    <text x="456" y="112">6</text>
-    <text x="528" y="112">7</text>
-    <text x="600" y="112">8…</text>
+    <text x="85" y="112">CNT 0</text>
+    <text x="135" y="112">1</text>
+    <text x="185" y="112">2</text>
+    <text x="235" y="112">3</text>
+    <text x="285" y="112">4</text>
+    <text x="335" y="112">5</text>
+    <text x="385" y="112">6</text>
+    <text x="435" y="112">7</text>
+    <text x="485" y="112">8</text>
+    <text x="535" y="112">9</text>
   </g>
   <g stroke="var(--vp-c-text-3)" stroke-width="1">
-    <line x1="96" y1="24" x2="96" y2="130" />
-    <line x1="240" y1="24" x2="240" y2="130" />
-    <line x1="600" y1="24" x2="600" y2="130" />
+    <line x1="110" y1="120" x2="110" y2="138" />
+    <line x1="210" y1="120" x2="210" y2="138" />
+    <line x1="560" y1="120" x2="560" y2="138" />
   </g>
-  <g font-size="10.5" fill="var(--vp-c-text-3)">
-    <text x="96" y="144">PSC 定刻度宽</text>
-    <text x="252" y="144">CCR 定翻转点</text>
-    <text x="452" y="144">ARR 定周期</text>
+  <g font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">
+    <text x="110" y="152">PSC 定刻度宽</text>
+    <text x="210" y="152">CCR 定翻转点</text>
+    <text x="560" y="152">ARR 定周期</text>
   </g>
   <text x="60" y="176" font-size="11" fill="var(--vp-c-text-3)">若 f_cnt = 1 MHz，则刻度宽 1 µs，周期 10 µs（100 kHz），高电平 3 µs，占空比 30%</text>
 </svg>
@@ -343,7 +347,7 @@ TIM1、TIM8 这类高级定时器多出三样东西：互补输出加死区（�
 
 <FigBox title="互补输出里的死区：两段「都关断」的空档" kind="时序" note="CH1 与 CH1N 互为反相，但翻转时刻错开 t_dead。这两段空档里上下两管都不导通，母线不会短路。代价是高电平被吃掉一点：一个周期总共损失 2·t_dead，所以实际送到电机的电压低于设定值。" >
 
-<svg viewBox="0 0 580 212" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
+<svg viewBox="0 0 580 220" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
   <text x="24" y="54" font-size="10" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">CH1</text>
   <text x="24" y="136" font-size="10" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">CH1N</text>
   <text x="24" y="72" font-size="8.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">上管</text>
@@ -351,7 +355,7 @@ TIM1、TIM8 这类高级定时器多出三样东西：互补输出加死区（�
   <rect x="150" y="44" width="10" height="102" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-dasharray="3 3"/>
   <rect x="270" y="44" width="10" height="102" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-dasharray="3 3"/>
   <path d="M 60 50 L 150 50 L 150 80 L 280 80 L 280 50 L 380 50" stroke="var(--vp-c-brand-1)" stroke-width="2.2"/>
-  <path d="M 60 110 L 160 110 L 160 140 L 270 140 L 270 110 L 380 110" stroke="var(--vp-c-brand-2)" stroke-width="2.2"/>
+  <path d="M 60 140 L 160 140 L 160 110 L 270 110 L 270 140 L 380 140" stroke="var(--vp-c-brand-2)" stroke-width="2.2"/>
   <text x="155" y="38" text-anchor="middle" font-size="9" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">t_dead</text>
   <text x="275" y="38" text-anchor="middle" font-size="9" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">t_dead</text>
   <line x1="60" y1="180" x2="380" y2="180" stroke="var(--vp-c-text-3)" stroke-width="1"/>

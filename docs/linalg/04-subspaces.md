@@ -46,17 +46,17 @@ $$
   <line x1="486" y1="32" x2="486" y2="232" stroke="var(--vp-c-divider)" stroke-dasharray="4 4"/>
   <line x1="60" y1="110" x2="230" y2="110" stroke="var(--vp-c-text-3)"/>
   <line x1="150" y1="150" x2="150" y2="42" stroke="var(--vp-c-text-3)"/>
-  <line x1="115" y1="150" x2="185" y2="70" stroke="#16a34a" stroke-width="2.4"/>
+  <line x1="115" y1="136" x2="185" y2="84" stroke="#16a34a" stroke-width="2.4"/>
   <circle cx="150" cy="110" r="3.6" fill="var(--vp-c-text-1)" stroke="none"/>
   <text x="140" y="126" font-size="11" fill="var(--vp-c-text-2)" stroke="none">0</text>
-  <text x="188" y="66" font-size="11.5" fill="#16a34a" stroke="none">过原点</text>
+  <text x="189" y="82" font-size="11.5" fill="#16a34a" stroke="none">过原点</text>
   <text x="276" y="76" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">① 含零 ✓</text>
   <text x="276" y="98" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">② 加法封闭 ✓</text>
   <text x="276" y="120" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">③ 数乘封闭 ✓</text>
   <text x="520" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#16a34a" stroke="none">是子空间</text>
   <line x1="60" y1="206" x2="230" y2="206" stroke="var(--vp-c-text-3)"/>
   <line x1="150" y1="232" x2="150" y2="146" stroke="var(--vp-c-text-3)"/>
-  <line x1="105" y1="216" x2="190" y2="152" stroke="#ef4444" stroke-width="2.4"/>
+  <line x1="105" y1="220" x2="190" y2="156" stroke="#ef4444" stroke-width="2.4"/>
   <circle cx="150" cy="206" r="3.6" fill="var(--vp-c-text-2)" stroke="none"/>
   <text x="158" y="222" font-size="11" fill="var(--vp-c-text-2)" stroke="none">0 不在这条线上</text>
   <text x="196" y="150" font-size="11.5" fill="#ef4444" stroke="none">不过原点</text>
@@ -193,21 +193,21 @@ $$
   <rect x="438" y="44" width="34" height="114" fill="#3b82f6" fill-opacity="0.1" stroke="none"/>
   <path d="M372 46 L362 46 L362 168 L372 168" stroke="var(--vp-c-text-3)"/>
   <path d="M484 46 L494 46 L494 168 L484 168" stroke="var(--vp-c-text-3)"/>
-  <circle cx="383" cy="60" r="13" stroke="#3b82f6" stroke-width="1.8"/>
-  <circle cx="419" cy="96" r="13" stroke="#3b82f6" stroke-width="1.8"/>
-  <text x="383" y="65" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
-  <text x="419" y="65" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">2</text>
-  <text x="455" y="65" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">3</text>
-  <text x="383" y="101" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
-  <text x="419" y="101" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
-  <text x="455" y="101" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
-  <text x="383" y="137" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
-  <text x="419" y="137" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
-  <text x="455" y="137" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
-  <text x="455" y="188" text-anchor="middle" font-size="11" fill="#3b82f6" stroke="none">第 3 列无主元 → 自由变量 x₃</text>
-  <text x="383" y="188" text-anchor="middle" font-size="11" fill="#3b82f6" stroke="none">主元 2 个</text>
-  <text x="540" y="80" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">秩 = 主元数 = 2</text>
-  <text x="540" y="104" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">零空间 = 3 − 2 = 1 维</text>
+  <circle cx="383" cy="71" r="13" stroke="#3b82f6" stroke-width="1.8"/>
+  <circle cx="419" cy="107" r="13" stroke="#3b82f6" stroke-width="1.8"/>
+  <text x="383" y="76" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="419" y="76" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">2</text>
+  <text x="455" y="76" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">3</text>
+  <text x="383" y="112" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="419" y="112" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="455" y="112" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">1</text>
+  <text x="383" y="148" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="419" y="148" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="455" y="148" text-anchor="middle" font-size="13" fill="var(--vp-c-text-1)" stroke="none">0</text>
+  <text x="452" y="200" text-anchor="middle" font-size="11" fill="#3b82f6" stroke="none">第 3 列无主元 → 自由变量 x₃</text>
+  <text x="383" y="180" text-anchor="middle" font-size="11" fill="#3b82f6" stroke="none">主元 2 个</text>
+  <text x="526" y="80" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">秩 = 主元数 = 2</text>
+  <text x="526" y="104" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">零空间 = 3 − 2 = 1 维</text>
 </svg>
 </FigBox>
 
@@ -232,10 +232,10 @@ $$
   <path d="M246 116 l-9 -2 l1.2 6.4 Z" fill="#3b82f6" stroke="none"/>
   <text x="252" y="110" font-size="12" fill="#3b82f6" stroke="none">c₁</text>
   <line x1="120" y1="160" x2="150" y2="202" stroke="#3b82f6" stroke-width="2.2"/>
-  <path d="M150 202 l-1.4 8.4 l-6 -5.6 Z" fill="#3b82f6" stroke="none"/>
+  <path d="M150 202 L142.2 196.5 L147.4 192.8 Z" fill="#3b82f6" stroke="none"/>
   <text x="132" y="220" font-size="12" fill="#3b82f6" stroke="none">c₂</text>
   <line x1="120" y1="160" x2="276" y2="158" stroke="var(--vp-c-text-1)" stroke-width="2" stroke-dasharray="5 4"/>
-  <path d="M276 158 l-8.4 -2 l1.4 6.4 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <path d="M276 158 L267.1 161.3 L267 154.9 Z" fill="var(--vp-c-text-1)" stroke="none"/>
   <text x="284" y="162" font-size="12" fill="var(--vp-c-text-1)" stroke="none">c₃ = c₁ + c₂</text>
   <circle cx="120" cy="160" r="3.4" fill="var(--vp-c-text-1)" stroke="none"/>
   <text x="112" y="150" text-anchor="end" font-size="11" fill="var(--vp-c-text-2)" stroke="none">原点</text>

@@ -28,110 +28,130 @@ outline: [2, 3]
 
 <FigBox title="四个功能的接线与内部等效，一张图记住" kind="结构" note="左上：电压档并联，内部是 10 MΩ 输入阻抗。右上：电流档串联断口，内部是毫欧级分流电阻。左下：电阻档断电测，表自己送出电流。右下：二极管档内部是 1 mA 恒流源。每一格里的表笔位置就是你在实物上该接的位置。">
 
-<svg viewBox="0 0 560 400" role="img" aria-label="万用表四个功能的接线方式与内部等效电路：电压档并联、电流档串联、电阻档断电送流、二极管档恒流源">
+<svg viewBox="0 0 560 420" role="img" aria-label="万用表四个功能的接线方式与内部等效：电压档并联、电流档串联（R_sh 与负载同流）、电阻档断电送流、二极管档 1 毫安恒流源">
+<g fill="none" stroke="var(--vp-c-divider)">
+  <rect x="10" y="28" width="260" height="160" />
+  <rect x="290" y="28" width="260" height="160" />
+  <rect x="10" y="248" width="260" height="140" />
+  <rect x="290" y="248" width="260" height="140" />
+</g>
+
+<g font-size="11" fill="var(--vp-c-text-1)" text-anchor="middle" font-weight="700">
+  <text x="140" y="18">电压档：并联</text>
+  <text x="430" y="18">电流档：串联</text>
+  <text x="140" y="240">电阻档：断电测</text>
+  <text x="430" y="240">二极管档：1 mA 恒流源</text>
+</g>
+
+<!-- 电压档 -->
+<g stroke="var(--vp-c-brand-1)" stroke-width="1.6" fill="none">
+  <circle cx="50" cy="52" r="7" />
+  <circle cx="50" cy="176" r="7" />
+  <line x1="57" y1="52" x2="120" y2="52" />
+  <line x1="120" y1="52" x2="120" y2="92" />
+  <line x1="120" y1="136" x2="120" y2="176" />
+  <line x1="120" y1="176" x2="57" y2="176" />
+  <line x1="120" y1="52" x2="232" y2="52" />
+  <line x1="120" y1="176" x2="232" y2="176" />
+  <line x1="232" y1="52" x2="232" y2="92" />
+  <line x1="232" y1="136" x2="232" y2="176" />
+</g>
+<rect x="106" y="92" width="28" height="44" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+<text x="120" y="112" font-size="10" text-anchor="middle" fill="var(--vp-c-brand-1)">表</text>
+<text x="120" y="127" font-size="10" text-anchor="middle" fill="var(--vp-c-brand-1)">10 MΩ</text>
+<rect x="220" y="92" width="24" height="44" rx="3" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+<text x="232" y="152" font-size="11" text-anchor="middle">R</text>
+<g font-size="10" fill="var(--vp-c-text-3)" text-anchor="end">
+  <text x="26" y="56">V</text>
+  <text x="26" y="180">COM</text>
+</g>
+<g font-size="9" fill="var(--vp-c-brand-1)" text-anchor="middle">
+  <text x="50" y="55">+</text>
+  <text x="50" y="179">−</text>
+</g>
+<text x="196" y="70" font-size="10" fill="var(--vp-c-text-3)">被测电压</text>
+<text x="140" y="206" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">表内只有一只高阻：并联进电路，只分掉一点点电流</text>
+
+<!-- 电流档 -->
+<g stroke="var(--vp-c-brand-1)" stroke-width="1.6" fill="none">
+  <circle cx="326" cy="52" r="7" />
+  <circle cx="326" cy="176" r="7" />
+  <line x1="333" y1="52" x2="470" y2="52" />
+  <line x1="514" y1="52" x2="540" y2="52" />
+  <line x1="540" y1="52" x2="540" y2="176" />
+  <line x1="540" y1="176" x2="428" y2="176" />
+  <line x1="380" y1="176" x2="333" y2="176" />
+</g>
+<rect x="470" y="44" width="44" height="16" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+<text x="492" y="38" font-size="11" text-anchor="middle">R</text>
+<rect x="380" y="168" width="48" height="16" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+<text x="404" y="160" font-size="10" text-anchor="middle" fill="var(--vp-c-brand-1)">R_sh = 10 mΩ</text>
+<g font-size="10" fill="var(--vp-c-text-3)" text-anchor="end">
+  <text x="306" y="56">A</text>
+  <text x="306" y="180">COM</text>
+</g>
+<g font-size="9" fill="var(--vp-c-brand-1)" text-anchor="middle">
+  <text x="326" y="55">+</text>
+  <text x="326" y="179">−</text>
+</g>
+<text x="350" y="104" font-size="10.5" fill="var(--vp-c-brand-1)">电流必须流过表</text>
+<text x="430" y="206" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">断开回路、把表串进断口；R_sh 只取样，不改电路</text>
+
+<!-- 电阻档 -->
+<g stroke="var(--vp-c-brand-1)" stroke-width="1.6" fill="none">
+  <circle cx="50" cy="282" r="7" />
+  <circle cx="50" cy="372" r="7" />
+  <line x1="57" y1="282" x2="130" y2="282" />
+  <line x1="130" y1="282" x2="130" y2="296" />
+  <line x1="130" y1="322" x2="130" y2="372" />
+  <line x1="57" y1="372" x2="130" y2="372" />
+  <line x1="130" y1="282" x2="220" y2="282" />
+  <line x1="220" y1="282" x2="220" y2="300" />
+  <line x1="220" y1="360" x2="220" y2="372" />
+  <line x1="130" y1="372" x2="220" y2="372" />
+</g>
+<rect x="108" y="296" width="44" height="26" rx="4" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+<text x="130" y="313" font-size="10" text-anchor="middle" fill="var(--vp-c-brand-1)">恒压源</text>
+<rect x="212" y="300" width="16" height="60" rx="3" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+<text x="232" y="334" font-size="11" text-anchor="start">R</text>
+<circle cx="220" cy="282" r="4" fill="var(--vp-c-text-2)" />
+<circle cx="220" cy="372" r="4" fill="var(--vp-c-text-2)" />
+<g font-size="10" fill="var(--vp-c-text-3)" text-anchor="end">
+  <text x="26" y="286">Ω</text>
+  <text x="26" y="376">COM</text>
+</g>
+<path d="M 190 282 L 190 262" stroke="var(--vp-c-brand-1)" stroke-width="1.4" fill="none" marker-end="url(#dmm-ar)" />
+<text x="196" y="258" font-size="10" fill="var(--vp-c-brand-1)">表送出测试电流</text>
+<text x="140" y="410" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">外部必须断电放电，否则外来电压灌进欧姆档</text>
+
+<!-- 二极管档 -->
+<g stroke="var(--vp-c-brand-1)" stroke-width="1.6" fill="none">
+  <circle cx="326" cy="282" r="7" />
+  <circle cx="326" cy="372" r="7" />
+  <line x1="333" y1="282" x2="480" y2="282" />
+  <line x1="480" y1="282" x2="480" y2="302" />
+  <line x1="480" y1="328" x2="480" y2="372" />
+  <line x1="333" y1="372" x2="480" y2="372" />
+  <line x1="400" y1="282" x2="400" y2="309" />
+  <line x1="400" y1="345" x2="400" y2="372" />
+</g>
+<circle cx="400" cy="327" r="18" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+<path d="M 400 312 L 400 340" stroke="var(--vp-c-brand-1)" stroke-width="1.6" fill="none" marker-end="url(#dmm-ar)" />
+<g stroke="var(--vp-c-text-2)" stroke-width="1.6" fill="none">
+  <path d="M 466 302 L 494 302 L 480 328 Z" fill="var(--vp-c-bg-soft)" />
+  <line x1="466" y1="328" x2="494" y2="328" />
+</g>
+<path d="M 296 274 L 308 281 L 296 288 Z" fill="var(--vp-c-text-2)" stroke="var(--vp-c-text-2)" stroke-width="1.2" />
+<line x1="308" y1="274" x2="308" y2="288" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+<text x="372" y="354" font-size="10" text-anchor="end" fill="var(--vp-c-brand-1)">1 mA 恒流源</text>
+<text x="420" y="296" font-size="10" fill="var(--vp-c-text-3)">二极管（正向）</text>
+<text x="430" y="410" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">读数是「1 mA 下的导通压降」，不是电阻</text>
+
 <defs>
   <marker id="dmm-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
-  <marker id="dmm-ar3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
-  </marker>
 </defs>
-<g font-size="11" fill="var(--vp-c-text-1)">
-
-  <text x="140" y="18" text-anchor="middle" font-weight="700">电压档：并联</text>
-  <rect x="10" y="28" width="260" height="160" rx="8" fill="none" stroke="var(--vp-c-divider)" />
-  <circle cx="50" cy="52" r="7" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <circle cx="50" cy="176" r="7" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="36" y="46">+</text><text x="36" y="188">−</text>
-  <text x="26" y="56">V</text><text x="26" y="180">COM</text>
-  <line x1="57" y1="52" x2="120" y2="52" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="57" y1="176" x2="120" y2="176" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="120" y1="52" x2="120" y2="92" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="120" y1="136" x2="120" y2="176" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <rect x="108" y="92" width="24" height="44" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="120" y="110" text-anchor="middle" fill="var(--vp-c-brand-1)">表</text>
-  <text x="120" y="126" text-anchor="middle" fill="var(--vp-c-brand-1)">10 MΩ</text>
-  <line x1="120" y1="52" x2="220" y2="52" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <line x1="120" y1="176" x2="220" y2="176" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <rect x="208" y="86" width="24" height="56" rx="4" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <text x="220" y="118" text-anchor="middle">R</text>
-  <text x="222" y="60" fill="var(--vp-c-text-3)">被测电压</text>
-  <text x="222" y="170" fill="var(--vp-c-text-3)">跨在 R 两端</text>
-  <text x="140" y="210" text-anchor="middle" fill="var(--vp-c-text-3)">表内只有一个高阻值：它并联进电路分掉一点点电流</text>
-
-  <text x="430" y="18" text-anchor="middle" font-weight="700">电流档：串联</text>
-  <rect x="290" y="28" width="260" height="160" rx="8" fill="none" stroke="var(--vp-c-divider)" />
-  <text x="306" y="46">A</text><text x="306" y="180">COM</text>
-  <circle cx="326" cy="52" r="7" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <circle cx="326" cy="176" r="7" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="333" y1="52" x2="400" y2="52" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="333" y1="176" x2="400" y2="176" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="400" y1="52" x2="400" y2="70" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <rect x="390" y="70" width="20" height="30" rx="3" fill="var(--vp-c-brand-1)" />
-  <rect x="390" y="126" width="20" height="30" rx="3" fill="var(--vp-c-brand-1)" />
-  <line x1="400" y1="100" x2="400" y2="126" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="416" y="90" fill="var(--vp-c-brand-1)">R_sh</text>
-  <text x="416" y="102" fill="var(--vp-c-brand-1)">10 mΩ</text>
-  <line x1="400" y1="156" x2="400" y2="176" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="400" y1="176" x2="500" y2="176" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <line x1="500" y1="176" x2="500" y2="52" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <line x1="400" y1="52" x2="500" y2="52" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <rect x="488" y="92" width="24" height="44" rx="4" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <text x="500" y="118" text-anchor="middle">R</text>
-  <line x1="410" y1="52" x2="410" y2="34" stroke="var(--vp-c-text-3)" stroke-width="1" marker-end="url(#dmm-ar3)" />
-  <text x="440" y="34" fill="var(--vp-c-text-3)">电流必须流过表</text>
-  <text x="430" y="210" text-anchor="middle" fill="var(--vp-c-text-3)">断开回路、把表串进断口；R_sh 只是取样，别让它改电路</text>
-
-  <text x="140" y="238" text-anchor="middle" font-weight="700">电阻档：断电测</text>
-  <rect x="10" y="248" width="260" height="140" rx="8" fill="none" stroke="var(--vp-c-divider)" />
-  <text x="26" y="276">Ω</text><text x="26" y="376">COM</text>
-  <circle cx="50" cy="282" r="7" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <circle cx="50" cy="372" r="7" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="57" y1="282" x2="130" y2="282" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="57" y1="372" x2="130" y2="372" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <rect x="108" y="296" width="44" height="26" rx="4" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="130" y="314" text-anchor="middle" fill="var(--vp-c-brand-1)">恒压源</text>
-  <line x1="130" y1="282" x2="130" y2="296" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="130" y1="322" x2="130" y2="372" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <circle cx="220" cy="282" r="5" fill="var(--vp-c-text-2)" />
-  <circle cx="220" cy="372" r="5" fill="var(--vp-c-text-2)" />
-  <line x1="130" y1="282" x2="215" y2="282" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="130" y1="372" x2="215" y2="372" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <rect x="220" y="298" width="16" height="58" rx="4" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <text x="228" y="332">R</text>
-  <path d="M 190 282 L 190 262" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-end="url(#dmm-ar)" />
-  <text x="196" y="258" fill="var(--vp-c-brand-1)">表送出测试电流</text>
-  <text x="140" y="410" text-anchor="middle" fill="var(--vp-c-text-3)">外部必须断电放电，否则外来电压灌进欧姆档</text>
-
-  <text x="430" y="238" text-anchor="middle" font-weight="700">二极管档：1 mA 恒流源</text>
-  <rect x="290" y="248" width="260" height="140" rx="8" fill="none" stroke="var(--vp-c-divider)" />
-  <text x="306" y="276">⏚▸</text><text x="306" y="376">COM</text>
-  <circle cx="326" cy="282" r="7" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <circle cx="326" cy="372" r="7" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="333" y1="282" x2="400" y2="282" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="333" y1="372" x2="400" y2="372" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <circle cx="400" cy="327" r="18" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="400" y1="309" x2="400" y2="345" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#dmm-ar)" />
-  <text x="400" y="327" text-anchor="middle" fill="var(--vp-c-brand-1)">1 mA</text>
-  <line x1="400" y1="282" x2="400" y2="309" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="400" y1="345" x2="400" y2="372" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <polygon points="460,292 460,362 478,327" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <line x1="478" y1="292" x2="478" y2="362" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
-  <line x1="400" y1="282" x2="460" y2="282" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="478" y1="282" x2="478" y2="292" stroke="var(--vp-c-brand-1)" stroke-width="0" />
-  <line x1="400" y1="372" x2="478" y2="372" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="478" y1="362" x2="478" y2="372" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="478" y1="282" x2="478" y2="292" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="400" y1="282" x2="478" y2="282" stroke="var(--vp-c-brand-1)" stroke-width="0" />
-  <line x1="400" y1="282" x2="460" y2="282" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="460" y1="282" x2="460" y2="292" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="460" y1="292" x2="460" y2="282" stroke="var(--vp-c-brand-1)" stroke-width="0" />
-  <line x1="478" y1="282" x2="460" y2="282" stroke="var(--vp-c-brand-1)" stroke-width="0" />
-  <line x1="460" y1="282" x2="478" y2="282" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="468" y="386" text-anchor="middle">二极管</text>
-  <text x="430" y="410" text-anchor="middle" fill="var(--vp-c-text-3)">读数是「1 mA 下的导通压降」，不是电阻，也不是电压</text>
-</g>
 </svg>
 
 </FigBox>
@@ -156,45 +176,52 @@ $$U_{\text{读数}} = U_{\text{真实}} \cdot \frac{R_{\text{被测}}}{R_{\text{
 
 <FigBox title="电流档的取样原理与三档分流电阻" kind="结构" note="左：电流档的本质是一个毫欧级电阻加一个毫伏表，测出的压降除以阻值就是电流。右：量程小的时候 R_sh 大，串进 10 Ω 电路后压降占比就上来，μA 档的 100 Ω 已经能完全改变电路的工作点。">
 
-<svg viewBox="0 0 560 200" role="img" aria-label="左：分流电阻与毫伏表等效；右：三个量程的分流电阻值与串入 10 欧电路的压降对比">
-<defs>
-  <marker id="dmm-sh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
-  </marker>
-</defs>
-<g font-size="11" fill="var(--vp-c-text-1)">
-  <text x="120" y="18" text-anchor="middle" font-weight="700">电流档内部：R_sh + 毫伏表</text>
-  <line x1="30" y1="60" x2="90" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <rect x="90" y="44" width="60" height="32" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="120" y="64" text-anchor="middle" fill="var(--vp-c-brand-1)">R_sh</text>
-  <line x1="150" y1="60" x2="210" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <circle cx="180" cy="60" r="3" fill="var(--vp-c-brand-1)" />
-  <text x="180" y="94" text-anchor="middle" fill="var(--vp-c-text-3)">mV 表并联在 R_sh 两端</text>
-  <path d="M 120 76 L 120 60" stroke="var(--vp-c-text-3)" stroke-width="1" />
-  <path d="M 60 60 L 60 26 L 180 26 L 180 56" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1" marker-end="url(#dmm-sh)" />
-  <path d="M 180 64 L 180 104 L 60 104 L 60 60" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1" marker-end="url(#dmm-sh)" />
-  <text x="120" y="130" text-anchor="middle" fill="var(--vp-c-text-3)">I = U_sh / R_sh：表测的是压降，换算成电流</text>
-  <text x="120" y="152" text-anchor="middle" fill="var(--vp-c-text-3)">量程越小 → R_sh 越大 → 串入电路的「额外电阻」越大</text>
-
-  <text x="420" y="18" text-anchor="middle" font-weight="700">三档对比（串入 10 Ω 负载）</text>
-  <line x1="300" y1="140" x2="540" y2="140" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-  <text x="300" y="156" fill="var(--vp-c-text-3)">量程</text>
-  <text x="380" y="156" text-anchor="middle" fill="var(--vp-c-text-3)">R_sh</text>
-  <text x="480" y="156" text-anchor="middle" fill="var(--vp-c-text-3)">附加压降</text>
-  <text x="300" y="52">200 mA</text>
-  <text x="380" y="52" text-anchor="middle">0.1~1 Ω</text>
-  <text x="480" y="52" text-anchor="middle">10~100 mV</text>
-  <line x1="300" y1="62" x2="540" y2="62" stroke="var(--vp-c-divider)" stroke-width="0.6" />
-  <text x="300" y="82">2~10 A</text>
-  <text x="380" y="82" text-anchor="middle">10 mΩ</text>
-  <text x="480" y="82" text-anchor="middle">5 mV @ 500 mA</text>
-  <line x1="300" y1="92" x2="540" y2="92" stroke="var(--vp-c-divider)" stroke-width="0.6" />
-  <text x="300" y="112">μA 档</text>
-  <text x="380" y="112" text-anchor="middle">≥100 Ω</text>
-  <text x="480" y="112" text-anchor="middle" fill="var(--vp-c-brand-1)">不适用</text>
-  <line x1="300" y1="122" x2="540" y2="122" stroke="var(--vp-c-divider)" stroke-width="0.6" />
-  <text x="420" y="176" text-anchor="middle" fill="var(--vp-c-text-3)">被测电路阻值与 R_sh 同量级时，表本身就是电路的一部分</text>
+<svg viewBox="0 0 560 200" role="img" aria-label="左：分流电阻 R_sh 与跨在它两端的毫伏表组成电流档，测压降换算电流；右：三个量程的分流电阻值与串入 10 欧负载时的附加压降">
+<text x="120" y="14" font-size="11" text-anchor="middle" font-weight="700" fill="var(--vp-c-text-1)">电流档内部：R_sh + 毫伏表</text>
+<g stroke="var(--vp-c-brand-1)" stroke-width="1.6" fill="none">
+  <line x1="30" y1="60" x2="90" y2="60" />
+  <line x1="150" y1="60" x2="210" y2="60" />
 </g>
+<rect x="90" y="44" width="60" height="32" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+<text x="120" y="64" font-size="11" text-anchor="middle" fill="var(--vp-c-brand-1)">R_sh</text>
+<g stroke="var(--vp-c-text-2)" stroke-width="1.4" fill="none">
+  <path d="M 60 60 L 60 36 L 107 36" />
+  <path d="M 133 36 L 180 36 L 180 60" />
+</g>
+<circle cx="120" cy="36" r="13" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+<text x="120" y="40" font-size="10" text-anchor="middle" fill="var(--vp-c-text-2)">mV</text>
+<circle cx="60" cy="60" r="3" fill="var(--vp-c-text-2)" />
+<circle cx="180" cy="60" r="3" fill="var(--vp-c-text-2)" />
+<g font-size="10.5" fill="var(--vp-c-text-3)">
+  <text x="120" y="106" text-anchor="middle">mV 表并在 R_sh 两端，只取压降</text>
+  <text x="120" y="124" text-anchor="middle">I = U_sh / R_sh：测压降，换算成电流</text>
+  <text x="120" y="150" text-anchor="middle">量程越小 → R_sh 越大 → 串进去的电阻越大</text>
+</g>
+<text x="420" y="14" font-size="11" text-anchor="middle" font-weight="700" fill="var(--vp-c-text-1)">三档对比（串入 10 Ω 负载）</text>
+<g stroke="var(--vp-c-divider)" stroke-width="1">
+  <line x1="300" y1="26" x2="540" y2="26" />
+  <line x1="300" y1="54" x2="540" y2="54" />
+  <line x1="300" y1="84" x2="540" y2="84" />
+  <line x1="300" y1="114" x2="540" y2="114" />
+  <line x1="300" y1="144" x2="540" y2="144" />
+</g>
+<g font-size="10.5" fill="var(--vp-c-text-3)">
+  <text x="300" y="44">量程</text>
+  <text x="380" y="44" text-anchor="middle">R_sh</text>
+  <text x="480" y="44" text-anchor="middle">附加压降</text>
+</g>
+<g font-size="10.5" fill="var(--vp-c-text-1)">
+  <text x="300" y="74">200 mA</text>
+  <text x="380" y="74" text-anchor="middle">0.1~1 Ω</text>
+  <text x="480" y="74" text-anchor="middle">10~100 mV</text>
+  <text x="300" y="104">2~10 A</text>
+  <text x="380" y="104" text-anchor="middle">10 mΩ</text>
+  <text x="480" y="104" text-anchor="middle">5 mV @ 500 mA</text>
+  <text x="300" y="134">μA 档</text>
+  <text x="380" y="134" text-anchor="middle">≥100 Ω</text>
+  <text x="480" y="134" text-anchor="middle" fill="var(--vp-c-brand-1)">不适用</text>
+</g>
+<text x="420" y="172" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">被测电路阻值与 R_sh 同量级时，表本身就是电路的一部分</text>
 </svg>
 
 </FigBox>
@@ -284,34 +311,29 @@ $$U_{\text{rms}} = \sqrt{\frac{1}{T}\int_0^T u^2(t)\,dt}$$
 
 <FigBox title="平均值表只在正弦波上是对的" kind="结构" note="三种波形幅值同为 12 V：正弦波两种表读数一致；25% 占空比方波的真有效值是 6.0 V，平均表只显示 3.33 V，偏低 44.5%；削顶正弦介于两者之间。凡是 PWM、相控调光、开关电源输出，都必须用真有效值表。">
 
-<svg viewBox="0 0 560 240" role="img" aria-label="三种波形的平均表读数与真有效值对比：正弦一致，方波差 44.5%，削顶正弦介于两者之间">
-<g font-size="11" fill="var(--vp-c-text-1)">
-  <text x="120" y="18" text-anchor="middle" font-weight="700">正弦：两者都准</text>
-  <line x1="20" y1="70" x2="220" y2="70" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" points="20,70 27.5,46 35,26 42.5,14 50,10 57.5,14 65,26 72.5,46 80,70 87.5,94 95,114 102.5,126 110,130 117.5,126 125,114 132.5,94 140,70 147.5,46 155,26 162.5,14 170,10 177.5,14 185,26 192.5,46 200,70 207.5,94 215,114" />
-  <text x="120" y="92" text-anchor="middle" fill="var(--vp-c-text-3)">真有效值 8.49 V</text>
-  <text x="120" y="106" text-anchor="middle" fill="var(--vp-c-text-3)">平均表 8.49 V 通过</text>
-
-  <text x="420" y="18" text-anchor="middle" font-weight="700">25% 方波：平均表错 44.5%</text>
-  <line x1="320" y1="70" x2="520" y2="70" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" points="320,70 320,10 350,10 350,70 395,70 395,10 425,10 425,70 470,70 470,10 500,10 500,70" />
-  <line x1="320" y1="34.6" x2="520" y2="34.6" stroke="var(--vp-c-text-2)" stroke-width="1.2" stroke-dasharray="4 3" />
-  <text x="524" y="38" fill="var(--vp-c-text-2)">真 6.0 V</text>
-  <line x1="320" y1="57.3" x2="520" y2="57.3" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="2 3" />
-  <text x="524" y="61" fill="var(--vp-c-text-3)">平均表 3.33 V</text>
-  <text x="420" y="92" text-anchor="middle" fill="var(--vp-c-text-3)">虚线高度差就是 44.5% 的读数误差</text>
-
-  <text x="120" y="140" text-anchor="middle" font-weight="700">削顶正弦：介于两者之间</text>
-  <line x1="20" y1="192" x2="220" y2="192" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" points="20,192 27.5,168 35,148 42.5,136 50,132 57.5,132 65,132 72.5,136 80,148 87.5,168 95,192 102.5,216 110,236 117.5,248 125,252 132.5,248 140,236 147.5,216 155,192 162.5,168 170,148 177.5,136 185,132 192.5,132 200,136 207.5,148 215,168" />
-  <text x="120" y="214" text-anchor="middle" fill="var(--vp-c-text-3)">相控调光、整流削波的常见形状</text>
-  <text x="120" y="228" text-anchor="middle" fill="var(--vp-c-text-3)">两种表读数开始分叉，差距取决于削掉多少</text>
-
-  <text x="420" y="140" text-anchor="middle" font-weight="700">结论</text>
-  <text x="420" y="164" text-anchor="middle" fill="var(--vp-c-text-2)">正弦波：平均表可用</text>
-  <text x="420" y="184" text-anchor="middle" fill="var(--vp-c-text-2)">任何开关波形：必须真有效值</text>
-  <text x="420" y="204" text-anchor="middle" fill="var(--vp-c-text-3)">测 PWM、可控硅调压、开关电源、LED 驱动时</text>
-  <text x="420" y="220" text-anchor="middle" fill="var(--vp-c-text-3)">先确认表上有没有 true-RMS 标志</text>
+<svg viewBox="0 0 620 340" role="img" aria-label="三种波形的平均表读数与真有效值对比：正弦两者一致，25% 方波真值 6.0 V 而平均表只给 3.33 V，削顶正弦介于两者之间">
+<text x="150" y="18" font-size="11" text-anchor="middle" font-weight="700" fill="var(--vp-c-text-1)">正弦：两者都准</text>
+<text x="460" y="18" font-size="11" text-anchor="middle" font-weight="700" fill="var(--vp-c-text-1)">25% 方波：平均表错 44.5%</text>
+<text x="150" y="206" font-size="11" text-anchor="middle" font-weight="700" fill="var(--vp-c-text-1)">削顶正弦：介于两者之间</text>
+<text x="460" y="206" font-size="11" text-anchor="middle" font-weight="700" fill="var(--vp-c-text-1)">结论</text>
+<line x1="20" y1="80" x2="280" y2="80" stroke="var(--vp-c-divider)" stroke-width="1" />
+<polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" points="20,80 27,58 34,38 41,26 48,22 55,22 62,26 69,38 76,58 83,80 90,102 97,122 104,134 111,138 118,134 125,122 132,102 139,80 146,58 153,38 160,26 167,22 174,22 181,26 188,38 195,58 202,80 209,102 216,122 223,134 230,138 237,134 244,122 251,102 258,80 265,58" />
+<text x="150" y="158" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">真有效值 12 / √2 = 8.49 V</text>
+<text x="150" y="174" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">平均表也显示 8.49 V：通过</text>
+<line x1="340" y1="80" x2="600" y2="80" stroke="var(--vp-c-divider)" stroke-width="1" />
+<polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" points="340,80 340,20 360,20 360,80 420,80 420,20 440,20 440,80 500,80 500,20 520,20 520,80 580,80" />
+<line x1="340" y1="50" x2="580" y2="50" stroke="var(--vp-c-text-2)" stroke-width="1.2" stroke-dasharray="4 3" />
+<line x1="340" y1="63.4" x2="580" y2="63.4" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="2 3" />
+<text x="460" y="158" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">虚线：真有效值 6.0 V（高）／平均表 3.33 V（低）</text>
+<text x="460" y="174" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">两条虚线的高度差就是 44.5% 的读数误差</text>
+<line x1="20" y1="268" x2="280" y2="268" stroke="var(--vp-c-divider)" stroke-width="1" />
+<polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" points="20,268 25,253.6 30,240.1 35,228.2 40,228 45,228 50,228 55,228 60,228 65,228 70,228.2 75,240.1 80,253.6 85,268 90,282.4 95,295.9 100,307.8 105,308 110,308 115,308 120,308 125,308 130,308 135,307.8 140,295.9 145,282.4 150,268 155,253.6 160,240.1 165,228.2 170,228 175,228 180,228 185,228 190,228 195,228 200,228.2 205,240.1 210,253.6 215,268 220,282.4 225,295.9 230,307.8 235,308 240,308 245,308 250,308 255,308 260,308 265,307.8 270,295.9 275,282.4 280,268" />
+<text x="150" y="330" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">相控调光、整流削波的常见形状：读数分叉，差多少看削掉多少</text>
+<g font-size="10.5" fill="var(--vp-c-text-2)">
+  <text x="460" y="236" text-anchor="middle">正弦波：平均表可用</text>
+  <text x="460" y="258" text-anchor="middle">任何开关波形：必须真有效值</text>
+  <text x="460" y="284" text-anchor="middle" fill="var(--vp-c-text-3)">测 PWM、可控硅调压、开关电源</text>
+  <text x="460" y="304" text-anchor="middle" fill="var(--vp-c-text-3)">先确认表上有没有 true-RMS 标志</text>
 </g>
 </svg>
 
@@ -525,49 +547,55 @@ $$\beta = \frac{I_C}{I_B}$$
 
 <FigBox title="电流档并联 = 用 50 mΩ 短路电源" kind="结构" note="左：正确接法，电流档串联在「电源 → 负载 → 表」回路里，R_sh 与负载同流。右：错误接法，电流档直接跨在电源两端，回路里只剩电源内阻与 R_sh，12 A 的电流远超 2 A 档量程。正确与错误只差「断没断开回路」这一个动作。">
 
-<svg viewBox="0 0 560 220" role="img" aria-label="左图正确串联接法电流经过负载与分流电阻，右图错误并联接法只剩内阻与分流电阻构成 12 安短路回路">
+<svg viewBox="0 0 560 220" role="img" aria-label="左图正确串联接法：电池、负载与分流电阻构成一条回路，电流被负载限制；右图错误并联接法：分流电阻直接跨在电源两端，只剩内阻与分流电阻，电流 12 安">
+<text x="150" y="18" font-size="11" text-anchor="middle" font-weight="700" fill="var(--vp-c-text-1)">正确：串联进回路</text>
+<text x="430" y="18" font-size="11" text-anchor="middle" font-weight="700" fill="var(--vp-c-text-1)">错误：并联在电源上</text>
+<g stroke="var(--vp-c-brand-1)" stroke-width="1.8" fill="none">
+  <line x1="40" y1="60" x2="140" y2="60" />
+  <line x1="180" y1="60" x2="220" y2="60" />
+  <line x1="264" y1="60" x2="292" y2="60" />
+  <line x1="292" y1="60" x2="292" y2="150" />
+  <line x1="40" y1="60" x2="40" y2="90" />
+  <line x1="40" y1="98" x2="40" y2="150" />
+  <line x1="40" y1="150" x2="292" y2="150" />
+</g>
+<g stroke="var(--vp-c-text-2)" stroke-width="2">
+  <line x1="28" y1="90" x2="52" y2="90" />
+  <line x1="34" y1="98" x2="46" y2="98" />
+</g>
+<rect x="140" y="48" width="40" height="24" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+<text x="160" y="42" font-size="10" text-anchor="middle" fill="var(--vp-c-text-3)">负载</text>
+<rect x="220" y="46" width="44" height="28" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+<text x="242" y="42" font-size="10" text-anchor="middle" fill="var(--vp-c-brand-1)">R_sh 50 mΩ</text>
+<path d="M 190 60 L 212 60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" fill="none" marker-end="url(#dmm-e1)" />
+<text x="58" y="80" font-size="10" fill="var(--vp-c-text-3)">电池 3 V</text>
+<text x="58" y="112" font-size="10" fill="var(--vp-c-text-3)">r = 0.2 Ω</text>
+<text x="166" y="176" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">回路电阻 = 0.2 + 负载 + 0.05</text>
+<text x="166" y="194" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">电流被负载限制，表只是取样</text>
+<g stroke="var(--vp-c-brand-1)" stroke-width="1.8" fill="none">
+  <line x1="350" y1="60" x2="520" y2="60" />
+  <line x1="350" y1="60" x2="350" y2="90" />
+  <line x1="350" y1="98" x2="350" y2="150" />
+  <line x1="350" y1="150" x2="520" y2="150" />
+  <line x1="520" y1="60" x2="520" y2="150" />
+  <line x1="460" y1="60" x2="460" y2="84" />
+  <line x1="460" y1="128" x2="460" y2="150" />
+</g>
+<g stroke="var(--vp-c-text-2)" stroke-width="2">
+  <line x1="338" y1="90" x2="362" y2="90" />
+  <line x1="344" y1="98" x2="356" y2="98" />
+</g>
+<rect x="446" y="84" width="28" height="44" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+<text x="360" y="80" font-size="10" fill="var(--vp-c-text-3)">3 V</text>
+<text x="360" y="132" font-size="10" fill="var(--vp-c-text-3)">r = 0.2 Ω</text>
+<text x="460" y="170" font-size="10" text-anchor="middle" fill="var(--vp-c-brand-1)">R_sh = 50 mΩ</text>
+<text x="430" y="192" font-size="10.5" text-anchor="middle" fill="var(--vp-c-brand-1)">I = 3 / 0.25 = 12 A，远超 2 A 量程</text>
+<text x="430" y="210" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">回路里没有负载：只剩内阻 + 分流电阻</text>
 <defs>
   <marker id="dmm-e1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
 </defs>
-<g font-size="11" fill="var(--vp-c-text-1)">
-  <text x="130" y="18" text-anchor="middle" font-weight="700">正确：串联进回路</text>
-  <line x1="40" y1="60" x2="80" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <rect x="40" y="44" width="10" height="32" rx="2" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <text x="45" y="90" text-anchor="middle" fill="var(--vp-c-text-3)">电池 3 V</text>
-  <text x="45" y="104" text-anchor="middle" fill="var(--vp-c-text-3)">r = 0.2 Ω</text>
-  <line x1="80" y1="60" x2="140" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <rect x="140" y="48" width="40" height="24" rx="4" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <text x="160" y="44" text-anchor="middle" fill="var(--vp-c-text-3)">负载</text>
-  <line x1="180" y1="60" x2="220" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <rect x="220" y="46" width="44" height="28" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="242" y="64" text-anchor="middle" fill="var(--vp-c-brand-1)">R_sh</text>
-  <text x="242" y="92" text-anchor="middle" fill="var(--vp-c-brand-1)">50 mΩ</text>
-  <line x1="264" y1="60" x2="292" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="40" y1="60" x2="40" y2="150" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="292" y1="60" x2="292" y2="150" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="40" y1="150" x2="292" y2="150" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="166" y="130" text-anchor="middle" fill="var(--vp-c-text-3)">回路电阻 = 0.2 + 负载 + 0.05</text>
-  <text x="166" y="146" text-anchor="middle" fill="var(--vp-c-text-3)">电流被负载限制，表只是取样</text>
-
-  <text x="440" y="18" text-anchor="middle" font-weight="700">错误：并联在电源上</text>
-  <rect x="380" y="70" width="10" height="32" rx="2" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <text x="385" y="120" text-anchor="middle" fill="var(--vp-c-text-3)">3 V</text>
-  <text x="385" y="134" text-anchor="middle" fill="var(--vp-c-text-3)">r = 0.2 Ω</text>
-  <line x1="390" y1="78" x2="440" y2="78" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="390" y1="94" x2="440" y2="94" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <rect x="440" y="70" width="44" height="32" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="462" y="90" text-anchor="middle" fill="var(--vp-c-brand-1)">R_sh</text>
-  <line x1="484" y1="78" x2="510" y2="78" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="484" y1="94" x2="510" y2="94" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <line x1="510" y1="78" x2="510" y2="94" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="475" y="134" text-anchor="middle" fill="var(--vp-c-brand-1)">I = 3 / 0.25 = 12 A</text>
-  <path d="M 445 70 L 445 40 L 480 40" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.2" marker-end="url(#dmm-e1)" />
-  <text x="516" y="44" fill="var(--vp-c-brand-1)">远超 2 A 量程</text>
-  <text x="445" y="158" text-anchor="middle" fill="var(--vp-c-text-3)">回路里没有负载：只剩内阻 + 分流电阻</text>
-  <text x="445" y="174" text-anchor="middle" fill="var(--vp-c-brand-1)">换 5 V 电源：I = 5 / 0.05 = 100 A（受限流保护）</text>
-</g>
 </svg>
 
 </FigBox>
@@ -627,7 +655,7 @@ $$\frac{0.110 - 0.100}{0.100} = +10.0\%$$
 
 **虚电**（phantom voltage，不是电源提供的、由容性耦合或电容残压形成的读数）排查有个固定顺序：先怀疑表，再怀疑读数，最后找根因。下面这张图就是那次排查走的路：
 
-<FigBox title="虚电排查流程：换表 → 看趋势 → 并假负载 → 找根因" kind="结构" note="菱形是判断，圆角框是动作。关键判断是第 2 步：读数随时间衰减就是虚电；读数稳定就是真有电压或真有高阻分压。假负载（100 kΩ~1 MΩ 电阻）是终结争议的那一步。">
+<FigBox title="虚电排查流程：换表 → 看趋势 → 并假负载 → 找根因" kind="结构" note="圆角框是步骤，第三个框下面的分叉就是判断点。关键判断：读数随时间衰减就是虚电；读数稳定就是真有电压或真有高阻分压。假负载（100 kΩ~1 MΩ 电阻）是终结争议的那一步。">
 
 <svg viewBox="0 0 560 300" role="img" aria-label="虚电排查流程图：换表复核、看衰减趋势、并假负载、最后定位根因">
 <defs>
@@ -646,17 +674,17 @@ $$\frac{0.110 - 0.100}{0.100} = +10.0\%$$
   <text x="280" y="133" text-anchor="middle">用示波器看同一节点</text>
   <text x="280" y="149" text-anchor="middle" fill="var(--vp-c-text-3)">它是稳定的直流，还是在缓慢衰减？</text>
   <line x1="180" y1="137" x2="130" y2="137" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
-  <line x1="380" y1="137" x2="440" y2="137" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+  <line x1="380" y1="137" x2="430" y2="137" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
   <text x="128" y="130" text-anchor="end" fill="var(--vp-c-text-3)">缓慢衰减</text>
-  <text x="444" y="130" fill="var(--vp-c-text-3)">稳定</text>
+  <text x="438" y="130" fill="var(--vp-c-text-3)">稳定</text>
   <rect x="24" y="200" width="212" height="42" rx="6" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
   <text x="130" y="217" text-anchor="middle" fill="var(--vp-c-brand-1)">虚电：找耦合来源或残压电容</text>
   <text x="130" y="233" text-anchor="middle" fill="var(--vp-c-text-3)">悬空引脚要加上拉 / 下拉再谈电平</text>
-  <line x1="130" y1="158" x2="130" y2="200" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#dmm-fl)" />
+  <line x1="130" y1="137" x2="130" y2="200" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#dmm-fl)" />
   <rect x="324" y="200" width="212" height="42" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
   <text x="430" y="217" text-anchor="middle">并 100 kΩ~1 MΩ 假负载复测</text>
   <text x="430" y="233" text-anchor="middle" fill="var(--vp-c-text-3)">读数掉了 → 虚电；不掉 → 真有分压，查分压链</text>
-  <line x1="430" y1="158" x2="430" y2="200" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#dmm-fl)" />
+  <line x1="430" y1="137" x2="430" y2="200" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#dmm-fl)" />
   <text x="280" y="278" text-anchor="middle" fill="var(--vp-c-text-3)">判定顺序：工具 → 波形 → 负载 → 根因，每一步都有明确结论</text>
 </g>
 </svg>

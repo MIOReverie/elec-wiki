@@ -79,8 +79,8 @@ $$m_0=\overline A\overline B\overline C,\; m_1=\overline A\overline B C,\; \dots
 <FigBox title="3 变量卡诺图：列是 AB（格雷码），行是 C" kind="结构" note="地址用格雷码排列，所以左右相邻、上下相邻都只差一个变量；最左列与最右列也相邻（回绕）。">
 <svg viewBox="0 0 360 220" role="img" aria-label="3 变量卡诺图骨架：上方 AB 为 00 01 11 10，左侧 C 为 0 和 1，共 8 格">
   <g font-size="13" fill="var(--vp-c-text-1)" text-anchor="middle">
-    <text x="210" y="30" fill="var(--vp-c-text-3)">AB（格雷码）</text>
-    <text x="170" y="55">00</text><text x="230" y="55">01</text><text x="290" y="55">11</text><text x="350" y="55">10</text>
+    <text x="240" y="30" fill="var(--vp-c-text-3)">AB（格雷码）</text>
+    <text x="150" y="55">00</text><text x="210" y="55">01</text><text x="270" y="55">11</text><text x="330" y="55">10</text>
     <text x="60" y="105" fill="var(--vp-c-text-3)">C=0</text>
     <text x="60" y="175" fill="var(--vp-c-text-3)">C=1</text>
   </g>
@@ -155,13 +155,14 @@ $$m_0=\overline A\overline B\overline C,\; m_1=\overline A\overline B C,\; \dots
 ::: tip 例 3 · 利用无关项减门 {#ex-kmap-dontcare}
 先想什么：m4 是无关项，标成 $\phi$。如果把它当 1，左上 2×2 的格子（m0,m1,m4,m5）就能合成一个大圈，直接消掉两个变量。
 
-<FigBox title="m0 m1 m5 为 1，m4 为 φ；把 φ 当 1 后左上 2×2 成圈" kind="结构" note="不利用 φ 时需两笔（ĀC̄ + ĀB）；把 m4 当 1，左上整块 = A=0，一笔搞定。">
-<svg viewBox="0 0 520 210" role="img" aria-label="三变量卡诺图，m0 m1 m5 为 1，m4 为 phi，画出覆盖左上的大圈">
+<FigBox title="m0 m1 m5 为 1，m4 为 φ；把 φ 当 1 后首尾两列合成一个 2×2 圈" kind="结构" note="行是 C，列是 AB（格雷码 00、01、11、10）。B=0 落在最左列（AB=00）与最右列（AB=10）——格雷码首尾相接，两列圈成一个 2×2。不利用 φ 时 m4 必须为 0，这一圈就不合法，只能写 ĀB̄ + AB̄C 两笔。">
+<svg viewBox="0 0 520 210" role="img" aria-label="三变量卡诺图，m0 m1 m5 为 1，m4 为 phi，画出跨最左列与最右列的大圈">
   <g font-size="12" fill="var(--vp-c-text-1)">
     <text x="140" y="24" text-anchor="middle" fill="var(--vp-c-text-3)">00</text>
     <text x="240" y="24" text-anchor="middle" fill="var(--vp-c-text-3)">01</text>
     <text x="340" y="24" text-anchor="middle" fill="var(--vp-c-text-3)">11</text>
     <text x="440" y="24" text-anchor="middle" fill="var(--vp-c-text-3)">10</text>
+    <text x="470" y="24" fill="var(--vp-c-text-3)">AB</text>
     <text x="30" y="78" fill="var(--vp-c-text-3)">C=0</text>
     <text x="30" y="148" fill="var(--vp-c-text-3)">C=1</text>
   </g>
@@ -174,16 +175,18 @@ $$m_0=\overline A\overline B\overline C,\; m_1=\overline A\overline B C,\; \dots
   <line x1="390" y1="40" x2="390" y2="190" stroke="var(--vp-c-divider)"/>
   <line x1="90" y1="140" x2="490" y2="140" stroke="var(--vp-c-divider)"/>
   <g font-size="15" fill="var(--vp-c-text-1)" text-anchor="middle">
-    <text x="140" y="100">1</text><text x="240" y="100">1</text><text x="340" y="100">0</text><text x="440" y="100">0</text>
-    <text x="140" y="170" fill="var(--vp-c-brand-1)">φ</text><text x="240" y="170">1</text><text x="340" y="170">0</text><text x="440" y="170">0</text>
+    <text x="140" y="100">1</text><text x="240" y="100">0</text><text x="340" y="100">0</text><text x="440" y="100" fill="var(--vp-c-brand-1)">φ</text>
+    <text x="140" y="170">1</text><text x="240" y="170">0</text><text x="340" y="170">0</text><text x="440" y="170">1</text>
   </g>
-  <rect x="90" y="40" width="200" height="150" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" stroke-dasharray="5 4"/>
+  <rect x="90" y="40" width="100" height="150" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" stroke-dasharray="5 4"/>
+  <rect x="390" y="40" width="100" height="150" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="260" y="205" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)">最左列与最右列在格雷码上相邻，两个虚线框其实是同一个圈</text>
 </svg>
 </FigBox>
 
-为什么：把 $d(4)$ 取为 1，则左上 2×2（m0,m1,m4,m5）全为 1，对应 $A=0$（B、C 都在变），得到 $F=\overline A$。
+为什么：三个必为 1 的格子是 m0、m1、m5，共同点是 $B=0$。$B=0$ 落在哪几列？$AB$ 取 00（B=0）和 10（B=0），也就是最左列与最右列。$d(4)$ 正好在最右列，把它取作 1 之后，这两列的四个格子全为 1，可以圈成一笔：$A$ 在变、$C$ 在变，只有 $B$ 恒为 0，于是 $F=\overline B$。
 
-验算：$\overline A=1$ 当 $A=0$，即覆盖 m0,m1,m4,m5。其中 m4 本就是无关项，取 1 合法；m0,m1,m5 是要求为 1 的项，全中。若不利用无关项，则需 $\overline A\overline C+\overline A B$ 两笔，多一个门。所以本例靠 $\phi$ 省了一个门。
+验算：$\overline B$ 在 m0、m1、m4、m5 上取 1，其余取 0。m0、m1、m5 是必为 1 的项，全中；m4 是无关项，取 1 合法。反过来看无关项在这里的分量：如果 m4 被定死为 0，这一圈就把 m4 也写成了 1，成为非法，只能退回两笔——$\overline A\,\overline B$（盖 m0、m1）和 $A\overline B C$（单独盖 m5）。所以 $d(4)$ 省下的正是那一笔。
 :::
 
 ### 例 4 · 4 变量：$F=\sum m(4,5,6,7,12,13,14,15)$

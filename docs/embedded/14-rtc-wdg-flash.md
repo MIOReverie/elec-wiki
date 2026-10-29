@@ -72,10 +72,10 @@ RTC（Real-Time Clock，实时时钟）在芯片里是个很孤僻的模块。�
     <line x1="538" y1="86" x2="558" y2="86"/>
   </g>
   <g font-size="10.5" fill="var(--vp-c-text-3)">
-    <text x="195" y="140">预分频 = 把频率除以整数</text>
-    <text x="313" y="140">128 × 256 = 32 768</text>
-    <text x="404" y="140">每秒一个脉冲</text>
-    <text x="495" y="140">进位到分、时</text>
+    <text x="195" y="140" font-size="10.5" text-anchor="middle">预分频 = 把频率除以整数</text>
+    <text x="313" y="140" font-size="10.5" text-anchor="middle">128 × 256 = 32 768</text>
+    <text x="404" y="140" font-size="10.5" text-anchor="middle">每秒一个脉冲</text>
+    <text x="495" y="140" font-size="10.5" text-anchor="middle">进位到分、时</text>
   </g>
 </svg>
 
@@ -143,8 +143,8 @@ STM32 的 RTC 里分三段：最前面一级 PRL 预分频是你能配的，后�
     <text x="75" y="95">断电也在</text>
     <text x="441" y="95">断电也在</text>
     <text x="441" y="175">断电就丢</text>
-    <text x="600" y="60">VBAT 一节</text>
-    <text x="600" y="74">电池 ≈ 5 年</text>
+    <text x="530" y="60">VBAT 一节</text>
+    <text x="530" y="74">电池 ≈ 5 年</text>
   </g>
 </svg>
 
@@ -201,8 +201,9 @@ STM32 的 RTC 里分三段：最前面一级 PRL 预分频是你能配的，后�
     <line x1="452" y1="42" x2="478" y2="42"/>
   </g>
   <g stroke="var(--vp-c-brand-2)" stroke-width="2" fill="none">
-    <line x1="411" y1="64" x2="411" y2="84"/>
-    <line x1="187" y1="116" x2="187" y2="68"/>
+    <line x1="411" y1="64" x2="411" y2="100"/>
+    <line x1="411" y1="100" x2="187" y2="100"/>
+    <line x1="187" y1="100" x2="187" y2="116"/>
     <line x1="228" y1="142" x2="366" y2="142"/>
     <line x1="452" y1="142" x2="478" y2="142"/>
   </g>
@@ -309,7 +310,7 @@ WWDG 的「窗口」把整个超时周期切成两段：一段叫窗口期（win
     <text x="560" y="26">0x00</text>
   </g>
   <g stroke="var(--vp-c-brand-1)" stroke-width="2" fill="none">
-    <path d="M 84 40 L 330 52 L 596 64"/>
+    <path d="M 84 40 L 330 46 L 560 52"/>
   </g>
   <g fill="var(--vp-c-brand-2)">
     <rect x="380" y="60" width="150" height="16" rx="4" opacity="0.35"/>
@@ -334,7 +335,7 @@ WWDG 的「窗口」把整个超时周期切成两段：一段叫窗口期（win
   <g stroke="var(--vp-c-brand-3)" stroke-width="2">
     <line x1="600" y1="122" x2="600" y2="140"/>
     <line x1="600" y1="140" x2="606" y2="133"/>
-    <line x="600" y1="140" x2="606" y2="147"/>
+    <line x1="600" y1="140" x2="606" y2="147"/>
   </g>
   <text x="586" y="164" font-size="10.5" fill="var(--vp-c-brand-3)" text-anchor="middle">太晚 → 复位</text>
 </svg>
@@ -432,7 +433,7 @@ HAL_IWDG_Refresh(&hiwdg);
   </g>
   <g font-size="11" fill="var(--vp-c-text-3)">
     <text x="16" y="132">擦除前：一个 0 卡在中间</text>
-    <text x="16" y="176" fill="var(--vp-c-brand-2)">擦除后：整页全 1，可以重新编程</text>
+    <text x="16" y="203" fill="var(--vp-c-brand-2)">擦除后：整页全 1，可以重新编程</text>
   </g>
   <g stroke="var(--vp-c-brand-2)" stroke-width="1.6">
     <rect x="16" y="156" width="600" height="30" rx="6" fill="var(--vp-c-bg-soft)"/>
@@ -495,7 +496,7 @@ IAP（In-Application Programming，在应用编程）指的是应用程序自己
     <text x="320" y="174">数据区（16 KB）· 配置、日志、升级标志</text>
 
     <rect x="20" y="200" width="600" height="30" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-dasharray="5 3"/>
-    <text x="320" y="220">剩余 16 KB · 预留</text>
+    <text x="320" y="220">剩余空间 · 视型号而定（128 KB 型号以上四项恰好用满）</text>
   </g>
   <g stroke="var(--vp-c-brand-1)" stroke-width="1.8" fill="none">
     <path d="M 560 130 L 596 130 L 596 86 L 560 86"/>

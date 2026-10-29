@@ -276,7 +276,7 @@ export function sourceAC(x: number, y: number, o: ElOpt = {}): string {
   )
 }
 
-/** 电流源（圆环 + 内部箭头，箭头方向 = 电流方向）。dir=1 电流沿局部 +x（向上先传 rot） */
+/** 电流源（圆环 + 内部箭头，箭头方向 = 电流方向）。dir=1 电流沿局部 +x，即从起点流向终点 */
 export function sourceI(x: number, y: number, o: ElOpt & { dir?: 1 | -1 } = {}): string {
   const h = o.half ?? 24
   const d = o.dir ?? 1
@@ -286,7 +286,8 @@ export function sourceI(x: number, y: number, o: ElOpt & { dir?: 1 | -1 } = {}):
     o,
     wire(-h, 0, -14, 0) +
       `<circle cx="0" cy="0" r="14" fill="none"/>` +
-      (d === 1 ? arrow(0, 9, 0, -9) : arrow(0, -9, 0, 9)) +
+      // 箭头必须沿导线方向（局部 x 轴），否则竖放时会变成横着指
+      (d === 1 ? arrow(-8, 0, 8, 0) : arrow(8, 0, -8, 0)) +
       wire(14, 0, h, 0) +
       (o.label ? txt(0, -20, o.label, { size: 12, italic: true, dy: o.dy }) : '')
   )

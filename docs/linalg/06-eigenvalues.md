@@ -36,7 +36,7 @@ $A\mathbf x$ 是把各列按 $\mathbf x$ 的分量加权相加（[第 2 章](02-
 
 输出那一列里的 $(3,3)$ 与输入 $(1,1)$ 在同一条过原点的直线上，差的只是一个倍数 $3$；$(1,-1)$ 更直接，输出与输入一模一样。而 $(2,1)$ 与 $(5,4)$ 不成倍数，落在两条不同的线上。
 
-<FigBox title="四条箭头里，两条被掰弯，两条留在原来的直线上" kind="几何" note="左边四条箭头，两条绿虚线是 45° 与 −45° 两条过原点的直线；右边是 (1,1) 被拉 3 倍、(1,−1) 原地不动、（1,0) 与 (2,1) 跑到线外（两轴同为每单位 24 像素）。看完该看出绿线上那条方向整条都是例外。">
+<FigBox title="四条箭头里，两条被掰弯，两条留在原来的直线上" kind="几何" note="左边四条箭头，两条绿虚线是 45° 与 −45° 两条过原点的直线；右边只画了留下来的两支——(1,1) 被拉 3 倍、(1,−1) 原地不动；跑到线外的 (1,0)→(2,1) 与 (2,1)→(5,4) 见中间一列（两轴同为每单位 24 像素）。看完该看出绿线上那条方向整条都是例外。">
 <svg viewBox="0 0 640 262" class="sf" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" role="img">
   <text x="130" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">输入：四条箭头</text>
   <text x="340" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="var(--vp-c-text-2)" stroke="none">操作：A 逐条作用</text>
@@ -52,10 +52,10 @@ $A\mathbf x$ 是把各列按 $\mathbf x$ 的分量加权相加（[第 2 章](02-
   <path d="M128 166 l-8.4 -1.4 l1.6 6.4 Z" fill="var(--vp-c-text-2)" stroke="none"/>
   <text x="134" y="160" font-size="11" fill="var(--vp-c-text-2)" stroke="none">(2,1)</text>
   <line x1="80" y1="190" x2="104" y2="166" stroke="#16a34a" stroke-width="2.4"/>
-  <path d="M104 166 l-8 -1 l0 6 Z" fill="#16a34a" stroke="none"/>
+  <path d="M104 166 L99.9 174.6 L95.4 170.1 Z" fill="#16a34a" stroke="none"/>
   <text x="98" y="158" text-anchor="end" font-size="11" fill="#16a34a" stroke="none">(1,1)</text>
   <line x1="80" y1="190" x2="104" y2="214" stroke="var(--vp-c-text-1)" stroke-width="2.4"/>
-  <path d="M104 214 l-8 -1 l0 6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <path d="M104 214 L95.4 209.9 L99.9 205.4 Z" fill="var(--vp-c-text-1)" stroke="none"/>
   <text x="110" y="224" font-size="11" fill="var(--vp-c-text-1)" stroke="none">(1,−1)</text>
   <text x="240" y="92" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">A(1,1) = (3,3)</text>
   <text x="240" y="122" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">A(1,−1) = (1,−1)</text>
@@ -66,10 +66,10 @@ $A\mathbf x$ 是把各列按 $\mathbf x$ 的分量加权相加（[第 2 章](02-
   <line x1="450" y1="210" x2="524" y2="136" stroke="#16a34a" stroke-width="1" stroke-dasharray="4 4"/>
   <line x1="450" y1="170" x2="530" y2="250" stroke="#16a34a" stroke-width="1" stroke-dasharray="4 4"/>
   <line x1="470" y1="190" x2="542" y2="118" stroke="#16a34a" stroke-width="2.6"/>
-  <path d="M542 118 l-8.4 -1.6 l1.8 6.6 Z" fill="#16a34a" stroke="none"/>
+  <path d="M542 118 L537.9 126.6 L533.4 122.1 Z" fill="#16a34a" stroke="none"/>
   <text x="548" y="112" font-size="11" fill="#16a34a" stroke="none">(3,3) = 3(1,1)</text>
   <line x1="470" y1="190" x2="494" y2="214" stroke="var(--vp-c-text-1)" stroke-width="2.4"/>
-  <path d="M494 214 l-8 -1 l0 6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <path d="M494 214 L485.4 209.9 L489.9 205.4 Z" fill="var(--vp-c-text-1)" stroke="none"/>
   <text x="500" y="224" font-size="11" fill="var(--vp-c-text-1)" stroke="none">(1,−1) 不动</text>
   <text x="470" y="246" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">两条绿线没被掰弯</text>
 </svg>
@@ -167,19 +167,19 @@ $$
   <path d="M128 176 l-8.6 -1.2 l1.2 6.4 Z" fill="#3b82f6" stroke="none"/>
   <text x="134" y="170" font-size="11.5" fill="#3b82f6" stroke="none">Ai = (2,1)</text>
   <line x1="80" y1="200" x2="104" y2="152" stroke="#3b82f6" stroke-width="2.4"/>
-  <path d="M104 152 l-7.4 -4.4 l-1 6.4 Z" fill="#3b82f6" stroke="none"/>
+  <path d="M104 152 L102.8 161.5 L97.1 158.6 Z" fill="#3b82f6" stroke="none"/>
   <text x="110" y="146" font-size="11.5" fill="#3b82f6" stroke="none">Aj = (1,2)</text>
   <text x="145" y="232" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)" stroke="none">两条基箭都被掰弯</text>
   <line x1="370" y1="230" x2="490" y2="110" stroke="var(--vp-c-text-3)" stroke-dasharray="4 3"/>
   <line x1="390" y1="130" x2="490" y2="230" stroke="var(--vp-c-text-3)" stroke-dasharray="4 3"/>
   <line x1="430" y1="170" x2="454" y2="146" stroke="var(--vp-c-text-2)" stroke-width="1.8"/>
-  <path d="M454 146 l-8.4 -1.4 l1.6 6.4 Z" fill="var(--vp-c-text-2)" stroke="none"/>
+  <path d="M454 146 L449.9 154.6 L445.4 150.1 Z" fill="var(--vp-c-text-2)" stroke="none"/>
   <text x="460" y="140" font-size="11.5" fill="var(--vp-c-text-2)" stroke="none">v₂</text>
   <line x1="430" y1="170" x2="502" y2="98" stroke="#3b82f6" stroke-width="2.6"/>
-  <path d="M502 98 l-8.4 -1.6 l1.8 6.6 Z" fill="#3b82f6" stroke="none"/>
+  <path d="M502 98 L497.9 106.6 L493.4 102.1 Z" fill="#3b82f6" stroke="none"/>
   <text x="508" y="94" font-size="11.5" fill="#3b82f6" stroke="none">3v₂：拉 3 倍</text>
   <line x1="430" y1="170" x2="454" y2="194" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-  <path d="M454 194 l-8.6 -1.2 l1.2 6.4 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <path d="M454 194 L445.4 189.9 L449.8 185.4 Z" fill="var(--vp-c-text-1)" stroke="none"/>
   <text x="460" y="202" font-size="11.5" fill="var(--vp-c-text-1)" stroke="none">v₁ 方向：不动</text>
 </svg>
 </FigBox>
@@ -253,16 +253,16 @@ $$
   <path d="M276 152 l-8 -3.4 l0 6.8 Z" fill="var(--vp-c-text-1)" stroke="none"/>
   <line x1="270" y1="180" x2="600" y2="180" stroke="var(--vp-c-text-3)"/>
   <line x1="300" y1="215" x2="300" y2="100" stroke="var(--vp-c-text-3)"/>
-  <polygon points="300,180 350,180 380,130 330,130" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6"/>
+  <polygon points="300,180 350,180 400,130 350,130" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6"/>
   <line x1="300" y1="180" x2="350" y2="180" stroke="var(--vp-c-text-1)" stroke-width="2"/>
   <path d="M350 180 l-8 -3 l0 6 Z" fill="var(--vp-c-text-1)" stroke="none"/>
   <text x="356" y="184" font-size="11" fill="var(--vp-c-text-1)" stroke="none">(1,0) 没动</text>
   <line x1="300" y1="180" x2="350" y2="130" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-  <path d="M350 130 l-8.4 -1.4 l1.6 6.4 Z" fill="var(--vp-c-text-1)" stroke="none"/>
-  <text x="356" y="126" font-size="11" fill="var(--vp-c-text-1)" stroke="none">(0,1) ↦ (1,1)</text>
+  <path d="M350 130 L345.9 138.6 L341.4 134.1 Z" fill="var(--vp-c-text-1)" stroke="none"/>
+  <text x="330" y="112" text-anchor="end" font-size="11" fill="var(--vp-c-text-1)" stroke="none">(0,1) ↦ (1,1)</text>
   <line x1="315" y1="155" x2="250" y2="122" stroke="#ef4444" stroke-width="1.4" stroke-dasharray="3 3"/>
   <text x="246" y="118" text-anchor="end" font-size="11" fill="#ef4444" stroke="none">竖直边被推成斜边</text>
-  <text x="430" y="112" font-size="11" fill="var(--vp-c-text-2)" stroke="none">上边仍是水平的</text>
+  <text x="405" y="124" font-size="11" fill="var(--vp-c-text-2)" stroke="none">上边仍是水平的</text>
 </svg>
 </FigBox>
 

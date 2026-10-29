@@ -211,45 +211,48 @@ $$R = \frac{V_{CC} - V_F}{I_F}$$
 <text x="150" y="26" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">拉电流（高电平点亮）</text>
 <rect x="46" y="46" width="208" height="152" rx="8" stroke="var(--vp-c-divider)" stroke-width="1.2"/>
 <text x="60" y="66" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">IO 输出高</text>
+<circle cx="60" cy="90" r="3.2" class="sf-dot"/>
 <line x1="60" y1="90" x2="150" y2="90"/>
 <g transform="translate(180 90)">
 <line x1="-30" y1="0" x2="-10" y2="0"/>
 <rect x="-10" y="-6" width="20" height="12" rx="1.5" fill="none"/>
 <line x1="10" y1="0" x2="30" y2="0"/>
 </g>
-<line x1="210" y1="90" x2="240" y2="90"/>
+<line x1="210" y1="90" x2="225" y2="90"/>
 <text x="180" y="72" text-anchor="middle" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R</text>
-<line x1="150" y1="90" x2="150" y2="130"/>
-<g transform="translate(150 150) rotate(90)">
+<line x1="225" y1="90" x2="225" y2="140"/>
+<g transform="translate(225 150) rotate(90)">
 <polygon points="-10,-10 -10,10 8,0" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
 <line x1="8" y1="-10" x2="8" y2="10" stroke="var(--vp-c-text-1)" stroke-width="2.2"/>
 </g>
-<line x1="150" y1="170" x2="150" y2="182"/>
-<line x1="60" y1="182" x2="240" y2="182"/>
-<line x1="60" y1="182" x2="60" y2="90"/>
-<line x1="70" y1="128" x2="70" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#ev-led)"/>
+<line x1="225" y1="158" x2="225" y2="176"/>
+<line x1="205" y1="176" x2="245" y2="176"/>
+<line x1="211" y1="182" x2="239" y2="182"/>
+<line x1="217" y1="188" x2="233" y2="188"/>
+<line x1="95" y1="90" x2="140" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#ev-led)"/>
 <text x="150" y="212" text-anchor="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">电流从引脚流出 → 单脚总输出有上限</text>
 
 <text x="490" y="26" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">灌电流（低电平点亮）</text>
 <rect x="386" y="46" width="208" height="152" rx="8" stroke="var(--vp-c-divider)" stroke-width="1.2"/>
 <text x="400" y="66" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">VDD = 3.3 V</text>
-<line x1="400" y1="90" x2="470" y2="90"/>
+<circle cx="400" cy="90" r="3.2" class="sf-dot"/>
+<line x1="400" y1="90" x2="460" y2="90"/>
 <text x="404" y="106" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">阳极接电源</text>
-<g transform="translate(500 90)">
+<g transform="translate(480 90)">
 <polygon points="-10,-10 -10,10 8,0" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
 <line x1="8" y1="-10" x2="8" y2="10" stroke="var(--vp-c-text-1)" stroke-width="2.2"/>
 </g>
-<line x1="530" y1="90" x2="540" y2="90"/>
-<g transform="translate(566 90)">
+<line x1="490" y1="90" x2="500" y2="90"/>
+<g transform="translate(526 90)">
 <line x1="-26" y1="0" x2="-10" y2="0"/>
 <rect x="-10" y="-6" width="20" height="12" rx="1.5" fill="none"/>
 <line x1="10" y1="0" x2="26" y2="0"/>
 </g>
-<line x1="470" y1="90" x2="470" y2="130"/>
-<line x1="400" y1="90" x2="400" y2="182"/>
-<line x1="400" y1="182" x2="580" y2="182"/>
-<line x1="580" y1="182" x2="580" y2="90"/>
-<line x1="580" y1="120" x2="580" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#ev-led)"/>
+<text x="526" y="72" text-anchor="middle" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R</text>
+<line x1="552" y1="90" x2="552" y2="140"/>
+<circle cx="552" cy="140" r="3.2" class="sf-dot"/>
+<text x="552" y="158" text-anchor="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">IO 输出低</text>
+<line x1="415" y1="90" x2="452" y2="90" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#ev-led)"/>
 <text x="490" y="212" text-anchor="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">电流灌入引脚 → PC13 就是这种接法</text>
 <text x="330" y="226" text-anchor="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">同一个电流方向问题：灌电流是「引脚吸收」，拉电流是「引脚输出」</text>
 </svg>
@@ -354,14 +357,14 @@ HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);                  // 翻转
   <line x1="424" y1="36" x2="424" y2="78" stroke="var(--vp-c-divider)" stroke-width="1" />
   <line x1="504" y1="36" x2="504" y2="78" stroke="var(--vp-c-divider)" stroke-width="1" />
   <line x1="584" y1="36" x2="584" y2="78" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="64" y="62" text-anchor="middle">P0</text>
-  <text x="144" y="62" text-anchor="middle">P1</text>
-  <text x="224" y="62" text-anchor="middle">P2</text>
-  <text x="304" y="62" text-anchor="middle">P3</text>
-  <text x="384" y="62" text-anchor="middle">P4</text>
-  <text x="464" y="62" text-anchor="middle">P5</text>
-  <text x="544" y="62" text-anchor="middle">P6</text>
-  <text x="624" y="62" text-anchor="middle">P7</text>
+  <text x="64" y="62" text-anchor="middle">P7</text>
+  <text x="144" y="62" text-anchor="middle">P6</text>
+  <text x="224" y="62" text-anchor="middle">P5</text>
+  <text x="304" y="62" text-anchor="middle">P4</text>
+  <text x="384" y="62" text-anchor="middle">P3</text>
+  <text x="464" y="62" text-anchor="middle">P2</text>
+  <text x="544" y="62" text-anchor="middle">P1</text>
+  <text x="624" y="62" text-anchor="middle">P0</text>
   <text x="24" y="96" fill="var(--vp-c-text-3)">bit31 ──────────────────────────────────────────────── bit0</text>
 
   <text x="24" y="132" font-weight="700">CRH（0x04）：Pin8 ~ Pin15，每脚 4 位</text>
@@ -373,16 +376,16 @@ HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);                  // 翻转
   <line x1="424" y1="142" x2="424" y2="184" stroke="var(--vp-c-divider)" stroke-width="1" />
   <line x1="504" y1="142" x2="504" y2="184" stroke="var(--vp-c-divider)" stroke-width="1" />
   <line x1="584" y1="142" x2="584" y2="184" stroke="var(--vp-c-divider)" stroke-width="1" />
-  <text x="64" y="168" text-anchor="middle">P8</text>
-  <text x="144" y="168" text-anchor="middle">P9</text>
-  <text x="224" y="168" text-anchor="middle">P10</text>
-  <text x="304" y="168" text-anchor="middle">P11</text>
-  <text x="384" y="168" text-anchor="middle">P12</text>
-  <rect x="424" y="142" width="80" height="42" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="464" y="168" text-anchor="middle" font-weight="700" fill="var(--vp-c-brand-1)">P13</text>
-  <text x="544" y="168" text-anchor="middle">P14</text>
-  <text x="624" y="168" text-anchor="middle">P15</text>
-  <text x="464" y="202" text-anchor="middle" fill="var(--vp-c-brand-1)">第 5 组：bit[23:20]</text>
+  <text x="64" y="168" text-anchor="middle">P15</text>
+  <text x="144" y="168" text-anchor="middle">P14</text>
+  <rect x="184" y="142" width="80" height="42" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <text x="224" y="168" text-anchor="middle" font-weight="700" fill="var(--vp-c-brand-1)">P13</text>
+  <text x="304" y="168" text-anchor="middle">P12</text>
+  <text x="384" y="168" text-anchor="middle">P11</text>
+  <text x="464" y="168" text-anchor="middle">P10</text>
+  <text x="544" y="168" text-anchor="middle">P9</text>
+  <text x="624" y="168" text-anchor="middle">P8</text>
+  <text x="224" y="202" text-anchor="middle" fill="var(--vp-c-brand-1)">第 5 组：bit[23:20]</text>
 
   <text x="24" y="232" fill="var(--vp-c-text-3)">算法：(13 − 8) × 4 = 20 → 掩码 0xF &lt;&lt; 20；模式位取 0x1（通用推挽输出，10 MHz）</text>
 </g>

@@ -61,60 +61,47 @@ H 桥的名字来自它的画法：四个开关（集成芯片里是四只 MOS �
 
 <FigBox title="H 桥的四只开关与唯一禁止的路径" kind="拓扑" note="左臂 Q1/Q4，右臂 Q3/Q2，电机跨在中间。红色虚线是同桥臂上下管同时导通的路径，+12 V 经它直接接到 GND，电流只受 MOS 的导通电阻限制。每只 MOS 反并的续流二极管图上没画，6.3 节单独说明。">
 
-<svg viewBox="0 0 640 320" role="img" aria-label="H 桥拓扑图：Q1 与 Q4 为左桥臂，Q3 与 Q2 为右桥臂，电机跨在中间，同一桥臂上下管同时导通会造成直通短路">
-<defs>
-  <marker id="md-ps-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
-  </marker>
-</defs>
-
+<svg viewBox="0 0 640 320" role="img" aria-label="H 桥拓扑图：Q1 与 Q4 为左桥臂，Q3 与 Q2 为右桥臂，电机跨在两个桥臂中点之间，同一桥臂上下管同时导通会造成直通短路">
 <g stroke="var(--vp-c-text-2)" stroke-width="2.2" fill="none">
   <line x1="240" y1="26" x2="400" y2="26" />
-  <line x1="240" y1="26" x2="240" y2="66" />
-  <line x1="400" y1="26" x2="400" y2="66" />
-  <line x1="240" y1="66" x2="240" y2="106" />
-  <line x1="400" y1="66" x2="400" y2="106" />
-  <line x1="240" y1="134" x2="240" y2="174" />
-  <line x1="400" y1="134" x2="400" y2="174" />
-  <line x1="240" y1="174" x2="240" y2="214" />
-  <line x1="400" y1="174" x2="400" y2="214" />
-  <line x1="240" y1="214" x2="240" y2="254" />
-  <line x1="400" y1="214" x2="400" y2="254" />
+  <line x1="240" y1="26" x2="240" y2="60" />
+  <line x1="400" y1="26" x2="400" y2="60" />
+  <line x1="240" y1="104" x2="240" y2="174" />
+  <line x1="400" y1="104" x2="400" y2="174" />
+  <line x1="240" y1="218" x2="240" y2="254" />
+  <line x1="400" y1="218" x2="400" y2="254" />
   <line x1="240" y1="254" x2="400" y2="254" />
   <line x1="320" y1="254" x2="320" y2="294" />
 </g>
 
-<g stroke="var(--vp-c-brand-1)" stroke-width="2.4" fill="none">
-  <rect x="214" y="66" width="52" height="40" rx="3" />
-  <rect x="374" y="66" width="52" height="40" rx="3" />
-  <rect x="214" y="174" width="52" height="40" rx="3" />
-  <rect x="374" y="174" width="52" height="40" rx="3" />
-</g>
+<path d="M 240 32 L 240 248" stroke="var(--vp-c-danger-1)" stroke-width="2" fill="none" stroke-dasharray="6 4" />
 
+<g stroke="var(--vp-c-brand-1)" stroke-width="2.4" fill="var(--vp-c-bg-soft)">
+  <rect x="210" y="60" width="60" height="44" rx="3" />
+  <rect x="370" y="60" width="60" height="44" rx="3" />
+  <rect x="210" y="174" width="60" height="44" rx="3" />
+  <rect x="370" y="174" width="60" height="44" rx="3" />
+</g>
 <g font-size="12" text-anchor="middle" fill="var(--vp-c-text-1)">
-  <text x="240" y="91" font-weight="600">Q1</text>
-  <text x="400" y="91" font-weight="600">Q3</text>
-  <text x="240" y="199" font-weight="600">Q4</text>
-  <text x="400" y="199" font-weight="600">Q2</text>
+  <text x="240" y="88" font-weight="600">Q1</text>
+  <text x="400" y="88" font-weight="600">Q3</text>
+  <text x="240" y="202" font-weight="600">Q4</text>
+  <text x="400" y="202" font-weight="600">Q2</text>
 </g>
 
 <g stroke="var(--vp-c-brand-2)" stroke-width="2.4" fill="none">
-  <circle cx="280" cy="120" r="21" />
-  <text x="360" y="119" font-size="11" text-anchor="middle" fill="var(--vp-c-text-3)">电机 M</text>
-  <text x="360" y="135" font-size="11" text-anchor="middle" fill="var(--vp-c-text-3)">（电感）</text>
+  <line x1="240" y1="150" x2="300" y2="150" />
+  <line x1="340" y1="150" x2="400" y2="150" />
+  <circle cx="320" cy="150" r="20" />
 </g>
-<g stroke="var(--vp-c-brand-2)" stroke-width="2.4" fill="none">
-  <line x1="240" y1="106" x2="280" y2="106" />
-  <line x1="280" y1="141" x2="240" y2="141" />
-  <line x1="400" y1="106" x2="360" y2="106" />
-  <line x1="360" y1="141" x2="400" y2="141" />
-</g>
+<text x="320" y="155" font-size="12" text-anchor="middle" fill="var(--vp-c-brand-2)">M</text>
+<text x="320" y="192" font-size="11" text-anchor="middle" fill="var(--vp-c-text-3)">电机（电感）</text>
 
-<g stroke="#ef4444" stroke-width="2" fill="none" stroke-dasharray="6 4">
-  <path d="M 240 86 L 240 194" />
-</g>
-<text x="196" y="146" font-size="11" fill="#ef4444" text-anchor="end">直通短路</text>
-<text x="196" y="162" font-size="11" fill="#ef4444" text-anchor="end">（禁止）</text>
+<circle cx="240" cy="150" r="4" fill="var(--vp-c-text-2)" />
+<circle cx="400" cy="150" r="4" fill="var(--vp-c-text-2)" />
+
+<text x="196" y="146" font-size="11" fill="var(--vp-c-danger-1)" text-anchor="end">直通短路</text>
+<text x="196" y="162" font-size="11" fill="var(--vp-c-danger-1)" text-anchor="end">（禁止）</text>
 
 <g font-size="11" fill="var(--vp-c-text-3)">
   <text x="320" y="20" text-anchor="middle" font-weight="600" fill="var(--vp-c-text-1)">+12 V</text>
@@ -369,7 +356,7 @@ STM32 的定时器有编码器模式，硬件自动根据相位关系判断方�
 
 <FigBox title="正交编码器的 A/B 相位与方向判定" kind="波形" note="正转时 A 先跳，B 晚 90°；反转时顺序反过来。定时器的 TI12 模式就是硬件在比对这两个上升沿的先后，据此决定 CNT 加还是减。四倍频指 A 升、B 降、A 降、B 升四次都计数。">
 
-<svg viewBox="0 0 640 230" role="img" aria-label="正交编码器 A 相与 B 相波形：正转时 A 超前 B 90 度，反转时 B 超前 A 90 度，标出四个计数边沿">
+<svg viewBox="0 0 640 236" role="img" aria-label="正交编码器 A 相与 B 相波形：此图 B 比 A 超前四分之一周期，属反转；正转时 A 先跳变。标出 A 相的六个跳变沿与 90 度相位差">
 <g stroke="var(--vp-c-divider)" stroke-width="1">
   <line x1="90" y1="120" x2="600" y2="120" />
 </g>
@@ -402,11 +389,24 @@ STM32 的定时器有编码器模式，硬件自动根据相位关系判断方�
   <text x="540" y="26">↓A−</text>
 </g>
 
+<g stroke="var(--vp-c-text-2)" stroke-width="1.2">
+  <line x1="200" y1="126" x2="200" y2="142" />
+  <line x1="240" y1="126" x2="240" y2="142" />
+  <line x1="200" y1="142" x2="240" y2="142" marker-start="url(#md-phase-arrow)" marker-end="url(#md-phase-arrow)" />
+</g>
+<text x="220" y="138" font-size="10.5" fill="var(--vp-c-text-2)" text-anchor="middle">90°</text>
+
 <g font-size="11" fill="var(--vp-c-text-2)">
   <text x="96" y="222">t →</text>
-  <text x="404" y="120" fill="var(--vp-c-text-3)">相位差固定 90°（四倍频）</text>
+  <text x="600" y="216" text-anchor="end" font-size="10.5" fill="var(--vp-c-text-3)">四倍频：A 升、B 降、A 降、B 升，四个沿各计一次</text>
+  <text x="600" y="232" text-anchor="end" fill="var(--vp-c-brand-2)">此图 B 先跳变 → 判为反转；A 先跳变才是正转</text>
 </g>
-<path d="M 400 110 L 400 118" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+
+<defs>
+  <marker id="md-phase-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-2)" />
+  </marker>
+</defs>
 </svg>
 
 </FigBox>
@@ -617,46 +617,65 @@ INA240 GND ── 模拟地（靠近 MCU 处）
 
 <FigBox title="电机驱动的信号链：MCU 出 PWM，驱动放电流，采样与编码器回到 MCU" kind="结构" note="低端采样电阻把流过 H 桥的所有电流变成一个小电压，INA240 放大后送 ADC。这个位置叫低边采样，好处是共模电压接近 0，代价是 PWM 关断期间看不到电流。">
 
-<svg viewBox="0 0 660 250" role="img" aria-label="电机驱动信号链：STM32 通过 PWM 控制 DRV8871，DRV8871 驱动电机，采样电阻与 INA240 回采电流，编码器回送 A/B 脉冲">
+<svg viewBox="0 0 660 290" role="img" aria-label="电机驱动信号链：STM32 用 PWM/DIR 控制 DRV8871，DRV8871 经过电机，低边 0.01 欧采样电阻经 INA240 放大回送 PA0，编码器 A/B 脉冲回送 PA6/PA7">
 <defs>
   <marker id="tp-md-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
 </defs>
-<g font-size="11.5" fill="var(--vp-c-text-1)" text-anchor="middle">
-  <rect x="20" y="96" width="112" height="58" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
-  <text x="76" y="120">STM32</text>
-  <text x="76" y="138" fill="var(--vp-c-text-3)">TIM1 / TIM3 / ADC</text>
 
-  <rect x="188" y="96" width="112" height="58" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
-  <text x="244" y="120">DRV8871</text>
-  <text x="244" y="138" fill="var(--vp-c-text-3)">H 桥 + 限流</text>
+<g font-size="11.5" fill="var(--vp-c-text-1)">
+  <rect x="20" y="100" width="124" height="58" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+  <text x="82" y="124" text-anchor="middle">STM32</text>
+  <text x="82" y="144" text-anchor="middle" fill="var(--vp-c-text-3)" font-size="10.5">TIM1 / TIM3 / ADC</text>
 
-  <rect x="356" y="96" width="84" height="58" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
-  <text x="398" y="120">电机</text>
-  <text x="398" y="138" fill="var(--vp-c-text-3)">+ 编码器</text>
+  <rect x="200" y="100" width="120" height="58" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+  <text x="260" y="124" text-anchor="middle">DRV8871</text>
+  <text x="260" y="144" text-anchor="middle" fill="var(--vp-c-text-3)" font-size="10.5">H 桥 + 限流</text>
 
-  <rect x="150" y="196" width="80" height="40" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
-  <text x="190" y="221">0.01 Ω</text>
+  <rect x="380" y="100" width="110" height="58" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="435" y="124" text-anchor="middle">电机</text>
+  <text x="435" y="144" text-anchor="middle" fill="var(--vp-c-text-3)" font-size="10.5">+ 编码器</text>
 
-  <rect x="252" y="196" width="96" height="40" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
-  <text x="300" y="221">INA240</text>
+  <rect x="220" y="196" width="80" height="40" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="260" y="221" text-anchor="middle">0.01 Ω</text>
+
+  <rect x="60" y="196" width="100" height="40" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
+  <text x="110" y="221" text-anchor="middle">INA240</text>
 </g>
+
 <g stroke="var(--vp-c-brand-1)" stroke-width="1.8" fill="none" marker-end="url(#tp-md-arrow)">
-  <line x1="132" y1="112" x2="182" y2="112" />
-  <line x1="300" y1="112" x2="350" y2="112" />
-  <line x1="440" y1="112" x2="510" y2="112" />
-  <line x1="210" y1="196" x2="248" y2="196" />
-  <path d="M 300 196 L 300 160" />
-  <path d="M 76 96 L 76 72 L 560" stroke-dasharray="5 3" />
-  <path d="M 560 72 L 560 210 L 480 210" stroke-dasharray="5 3" />
+  <line x1="144" y1="118" x2="196" y2="118" />
+  <line x1="320" y1="118" x2="376" y2="118" />
+  <path d="M 110 196 L 110 162" />
+  <path d="M 490 118 L 560 118 L 560 74 L 140 74 L 140 96" />
 </g>
+
+<g stroke="var(--vp-c-text-2)" stroke-width="1.8" fill="none">
+  <line x1="260" y1="158" x2="260" y2="196" />
+  <line x1="260" y1="236" x2="260" y2="264" />
+  <line x1="244" y1="264" x2="276" y2="264" />
+  <line x1="250" y1="271" x2="270" y2="271" />
+  <line x1="256" y1="278" x2="264" y2="278" />
+</g>
+
+<g stroke="var(--vp-c-text-2)" stroke-width="1.6" fill="none">
+  <path d="M 260 186 L 176 186 L 176 206 L 163 206" />
+  <path d="M 260 246 L 176 246 L 176 226 L 163 226" />
+</g>
+
+<g fill="var(--vp-c-text-2)">
+  <circle cx="260" cy="186" r="3.2" />
+  <circle cx="260" cy="246" r="3.2" />
+</g>
+
 <g font-size="10.5" fill="var(--vp-c-text-3)">
-  <text x="156" y="102">PWM / DIR</text>
-  <text x="320" y="102">OUT1/OUT2</text>
-  <text x="466" y="102">A/B 脉冲 → PA6/PA7</text>
-  <text x="336" y="220">放大后 → PA0</text>
-  <text x="470" y="196">编码器 VCC/GND</text>
+  <text x="156" y="108">PWM / DIR</text>
+  <text x="332" y="108">OUT1 / OUT2</text>
+  <text x="222" y="70">A/B 脉冲 → PA6/PA7</text>
+  <text x="122" y="180">放大后 → PA0</text>
+  <text x="286" y="268">到电源地（低边）</text>
+  <text x="380" y="190">编码器另需 5 V 与 GND：就近取自同一个公共地</text>
 </g>
 </svg>
 

@@ -51,10 +51,10 @@ STM32 里最常见的是 SAR（Successive Approximation Register，逐次逼近�
   <text x="20" y="184" font-weight="700">源阻抗大：没充满就开始转换 ✗</text>
   <line x1="60" y1="240" x2="660" y2="240" stroke="var(--vp-c-divider)" stroke-width="1" stroke-dasharray="4 4" />
   <text x="654" y="232" text-anchor="end" fill="var(--vp-c-text-3)">V_in</text>
-  <path d="M 60 290 Q 130 262 210 252 Q 280 246 330 244" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
+  <path d="M 60 290 Q 130 265 210 257 Q 280 252 330 250" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.2" />
   <line x1="300" y1="210" x2="300" y2="300" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="3 3" />
   <text x="60" y="296" fill="var(--vp-c-text-3)">开关闭合</text>
-  <circle cx="300" cy="244.5" r="3.5" fill="var(--vp-c-brand-1)" />
+  <circle cx="300" cy="251" r="3.5" fill="var(--vp-c-brand-1)" />
   <text x="292" y="210" text-anchor="end" fill="var(--vp-c-text-3)">采样窗口结束：只爬到 80%</text>
   <text x="360" y="270" fill="var(--vp-c-text-2)">转换从偏低值开始 → 读数系统性偏低</text>
 </g>
@@ -110,7 +110,7 @@ $$V = \frac{2048}{4095} \times 3.3 \approx 1.6504\ \text{V}$$
 
 量化台阶带来的 ±0.5 LSB 误差永远去不掉。输入电压是连续的，输出码是台阶状的，两者之间必有一段对不齐。三位 ADC 的台阶长这样：
 
-<FigBox title="量化：连续电压被切成台阶，台阶差就是 ±0.5 LSB" kind="结构" note="蓝色阶梯是 ADC 的输出码对输入电压的响应：在 0~1.5 LSB 区间内输出都是码 1，无论输入是 0.6 LSB 还是 1.4 LSB。灰色的斜线是理想的无穷位 ADC。两者的最大偏差恰好出现在台阶中央，等于 ±0.5 LSB——这就是量化误差的来源，它只能靠加位数来缩小。">
+<FigBox title="量化：连续电压被切成台阶，台阶差就是 ±0.5 LSB" kind="结构" note="蓝色阶梯是 ADC 的输出码对输入电压的响应：在 0.5~1.5 LSB 区间内输出都是码 1，无论输入是 0.6 LSB 还是 1.4 LSB。灰色的斜线是理想的无穷位 ADC。两者的最大偏差恰好出现在台阶中央，等于 ±0.5 LSB——这就是量化误差的来源，它只能靠加位数来缩小。">
 
 <svg viewBox="0 0 700 280" role="img" aria-label="三位 ADC 的量化台阶与理想直线对比，量化误差最大为半 LSB">
 <g font-size="11.5" fill="var(--vp-c-text-1)">

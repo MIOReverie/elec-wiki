@@ -54,7 +54,6 @@ $$
 <rect x="-6" y="-6" width="12" height="12" rx="1.5" fill="none"/>
 <line x1="6" y1="0" x2="20" y2="0"/>
 </g>
-<line x1="120" y1="112" x2="120" y2="134"/>
 <text x="104" y="92" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_C</text>
 <text x="120" y="28" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">+V_CC</text>
 <line x1="400" y1="40" x2="400" y2="72"/>
@@ -63,30 +62,29 @@ $$
 <rect x="-6" y="-6" width="12" height="12" rx="1.5" fill="none"/>
 <line x1="6" y1="0" x2="20" y2="0"/>
 </g>
-<line x1="400" y1="112" x2="400" y2="134"/>
 <text x="416" y="92" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_C</text>
-<text x="104" y="134" text-anchor="end" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">C₁</text>
-<text x="416" y="134" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">C₂</text>
-<line x1="30" y1="166" x2="104" y2="166"/>
+<text x="104" y="112" text-anchor="end" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">C₁</text>
+<text x="412" y="112" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">C₂</text>
+<line x1="30" y1="166" x2="120" y2="166"/>
 <line x1="120" y1="150" x2="120" y2="182" stroke-width="2"/>
 <line x1="120" y1="158" x2="160" y2="172"/>
 <line x1="120" y1="174" x2="160" y2="188"/>
-<line x1="160" y1="172" x2="160" y2="188" stroke-width="2"/>
+<path d="M 160 172 L 160 112 L 120 112"/>
 <path d="M 152 185.5 L 160 188 L 154.5 181 Z" fill="var(--vp-c-text-1)" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
 <text x="24" y="166" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700 sf-it">u</text>
 <text x="33" y="176" text-anchor="start" dominant-baseline="middle" font-size="9" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">I1</text>
 <text x="176" y="206" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">T₁</text>
-<line x1="490" y1="166" x2="416" y2="166"/>
+<line x1="490" y1="166" x2="400" y2="166"/>
 <line x1="400" y1="150" x2="400" y2="182" stroke-width="2"/>
 <line x1="400" y1="158" x2="360" y2="172"/>
 <line x1="400" y1="174" x2="360" y2="188"/>
-<line x1="360" y1="172" x2="360" y2="188" stroke-width="2"/>
+<path d="M 360 172 L 360 112 L 400 112"/>
 <path d="M 368 185.5 L 360 188 L 365.5 181 Z" fill="var(--vp-c-text-1)" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
 <text x="496" y="166" text-anchor="end" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700 sf-it">u</text>
 <text x="502" y="176" text-anchor="end" dominant-baseline="middle" font-size="9" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">I2</text>
 <text x="344" y="206" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">T₂</text>
-<line x1="160" y1="180" x2="160" y2="222"/>
-<line x1="360" y1="180" x2="360" y2="222"/>
+<line x1="160" y1="188" x2="160" y2="222"/>
+<line x1="360" y1="188" x2="360" y2="222"/>
 <circle cx="260" cy="222" r="4" class="sf-dot"/>
 <line x1="160" y1="222" x2="260" y2="222"/>
 <line x1="360" y1="222" x2="260" y2="222"/>
@@ -264,7 +262,7 @@ CMRR 从 70.7 dB 掉到 50.7 dB，差了整整 20 dB，也就是 10 倍。
 <line x1="180" y1="88" x2="340" y2="88"/>
 <line x1="180" y1="88" x2="180" y2="100"/>
 <circle cx="180" cy="100" r="4.5" class="sf-dot"/>
-<text x="188" y="112" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">基准节点</text>
+<text x="184" y="82" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">基准节点</text>
 <line x1="216" y1="88" x2="216" y2="106"/>
 <line x1="250" y1="88" x2="250" y2="98"/>
 <line x1="340" y1="88" x2="340" y2="106"/>
@@ -306,7 +304,7 @@ CMRR 从 70.7 dB 掉到 50.7 dB，差了整整 20 dB，也就是 10 倍。
 
 <FigBox title="例 2 的微电流源：电阻大一点，电流小一截" kind="曲线" note="横轴是 T₂ 发射极电阻 R，纵轴是解出的 I_C2。曲线下降得很陡，所以几十微安的偏置只需要几百欧的小电阻，这正是硅片上「用小电阻换小电流」的收益所在。" >
 
-<svg viewBox="0 0 470 250" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
+<svg viewBox="0 0 470 276" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
 <line x1="70" y1="200" x2="430" y2="200" stroke="var(--vp-c-divider)" stroke-width="1.2"/>
 <line x1="70" y1="200" x2="70" y2="30" stroke="var(--vp-c-divider)" stroke-width="1.2"/>
 <text x="436" y="216" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">R / Ω</text>
@@ -319,10 +317,10 @@ CMRR 从 70.7 dB 掉到 50.7 dB，差了整整 20 dB，也就是 10 倍。
 <circle cx="300" cy="162" r="4.5" fill="var(--vp-c-brand-1)" stroke="none"/>
 <text x="310" y="154" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700">R = 500 Ω → 112 μA</text>
 <text x="90" y="220" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">0</text>
-<text x="410" y="220" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">1 k</text>
+<text x="410" y="234" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">1 k</text>
 <text x="62" y="54" text-anchor="end" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">900</text>
 <text x="62" y="200" text-anchor="end" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">0</text>
-<text x="250" y="242" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">方程 V_T·ln(I_C1 / I_C2) = I_C2·R 的解：电流随电阻快速下降</text>
+<text x="240" y="264" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">方程 V_T·ln(I_C1 / I_C2) = I_C2·R 的解：电流随电阻快速下降</text>
 </svg>
 
 </FigBox>
@@ -451,23 +449,22 @@ $$
 <text x="248" y="98" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">u₋ = u₊</text>
 <text x="30" y="106" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700 sf-it">u</text>
 <text x="37" y="115" text-anchor="start" dominant-baseline="middle" font-size="9" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">i</text>
-<line x1="52" y1="106" x2="52" y2="130"/>
-<line x1="52" y1="130" x2="86" y2="130"/>
-<g transform="translate(120 130)">
+<line x1="52" y1="106" x2="94" y2="106"/>
+<g transform="translate(120 106)">
 <line x1="-26" y1="0" x2="-10" y2="0"/>
 <rect x="-10" y="-6" width="20" height="12" rx="1.5" fill="none"/>
 <line x1="10" y1="0" x2="26" y2="0"/>
 </g>
-<line x1="146" y1="130" x2="170" y2="130"/>
-<text x="120" y="108" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R</text>
-<text x="127" y="117" text-anchor="start" dominant-baseline="middle" font-size="9" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">1</text>
-<text x="120" y="154" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">10 kΩ</text>
-<path d="M 56 106 L 142 106" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#op-b)"/>
+<line x1="146" y1="106" x2="170" y2="106"/>
+<text x="120" y="84" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R</text>
+<text x="127" y="93" text-anchor="start" dominant-baseline="middle" font-size="9" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">1</text>
+<text x="120" y="130" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">10 kΩ</text>
+<path d="M 56 106 L 100 106" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#op-b)"/>
 <text x="78" y="94" text-anchor="middle" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700 sf-it">i</text>
 <text x="85" y="103" text-anchor="start" dominant-baseline="middle" font-size="8" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">1</text>
-<text x="158" y="112" text-anchor="end" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">虚地 0 V</text>
-<circle cx="170" cy="130" r="4" class="sf-dot"/>
-<line x1="170" y1="130" x2="170" y2="70"/>
+<text x="182" y="72" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">虚地 0 V</text>
+<circle cx="170" cy="106" r="4" class="sf-dot"/>
+<line x1="170" y1="106" x2="170" y2="70"/>
 <line x1="170" y1="70" x2="290" y2="70"/>
 <g transform="translate(230 70)">
 <line x1="-26" y1="0" x2="-10" y2="0"/>
@@ -575,7 +572,7 @@ $$
 <text x="330" y="186" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">A_od = 2×10⁵</text>
 <text x="330" y="204" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">GBD = 1 MHz</text>
 <line x1="60" y1="180" x2="150" y2="180" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 3"/>
-<text x="58" y="180" text-anchor="end" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">失调电压 ≈ 1 mV</text>
+<text x="8" y="172" text-anchor="start" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">失调电压 ≈ 1 mV</text>
 <text x="250" y="234" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">虚线框里的四件事，就是「理想运放」这四个字被省略掉的全部内容</text>
 </svg>
 
@@ -630,7 +627,7 @@ $$
 
 <svg viewBox="0 0 560 200" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
 <defs>
-  <marker id="op-c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+  <marker id="op-c8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
 </defs>
@@ -645,9 +642,9 @@ $$
 <text x="390" y="92" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">甲乙类 · 限流保护</text>
 <rect x="200" y="140" width="200" height="42" rx="8" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.4" stroke-dasharray="5 4"/>
 <text x="300" y="160" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">镜像 / 微电流源偏置链</text>
-<line x1="150" y1="79" x2="178" y2="79" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#op-c)"/>
-<line x1="300" y1="79" x2="328" y2="79" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#op-c)"/>
-<line x1="450" y1="79" x2="500" y2="79" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#op-c)"/>
+<line x1="150" y1="79" x2="178" y2="79" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#op-c8)"/>
+<line x1="300" y1="79" x2="328" y2="79" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#op-c8)"/>
+<line x1="450" y1="79" x2="500" y2="79" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#op-c8)"/>
 <text x="514" y="79" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700 sf-it">u</text>
 <text x="523" y="87" text-anchor="start" dominant-baseline="middle" font-size="9" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">o</text>
 <line x1="8" y1="66" x2="28" y2="66"/>

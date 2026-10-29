@@ -231,36 +231,45 @@ $$
 题干：$E=10\,\text{V}$、$R=100\,\Omega$、$L=0.2\,\text{H}$ 串联，闭合前电流为零。求 $i_L(t)$、$u_L(t)$，以及电流升到 50 mA 的时间。
 
 <FigBox title="RL 接通回路：电源、电阻、线圈串成一个圈" kind="电路" note="求 τ 时把电源短路，从电感端口看进去就是 R 一个电阻，所以 τ = L/R，与电源大小无关。">
-<svg viewBox="0 0 440 240" role="img" aria-label="RL 串联接通回路：交流源符号位置放直流电源 E、R、L 串成一个矩形回路">
+<svg viewBox="0 0 440 240" role="img" aria-label="RL 串联回路：直流电源 E、开关 S、线圈 L、电阻 R 串成一个闭合回路">
   <g stroke="var(--vp-c-text-1)" stroke-width="1.7" fill="none" stroke-linecap="round">
-    <line x1="110" y1="70" x2="190" y2="70"/>
-    <rect x="190" y="50" width="90" height="40" rx="5"/>
+    <line x1="110" y1="70" x2="136" y2="70"/>
+    <line x1="136" y1="70" x2="178" y2="70"/>
+    <line x1="178" y1="70" x2="190" y2="70"/>
+    <path d="M 190 70 a 9 9 0 0 1 18 0 a 9 9 0 0 1 18 0 a 9 9 0 0 1 18 0 a 9 9 0 0 1 18 0 a 9 9 0 0 1 18 0"/>
     <line x1="280" y1="70" x2="350" y2="70"/>
-    <line x1="350" y1="70" x2="350" y2="190"/>
+    <line x1="350" y1="70" x2="350" y2="110"/>
+    <rect x="330" y="110" width="40" height="50" rx="5"/>
+    <line x1="350" y1="160" x2="350" y2="190"/>
     <line x1="350" y1="190" x2="110" y2="190"/>
-    <line x1="110" y1="190" x2="110" y2="118"/>
-    <line x1="110" y1="118" x2="110" y2="70"/>
-    <g transform="translate(110 142) rotate(-90)">
+    <line x1="110" y1="190" x2="110" y2="168"/>
+    <g transform="translate(110 142) rotate(90)">
       <line x1="-26" y1="0" x2="-5" y2="0"/>
       <line x1="-5" y1="-11" x2="-5" y2="11" stroke-width="2.6"/>
       <line x1="5" y1="-6" x2="5" y2="6" stroke-width="2.6"/>
       <line x1="5" y1="0" x2="26" y2="0"/>
     </g>
+    <line x1="110" y1="116" x2="110" y2="70"/>
+  </g>
+  <g fill="var(--vp-c-text-1)">
+    <circle cx="136" cy="70" r="2.2"/>
+    <circle cx="178" cy="70" r="2.2"/>
   </g>
   <g font-size="12" fill="var(--vp-c-text-1)">
     <text x="235" y="40" text-anchor="middle">L = 0.2 H</text>
-    <text x="350" y="132" text-anchor="middle">R = 100 Ω</text>
+    <text x="326" y="138" text-anchor="end">R = 100 Ω</text>
     <text x="86" y="146" text-anchor="end">E = 10 V</text>
+    <text x="157" y="58" text-anchor="middle">S</text>
     <text x="230" y="214" text-anchor="middle" fill="var(--vp-c-text-3)">闭合前电流为零 → 起点为 0</text>
-  </g>
-  <g stroke="var(--vp-c-brand-1)" stroke-width="1.7" fill="none">
-    <path d="M 300 70 L 318 70" marker-end="url(#ee2f-arr)"/>
   </g>
   <defs>
     <marker id="ee2f-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)"/>
     </marker>
   </defs>
+  <g stroke="var(--vp-c-brand-1)" stroke-width="1.7" fill="none">
+    <path d="M 300 70 L 318 70" marker-end="url(#ee2f-arr)"/>
+  </g>
   <text x="309" y="58" text-anchor="middle" font-size="13" fill="var(--vp-c-brand-1)" font-style="italic">i</text>
 </svg>
 </FigBox>
@@ -290,21 +299,21 @@ $$
 题干：$C=20\,\mu\text{F}$ 已充电至 $10\,\text{V}$，经 $R=10\,\text{k}\Omega$ 放电。求 $u_C(t)$、$t=0.1\,\text{s}$ 时的电压、降到 1 V 的时间，并说明能量去哪了。
 
 <FigBox title="电容放电回路：没有电源，只剩 C 与 R 构成一个圈" kind="电路" note="没有独立电源，f(∞) 直接是 0——电容把储存的电荷全部放完，电压归零。" >
-<svg viewBox="0 0 440 240" role="img" aria-label="电容通过电阻放电的回路：电容与电阻构成闭合回路，无电源">
+<svg viewBox="0 0 440 240" role="img" aria-label="电容通过电阻放电的回路：电容在上边、电阻在右边，两者构成闭合回路，无电源">
   <g stroke="var(--vp-c-text-1)" stroke-width="1.7" fill="none" stroke-linecap="round">
-    <line x1="110" y1="70" x2="350" y2="70"/>
-    <line x1="350" y1="70" x2="350" y2="190"/>
+    <line x1="110" y1="70" x2="200" y2="70"/>
+    <line x1="200" y1="56" x2="200" y2="84" stroke-width="2.4"/>
+    <line x1="214" y1="56" x2="214" y2="84" stroke-width="2.4"/>
+    <line x1="214" y1="70" x2="350" y2="70"/>
+    <line x1="350" y1="70" x2="350" y2="110"/>
+    <rect x="330" y="110" width="40" height="50" rx="5"/>
+    <line x1="350" y1="160" x2="350" y2="190"/>
     <line x1="350" y1="190" x2="110" y2="190"/>
-    <line x1="110" y1="190" x2="110" y2="118"/>
-    <line x1="110" y1="118" x2="110" y2="70"/>
-    <line x1="110" y1="120" x2="182" y2="120"/>
-    <line x1="182" y1="98" x2="182" y2="142"/>
-    <line x1="258" y1="98" x2="258" y2="142"/>
-    <line x1="258" y1="120" x2="350" y2="120"/>
+    <line x1="110" y1="190" x2="110" y2="70"/>
   </g>
   <g font-size="12" fill="var(--vp-c-text-1)">
-    <text x="220" y="98" text-anchor="middle">C = 20 µF（初始 10 V）</text>
-    <text x="350" y="132" text-anchor="middle">R = 10 kΩ</text>
+    <text x="207" y="44" text-anchor="middle">C = 20 µF（初始 10 V）</text>
+    <text x="322" y="138" text-anchor="end">R = 10 kΩ</text>
     <text x="220" y="214" text-anchor="middle" fill="var(--vp-c-text-3)">没有电源 → 电路里只剩电容和电阻</text>
   </g>
 </svg>
@@ -332,33 +341,38 @@ $$
 题干：图示电路：$t<0$ 时开关 S 置于位置 1，电路已稳态，$u_C(0_-)=4\,\text{V}$；$t=0$ 时 S 扳到位置 2，接入 $E=12\,\text{V}$，$R_1=R_2=2\,\text{k}\Omega$，$C=100\,\mu\text{F}$ 与 $R_2$ 并联。求 $u_C(t)$ 和 $i_{R_1}(t)$。
 
 <FigBox title="换路后的电路：电源经 R₁ 到结点，结点下并着 R₂ 与 C" kind="结构" note="求 τ 时把电源短路，从电容端口看进去：R₁ 与 R₂ 都接到被短路的电源另一端，所以是并联，等效 1 kΩ 而不是 2 kΩ。">
-<svg viewBox="0 0 460 250" role="img" aria-label="换路后电路：电源 E 经电阻 R1 到上方结点，结点下方并联 R2 与电容 C">
+<svg viewBox="0 0 460 270" role="img" aria-label="换路后电路：电源 E 经电阻 R1 到上方结点，结点下方并联 R2 与电容 C">
   <g stroke="var(--vp-c-text-1)" stroke-width="1.7" fill="none" stroke-linecap="round">
-    <line x1="60" y1="60" x2="130" y2="60"/>
-    <rect x="130" y="42" width="80" height="36" rx="5"/>
-    <line x1="210" y1="60" x2="330" y2="60"/>
-    <line x1="330" y1="60" x2="330" y2="100"/>
-    <line x1="330" y1="100" x2="330" y2="200"/>
-    <line x1="330" y1="200" x2="60" y2="200"/>
-    <line x1="60" y1="200" x2="60" y2="108"/>
-    <g transform="translate(60 140) rotate(-90)">
+    <line x1="60" y1="70" x2="130" y2="70"/>
+    <rect x="130" y="52" width="80" height="36" rx="5"/>
+    <line x1="210" y1="70" x2="330" y2="70"/>
+    <line x1="250" y1="70" x2="250" y2="118"/>
+    <line x1="232" y1="118" x2="268" y2="118"/>
+    <line x1="232" y1="130" x2="268" y2="130"/>
+    <line x1="250" y1="130" x2="250" y2="210"/>
+    <line x1="330" y1="70" x2="330" y2="110"/>
+    <rect x="310" y="110" width="40" height="50" rx="5"/>
+    <line x1="330" y1="160" x2="330" y2="210"/>
+    <line x1="330" y1="210" x2="60" y2="210"/>
+    <line x1="60" y1="210" x2="60" y2="176"/>
+    <g transform="translate(60 150) rotate(90)">
       <line x1="-26" y1="0" x2="-5" y2="0"/>
       <line x1="-5" y1="-11" x2="-5" y2="11" stroke-width="2.6"/>
       <line x1="5" y1="-6" x2="5" y2="6" stroke-width="2.6"/>
       <line x1="5" y1="0" x2="26" y2="0"/>
     </g>
-    <rect x="238" y="100" width="36" height="100" rx="4"/>
-    <line x1="238" y1="130" x2="274" y2="130"/>
-    <line x1="238" y1="170" x2="274" y2="170"/>
-    <line x1="330" y1="130" x2="274" y2="130"/>
-    <line x1="330" y1="170" x2="274" y2="170"/>
+    <line x1="60" y1="124" x2="60" y2="70"/>
+  </g>
+  <g fill="var(--vp-c-text-1)">
+    <circle cx="250" cy="70" r="3"/>
+    <circle cx="250" cy="210" r="3"/>
   </g>
   <g font-size="12" fill="var(--vp-c-text-1)">
-    <text x="170" y="32" text-anchor="middle">R₁ = 2 kΩ</text>
-    <text x="256" y="220" text-anchor="middle">C = 100 µF</text>
-    <text x="352" y="140" text-anchor="start">R₂ = 2 kΩ</text>
-    <text x="38" y="144" text-anchor="end">E = 12 V</text>
-    <text x="230" y="242" text-anchor="middle" fill="var(--vp-c-text-3)">R₂ 与 C 并联在结点下方</text>
+    <text x="170" y="44" text-anchor="middle">R₁ = 2 kΩ</text>
+    <text x="218" y="124" text-anchor="end">C = 100 µF</text>
+    <text x="356" y="140" text-anchor="start">R₂ = 2 kΩ</text>
+    <text x="86" y="160" text-anchor="start">E = 12 V</text>
+    <text x="230" y="252" text-anchor="middle" fill="var(--vp-c-text-3)">R₂ 与 C 并联在结点下方</text>
   </g>
 </svg>
 </FigBox>

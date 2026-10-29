@@ -95,7 +95,6 @@ $$
     <line x1="152" y1="70" x2="152" y2="220"/><line x1="198" y1="70" x2="198" y2="220"/>
     <line x1="244" y1="70" x2="244" y2="220"/><line x1="290" y1="70" x2="290" y2="220"/>
   </g>
-  <line x1="66" y1="76" x2="66" y2="214" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3"/>
   <line x1="244" y1="70" x2="244" y2="220" stroke="var(--vp-c-text-2)" stroke-width="2.4"/>
   <g font-size="14" text-anchor="middle" fill="var(--vp-c-text-1)" class="sf-t">
     <text x="83" y="99">1</text><text x="129" y="99">2</text><text x="175" y="99">−1</text><text x="221" y="99">1</text><text x="267" y="99">1</text>

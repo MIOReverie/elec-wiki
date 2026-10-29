@@ -355,25 +355,25 @@ GPIOA->ODR |= (1 << 5);   // 看起来是「只改 bit5」
 
 STM32 为此给了第一条出路，`BSRR`（Bit Set/Reset Register，位置位 / 复位寄存器）：
 
-<FigBox title="BSRR 的两个 16 位半区：低半区置位，高半区清零" kind="结构" note="写 BSRR 只影响你写 1 的那几位，写 0 的位完全不动作——注意这与 ODR「整字覆盖」的本质区别。置位和清零要同时做也能一次写进去：0x0002_0020 就是「bit5 置位、bit9 清零」。">
+<FigBox title="BSRR 的两个 16 位半区：低半区置位，高半区清零" kind="结构" note="写 BSRR 只影响你写 1 的那几位，写 0 的位完全不动作——注意这与 ODR「整字覆盖」的本质区别。置位和清零要同时做也能一次写进去：0x0200_0020 就是「bit5 置位、bit9 清零」。">
 
 <svg viewBox="0 0 700 250" role="img" aria-label="BSRR 寄存器：低 16 位 BR 置位，高 16 位 BS 清零；两个例子分别置位 bit5 和清零 bit5">
 <g font-size="11.5" fill="var(--vp-c-text-1)">
-  <rect x="24" y="36" width="300" height="46" rx="5" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="174" y="58" text-anchor="middle" font-weight="700" fill="var(--vp-c-brand-1)">低 16 位：写 1 的位 → 置位</text>
-  <text x="174" y="76" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)">bit0 ~ bit15 对应引脚 0 ~ 15</text>
-  <rect x="336" y="36" width="300" height="46" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.4" />
-  <text x="486" y="58" text-anchor="middle" font-weight="700">高 16 位：写 1 的位 → 清零</text>
-  <text x="486" y="76" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)">bit16 ~ bit31 对应引脚 0 ~ 15</text>
+  <rect x="24" y="36" width="300" height="46" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.4" />
+  <text x="174" y="58" text-anchor="middle" font-weight="700">高 16 位：写 1 的位 → 清零</text>
+  <text x="174" y="76" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)">bit31 ~ bit16 对应引脚 15 ~ 0</text>
+  <rect x="336" y="36" width="300" height="46" rx="5" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <text x="486" y="58" text-anchor="middle" font-weight="700" fill="var(--vp-c-brand-1)">低 16 位：写 1 的位 → 置位</text>
+  <text x="486" y="76" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)">bit15 ~ bit0 对应引脚 15 ~ 0</text>
   <text x="330" y="30" text-anchor="middle" font-size="10" fill="var(--vp-c-text-3)">一个字 32 位</text>
 
-  <text x="24" y="120" font-weight="700">置位 bit5：GPIOA-&gt;BSRR = (1 &lt;&lt; 5)</text>
-  <text x="24" y="144" font-size="11">写 0x0000 0020 → bit5 变 1，其余引脚不动</text>
-  <text x="24" y="164" font-size="10.5" fill="var(--vp-c-text-3)">（若该位当前就是 1，写 1 也不报错，结果仍是 1）</text>
+  <text x="24" y="120" font-weight="700">清零 bit5：GPIOA-&gt;BSRR = (1 &lt;&lt; (5+16))</text>
+  <text x="24" y="144" font-size="11">写 0x0020 0000 → bit5 变 0，其余引脚不动</text>
+  <text x="24" y="164" font-size="10.5" fill="var(--vp-c-text-3)">（等价于 GPIOA-&gt;BRR = (1 &lt;&lt; 5)）</text>
 
-  <text x="380" y="120" font-weight="700">清零 bit5：GPIOA-&gt;BSRR = (1 &lt;&lt; (5+16))</text>
-  <text x="380" y="144" font-size="11">写 0x0020 0000 → bit5 变 0，其余引脚不动</text>
-  <text x="380" y="164" font-size="10.5" fill="var(--vp-c-text-3)">（等价于 GPIOA-&gt;BRR = (1 &lt;&lt; 5)）</text>
+  <text x="380" y="120" font-weight="700">置位 bit5：GPIOA-&gt;BSRR = (1 &lt;&lt; 5)</text>
+  <text x="380" y="144" font-size="11">写 0x0000 0020 → bit5 变 1，其余引脚不动</text>
+  <text x="380" y="164" font-size="10.5" fill="var(--vp-c-text-3)">（若该位当前就是 1，写 1 也不报错，结果仍是 1）</text>
 
   <line x1="24" y1="188" x2="656" y2="188" stroke="var(--vp-c-divider)" stroke-width="1.2" />
   <text x="24" y="212" font-size="11">一次写操作完成，硬件内部改位 → 没有「读—改—写」的窗口，所以不会被中断撕开</text>
@@ -402,13 +402,14 @@ GPIOA->BSRR = (1 << (5 + 16));   // 高 16 位：清零 → bit5 = 0
 </defs>
 <g font-size="11" fill="var(--vp-c-text-1)">
   <text x="24" y="26" font-weight="700">源区：GPIOA-&gt;ODR 的一个字节（0x4001 080C）</text>
-  <rect x="24" y="36" width="252" height="28" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.2" />
+  <rect x="24" y="36" width="288" height="28" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.2" />
   <line x1="60" y1="36" x2="60" y2="64" stroke="var(--vp-c-divider)" stroke-width="0.8" />
   <line x1="96" y1="36" x2="96" y2="64" stroke="var(--vp-c-divider)" stroke-width="0.8" />
   <line x1="132" y1="36" x2="132" y2="64" stroke="var(--vp-c-divider)" stroke-width="0.8" />
   <line x1="168" y1="36" x2="168" y2="64" stroke="var(--vp-c-divider)" stroke-width="0.8" />
   <line x1="204" y1="36" x2="204" y2="64" stroke="var(--vp-c-divider)" stroke-width="0.8" />
   <line x1="240" y1="36" x2="240" y2="64" stroke="var(--vp-c-divider)" stroke-width="0.8" />
+  <line x1="276" y1="36" x2="276" y2="64" stroke="var(--vp-c-divider)" stroke-width="0.8" />
   <text x="42" y="55" text-anchor="middle">b7</text>
   <text x="78" y="55" text-anchor="middle">b6</text>
   <text x="114" y="55" text-anchor="middle">b5</text>
@@ -416,6 +417,7 @@ GPIOA->BSRR = (1 << (5 + 16));   // 高 16 位：清零 → bit5 = 0
   <text x="186" y="55" text-anchor="middle">b3</text>
   <text x="222" y="55" text-anchor="middle">b2</text>
   <text x="258" y="55" text-anchor="middle">b1</text>
+  <text x="294" y="55" text-anchor="middle">b0</text>
   <rect x="96" y="36" width="36" height="28" fill="var(--vp-c-brand-1)" opacity="0.18" />
   <text x="114" y="82" text-anchor="middle" fill="var(--vp-c-brand-1)">目标：bit5</text>
 

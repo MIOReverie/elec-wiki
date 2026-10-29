@@ -254,7 +254,7 @@ $$G=\left(1+\frac{2R_1}{R_G}\right)\frac{R_3}{R_2}$$
 <path d="M60 200 L460 160 L460 200 Z" fill="currentColor" opacity="0.14" stroke="none" />
 <path d="M60 200 L260 190 L460 200 Z" fill="currentColor" opacity="0.14" stroke="none" />
 </g>
-<text x="46" y="46" text-anchor="end" font-size="13" fill="currentColor">真实信号</text>
+<text x="60" y="46" text-anchor="end" font-size="13" fill="currentColor">真实信号</text>
 <text x="46" y="204" text-anchor="end" font-size="13" fill="currentColor">1 kHz</text>
 <text x="370" y="252" text-anchor="middle" font-size="12" fill="currentColor">采样点（f_s = 600 Hz，只隔 1/600 s 取一个值）</text>
 <text x="370" y="278" text-anchor="middle" font-size="13" fill="currentColor">把这些点连起来 → 看起来是一条 200 Hz 的波（|1000−600|=400，再折一次 |400−600|=200）</text>
@@ -439,7 +439,7 @@ $$t=0:\ R_{\text{测}}=104\,\Omega\rightarrow t_{\text{显}}=10.25\,^\circ\text{
 再往上还有四线制，也叫开尔文接法：恒流两端与电压采样两端物理分开，连引线失配都不用担心，这是精密测量的终极答案。
 
 <FigBox title="两线制 vs 三线制：引线压降去了哪里" kind="结构" note="两线制里两根引线的压降与信号混在同一个测量回路中，被当成传感器阻值读出；三线制把第三根引线的压降送进差分的另一端，两份 I·R_L 在相减时抵消。">
-<svg viewBox="0 0 760 300" role="img" aria-label="两线制与三线制 PT100 接线的对比示意图">
+<svg viewBox="0 0 760 340" role="img" aria-label="两线制与三线制 PT100 接线的对比示意图">
 <g stroke="currentColor" stroke-width="2" fill="none">
 <!-- 两线制 -->
 <circle cx="60" cy="60" r="4" fill="currentColor" />

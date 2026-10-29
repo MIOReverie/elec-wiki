@@ -81,19 +81,22 @@ $A_{od}$ 是**开环差模增益**，普通运放是 $10^5\sim10^6$。这条式�
 <line x1="234" y1="268" x2="246" y2="268" stroke="currentColor" stroke-width="2.4" />
 <text x="214" y="232" text-anchor="middle" font-size="11" fill="currentColor">同相端接地</text>
 <!-- 反馈 -->
-<line x1="400" y1="180" x2="480" y2="180" stroke="currentColor" stroke-width="2" />
-<line x1="480" y1="180" x2="480" y2="66" stroke="currentColor" stroke-width="2" />
+<line x1="400" y1="180" x2="534" y2="180" stroke="currentColor" stroke-width="2" />
+<line x1="534" y1="180" x2="534" y2="66" stroke="currentColor" stroke-width="2" />
 <rect x="426" y="36" width="108" height="30" fill="none" stroke="currentColor" stroke-width="1.6" />
 <text x="480" y="57" text-anchor="middle" font-size="13" fill="currentColor">R_f</text>
-<line x1="480" y1="66" x2="480" y2="180" stroke="currentColor" stroke-width="2" />
-<path d="M472 70 L480 62 L488 70" fill="none" stroke="currentColor" stroke-width="1.8" marker-end="url(#ar1)" />
-<text x="498" y="46" font-size="13" fill="currentColor">u_o</text>
+<line x1="426" y1="51" x2="270" y2="51" stroke="currentColor" stroke-width="2" />
+<line x1="270" y1="51" x2="270" y2="150" stroke="currentColor" stroke-width="2" />
+<line x1="270" y1="150" x2="300" y2="150" stroke="currentColor" stroke-width="2" />
+<circle cx="270" cy="150" r="3.5" fill="currentColor" />
+<path d="M358 51 L340 51" fill="none" stroke="currentColor" stroke-width="1.8" marker-end="url(#ar1)" />
+<text x="546" y="120" font-size="13" fill="currentColor">u_o</text>
 <!-- 地线 -->
 <line x1="60" y1="268" x2="600" y2="268" stroke="currentColor" stroke-width="1.6" opacity="0.6" />
 <!-- 说明 -->
-<text x="360" y="200" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">虚断 ⇒ 输入电流全部走 Rf</text>
-<text x="360" y="220" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">虚短 + 同相接地 ⇒ 反相端电位 = 0</text>
-<text x="360" y="240" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">两个条件合起来：这是分压，只是接了一条运放</text>
+<text x="430" y="200" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">虚断 ⇒ 输入电流全部走 Rf</text>
+<text x="430" y="220" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">虚短 + 同相接地 ⇒ 反相端电位 = 0</text>
+<text x="430" y="240" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">两个条件合起来：这是分压，只是接了一条运放</text>
 </svg>
 </FigBox>
 
@@ -151,7 +154,7 @@ $$u_o=-R_f\left(\frac{u_1}{R_1}+\frac{u_2}{R_2}+\frac{u_3}{R_3}\right)$$
 <rect x="470" y="30" width="100" height="30" />
 </g>
 <text x="520" y="51" text-anchor="middle" font-size="13" fill="currentColor">R_f = 30 kΩ</text>
-<text x="540" y="40" font-size="13" fill="currentColor">u_o</text>
+<text x="548" y="100" font-size="13" fill="currentColor">u_o</text>
 <text x="200" y="284" font-size="12" fill="currentColor" opacity="0.8">三路电流在虚地相加：i = u₁/R₁ + u₂/R₂ + u₃/R₃，全部流经 R_f</text>
 </svg>
 </FigBox>
@@ -209,7 +212,7 @@ $$\frac{u_i}{R}=C\frac{du_o}{dt}\;\Longrightarrow\;\frac{du_o}{dt}=-\frac{u_i}{R
 <text x="560" y="90" font-size="12" fill="currentColor">输入 u_i（方波）</text>
 <text x="588" y="262" font-size="12" fill="currentColor">输出 u_o（三角波）</text>
 <text x="470" y="300" font-size="11" fill="currentColor" opacity="0.8">斜率 = −u_i /(RC)，所以每半周走固定的电压</text>
-<text x="470" y="316" font-size="11" fill="currentColor" opacity="0.8">输入若带直流分量，斜率恒不为零 → 输出爬到电源轨</text>
+<text x="470" y="316" font-size="11" text-anchor="end" fill="currentColor" opacity="0.8">输入若带直流分量，斜率恒不为零 → 输出爬到电源轨</text>
 </svg>
 </FigBox>
 
@@ -283,8 +286,8 @@ $f_0$ 是 1591.5 Hz，$10\,\text{kHz}$ 比它高 6.28 倍，一阶衰减十几�
 <line x1="70" y1="70" x2="70" y2="245" stroke-width="1.4" />
 <line x1="70" y1="110" x2="700" y2="110" stroke-dasharray="6 4" stroke-width="1.3" opacity="0.7" />
 <line x1="70" y1="170" x2="700" y2="170" stroke-dasharray="6 4" stroke-width="1.3" opacity="0.7" />
-<text x="706" y="114" font-size="11" fill="currentColor">+4 V</text>
-<text x="706" y="174" font-size="11" fill="currentColor">−4 V</text>
+<text x="706" y="114" font-size="11" text-anchor="end" fill="currentColor">+4 V</text>
+<text x="706" y="174" font-size="11" text-anchor="end" fill="currentColor">−4 V</text>
 <text x="34" y="74" font-size="11" fill="currentColor">u_o</text>
 <text x="34" y="204" font-size="11" fill="currentColor">u_i</text>
 <path d="M70 210 Q95 140 130 210 Q150 250 175 190 Q200 130 235 205 Q255 250 280 175 Q305 115 335 200 L470 200 L470 80 L700 80" stroke-width="2" />

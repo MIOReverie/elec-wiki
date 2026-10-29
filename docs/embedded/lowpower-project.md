@@ -141,17 +141,17 @@ $$I_{avg} = I_{active} \times \frac{t_{active}}{T} + I_{sleep} \times \frac{t_{s
   <g font-size="12" fill="var(--vp-c-text-1)">
     <line x1="60" y1="190" x2="620" y2="190" stroke="var(--vp-c-divider)" stroke-width="1.2" />
     <line x1="60" y1="190" x2="60" y2="30" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-    <text x="66" y="40" fill="var(--vp-c-text-3)">30 mA</text>
-    <text x="66" y="184" fill="var(--vp-c-text-3)">20 µA</text>
+    <text x="56" y="54" text-anchor="end" fill="var(--vp-c-text-3)">30 mA</text>
+    <text x="56" y="188" text-anchor="end" fill="var(--vp-c-text-3)">20 µA</text>
     <path d="M 60 184 L 60 50 L 68 50 L 68 184 L 620 184" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.4" />
     <line x1="60" y1="50" x2="620" y2="50" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 4" />
-    <text x="64" y="44" fill="var(--vp-c-brand-1)">活跃 1 ms @ 30 mA</text>
-    <text x="360" y="176" text-anchor="middle" fill="var(--vp-c-text-3)">睡眠 999 ms @ 20 µA</text>
+    <text x="74" y="44" fill="var(--vp-c-brand-1)">活跃 1 ms @ 30 mA</text>
+    <text x="150" y="164" text-anchor="middle" fill="var(--vp-c-text-3)">睡眠 999 ms @ 20 µA</text>
     <line x1="60" y1="206" x2="68" y2="206" stroke="var(--vp-c-text-3)" stroke-width="1" />
     <text x="60" y="222" text-anchor="middle" fill="var(--vp-c-text-3)">0</text>
     <text x="620" y="222" text-anchor="middle" fill="var(--vp-c-text-3)">1 s</text>
-    <line x1="64" y1="120" x2="616" y2="120" stroke="var(--vp-c-brand-2)" stroke-width="1.6" stroke-dasharray="6 4" />
-    <text x="340" y="114" text-anchor="middle" fill="var(--vp-c-brand-2)">平均电流 ≈ 50 µA（介于两个电平之间）</text>
+    <line x1="64" y1="176" x2="616" y2="176" stroke="var(--vp-c-brand-2)" stroke-width="1.6" stroke-dasharray="6 4" />
+    <text x="470" y="170" text-anchor="middle" fill="var(--vp-c-brand-2)">平均 ≈ 50 µA（只有睡眠电流的 2.5 倍，贴在平台上方）</text>
   </g>
 </svg>
 

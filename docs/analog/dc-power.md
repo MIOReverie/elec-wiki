@@ -67,7 +67,7 @@ title: 09 · 直流电源
     <rect x="255" y="152" width="10" height="3" fill="var(--vp-c-brand-1)" opacity="0.45" />
     <text x="269" y="157" fill="var(--vp-c-text-2)">桥式无滤波</text>
     <rect x="340" y="152" width="10" height="3" fill="var(--vp-c-danger-1)" />
-    <text x="354" y="157" fill="var(--vp-c-text-2)">加滤波电容</text>
+    <text x="354" y="170" fill="var(--vp-c-text-2)">加滤波电容</text>
   </g>
 </svg>
 </FigBox>
@@ -172,31 +172,31 @@ $$U_o \approx U_Z\left(1+\frac{R_1}{R_2}\right)$$
 <rect x="110" y="40" width="110" height="84" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
 <text x="165" y="76" font-size="13" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">78xx</text>
 <text x="165" y="94" font-size="10" fill="var(--vp-c-text-3)" text-anchor="middle">IN · GND · OUT</text>
-<line x1="140" y1="124" x2="140" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
-<line x1="165" y1="124" x2="165" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
-<line x1="190" y1="124" x2="190" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
-<text x="140" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">IN</text>
-<text x="165" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">GND</text>
-<text x="190" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">OUT</text>
-<text x="140" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接 U_in</text>
-<text x="165" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接地</text>
-<text x="190" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接 U_o</text>
-<text x="140" y="208" font-size="10" fill="var(--vp-c-brand-2)" text-anchor="middle">并 0.33 µF 到地</text>
-<text x="190" y="208" font-size="10" fill="var(--vp-c-brand-2)" text-anchor="middle">并 0.1 µF 到地</text>
+<line x1="130" y1="124" x2="130" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<line x1="170" y1="124" x2="170" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<line x1="210" y1="124" x2="210" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<text x="130" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">IN</text>
+<text x="170" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">GND</text>
+<text x="210" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">OUT</text>
+<text x="130" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接 U_in</text>
+<text x="170" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接地</text>
+<text x="210" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接 U_o</text>
+<text x="130" y="208" font-size="10" fill="var(--vp-c-brand-2)" text-anchor="middle">并 0.33 µF 到地</text>
+<text x="210" y="208" font-size="10" fill="var(--vp-c-brand-2)" text-anchor="middle">并 0.1 µF 到地</text>
 <line x1="330" y1="20" x2="330" y2="230" stroke="var(--vp-c-divider)" stroke-width="1.4" stroke-dasharray="5 4" />
 <text x="510" y="26" font-size="12.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">LM317（可调输出）</text>
 <rect x="455" y="40" width="110" height="84" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
 <text x="510" y="76" font-size="13" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">LM317</text>
 <text x="510" y="94" font-size="10" fill="var(--vp-c-text-3)" text-anchor="middle">ADJ · OUT · IN</text>
-<line x1="480" y1="124" x2="480" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<line x1="465" y1="124" x2="465" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
 <line x1="510" y1="124" x2="510" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
-<line x1="540" y1="124" x2="540" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
-<text x="480" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">ADJ</text>
+<line x1="555" y1="124" x2="555" y2="154" stroke="var(--vp-c-text-2)" stroke-width="2" />
+<text x="465" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">ADJ</text>
 <text x="510" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">OUT</text>
-<text x="540" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">IN</text>
-<text x="480" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">经 R₂ 到地</text>
+<text x="555" y="170" font-size="11.5" font-weight="600" fill="var(--vp-c-text-1)" text-anchor="middle">IN</text>
+<text x="465" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">经 R₂ 到地</text>
 <text x="510" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接 U_o</text>
-<text x="540" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接 U_in</text>
+<text x="555" y="190" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">接 U_in</text>
 <text x="510" y="208" font-size="10" fill="var(--vp-c-brand-2)" text-anchor="middle">R₁ 240Ω 接 OUT↔ADJ</text>
 </svg>
 </FigBox>

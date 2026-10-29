@@ -67,14 +67,14 @@ $$
   <line x1="90" y1="170" x2="120" y2="200" stroke="var(--vp-c-brand-2)" stroke-width="2" marker-end="url(#c5f2)"/>
   <line x1="90" y1="170" x2="210" y2="290" stroke="var(--vp-c-brand-2)" stroke-width="2.6" marker-end="url(#c5f2)"/>
   <line x1="90" y1="170" x2="160" y2="140" stroke="var(--vp-c-text-2)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#c5f3)"/>
-  <line x1="90" y1="170" x2="250" y2="136" stroke="var(--vp-c-text-2)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#c5f3)"/>
+  <line x1="90" y1="170" x2="270" y2="150" stroke="var(--vp-c-text-2)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#c5f3)"/>
   <circle cx="90" cy="170" r="2.6" fill="var(--vp-c-text-2)"/>
   <text x="104" y="134" font-size="12" fill="var(--vp-c-brand-1)">v₁</text>
   <text x="140" y="104" font-size="12" fill="var(--vp-c-brand-1)">Av₁=2v₁</text>
   <text x="104" y="216" font-size="12" fill="var(--vp-c-brand-2)">v₂</text>
   <text x="216" y="294" font-size="12" fill="var(--vp-c-brand-2)">Av₂=4v₂</text>
   <text x="150" y="132" font-size="12" fill="var(--vp-c-text-2)">w</text>
-  <text x="256" y="132" font-size="12" fill="var(--vp-c-text-2)">Aw（方向变了）</text>
+  <text x="276" y="146" font-size="12" fill="var(--vp-c-text-2)">Aw（方向变了）</text>
   <line x1="20" y1="310" x2="440" y2="310" stroke="var(--vp-c-divider)" stroke-width="1"/>
   <text x="20" y="328" font-size="11.5" fill="var(--vp-c-text-2)">输入：v₁、v₂ 与 w。</text>
   <text x="20" y="346" font-size="11.5" fill="var(--vp-c-text-2)">操作：各乘一次 A；结果：v₁、v₂ 只变长，w 被掰弯。</text>
@@ -252,9 +252,9 @@ $$
   <line x1="90" y1="210" x2="90" y2="30" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
   <line x1="90" y1="150" x2="190" y2="50" stroke="var(--vp-c-brand-1)" stroke-width="2.2" marker-end="url(#c5f5)"/>
   <line x1="90" y1="150" x2="190" y2="250" stroke="var(--vp-c-brand-2)" stroke-width="2.2" marker-end="url(#c5f5)"/>
-  <line x1="126" y1="114" x2="144" y2="114" stroke="var(--vp-c-text-2)" stroke-width="1.3"/>
-  <line x1="144" y1="114" x2="144" y2="132" stroke="var(--vp-c-text-2)" stroke-width="1.3"/>
-  <text x="146" y="130" font-size="11" fill="var(--vp-c-text-2)">90°</text>
+  <line x1="99.9" y1="140.1" x2="109.8" y2="150" stroke="var(--vp-c-text-2)" stroke-width="1.3"/>
+  <line x1="109.8" y1="150" x2="99.9" y2="159.9" stroke="var(--vp-c-text-2)" stroke-width="1.3"/>
+  <text x="113" y="147" font-size="11" fill="var(--vp-c-text-2)">90°</text>
   <text x="196" y="46" font-size="12" fill="var(--vp-c-brand-1)">q₁（λ=2）</text>
   <text x="196" y="264" font-size="12" fill="var(--vp-c-brand-2)">q₂（λ=4）</text>
   <line x1="20" y1="274" x2="420" y2="274" stroke="var(--vp-c-divider)" stroke-width="1"/>

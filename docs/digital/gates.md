@@ -59,18 +59,21 @@ description: 一个逻辑门能不能带得动负载、信号穿过它要等多�
 <svg viewBox="0 0 460 220" role="img" aria-label="电平对比图：74LS 输出高 2.7V 低于 74HC 输入高阈值 3.5V，低电平安全">
   <g font-size="12" fill="var(--vp-c-text-1)">
     <line x1="40" y1="40" x2="440" y2="40" stroke="var(--vp-c-divider)"/>
-    <line x1="40" y1="90" x2="440" y2="90" stroke="var(--vp-c-divider)"/>
-    <line x1="40" y1="160" x2="440" y2="160" stroke="var(--vp-c-divider)"/>
+    <line x1="40" y1="85" x2="440" y2="85" stroke="var(--vp-c-divider)"/>
+    <line x1="40" y1="109" x2="440" y2="109" stroke="var(--vp-c-divider)"/>
     <line x1="40" y1="190" x2="440" y2="190" stroke="var(--vp-c-divider)"/>
-    <text x="30" y="44" text-anchor="end" fill="var(--vp-c-text-3)">5V</text>
-    <text x="36" y="94" text-anchor="end" fill="var(--vp-c-brand-1)">3.5V VIH</text>
-    <text x="36" y="164" text-anchor="end" fill="var(--vp-c-brand-1)">2.7V VOH</text>
-    <text x="30" y="194" text-anchor="end" fill="var(--vp-c-text-3)">0V</text>
+    <text x="36" y="44" text-anchor="end" fill="var(--vp-c-text-3)">5V</text>
+    <text x="36" y="89" text-anchor="end" fill="var(--vp-c-brand-1)">3.5V</text>
+    <text x="44" y="80" font-size="10" fill="var(--vp-c-brand-1)">VIH</text>
+    <text x="36" y="113" text-anchor="end" fill="var(--vp-c-brand-1)">2.7V</text>
+    <text x="44" y="104" font-size="10" fill="var(--vp-c-brand-1)">VOH</text>
+    <text x="36" y="194" text-anchor="end" fill="var(--vp-c-text-3)">0V</text>
   </g>
-  <rect x="120" y="40" width="280" height="50" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-dasharray="5 4"/>
-  <text x="150" y="72" font-size="12" fill="var(--vp-c-brand-1)">74HC 要求的高电平区 (≥3.5V)</text>
-  <line x1="80" y1="160" x2="400" y2="160" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-  <text x="150" y="150" font-size="12" fill="var(--vp-c-text-1)">74LS 实际输出高 2.7V（缺口）</text>
+  <rect x="120" y="40" width="280" height="45" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-dasharray="5 4"/>
+  <text x="150" y="70" font-size="12" fill="var(--vp-c-brand-1)">74HC 要求的高电平区（≥3.5V）</text>
+  <line x1="80" y1="109" x2="400" y2="109" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <text x="150" y="130" font-size="12" fill="var(--vp-c-text-1)">74LS 实际输出高只有 2.7V，缺口 0.8V</text>
+  <text x="150" y="150" font-size="11" fill="var(--vp-c-text-3)">这段空隙里 74HC 判不出高电平，行为不确定</text>
 </svg>
 </FigBox>
 
@@ -108,22 +111,33 @@ description: 一个逻辑门能不能带得动负载、信号穿过它要等多�
 先想什么：上拉电阻有两头约束。太大，高电平时压降过大、达不到 $V_{OH}$；太小，低电平时灌电流灌不过来。先把上界和下界分别算出来。
 
 <FigBox title="OD 门经上拉电阻 Rp 接负载，高/低两种状态" kind="结构" note="高态：电流经 Rp 流向上拉源，Rp 大则压降大；低态：Rp 需把灌电流分给负载，Rp 小则灌不过来。">
-<svg viewBox="0 0 460 180" role="img" aria-label="OD 门开漏结构：下拉管接地，上拉电阻接 VCC，输出接到负载输入端">
+<svg viewBox="0 0 460 190" role="img" aria-label="OD 门开漏结构：输出只由下拉管拉低，上拉电阻 Rp 把线拉向 VCC，输出节点接负载输入端">
   <g font-size="12" fill="var(--vp-c-text-1)">
-    <rect x="120" y="40" width="90" height="40" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-divider)"/>
-    <text x="165" y="64" text-anchor="middle">OD 门</text>
-    <line x1="210" y1="60" x2="320" y2="60" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-    <text x="300" y="50" text-anchor="end">输出</text>
-    <line x1="320" y1="60" x2="320" y2="110" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-    <rect x="290" y="110" width="60" height="30" fill="none" stroke="var(--vp-c-text-1)"/>
-    <text x="320" y="130" text-anchor="middle">负载</text>
-    <line x1="320" y1="140" x2="320" y2="160" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-    <line x1="120" y1="80" x2="120" y2="160" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-    <line x1="120" y1="160" x2="320" y2="160" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-    <line x1="60" y1="80" x2="120" y2="80" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-    <text x="60" y="72" text-anchor="end">Rp</text>
-    <line x1="60" y1="80" x2="60" y2="160" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-    <text x="55" y="120" text-anchor="end" fill="var(--vp-c-brand-1)">VCC</text>
+    <line x1="250" y1="26" x2="356" y2="26" stroke="var(--vp-c-text-1)" stroke-width="1.8"/>
+    <text x="362" y="30" fill="var(--vp-c-brand-1)">VCC</text>
+    <line x1="300" y1="26" x2="300" y2="40" stroke="var(--vp-c-text-1)" stroke-width="1.8"/>
+    <rect x="290" y="40" width="20" height="34" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
+    <text x="318" y="62">Rp</text>
+    <line x1="300" y1="74" x2="300" y2="86" stroke="var(--vp-c-text-1)" stroke-width="1.8"/>
+
+    <rect x="150" y="66" width="90" height="40" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-divider)"/>
+    <text x="195" y="90" text-anchor="middle">OD 门</text>
+    <line x1="150" y1="86" x2="120" y2="86" stroke="var(--vp-c-text-1)" stroke-width="1.8"/>
+    <text x="116" y="90" text-anchor="end" fill="var(--vp-c-text-3)">输入</text>
+    <line x1="240" y1="86" x2="300" y2="86" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+    <circle cx="300" cy="86" r="3" fill="var(--vp-c-text-1)"/>
+    <text x="250" y="80" fill="var(--vp-c-text-3)">输出</text>
+
+    <line x1="300" y1="86" x2="300" y2="112" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+    <rect x="270" y="112" width="60" height="30" fill="none" stroke="var(--vp-c-text-1)"/>
+    <text x="300" y="132" text-anchor="middle">负载</text>
+    <line x1="300" y1="142" x2="300" y2="160" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+    <line x1="284" y1="160" x2="316" y2="160" stroke="var(--vp-c-text-1)" stroke-width="1.8"/>
+    <line x1="290" y1="166" x2="310" y2="166" stroke="var(--vp-c-text-1)" stroke-width="1.8"/>
+    <line x1="296" y1="172" x2="304" y2="172" stroke="var(--vp-c-text-1)" stroke-width="1.8"/>
+
+    <text x="120" y="150" font-size="11" fill="var(--vp-c-text-3)">低态：下拉管导通，</text>
+    <text x="120" y="166" font-size="11" fill="var(--vp-c-text-3)">电流经 Rp 灌进 OD 门</text>
   </g>
 </svg>
 </FigBox>
@@ -173,7 +187,7 @@ $$R_{p(\min)} = \frac{V_{CC} - V_{OL(\max)}}{I_{OL(\max)} - n I_{IL}} = \frac{5 
 先想什么：A 跳变时，两条路径经过的门级数不同，到达输出端有先后，这个时间差就是毛刺。先把每级延时的到达时刻画在时间轴上。
 
 <FigBox title="A 1→0 跳变时两乘积项的到达时间轴（每门 10 ns）" kind="时序" note="AB 路经 1 个与门，第 10ns 变 0；ĀC 路经非门+与门，第 20ns 才变 1；10~20ns 两路同为 0，输出出现 10ns 负毛刺。">
-<svg viewBox="0 0 460 170" role="img" aria-label="时间轴：AB 路第10ns变0，AC路第20ns变1，中间10ns重叠为0产生毛刺">
+<svg viewBox="0 0 460 190" role="img" aria-label="时间轴：AB 路第 10ns 变 0，A 非 C 路第 20ns 变 1，中间 10ns 两路重叠为 0，输出出现负向毛刺">
   <g font-size="11" fill="var(--vp-c-text-1)">
     <line x1="40" y1="30" x2="440" y2="30" stroke="var(--vp-c-divider)"/>
     <line x1="40" y1="80" x2="440" y2="80" stroke="var(--vp-c-divider)"/>
@@ -181,14 +195,17 @@ $$R_{p(\min)} = \frac{V_{CC} - V_{OL(\max)}}{I_{OL(\max)} - n I_{IL}} = \frac{5 
     <text x="30" y="34" text-anchor="end" fill="var(--vp-c-text-3)">AB</text>
     <text x="30" y="84" text-anchor="end" fill="var(--vp-c-text-3)">ĀC</text>
     <text x="30" y="134" text-anchor="end" fill="var(--vp-c-text-3)">Y</text>
-    <text x="60" y="160" fill="var(--vp-c-text-3)">t=0</text>
-    <text x="200" y="160" fill="var(--vp-c-brand-1)">10ns</text>
-    <text x="330" y="160" fill="var(--vp-c-brand-1)">20ns</text>
   </g>
-  <polyline points="60,30 200,30 200,55 200,30 440,30" fill="none" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-  <polyline points="60,80 330,80 330,105 330,80 440,80" fill="none" stroke="var(--vp-c-text-1)" stroke-width="2"/>
-  <rect x="200" y="115" width="130" height="20" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)"/>
-  <text x="265" y="129" text-anchor="middle" font-size="11" fill="var(--vp-c-brand-1)">10ns 毛刺</text>
+  <polyline points="60,30 200,30 200,55 440,55" fill="none" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <polyline points="60,105 340,105 340,80 440,80" fill="none" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <polyline points="60,130 200,130 200,155 340,155 340,130 440,130" fill="none" stroke="var(--vp-c-text-1)" stroke-width="2"/>
+  <rect x="204" y="132" width="132" height="20" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)"/>
+  <text x="270" y="147" text-anchor="middle" font-size="10.5" fill="var(--vp-c-brand-1)">10ns 毛刺</text>
+  <g font-size="11">
+    <text x="60" y="178" text-anchor="middle" fill="var(--vp-c-text-3)">t=0</text>
+    <text x="200" y="178" text-anchor="middle" fill="var(--vp-c-brand-1)">10ns</text>
+    <text x="340" y="178" text-anchor="middle" fill="var(--vp-c-brand-1)">20ns</text>
+  </g>
 </svg>
 </FigBox>
 

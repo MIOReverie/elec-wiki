@@ -134,7 +134,7 @@ $$
 = \frac{\beta S_N\cos\varphi}{\beta S_N\cos\varphi+P_{Fe}+\beta^2P_{CuN}}
 $$
 
-<FigBox title="效率曲线：最高点不在满载" kind="曲线" note="铁损恒定、铜损按 β² 涨，两条线的交点就是效率最高点。">
+<FigBox title="效率曲线：最高点不在满载" kind="曲线" note="铁损恒定、铜损按 β² 涨，两者相等处就是效率最高点（β* = √(P_Fe/P_CuN)）。曲线在 β* 附近有一小段很平，到满载反而往下拐。">
 <WavePreset kind="traeff" />
 </FigBox>
 
@@ -208,16 +208,17 @@ $k = N_1/N_2 = U_1/U_2$，永远是「原边比副边」。降压变压器 $k > 
 <svg viewBox="0 0 360 120" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
   <rect x="20" y="35" width="70" height="50" rx="6" fill="none" stroke="currentColor"/>
   <text x="55" y="65" fill="currentColor" stroke="none" font-size="11" text-anchor="middle">信号源 200 Ω</text>
-  <line x1="90" y1="48" x2="130" y2="48" stroke="currentColor"/>
-  <line x1="90" y1="72" x2="130" y2="72" stroke="currentColor"/>
-  <circle cx="145" cy="48" r="4" fill="none" stroke="currentColor"/>
-  <circle cx="145" cy="72" r="4" fill="none" stroke="currentColor"/>
-  <path d="M145 48 C175 48 175 72 205 72" stroke="currentColor" fill="none"/>
-  <path d="M145 72 C175 72 175 48 205 48" stroke="currentColor" fill="none"/>
-  <line x1="128" y1="48" x2="128" y2="72" stroke="currentColor"/>
-  <text x="175" y="38" fill="currentColor" stroke="none" font-size="11" text-anchor="middle">5:1</text>
-  <line x1="205" y1="48" x2="270" y2="48" stroke="currentColor"/>
-  <line x1="205" y1="72" x2="270" y2="72" stroke="currentColor"/>
+  <line x1="90" y1="48" x2="160" y2="48" stroke="currentColor"/>
+  <line x1="90" y1="72" x2="160" y2="72" stroke="currentColor"/>
+  <path d="M160 48 A4 4 0 0 0 160 56 A4 4 0 0 0 160 64 A4 4 0 0 0 160 72" stroke="currentColor" fill="none"/>
+  <line x1="167" y1="42" x2="167" y2="78" stroke="currentColor"/>
+  <line x1="173" y1="42" x2="173" y2="78" stroke="currentColor"/>
+  <path d="M180 48 A6 6 0 0 1 180 60 A6 6 0 0 1 180 72" stroke="currentColor" fill="none"/>
+  <circle cx="156" cy="44" r="2.2" fill="currentColor" stroke="none"/>
+  <circle cx="186" cy="44" r="2.2" fill="currentColor" stroke="none"/>
+  <text x="170" y="24" fill="currentColor" stroke="none" font-size="11" text-anchor="middle">5:1</text>
+  <line x1="180" y1="48" x2="270" y2="48" stroke="currentColor"/>
+  <line x1="180" y1="72" x2="270" y2="72" stroke="currentColor"/>
   <rect x="270" y="35" width="70" height="50" rx="6" fill="none" stroke="currentColor"/>
   <text x="305" y="65" fill="currentColor" stroke="none" font-size="11" text-anchor="middle">扬声器 8 Ω</text>
 </svg>

@@ -66,58 +66,63 @@ description: 三个从零开始搭的电子项目：可调实验电源、直流�
 
 <FigBox title="三个项目共用一条「电源—负载—驱动—反馈」的链路" kind="结构" note="电源项目造出的是最左边那一级；电机与云台项目分别在右侧填上驱动、负载与反馈。红字标出的「公共地」是三个项目共同的接线纪律：所有 GND 最终汇到电源出口的同一点。">
 
-<svg viewBox="0 0 660 250" role="img" aria-label="三个项目的关系图：可调电源为电机驱动与舵机云台供电，主控 STM32 通过 PWM 控制驱动，驱动反馈电流与编码器">
+<svg viewBox="0 0 660 252" role="img" aria-label="三个项目的关系图：可调电源为电机驱动与舵机云台供电，5 V 独立模块只给云台；主控 STM32 用 PWM 控制驱动板与云台，驱动回送编码器反馈；所有地汇到电源出口同一点">
 <defs>
   <marker id="tp-rel-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
 </defs>
-<g font-size="11.5" fill="var(--vp-c-text-1)" text-anchor="middle">
+<g font-size="11.5" fill="var(--vp-c-text-1)">
   <rect x="18" y="34" width="112" height="54" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
-  <text x="74" y="56">可调电源</text>
-  <text x="74" y="74" fill="var(--vp-c-text-3)">1.25–15 V / 2 A</text>
+  <text x="74" y="56" text-anchor="middle">可调电源</text>
+  <text x="74" y="74" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)">1.25–15 V / 2 A</text>
 
   <rect x="196" y="34" width="140" height="54" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
-  <text x="266" y="56">电机驱动板</text>
-  <text x="266" y="74" fill="var(--vp-c-text-3)">H 桥 + 采样 + 编码器</text>
+  <text x="266" y="56" text-anchor="middle">电机驱动板</text>
+  <text x="266" y="74" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)">H 桥 + 采样 + 编码器</text>
 
   <rect x="404" y="34" width="104" height="54" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
-  <text x="456" y="56">DC 电机</text>
-  <text x="456" y="74" fill="var(--vp-c-text-3)">12 V 减速</text>
+  <text x="456" y="56" text-anchor="middle">DC 电机</text>
+  <text x="456" y="74" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)">12 V 减速</text>
 
   <rect x="196" y="150" width="140" height="54" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
-  <text x="266" y="172">双轴舵机云台</text>
-  <text x="266" y="190" fill="var(--vp-c-text-3)">2 × 50 Hz PWM</text>
+  <text x="266" y="172" text-anchor="middle">双轴舵机云台</text>
+  <text x="266" y="190" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)">2 × 50 Hz PWM</text>
 
   <rect x="404" y="150" width="104" height="54" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" />
-  <text x="456" y="172">5 V 独立模块</text>
-  <text x="456" y="190" fill="var(--vp-c-text-3)">≥ 3 A</text>
+  <text x="456" y="172" text-anchor="middle">5 V 独立模块</text>
+  <text x="456" y="190" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)">≥ 3 A</text>
 
   <rect x="540" y="92" width="104" height="54" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
-  <text x="592" y="114">主控 STM32</text>
-  <text x="592" y="132" fill="var(--vp-c-text-3)">PWM / ADC / 定时器</text>
+  <text x="592" y="114" text-anchor="middle">主控 STM32</text>
+  <text x="592" y="132" text-anchor="middle" font-size="10.5" fill="var(--vp-c-text-3)">PWM / ADC / 定时器</text>
 </g>
+
 <g stroke="var(--vp-c-brand-1)" stroke-width="1.8" fill="none" marker-end="url(#tp-rel-arrow)">
   <line x1="130" y1="61" x2="190" y2="61" />
   <line x1="336" y1="61" x2="398" y2="61" />
   <line x1="130" y1="80" x2="130" y2="176" />
   <path d="M 130 176 L 190 176" />
-  <line x1="336" y1="177" x2="398" y2="177" />
-  <path d="M 592 92 L 592 80 L 340 80" stroke-dasharray="5 3" />
-  <path d="M 592 146 L 592 177 L 340 177" stroke-dasharray="5 3" />
+  <path d="M 398 163 L 342 163" />
+  <path d="M 516 96 L 300 96 L 300 86" stroke-dasharray="5 3" />
+  <path d="M 540 120 L 524 120 L 524 220 L 266 220 L 266 206" stroke-dasharray="5 3" />
   <path d="M 508 61 L 540 92" stroke-dasharray="5 3" />
 </g>
+
 <g font-size="10.5" fill="var(--vp-c-text-3)">
-  <text x="160" y="52">12 V</text>
-  <text x="160" y="170">5 V</text>
-  <text x="364" y="52">功率</text>
-  <text x="364" y="168">PWM</text>
-  <text x="470" y="100">编码器反馈</text>
-  <text x="470" y="222">公共地：所有 GND 汇到电源出口同一点</text>
+  <text x="160" y="52" text-anchor="middle">12 V</text>
+  <text x="160" y="170" text-anchor="middle">5 V</text>
+  <text x="367" y="52" text-anchor="middle">功率</text>
+  <text x="370" y="157" text-anchor="middle">5 V</text>
+  <text x="420" y="112" text-anchor="middle">PWM / DIR</text>
+  <text x="360" y="214" text-anchor="middle">PWM</text>
+  <text x="476" y="118">编码器反馈</text>
 </g>
-<g stroke="var(--vp-c-danger-1, #ef4444)" stroke-width="1.6" fill="none">
-  <line x1="18" y1="96" x2="644" y2="96" stroke-dasharray="2 4" />
+
+<g stroke="var(--vp-c-danger-1)" stroke-width="1.6" fill="none">
+  <line x1="18" y1="240" x2="644" y2="240" stroke-dasharray="2 4" />
 </g>
+<text x="18" y="232" font-size="10.5" fill="var(--vp-c-text-2)">公共地：三个项目的所有 GND 都汇到电源出口同一点，只连一次</text>
 </svg>
 
 </FigBox>

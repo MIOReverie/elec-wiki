@@ -72,8 +72,8 @@ $$(a_n a_{n-1}\cdots a_0)_R = \sum_{k=0}^{n} a_k R^k$$
     <text x="325" y="58">1</text>
     <rect x="346" y="35" width="34" height="34" rx="4" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)"/>
     <text x="363" y="58">0</text>
-    <text x="240" y="92" fill="var(--vp-c-text-3)">高 4 位</text>
-    <text x="340" y="92" fill="var(--vp-c-text-3)">低 4 位</text>
+    <text x="114" y="92" fill="var(--vp-c-text-3)">高 4 位</text>
+    <text x="306" y="92" fill="var(--vp-c-text-3)">低 4 位</text>
     <text x="424" y="58" font-size="18" fill="var(--vp-c-brand-1)">= B6</text>
   </g>
 </svg>

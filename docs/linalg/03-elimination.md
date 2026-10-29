@@ -163,11 +163,11 @@ $0=0$ 本身判不出什么，它只说明「这个方程多余」。同一张�
 <line x1="128" y1="143" x2="192" y2="79" stroke="var(--vp-c-brand-1)" stroke-width="2" />
 <line x1="235" y1="111" x2="299" y2="47" stroke="var(--vp-c-danger-1)" stroke-width="2" />
 <line x1="235" y1="111" x2="299" y2="47" stroke="var(--vp-c-brand-1)" stroke-width="2" stroke-dasharray="6 5" />
-<g font-size="12" fill="var(--vp-c-text-2)" text-anchor="middle">
-  <text x="53" y="158">相交 · 唯一解</text>
-  <text x="160" y="158">平行 · 无解</text>
-  <text x="267" y="158">重合 · 无穷多解</text>
-  <text x="160" y="184" font-size="11" fill="var(--vp-c-text-3)">每个方程是一条直线，解是公共点</text>
+<g font-size="12" fill="var(--vp-c-text-2)">
+  <text x="53" y="158" text-anchor="middle">相交 · 唯一解</text>
+  <text x="160" y="158" text-anchor="middle">平行 · 无解</text>
+  <text x="267" y="158" text-anchor="middle">重合 · 无穷多解</text>
+  <text x="160" y="184" font-size="11" fill="var(--vp-c-text-3)" text-anchor="middle">每个方程是一条直线，解是公共点</text>
 </g>
 </svg>
 </FigBox>

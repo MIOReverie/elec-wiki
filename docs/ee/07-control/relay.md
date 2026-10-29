@@ -71,7 +71,7 @@ description: 一个按钮凭什么管住一台电机，自锁和互锁分别锁�
   <RelayCircuit mode="start" />
 </DemoBox>
 
-<FigBox caption="起保停时序：注意 t = 2s 时 SB2 早就松开了，KM 线圈却照样得电到 t = 5s —— 多出来的那段就是自锁触点的功劳">
+<FigBox title="起保停时序：SB2 松开后线圈靠自锁继续得电" kind="时序" note="注意 t = 2 s 时 SB2 早就松开了，KM 线圈却照样得电到 t = 5 s —— 多出来的那段就是自锁触点的功劳；t = 5 s 按下 SB1，线圈立即失电，电机靠惯性渐停。">
   <WavePreset kind="relaytime" />
 </FigBox>
 

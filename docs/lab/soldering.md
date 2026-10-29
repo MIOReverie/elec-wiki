@@ -95,7 +95,7 @@ $$Q = C_{\text{铜}} \Delta T + C_{\text{锡}} \Delta T \approx (0.6 + 0.85)\ \t
   <text x="100" y="92" text-anchor="middle" fill="var(--vp-c-text-3)">焊盘（铜箔）</text>
   <rect x="94" y="30" width="12" height="60" rx="2" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
   <text x="118" y="40" fill="var(--vp-c-text-3)">引脚</text>
-  <line x1="30" y1="52" x2="88" y2="66" stroke="var(--vp-c-brand-1)" stroke-width="4" />
+  <line x1="30" y1="52" x2="98" y2="67" stroke="var(--vp-c-brand-1)" stroke-width="4" />
   <line x1="22" y1="44" x2="34" y2="58" stroke="var(--vp-c-brand-1)" stroke-width="6" />
   <text x="26" y="34" fill="var(--vp-c-brand-1)">烙铁</text>
   <text x="100" y="120" text-anchor="middle" fill="var(--vp-c-brand-1)">同时接触焊盘 + 引脚 1~2 s</text>
@@ -103,8 +103,8 @@ $$Q = C_{\text{铜}} \Delta T + C_{\text{锡}} \Delta T \approx (0.6 + 0.85)\ \t
   <text x="300" y="18" text-anchor="middle" font-weight="700">步骤 3 对侧送锡</text>
   <rect x="240" y="60" width="120" height="14" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.2" />
   <rect x="294" y="30" width="12" height="60" rx="2" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <line x1="230" y1="52" x2="288" y2="66" stroke="var(--vp-c-brand-1)" stroke-width="4" />
-  <line x1="360" y1="46" x2="320" y2="58" stroke="var(--vp-c-text-2)" stroke-width="2.4" marker-end="url(#sol-s1)" />
+  <line x1="230" y1="52" x2="298" y2="67" stroke="var(--vp-c-brand-1)" stroke-width="4" />
+  <line x1="360" y1="46" x2="312" y2="60" stroke="var(--vp-c-text-2)" stroke-width="2.4" marker-end="url(#sol-s1)" />
   <text x="366" y="40" fill="var(--vp-c-text-2)">焊锡丝</text>
   <text x="300" y="120" text-anchor="middle" fill="var(--vp-c-text-2)">从引脚对侧送，接触被加热的引脚</text>
   <text x="300" y="136" text-anchor="middle" fill="var(--vp-c-text-3)">毛细作用把焊锡吸进焊盘与引脚之间</text>
@@ -112,12 +112,12 @@ $$Q = C_{\text{铜}} \Delta T + C_{\text{锡}} \Delta T \approx (0.6 + 0.85)\ \t
   <text x="480" y="18" text-anchor="middle" font-weight="700">步骤 4 先撤锡 后撤铁</text>
   <rect x="430" y="60" width="100" height="14" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.2" />
   <rect x="474" y="30" width="12" height="60" rx="2" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <path d="M 434 68 Q 454 88 470 76 Q 488 62 500 74 Q 512 84 526 70" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+  <path d="M 440 62 C 452 57 462 48 472 46 L 488 46 C 498 48 508 57 520 62 Z" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
   <text x="480" y="106" text-anchor="middle" fill="var(--vp-c-brand-1)">锥形焊点（凹面）</text>
   <text x="480" y="122" text-anchor="middle" fill="var(--vp-c-text-3)">顺序反了 → 拉尖</text>
 
   <text x="280" y="176" text-anchor="middle" font-weight="700">⑤ 检查：好焊点 vs 坏焊点</text>
-  <path d="M 130 220 Q 150 244 170 220 Q 150 214 130 220" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+  <path d="M 120 244 C 134 240 144 228 147 214 L 153 214 C 156 228 166 240 180 244 Z" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
   <line x1="150" y1="196" x2="150" y2="222" stroke="var(--vp-c-text-2)" stroke-width="2" />
   <text x="150" y="262" text-anchor="middle" fill="var(--vp-c-brand-1)">锥形、发亮、边角略凹 通过</text>
   <circle cx="290" cy="224" r="14" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1.6" />
@@ -196,22 +196,23 @@ $$P = I^2 R_{\text{接触}}$$
   <text x="120" y="126" text-anchor="middle" fill="var(--vp-c-text-3)">3 A 时 P = I²R = 0.45 W → 变色、冒烟</text>
 
   <text x="430" y="16" text-anchor="middle" font-weight="700">压降判据（1 A 下）</text>
-  <line x1="300" y1="140" x2="540" y2="140" stroke="var(--vp-c-divider)" stroke-width="1.2" />
-  <text x="300" y="156" fill="var(--vp-c-text-3)">R_接触</text>
-  <text x="400" y="156" text-anchor="middle" fill="var(--vp-c-text-3)">压降</text>
-  <text x="490" y="156" text-anchor="middle" fill="var(--vp-c-text-3)">判定</text>
-  <text x="300" y="56">&lt; 5 mΩ</text>
-  <text x="400" y="56" text-anchor="middle">&lt; 5 mV</text>
-  <text x="490" y="56" text-anchor="middle" fill="var(--vp-c-brand-1)">合格</text>
-  <line x1="300" y1="66" x2="540" y2="66" stroke="var(--vp-c-divider)" stroke-width="0.6" />
-  <text x="300" y="86">10 mΩ</text>
-  <text x="400" y="86" text-anchor="middle">10 mV</text>
-  <text x="490" y="86" text-anchor="middle">3 A 下建议重焊</text>
-  <line x1="300" y1="96" x2="540" y2="96" stroke="var(--vp-c-divider)" stroke-width="0.6" />
-  <text x="300" y="116">50 mΩ</text>
-  <text x="400" y="116" text-anchor="middle">50 mV</text>
-  <text x="490" y="116" text-anchor="middle" fill="var(--vp-c-brand-1)">必冒烟</text>
-  <line x1="300" y1="126" x2="540" y2="126" stroke="var(--vp-c-divider)" stroke-width="0.6" />
+  <text x="300" y="40" fill="var(--vp-c-text-3)">R_接触</text>
+  <text x="400" y="40" text-anchor="middle" fill="var(--vp-c-text-3)">压降</text>
+  <text x="490" y="40" text-anchor="middle" fill="var(--vp-c-text-3)">判定</text>
+  <line x1="300" y1="30" x2="540" y2="30" stroke="var(--vp-c-divider)" stroke-width="1.2" />
+  <line x1="300" y1="48" x2="540" y2="48" stroke="var(--vp-c-divider)" stroke-width="0.6" />
+  <text x="300" y="70">&lt; 5 mΩ</text>
+  <text x="400" y="70" text-anchor="middle">&lt; 5 mV</text>
+  <text x="490" y="70" text-anchor="middle" fill="var(--vp-c-brand-1)">合格</text>
+  <line x1="300" y1="80" x2="540" y2="80" stroke="var(--vp-c-divider)" stroke-width="0.6" />
+  <text x="300" y="102">10 mΩ</text>
+  <text x="400" y="102" text-anchor="middle">10 mV</text>
+  <text x="490" y="102" text-anchor="middle">3 A 下建议重焊</text>
+  <line x1="300" y1="112" x2="540" y2="112" stroke="var(--vp-c-divider)" stroke-width="0.6" />
+  <text x="300" y="134">50 mΩ</text>
+  <text x="400" y="134" text-anchor="middle">50 mV</text>
+  <text x="490" y="134" text-anchor="middle" fill="var(--vp-c-brand-1)">必冒烟</text>
+  <line x1="300" y1="144" x2="540" y2="144" stroke="var(--vp-c-divider)" stroke-width="0.6" />
   <text x="420" y="176" text-anchor="middle" fill="var(--vp-c-text-2)">蜂鸣阈值 30~50 Ω：上述全部「会叫」</text>
   <text x="420" y="194" text-anchor="middle" fill="var(--vp-c-text-3)">→ 蜂鸣档不能作为焊点合格的证据</text>
 </g>
@@ -243,7 +244,7 @@ $$P = I^2 R_{\text{接触}}$$
 | 用了一年的面包板 | 200 mΩ ~ 2 Ω | 0.2~2 V |
 | 元件原装引脚直接插入 | 比杜邦线插针更可靠 | 能用元件腿就别接一段杜邦线 |
 
-一条「5 V → 面包板四个接点 → MCU 板」的供电路径，每个接点 0.15 Ω、电流 0.2 A，就是 0.12 V 的压降。再叠一根细杜邦线（AWG26 的线电阻约 0.13 Ω/m），电压能掉到 4.6 V 以下。
+一条「5 V → 面包板四个接点 → MCU 板」的供电路径，每个接点 0.15 Ω：轻载 0.2 A 时压降 0.6 Ω×0.2 A = 0.12 V，看着还行；电流上到 1 A，同一串接点就是 0.6 V，5 V 到手只剩 4.4 V。再叠一根细杜邦线（AWG26 约 0.13 Ω/m），压降还要往上加。
 
 排查按这个顺序：
 
@@ -286,44 +287,52 @@ $$R = \rho\frac{l}{S}, \qquad \rho \approx 0.0172\ \Omega\cdot\text{mm}^2/\text{
 
 <FigBox title="电源地走法：串成分压链，还是连成轨道" kind="结构" note="上：错误走法，电源像串糖葫芦一样一个焊点一个焊点接到末端负载，每个焊点几十毫欧，末端电压被沿途吃掉。下：正确走法，电源与地各走一条环形粗轨道，负载就近挂轨，去耦电容贴着芯片电源脚。">
 
-<svg viewBox="0 0 560 300" role="img" aria-label="上图为错误串接供电使末端电压下降，下图为正确环形电源轨与就近去耦">
+<svg viewBox="0 0 560 300" role="img" aria-label="上图错误串接供电：电源与地各串成一串焊点，末端负载电压被沿途焊点吃掉；下图正确：电源与地各走一条环形粗轨道，芯片就近挂轨并配 0.1 微法去耦电容">
 <defs>
   <marker id="sol-r1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
 </defs>
-<g font-size="11" fill="var(--vp-c-text-1)">
-  <text x="130" y="18" text-anchor="middle" font-weight="700">错误：串成分压链</text>
-  <rect x="20" y="44" width="60" height="24" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <text x="50" y="60" text-anchor="middle">电源</text>
-  <line x1="80" y1="56" x2="130" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <circle cx="130" cy="56" r="4" fill="var(--vp-c-brand-1)" />
-  <line x1="134" y1="56" x2="184" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <circle cx="184" cy="56" r="4" fill="var(--vp-c-brand-1)" />
-  <line x1="188" y1="56" x2="238" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <circle cx="238" cy="56" r="4" fill="var(--vp-c-brand-1)" />
-  <rect x="242" y="44" width="52" height="24" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <text x="268" y="60" text-anchor="middle">负载</text>
-  <text x="158" y="42" text-anchor="middle" fill="var(--vp-c-text-3)">焊点 ×n 串联</text>
-  <line x1="268" y1="68" x2="268" y2="90" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#sol-r1)" />
-  <text x="268" y="106" text-anchor="middle" fill="var(--vp-c-text-3)">末端电压被沿途焊点吃掉</text>
+<text x="130" y="18" font-size="11" text-anchor="middle" font-weight="700" fill="var(--vp-c-text-1)">错误：串成分压链</text>
+<text x="430" y="18" font-size="11" text-anchor="middle" font-weight="700" fill="var(--vp-c-text-1)">正确：环形轨道</text>
 
-  <text x="430" y="18" text-anchor="middle" font-weight="700">正确：环形轨道</text>
-  <rect x="340" y="44" width="200" height="72" rx="10" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="4" />
-  <text x="356" y="40" fill="var(--vp-c-brand-1)">+5 V 轨</text>
-  <rect x="340" y="124" width="200" height="72" rx="10" fill="none" stroke="var(--vp-c-text-2)" stroke-width="4" />
-  <text x="356" y="120" fill="var(--vp-c-text-2)">GND 轨</text>
-  <line x1="400" y1="80" x2="400" y2="70" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
-  <rect x="386" y="94" width="28" height="24" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
-  <text x="400" y="111" text-anchor="middle">IC</text>
-  <line x1="400" y1="118" x2="400" y2="128" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
-  <rect x="420" y="96" width="14" height="20" rx="3" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.2" />
-  <text x="444" y="110" fill="var(--vp-c-text-3)">0.1 μF 就近</text>
-  <text x="430" y="216" text-anchor="middle" fill="var(--vp-c-text-3)">负载就近挂轨，轨道大面积载流</text>
-
-  <text x="280" y="258" text-anchor="middle" fill="var(--vp-c-text-2)">有动负载（电机、继电器）时：负载电流的地与信号的地分开走，在电源入口单点汇合</text>
-  <text x="280" y="280" text-anchor="middle" fill="var(--vp-c-text-3)">否则负载电流在地轨上的压降会叠加进 ADC 的参考地 → 一启动电机读数就跳</text>
+<rect x="20" y="44" width="60" height="24" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+<text x="50" y="60" font-size="11" text-anchor="middle" fill="var(--vp-c-text-1)">电源</text>
+<g stroke="var(--vp-c-brand-1)" stroke-width="1.6" fill="none">
+  <line x1="80" y1="56" x2="242" y2="56" />
+  <line x1="268" y1="68" x2="268" y2="104" />
+  <line x1="268" y1="104" x2="50" y2="104" />
+  <line x1="50" y1="104" x2="50" y2="68" />
 </g>
+<rect x="242" y="44" width="52" height="24" rx="5" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.4" />
+<text x="268" y="60" font-size="11" text-anchor="middle" fill="var(--vp-c-text-1)">负载</text>
+<g fill="var(--vp-c-brand-1)">
+  <circle cx="130" cy="56" r="4" />
+  <circle cx="184" cy="56" r="4" />
+  <circle cx="170" cy="104" r="4" />
+</g>
+<text x="158" y="40" font-size="10" text-anchor="middle" fill="var(--vp-c-text-3)">焊点 ×n 串联</text>
+<text x="166" y="128" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">末端电压被沿途焊点吃掉，地线上也有压降</text>
+
+<rect x="340" y="40" width="200" height="60" rx="10" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="4" />
+<rect x="340" y="140" width="200" height="60" rx="10" fill="none" stroke="var(--vp-c-text-2)" stroke-width="4" />
+<text x="356" y="32" font-size="10.5" fill="var(--vp-c-brand-1)">+5 V 轨</text>
+<text x="356" y="218" font-size="10.5" fill="var(--vp-c-text-2)">GND 轨</text>
+<rect x="380" y="108" width="40" height="24" rx="4" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+<text x="400" y="124" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-1)">IC</text>
+<line x1="400" y1="108" x2="400" y2="100" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+<line x1="400" y1="132" x2="400" y2="140" stroke="var(--vp-c-text-2)" stroke-width="1.6" />
+<g stroke="var(--vp-c-brand-1)" stroke-width="1.6" fill="none">
+  <line x1="440" y1="100" x2="440" y2="114" />
+  <line x1="440" y1="122" x2="440" y2="140" />
+  <line x1="426" y1="114" x2="454" y2="114" />
+  <line x1="426" y1="122" x2="454" y2="122" />
+</g>
+<text x="462" y="122" font-size="10" fill="var(--vp-c-text-3)">0.1 µF 就近</text>
+<text x="440" y="240" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">负载就近挂轨，轨道大面积载流</text>
+
+<text x="280" y="262" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-2)">有动负载（电机、继电器）时：负载电流的地与信号的地分开走，在电源入口单点汇合</text>
+<text x="280" y="284" font-size="10.5" text-anchor="middle" fill="var(--vp-c-text-3)">否则负载电流在地轨上的压降会叠加进 ADC 的参考地 → 一启动电机读数就跳</text>
 </svg>
 
 </FigBox>

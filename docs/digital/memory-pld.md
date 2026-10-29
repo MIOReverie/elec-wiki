@@ -51,13 +51,18 @@ description: 一颗 1K×4 的芯片怎么拼成 4K×8，几颗芯片怎么共用
     <line x1="232" y1="126" x2="286" y2="162" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#mp-ar1)" />
     <text x="258" y="50" text-anchor="middle" fill="var(--vp-c-text-3)">字选线</text>
     <rect x="288" y="42" width="180" height="140" rx="8" fill="none" stroke="var(--vp-c-divider)" stroke-width="1.6" />
-    <text x="378" y="196" text-anchor="middle" fill="var(--vp-c-text-3)">存储矩阵（8 行 × 4 列）</text>
+    <text x="150" y="212" text-anchor="middle" fill="var(--vp-c-text-3)">存储矩阵：8 行 × 4 列</text>
     <g stroke="var(--vp-c-divider)" stroke-width="1.1">
-      <line x1="316" y1="60" x2="440" y2="60" />
-      <line x1="316" y1="86" x2="440" y2="86" />
-      <line x1="316" y1="112" x2="440" y2="112" />
-      <line x1="316" y1="138" x2="440" y2="138" />
-      <line x1="316" y1="164" x2="440" y2="164" />
+      <line x1="290" y1="60" x2="420" y2="60" />
+      <line x1="290" y1="86" x2="420" y2="86" />
+      <line x1="290" y1="112" x2="420" y2="112" />
+      <line x1="290" y1="138" x2="420" y2="138" />
+      <line x1="290" y1="164" x2="420" y2="164" />
+      <line x1="336" y1="52" x2="336" y2="176" />
+      <line x1="364" y1="52" x2="364" y2="176" />
+      <line x1="392" y1="52" x2="392" y2="176" />
+      <line x1="420" y1="52" x2="420" y2="176" />
+      <line x1="336" y1="176" x2="420" y2="176" />
     </g>
     <g fill="var(--vp-c-brand-1)">
       <circle cx="316" cy="60" r="3" /><circle cx="316" cy="86" r="3" />
@@ -69,9 +74,9 @@ description: 一颗 1K×4 的芯片怎么拼成 4K×8，几颗芯片怎么共用
     <text x="300" y="104" text-anchor="end" fill="var(--vp-c-text-3)">W₂</text>
     <text x="300" y="130" text-anchor="end" fill="var(--vp-c-text-3)">W₃</text>
     <text x="300" y="156" text-anchor="end" fill="var(--vp-c-text-3)">…</text>
-    <line x1="440" y1="112" x2="486" y2="112" stroke="var(--vp-c-text-3)" stroke-width="1.6" marker-end="url(#mp-ar2)" />
-    <text x="500" y="106" text-anchor="middle" fill="var(--vp-c-text-3)">数据线</text>
-    <text x="500" y="124" text-anchor="middle" fill="var(--vp-c-text-3)">D₃…D₀</text>
+    <line x1="420" y1="176" x2="486" y2="176" stroke="var(--vp-c-text-3)" stroke-width="1.6" marker-end="url(#mp-ar2)" />
+    <text x="500" y="172" text-anchor="middle" fill="var(--vp-c-text-3)">数据线</text>
+    <text x="500" y="188" text-anchor="middle" fill="var(--vp-c-text-3)">D₃…D₀</text>
     <rect x="286" y="206" width="120" height="30" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.4" />
     <text x="346" y="226" text-anchor="middle">读写控制 WE</text>
     <text x="470" y="230" text-anchor="middle" fill="var(--vp-c-text-3)">WE=1 写 / WE=0 读</text>
@@ -115,6 +120,11 @@ SRAM 的触发器是一个双稳态环路，只要供电就自己保持；DRAM �
 <FigBox title="DRAM 刷新：轮流读出一行，放大后写回" kind="结构" note="刷新是按行轮流的——同一时刻只处理一行，其余行靠电容自己撑住。整个存储体被扫完一遍的时间必须短于数据能撑住的时间，这就是刷新周期上限的由来。">
 
 <svg viewBox="0 0 540 220" role="img" aria-label="DRAM 刷新时间轴：按行轮流刷新，1024 行在 64 毫秒内被扫完，每行间隔 62.5 微秒">
+<defs>
+  <marker id="mp-ar2b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
+  </marker>
+</defs>
   <g font-size="11.5" fill="var(--vp-c-text-1)">
     <line x1="60" y1="40" x2="60" y2="150" stroke="var(--vp-c-divider)" stroke-width="1.2" />
     <line x1="60" y1="40" x2="520" y2="40" stroke="var(--vp-c-divider)" stroke-width="1.2" />
@@ -130,7 +140,7 @@ SRAM 的触发器是一个双稳态环路，只要供电就自己保持；DRAM �
     <text x="470" y="75" text-anchor="middle" fill="var(--vp-c-bg)">刷 W₁₀₂₃</text>
     <line x1="60" y1="110" x2="520" y2="110" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 4" />
     <text x="290" y="126" text-anchor="middle" fill="var(--vp-c-text-3)">一轮扫完 = 64 ms（刷新周期上限）</text>
-    <line x1="60" y1="150" x2="130" y2="150" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#mp-ar2)" />
+    <line x1="60" y1="150" x2="130" y2="150" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#mp-ar2b)" />
     <text x="95" y="166" text-anchor="middle" fill="var(--vp-c-text-3)">62.5 µs</text>
     <text x="95" y="184" text-anchor="middle" fill="var(--vp-c-text-3)">相邻两行的间隔</text>
     <text x="300" y="200" text-anchor="middle" fill="var(--vp-c-text-3)">刷新期间存储器没空接待 CPU —— 这正是 DRAM 延迟抖动的来源</text>
@@ -239,10 +249,10 @@ LUT 里那张真值表正是卡诺图的老故事：逻辑被拆成与项、或�
     <rect x="440" y="36" width="100" height="46" rx="7" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
     <text x="490" y="56" text-anchor="middle">2-4 译码器</text>
     <text x="490" y="72" text-anchor="middle" fill="var(--vp-c-text-3)">A₁₁ A₁₀</text>
-    <line x1="424" y1="49" x2="438" y2="49" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-end="url(#mp-ar3)" />
-    <line x1="424" y1="83" x2="438" y2="83" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-end="url(#mp-ar3)" />
-    <line x1="424" y1="117" x2="438" y2="117" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-end="url(#mp-ar3)" />
-    <line x1="424" y1="151" x2="438" y2="151" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-end="url(#mp-ar3)" />
+    <line x1="438" y1="49" x2="424" y2="49" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-end="url(#mp-ar3)" />
+    <line x1="438" y1="83" x2="424" y2="83" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-end="url(#mp-ar3)" />
+    <line x1="438" y1="117" x2="424" y2="117" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-end="url(#mp-ar3)" />
+    <line x1="438" y1="151" x2="424" y2="151" stroke="var(--vp-c-brand-1)" stroke-width="1.4" marker-end="url(#mp-ar3)" />
     <text x="490" y="106" text-anchor="middle" fill="var(--vp-c-text-3)">片选</text>
     <text x="490" y="124" text-anchor="middle" fill="var(--vp-c-text-3)">CS₀…CS₃</text>
 
@@ -272,17 +282,25 @@ LUT 里那张真值表正是卡诺图的老故事：逻辑被拆成与项、或�
 <FigBox title="地址线与数据线各自由什么决定" kind="结构" note="地址线的根数 = 字数的二进制位数；数据线的根数 = 每字的位数。引脚总数还要加上片选、读写控制与电源，这就是大容量芯片封装越来越大的原因。">
 
 <svg viewBox="0 0 520 170" role="img" aria-label="8K 乘 8 存储器的引脚构成：13 根地址线、8 根双向数据线、1 根片选、1 根读写控制、两根电源">
+<defs>
+  <marker id="mp-ar3b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
+  </marker>
+  <marker id="mp-ar2c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-text-3)" />
+  </marker>
+</defs>
   <g font-size="12" fill="var(--vp-c-text-1)">
     <rect x="150" y="46" width="220" height="80" rx="9" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
     <text x="260" y="78" text-anchor="middle" font-weight="700">8K×8 存储器芯片</text>
     <text x="260" y="100" text-anchor="middle" fill="var(--vp-c-text-3)">8192 字 × 8 位</text>
     <text x="60" y="86" text-anchor="middle" fill="var(--vp-c-text-3)">地址线</text>
     <text x="60" y="104" text-anchor="middle" fill="var(--vp-c-text-3)">A₁₂…A₀（13 根）</text>
-    <line x1="98" y1="86" x2="148" y2="86" stroke="var(--vp-c-brand-1)" stroke-width="1.8" marker-end="url(#mp-ar3)" />
+    <line x1="98" y1="86" x2="148" y2="86" stroke="var(--vp-c-brand-1)" stroke-width="1.8" marker-end="url(#mp-ar3b)" />
     <text x="460" y="78" text-anchor="middle" fill="var(--vp-c-text-3)">数据线</text>
     <text x="460" y="96" text-anchor="middle" fill="var(--vp-c-text-3)">D₇…D₀（8 根）</text>
     <text x="460" y="114" text-anchor="middle" fill="var(--vp-c-text-3)">双向</text>
-    <line x1="372" y1="86" x2="412" y2="86" stroke="var(--vp-c-text-3)" stroke-width="1.8" marker-end="url(#mp-ar2)" />
+    <line x1="372" y1="86" x2="412" y2="86" stroke="var(--vp-c-text-3)" stroke-width="1.8" marker-end="url(#mp-ar2c)" />
     <text x="260" y="156" text-anchor="middle" fill="var(--vp-c-text-3)">再加上：片选 CS、读写 WE、VCC 与 GND</text>
   </g>
 </svg>

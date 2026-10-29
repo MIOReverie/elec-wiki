@@ -121,9 +121,9 @@ description: 模 N 是「一圈几个状态」、异步与同步差在谁触发�
   <line x1="120" y1="68" x2="156" y2="68" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#ct-c1)" />
   <line x1="226" y1="68" x2="262" y2="68" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#ct-c1)" />
   <line x1="332" y1="68" x2="368" y2="68" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#ct-c1)" />
-  <text x="138" y="60" text-anchor="middle" font-size="9" fill="var(--vp-c-text-3)">Q₀</text>
-  <text x="244" y="60" text-anchor="middle" font-size="9" fill="var(--vp-c-text-3)">Q₁</text>
-  <text x="350" y="60" text-anchor="middle" font-size="9" fill="var(--vp-c-text-3)">Q₂</text>
+  <text x="142" y="72" text-anchor="middle" font-size="9" fill="var(--vp-c-text-3)">Q₂</text>
+  <text x="244" y="72" text-anchor="middle" font-size="9" fill="var(--vp-c-text-3)">Q₁</text>
+  <text x="350" y="72" text-anchor="middle" font-size="9" fill="var(--vp-c-text-3)">Q₀</text>
   <text x="120" y="108" font-size="10" fill="var(--vp-c-text-3)">每一位都要「等」前一位翻完 → 延迟逐级累加</text>
 
   <line x1="16" y1="128" x2="466" y2="128" stroke="var(--vp-c-divider)" stroke-width="1" stroke-dasharray="5 4" />
@@ -260,8 +260,8 @@ description: 模 N 是「一圈几个状态」、异步与同步差在谁触发�
   </marker>
 </defs>
 <g font-size="11" fill="var(--vp-c-text-1)">
-  <text x="6" y="60" font-size="10" fill="var(--vp-c-text-3)">串入</text>
-  <line x1="40" y1="56" x2="62" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#ct-s1)" />
+  <text x="438" y="26" font-size="10" fill="var(--vp-c-text-3)">串入</text>
+  <line x1="474" y1="56" x2="431" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#ct-s1)" />
   <rect x="64" y="38" width="66" height="38" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
   <text x="97" y="62" text-anchor="middle" font-size="10.5">FF₃</text>
   <rect x="164" y="38" width="66" height="38" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
@@ -271,9 +271,9 @@ description: 模 N 是「一圈几个状态」、异步与同步差在谁触发�
   <rect x="364" y="38" width="66" height="38" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
   <text x="397" y="62" text-anchor="middle" font-size="10.5">FF₀</text>
 
-  <line x1="130" y1="56" x2="160" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#ct-s1)" />
-  <line x1="230" y1="56" x2="260" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#ct-s1)" />
-  <line x1="330" y1="56" x2="360" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#ct-s1)" />
+  <line x1="164" y1="56" x2="134" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#ct-s1)" />
+  <line x1="264" y1="56" x2="234" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#ct-s1)" />
+  <line x1="364" y1="56" x2="334" y2="56" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#ct-s1)" />
 
   <line x1="97" y1="76" x2="97" y2="92" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
   <line x1="197" y1="76" x2="197" y2="92" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
@@ -291,11 +291,11 @@ description: 模 N 是「一圈几个状态」、异步与同步差在谁触发�
   <polyline points="44,182 74,182 74,162 104,162 104,182 134,182 134,162 164,162 164,182 194,182 194,162 224,162 224,182 254,182 254,162 284,162 284,182 470,182" fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
 
   <text x="14" y="208" fill="var(--vp-c-text-3)">串入</text>
-  <polyline points="44,216 74,216 74,196 104,196 104,216 134,216 134,196 164,196 164,216 194,216 194,196 224,196 224,216 284,216" fill="none" stroke="#f59e0b" stroke-width="2" />
-  <text x="89" y="192" font-size="9.5" fill="#f59e0b" text-anchor="middle">1</text>
-  <text x="149" y="192" font-size="9.5" fill="#f59e0b" text-anchor="middle">0</text>
-  <text x="209" y="192" font-size="9.5" fill="#f59e0b" text-anchor="middle">1</text>
-  <text x="239" y="192" font-size="9.5" fill="#f59e0b" text-anchor="middle">1</text>
+  <polyline points="44,196 104,196 104,216 164,216 164,196 470,196" fill="none" stroke="#f59e0b" stroke-width="2" />
+  <text x="86" y="190" font-size="9.5" fill="#f59e0b" text-anchor="middle">1</text>
+  <text x="130" y="212" font-size="9.5" fill="#f59e0b" text-anchor="middle">0</text>
+  <text x="188" y="190" font-size="9.5" fill="#f59e0b" text-anchor="middle">1</text>
+  <text x="248" y="190" font-size="9.5" fill="#f59e0b" text-anchor="middle">1</text>
 
   <text x="14" y="250" fill="var(--vp-c-text-3)">内容</text>
   <text x="86" y="250" font-size="10.5">0000</text>
@@ -304,7 +304,7 @@ description: 模 N 是「一圈几个状态」、异步与同步差在谁触发�
   <text x="266" y="250" font-size="10.5">0101</text>
   <text x="326" y="250" font-size="10.5" fill="var(--vp-c-brand-1)">1011</text>
   <text x="386" y="250" font-size="9.5" fill="var(--vp-c-text-3)">四拍装满</text>
-  <text x="44" y="276" font-size="10" fill="var(--vp-c-text-3)">每拍：整体右移一格，最左位让给新来的串行数据</text>
+  <text x="44" y="276" font-size="10" fill="var(--vp-c-text-3)">每拍：整体左移一格，最低位（最右）让给新来的串行数据</text>
   <text x="44" y="294" font-size="10" fill="var(--vp-c-brand-1)">四拍 = 4 个数据位，所以四位移位寄存器要 4 个时钟周期完成一次串并转换</text>
 </g>
 </svg>
@@ -345,19 +345,22 @@ description: 模 N 是「一圈几个状态」、异步与同步差在谁触发�
   <text x="84" y="62" font-size="9.5">R₁</text>
   <line x1="66" y1="76" x2="66" y2="108" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
   <circle cx="66" cy="92" r="2.5" fill="var(--vp-c-brand-1)" />
-  <line x1="66" y1="92" x2="120" y2="92" stroke="var(--vp-c-brand-1)" stroke-width="1.3" marker-end="url(#ct-v1)" />
-  <text x="124" y="88" font-size="9" fill="var(--vp-c-brand-1)">DIS</text>
+  <line x1="66" y1="92" x2="160" y2="92" stroke="var(--vp-c-brand-1)" stroke-width="1.3" marker-end="url(#ct-v1)" />
+  <text x="124" y="86" font-size="9" fill="var(--vp-c-brand-1)">DIS</text>
   <rect x="56" y="108" width="20" height="34" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
   <text x="84" y="128" font-size="9.5">R₂</text>
-  <line x1="66" y1="142" x2="66" y2="176" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
+  <line x1="66" y1="142" x2="66" y2="190" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
   <circle cx="66" cy="160" r="2.5" fill="var(--vp-c-brand-1)" />
-  <line x1="66" y1="160" x2="120" y2="160" stroke="var(--vp-c-brand-1)" stroke-width="1.3" marker-end="url(#ct-v1)" />
-  <text x="124" y="156" font-size="9" fill="var(--vp-c-brand-1)">TH / TR</text>
+  <line x1="66" y1="160" x2="160" y2="160" stroke="var(--vp-c-brand-1)" stroke-width="1.3" marker-end="url(#ct-v1)" />
+  <text x="124" y="154" font-size="9" fill="var(--vp-c-brand-1)">TH / TR</text>
   <line x1="42" y1="190" x2="90" y2="190" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
   <line x1="42" y1="198" x2="90" y2="198" stroke="var(--vp-c-text-2)" stroke-width="1.8" />
   <text x="96" y="198" font-size="9.5">C</text>
-  <line x1="66" y1="198" x2="66" y2="220" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
-  <text x="66" y="236" text-anchor="middle" font-size="9" fill="var(--vp-c-text-3)">GND</text>
+  <line x1="66" y1="198" x2="66" y2="222" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
+  <line x1="52" y1="222" x2="80" y2="222" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
+  <line x1="57" y1="227" x2="75" y2="227" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
+  <line x1="62" y1="232" x2="70" y2="232" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
+  <text x="66" y="246" text-anchor="middle" font-size="9" fill="var(--vp-c-text-3)">GND</text>
 
   <rect x="160" y="70" width="76" height="100" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
   <text x="198" y="108" text-anchor="middle" font-weight="700">555</text>
@@ -376,8 +379,8 @@ description: 模 N 是「一圈几个状态」、异步与同步差在谁触发�
   <polyline points="286,108 352,60 358,108 424,60 430,108 462,60" fill="none" stroke="#f59e0b" stroke-width="2" />
 
   <text x="288" y="140" font-size="9.5" fill="var(--vp-c-text-3)">输出</text>
-  <polyline points="286,168 352,168 352,148 358,148 358,168 424,168 424,148 430,148 430,168 462,168" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" />
-  <text x="300" y="188" font-size="8.5" fill="var(--vp-c-text-3)">充电段=高电平</text>
+  <polyline points="286,148 352,148 352,168 358,168 358,148 424,148 424,168 430,168 430,148 462,148" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" />
+  <text x="292" y="188" font-size="8.5" fill="var(--vp-c-text-3)">充电段=高电平（长）</text>
   <text x="360" y="200" font-size="8.5" fill="var(--vp-c-text-3)">放电段=低电平（很短）</text>
   <text x="288" y="230" font-size="9" fill="var(--vp-c-brand-1)">T = 0.693(R₁+2R₂)C</text>
   <text x="288" y="248" font-size="9" fill="var(--vp-c-text-3)">f ≈ 1.43 / [(R₁+2R₂)C]</text>
@@ -669,7 +672,7 @@ $$
 
 <FigBox title="1101 检测器：两个 D 触发器加三个门" kind="结构" note="D₀ 直接接 x；D₁ 接「Q₀ 与（Q₁ 或 x）」，对应 Q₁⁺¹ = Q₀(Q₁+x)；输出 z 是三输入的与（Q₁、Q̄₀、x）。两个触发器共用同一路 CLK。">
 
-<svg viewBox="0 0 560 300" role="img" aria-label="1101 检测器的 D 触发器实现：输入 x 接 FF0 的 D0，Q0 与 Q1 或 x 的与接 FF1 的 D1，Q1 与反相 Q0 与 x 的三输入与门给出 z">
+<svg viewBox="0 0 560 300" role="img" aria-label="1101 检测器的 D 触发器实现：输入 x 接 FF0 的 D0，Q0 与「Q1 或 x」的与接 FF1 的 D1，Q1、反相 Q0 与 x 送进三输入与门给出 z">
 <defs>
   <marker id="fsm-c1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
@@ -679,61 +682,55 @@ $$
   </marker>
 </defs>
 <g font-size="11" fill="var(--vp-c-text-1)">
-  <text x="14" y="38" fill="var(--vp-c-text-3)">x（串行输入）</text>
-  <line x1="30" y1="52" x2="110" y2="52" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#fsm-c1)" />
-  <text x="66" y="44" font-size="9.5" fill="var(--vp-c-brand-1)">D₀ = x</text>
-  <line x1="30" y1="52" x2="30" y2="240" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
-  <line x1="30" y1="110" x2="396" y2="110" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
-  <line x1="30" y1="196" x2="252" y2="196" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+  <text x="14" y="50" font-size="10" fill="var(--vp-c-text-3)">x（串行输入）</text>
+  <line x1="8" y1="60" x2="96" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#fsm-c1)" />
+  <circle cx="8" cy="60" r="2.6" fill="var(--vp-c-brand-1)" />
+  <line x1="8" y1="20" x2="8" y2="118" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+  <line x1="8" y1="118" x2="250" y2="118" stroke="var(--vp-c-brand-1)" stroke-width="1.3" marker-end="url(#fsm-c1)" />
+  <path d="M 8 20 L 476 20 L 476 80" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#fsm-c2)" />
 
-  <rect x="110" y="40" width="92" height="44" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="156" y="60" text-anchor="middle" font-size="10.5">FF₀</text>
-  <text x="156" y="73" text-anchor="middle" font-size="8.5" fill="var(--vp-c-text-3)">Q₀⁺¹ = x</text>
-  <line x1="202" y1="62" x2="252" y2="62" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#fsm-c1)" />
-  <text x="212" y="54" font-size="9.5" fill="var(--vp-c-brand-1)">Q₀</text>
-  <line x1="226" y1="70" x2="226" y2="186" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
-  <text x="232" y="130" font-size="9" fill="var(--vp-c-text-3)">Q₀</text>
+  <rect x="96" y="40" width="86" height="40" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <text x="139" y="58" text-anchor="middle" font-size="10.5">FF₀</text>
+  <text x="139" y="72" text-anchor="middle" font-size="8" fill="var(--vp-c-text-3)">Q₀⁺¹ = x</text>
+  <path d="M 96 70 L 96 78 L 104 74 z" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1" />
+  <line x1="64" y1="74" x2="96" y2="74" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+  <text x="40" y="86" font-size="8.5" fill="var(--vp-c-text-3)">CLK</text>
 
-  <rect x="110" y="216" width="92" height="44" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <text x="156" y="236" text-anchor="middle" font-size="10.5">FF₁</text>
-  <text x="156" y="249" text-anchor="middle" font-size="8.5" fill="var(--vp-c-text-3)">Q₁⁺¹ = Q₀(Q₁+x)</text>
-  <line x1="202" y1="238" x2="256" y2="238" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#fsm-c1)" />
-  <text x="212" y="230" font-size="9.5" fill="var(--vp-c-brand-1)">Q₁</text>
+  <path d="M 182 60 L 353 60 L 353 110" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#fsm-c1)" />
+  <text x="190" y="52" font-size="9.5" fill="var(--vp-c-brand-1)">Q₀</text>
+  <circle cx="353" cy="100" r="2.6" fill="var(--vp-c-brand-1)" />
+  <line x1="353" y1="100" x2="452" y2="100" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+  <circle cx="456" cy="100" r="3.4" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.1" />
+  <text x="400" y="92" font-size="9" fill="var(--vp-c-text-3)">Q̄₀</text>
 
-  <rect x="258" y="184" width="40" height="26" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
-  <text x="278" y="201" text-anchor="middle" font-size="9.5">或</text>
-  <line x1="256" y1="242" x2="256" y2="202" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#fsm-c2)" />
-  <text x="262" y="226" font-size="9" fill="var(--vp-c-text-3)">Q₁</text>
-  <line x1="298" y1="197" x2="322" y2="197" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#fsm-c1)" />
+  <rect x="250" y="110" width="46" height="32" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <text x="273" y="130" text-anchor="middle" font-size="9.5">或</text>
+  <rect x="330" y="110" width="46" height="32" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
+  <text x="353" y="130" text-anchor="middle" font-size="9.5">与</text>
+  <line x1="296" y1="126" x2="330" y2="126" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#fsm-c1)" />
 
-  <rect x="328" y="184" width="40" height="26" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.4" />
-  <text x="348" y="201" text-anchor="middle" font-size="9.5">与</text>
-  <line x1="226" y1="186" x2="322" y2="190" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#fsm-c2)" />
-  <line x1="368" y1="197" x2="368" y2="238" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
-  <line x1="368" y1="238" x2="206" y2="238" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#fsm-c1)" />
-  <text x="292" y="252" font-size="9" fill="var(--vp-c-brand-1)">D₁ = Q₀(Q₁+x)</text>
+  <line x1="376" y1="126" x2="376" y2="200" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#fsm-c1)" />
+  <text x="384" y="166" font-size="9" fill="var(--vp-c-brand-1)">D₁ = Q₀(Q₁+x)</text>
 
-  <circle cx="250" cy="100" r="3" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.1" />
-  <line x1="226" y1="84" x2="246" y2="100" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
-  <line x1="254" y1="100" x2="266" y2="100" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
-  <text x="236" y="92" font-size="9" fill="var(--vp-c-text-3)">Q̄₀</text>
-  <line x1="266" y1="100" x2="266" y2="110" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+  <rect x="330" y="200" width="86" height="40" rx="7" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <text x="373" y="218" text-anchor="middle" font-size="10.5">FF₁</text>
+  <text x="373" y="232" text-anchor="middle" font-size="8" fill="var(--vp-c-text-3)">Q₁⁺¹ = Q₀(Q₁+x)</text>
+  <path d="M 330 228 L 330 236 L 338 232 z" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1" />
+  <line x1="300" y1="232" x2="330" y2="232" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+  <text x="294" y="226" font-size="8.5" fill="var(--vp-c-text-3)">CLK</text>
 
-  <rect x="404" y="96" width="44" height="28" rx="6" fill="var(--vp-c-bg-soft)" stroke="#f59e0b" stroke-width="1.4" />
-  <text x="426" y="114" text-anchor="middle" font-size="9.5" fill="#f59e0b">与</text>
-  <line x1="266" y1="110" x2="398" y2="106" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#fsm-c2)" />
-  <line x1="256" y1="238" x2="288" y2="238" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
-  <line x1="288" y1="238" x2="288" y2="120" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
-  <line x1="288" y1="120" x2="398" y2="120" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#fsm-c2)" />
-  <text x="296" y="130" font-size="9" fill="var(--vp-c-text-3)">Q₁</text>
-  <line x1="448" y1="110" x2="536" y2="110" stroke="#f59e0b" stroke-width="1.6" marker-end="url(#fsm-c2)" />
-  <text x="540" y="114" font-size="11" fill="#f59e0b">z</text>
-  <text x="404" y="88" font-size="9" fill="#f59e0b">z = Q₁·Q̄₀·x</text>
+  <line x1="416" y1="224" x2="440" y2="224" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
+  <text x="420" y="216" font-size="9.5" fill="var(--vp-c-brand-1)">Q₁</text>
+  <path d="M 440 224 L 440 270 L 273 270 L 273 142" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#fsm-c1)" />
+  <path d="M 440 224 L 508 224 L 508 172" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" marker-end="url(#fsm-c1)" />
+  <circle cx="440" cy="224" r="2.6" fill="var(--vp-c-brand-1)" />
 
-  <line x1="20" y1="282" x2="540" y2="282" stroke="var(--vp-c-text-3)" stroke-width="1.6" />
-  <line x1="156" y1="282" x2="156" y2="260" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#fsm-c2)" />
-  <line x1="156" y1="282" x2="156" y2="84" stroke="var(--vp-c-text-3)" stroke-width="1.2" marker-end="url(#fsm-c2)" />
-  <text x="24" y="296" font-size="9.5" fill="var(--vp-c-text-3)">CLK（两个触发器共用）</text>
+  <rect x="460" y="80" width="64" height="92" rx="6" fill="var(--vp-c-bg-soft)" stroke="#f59e0b" stroke-width="1.4" />
+  <text x="492" y="130" text-anchor="middle" font-size="9.5" fill="#f59e0b">与</text>
+  <text x="492" y="146" text-anchor="middle" font-size="8" fill="#f59e0b">3 输入</text>
+  <line x1="524" y1="126" x2="546" y2="126" stroke="#f59e0b" stroke-width="1.6" marker-end="url(#fsm-c2)" />
+  <text x="532" y="120" font-size="11" fill="#f59e0b">z</text>
+  <text x="388" y="36" font-size="9" fill="#f59e0b">z = Q₁·Q̄₀·x</text>
 </g>
 </svg>
 
@@ -806,7 +803,7 @@ assign z = Q1 & ~Q0 & x;
 
 <FigBox title="101 检测器（Mealy）状态图" kind="结构" note="三个状态。C 收到 1 时输出 1 并回到 B，末尾的 1 保留下来，实现重叠；C 收到 0 时回 A，因为 100 的结尾是 0，前缀清零。">
 
-<svg viewBox="0 0 420 300" role="img" aria-label="101 序列检测器状态图：三个状态 A、B、C，C 收到 1 输出 1 并回到 B">
+<svg viewBox="0 0 480 300" role="img" aria-label="101 序列检测器状态图：三个状态 A、B、C，C 收到 1 输出 1 并回到 B">
 <defs>
   <marker id="fsm-d1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
@@ -827,14 +824,14 @@ assign z = Q1 & ~Q0 & x;
   <path d="M 402 98 C 444 102 444 70 402 74" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#fsm-d1)" />
   <text x="456" y="92" text-anchor="middle" font-size="10.5">1/0</text>
 
-  <path d="M 372 110 C 420 160 380 210 268 236" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#fsm-d1)" />
-  <text x="410" y="180" text-anchor="middle" font-size="10.5">0/0</text>
+  <path d="M 372 110 C 424 164 340 236 166 236" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#fsm-d1)" />
+  <text x="414" y="182" text-anchor="middle" font-size="10.5">0/0</text>
 
-  <line x1="235" y1="232" x2="135" y2="110" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#fsm-d1)" />
-  <text x="174" y="184" text-anchor="middle" font-size="10.5">0/0</text>
+  <line x1="127" y1="216" x2="135" y2="110" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#fsm-d1)" />
+  <text x="176" y="186" text-anchor="middle" font-size="10.5">0/0</text>
 
-  <path d="M 258 228 C 214 190 300 130 364 106" fill="none" stroke="#f59e0b" stroke-width="2" marker-end="url(#fsm-d2)" />
-  <text x="272" y="170" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">1/1</text>
+  <path d="M 158 220 C 214 190 300 130 364 106" fill="none" stroke="#f59e0b" stroke-width="2" marker-end="url(#fsm-d2)" />
+  <text x="276" y="172" text-anchor="middle" font-size="11" font-weight="700" fill="#f59e0b">1/1</text>
 
   <circle cx="120" cy="90" r="24" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
   <text x="120" y="88" text-anchor="middle" font-weight="700" font-size="13">A</text>
@@ -909,8 +906,8 @@ $Q_0^{n+1}=x\,\overline{Q_1Q_0}$ 读作「$x=1$ 且现态不是 `11` 时 $Q_0$ �
 
   <path d="M 276 132 C 266 104 314 100 304 128" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#fsm-e1)" />
   <text x="288" y="104" text-anchor="middle" font-size="10.5">1</text>
-  <path d="M 304 164 C 314 192 266 196 276 168" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#fsm-e1)" />
-  <text x="288" y="202" text-anchor="middle" font-size="10.5">0</text>
+  <path d="M 87 133 C 96 104 44 104 53 133" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#fsm-e1)" />
+  <text x="70" y="100" text-anchor="middle" font-size="10.5">0</text>
 
   <path d="M 400 174 C 310 248 160 248 70 174" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#fsm-e1)" />
   <text x="235" y="242" text-anchor="middle" font-size="10.5">0</text>

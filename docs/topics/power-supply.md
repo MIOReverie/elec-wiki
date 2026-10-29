@@ -221,78 +221,63 @@ $R_2$ 开路（电位器滑动端虚焊）时，反馈断开，LM317 会把输�
 
 <FigBox title="LM317 可调稳压的接线：三颗电阻决定输出范围" kind="接线" note="R1 固定 240 Ω 决定中位电压，R2（电位器加 1 kΩ 保护电阻）决定调到多少，ADJ 抽头取这两者之间的分压。虚线框是输出端的保险：5.6 V 稳压管在反馈开路时把 VOUT 钳在 5.6 V 以下，保护下游 MCU。">
 
-<svg viewBox="0 0 660 260" role="img" aria-label="LM317 可调稳压接线图：输入经 VI 脚进入，输出经 VO 脚送出，R1 从 ADJ 到 VO，R2 从 ADJ 到地，输出端并 5.6 V 稳压管">
-<defs>
-  <marker id="ps-ps-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
-  </marker>
-</defs>
+<svg viewBox="0 0 660 320" role="img" aria-label="LM317 可调稳压接线图：输入经 VI 进入，VO 送出可调输出，R1 接在 VO 与 ADJ 之间、R2 从 ADJ 到地，输出端并 5.6 V 稳压管做钳位保护">
+<g stroke="var(--vp-c-text-2)" stroke-width="2" fill="none">
+  <line x1="60" y1="110" x2="230" y2="110" />
+  <line x1="360" y1="110" x2="620" y2="110" />
+  <line x1="295" y1="170" x2="295" y2="196" />
+  <line x1="295" y1="196" x2="450" y2="196" />
+  <line x1="450" y1="196" x2="450" y2="110" />
+  <line x1="295" y1="196" x2="295" y2="206" />
+  <line x1="295" y1="240" x2="295" y2="248" />
+  <line x1="295" y1="272" x2="295" y2="290" />
+  <line x1="120" y1="290" x2="580" y2="290" />
+  <line x1="520" y1="110" x2="520" y2="140" />
+  <line x1="520" y1="166" x2="520" y2="290" />
+</g>
+
+<rect x="230" y="70" width="130" height="100" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="2" />
+<g font-size="11" fill="var(--vp-c-text-1)" text-anchor="middle">
+  <text x="295" y="100" font-weight="600">LM317</text>
+  <text x="295" y="124" fill="var(--vp-c-text-3)">VI 3 · VO 2</text>
+  <text x="295" y="146" fill="var(--vp-c-text-3)">ADJ 1</text>
+</g>
+
+<rect x="442" y="140" width="16" height="40" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.8" />
+<rect x="287" y="206" width="16" height="34" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.8" />
+<rect x="287" y="248" width="16" height="24" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.8" />
+
+<g stroke="var(--vp-c-brand-2)" stroke-width="1.8" fill="none">
+  <line x1="546" y1="140" x2="574" y2="140" />
+  <path d="M 546 140 L 540 134 M 574 140 L 580 146" />
+  <path d="M 546 166 L 574 166 L 560 140 Z" fill="var(--vp-c-bg-soft)" />
+</g>
+
+<rect x="492" y="118" width="150" height="110" rx="6" fill="none" stroke="var(--vp-c-divider)" stroke-width="1.6" stroke-dasharray="5 4" />
 
 <g stroke="var(--vp-c-text-2)" stroke-width="2" fill="none">
-  <line x1="70" y1="40" x2="70" y2="200" />
-  <line x1="70" y1="40" x2="290" y2="40" />
-  <line x1="290" y1="40" x2="290" y2="150" />
-  <line x1="70" y1="200" x2="290" y2="200" />
-  <line x1="290" y1="150" x2="290" y2="200" />
+  <line x1="120" y1="290" x2="120" y2="296" />
+  <line x1="108" y1="296" x2="132" y2="296" />
+  <line x1="114" y1="303" x2="126" y2="303" />
+  <line x1="117" y1="310" x2="123" y2="310" />
 </g>
 
-<rect x="290" y="60" width="90" height="120" rx="6" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="2" />
-<g font-size="11" fill="var(--vp-c-text-1)">
-  <text x="335" y="112" text-anchor="middle" font-weight="600">LM317</text>
-  <text x="335" y="132" text-anchor="middle" fill="var(--vp-c-text-3)">VI 3 / VO 2</text>
-  <text x="335" y="150" text-anchor="middle" fill="var(--vp-c-text-3)">ADJ 1</text>
-</g>
-<g font-size="10" fill="var(--vp-c-text-3)">
-  <text x="272" y="36" text-anchor="end">输入 19.3 V（谷底）</text>
-  <text x="272" y="206" text-anchor="end">GND</text>
-</g>
+<circle cx="450" cy="110" r="4" fill="var(--vp-c-text-2)" />
+<circle cx="520" cy="110" r="4" fill="var(--vp-c-text-2)" />
+<circle cx="520" cy="290" r="4" fill="var(--vp-c-text-2)" />
+<circle cx="295" cy="290" r="4" fill="var(--vp-c-text-2)" />
 
-<g stroke="var(--vp-c-brand-1)" stroke-width="2" fill="none">
-  <line x1="380" y1="140" x2="470" y2="140" />
-  <line x1="470" y1="140" x2="470" y2="200" />
-  <line x1="470" y1="200" x2="600" y2="200" />
-</g>
-<g font-size="10" fill="var(--vp-c-text-3)">
-  <text x="484" y="136">VOUT 1.25–15 V</text>
-  <text x="604" y="190" text-anchor="end">GND</text>
-</g>
-
-<g stroke="var(--vp-c-brand-2)" stroke-width="2" fill="none">
-  <line x1="335" y1="150" x2="335" y2="240" />
-  <line x1="335" y1="240" x2="150" y2="240" />
-</g>
-
-<rect x="196" y="228" width="52" height="24" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.6" />
-<text x="222" y="245" font-size="10" fill="var(--vp-c-text-2)" text-anchor="middle">R2 电位</text>
-
-<g stroke="var(--vp-c-brand-2)" stroke-width="2" fill="none">
-  <line x1="196" y1="240" x2="170" y2="240" />
-  <line x1="170" y1="240" x2="170" y2="200" />
-  <rect x="162" y="212" width="16" height="16" rx="2" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.6" />
-</g>
-<text x="178" y="200" font-size="10" fill="var(--vp-c-text-3)" text-anchor="middle">1 kΩ</text>
-
-<g stroke="var(--vp-c-brand-2)" stroke-width="2" fill="none">
-  <line x1="150" y1="240" x2="150" y2="200" />
-  <line x1="150" y1="200" x2="70" y2="200" />
-  <rect x="142" y="176" width="16" height="16" rx="2" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.6" />
-</g>
-<text x="150" y="166" font-size="10" fill="var(--vp-c-text-3)" text-anchor="middle">R1 240 Ω</text>
-
-<g stroke="var(--vp-c-text-2)" stroke-width="2" fill="none">
-  <line x1="335" y1="140" x2="335" y2="112" />
-</g>
-
-<g stroke="var(--vp-c-divider)" stroke-width="1.6" fill="none" stroke-dasharray="5 4">
-  <rect x="452" y="82" width="180" height="106" rx="6" />
-</g>
-<path d="M 470 108 L 470 96 L 480 96 L 480 108 Z M 468 96 L 480 82 L 492 96" fill="none" stroke="var(--vp-c-brand-2)" stroke-width="1.6" />
-<line x1="470" y1="108" x2="470" y2="200" stroke="var(--vp-c-brand-2)" stroke-width="2" fill="none" />
-<text x="498" y="98" font-size="10" fill="var(--vp-c-text-3)">5.6 V 稳压管（反馈开路时钳位）</text>
-<text x="542" y="128" font-size="10" fill="var(--vp-c-text-3)" text-anchor="middle">保险区</text>
-
-<g font-size="10" fill="var(--vp-c-text-3)" text-anchor="middle">
-  <text x="252" y="92">ADJ 抽头</text>
+<g font-size="10.5" fill="var(--vp-c-text-3)">
+  <text x="60" y="100">输入 19.3 V（谷底）</text>
+  <text x="368" y="102">VOUT 1.25–15 V</text>
+  <text x="272" y="192" text-anchor="end">ADJ 抽头</text>
+  <text x="438" y="164" text-anchor="end" fill="var(--vp-c-text-2)">R1 240 Ω</text>
+  <text x="312" y="224" fill="var(--vp-c-text-2)">R2 电位器</text>
+  <text x="312" y="264" fill="var(--vp-c-text-2)">1 kΩ</text>
+  <text x="516" y="150" fill="var(--vp-c-brand-2)" text-anchor="middle">5.6 V</text>
+  <text x="516" y="170" fill="var(--vp-c-brand-2)" text-anchor="middle">稳压管</text>
+  <text x="616" y="214" text-anchor="middle">保险区</text>
+  <text x="136" y="312">GND：各处地点汇到这一条线上</text>
 </g>
 </svg>
 
@@ -338,7 +323,7 @@ $$
 
 <FigBox title="同一块 LM317，功耗随输出电压变化" kind="曲线" note="横轴是输出电压，纵轴是 LM317 上的功耗（输入谷底固定 19.3 V、电流 1 A）。输出压低时压差变大，功耗跟着涨，所以线性电源在「从高电压调到低电压」时最烫，在「接近输入电压」时最凉。">
 
-<svg viewBox="0 0 640 230" role="img" aria-label="LM317 功耗与输出电压的关系曲线：输出 1.25 V 时功耗 18 W，输出 15 V 时功耗 4.3 W">
+<svg viewBox="0 0 640 230" role="img" aria-label="LM317 功耗与输出电压的关系曲线：输出 1.25 V 时功耗 18.06 W，输出 15 V 时功耗 4.3 W，1.9 W 是无散热器时的上限">
 <g stroke="var(--vp-c-divider)" stroke-width="1">
   <line x1="60" y1="180" x2="600" y2="180" />
   <line x1="60" y1="180" x2="60" y2="24" />
@@ -357,20 +342,21 @@ $$
   <text x="52" y="142">5</text>
   <text x="52" y="100">10</text>
   <text x="52" y="58">15</text>
-  <text x="40" y="26" transform="rotate(-90 40 26)"></text>
-  <text x="24" y="120" transform="rotate(-90 24 120)">功耗 P / W</text>
+  <text x="30" y="120" transform="rotate(-90 30 120)" text-anchor="middle">功耗 P / W</text>
 </g>
-<path d="M 60 32 L 466 143" stroke="var(--vp-c-brand-1)" stroke-width="2.4" fill="none" />
-<g stroke="var(--vp-c-brand-2)" stroke-width="1.4" stroke-dasharray="4 3" fill="none">
-  <line x1="60" y1="164" x2="600" y2="164" />
-</g>
+
+<path d="M 60 18 L 466 144" stroke="var(--vp-c-brand-1)" stroke-width="2.4" fill="none" />
+
+<line x1="60" y1="164" x2="600" y2="164" stroke="var(--vp-c-brand-2)" stroke-width="1.4" stroke-dasharray="4 3" />
+
 <g font-size="10.5" fill="var(--vp-c-text-2)">
-  <text x="476" y="167">1.9 W：无散热器的上限</text>
-  <text x="100" y="44">1.25 V 时 18.06 W</text>
-  <text x="380" y="136">15 V 时 4.3 W</text>
+  <text x="104" y="26">1.25 V 时 18.06 W</text>
+  <text x="476" y="138">15 V 时 4.3 W</text>
+  <text x="66" y="160" font-size="10" fill="var(--vp-c-brand-2)">1.9 W：无散热器的上限</text>
 </g>
-<circle cx="74" cy="28" r="3.5" fill="var(--vp-c-brand-1)" />
-<circle cx="466" cy="143" r="3.5" fill="var(--vp-c-brand-1)" />
+
+<circle cx="94" cy="28" r="3.5" fill="var(--vp-c-brand-1)" />
+<circle cx="466" cy="144" r="3.5" fill="var(--vp-c-brand-1)" />
 </svg>
 
 </FigBox>

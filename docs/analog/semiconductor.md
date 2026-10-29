@@ -46,7 +46,7 @@ description: 一块本征硅怎么长出四种器件：PN 结、二极管的三�
 <text x="280" y="108" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">几乎无可动载流子</text>
 <text x="204" y="140" text-anchor="middle" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">⊖ 负离子</text>
 <text x="356" y="140" text-anchor="middle" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">⊕ 正离子</text>
-<line x1="240" y1="60" x2="320" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#sc-e)"/>
+<line x1="320" y1="52" x2="240" y2="52" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#sc-e)"/>
 <text x="280" y="44" text-anchor="middle" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700">内电场 E：N → P</text>
 <text x="110" y="192" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">P 区一侧</text>
 <text x="450" y="192" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">N 区一侧</text>
@@ -240,7 +240,7 @@ $$
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
 </defs>
-<line x1="70" y1="60" x2="70" y2="150" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
+<line x1="70" y1="60" x2="70" y2="190" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
 <path d="M 62 60 L 78 60" stroke="var(--vp-c-text-1)" stroke-width="2.6"/>
 <path d="M 66 74 L 74 74" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
 <text x="56" y="105" text-anchor="end" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">V</text>
@@ -258,7 +258,7 @@ $$
 <circle cx="330" cy="60" r="4" class="sf-dot"/>
 <text x="318" y="44" text-anchor="end" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">a</text>
 <line x1="330" y1="60" x2="330" y2="100"/>
-<g transform="translate(330 122) rotate(90)">
+<g transform="translate(330 122) rotate(-90)">
 <line x1="-26" y1="0" x2="-10" y2="0"/>
 <polygon points="-10,-10 -10,10 8,0" fill="var(--vp-c-brand-soft)" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
 <path d="M 8 -11 L 8 11" stroke="var(--vp-c-text-1)" stroke-width="2.2"/>
@@ -272,17 +272,16 @@ $$
 <line x1="330" y1="60" x2="410" y2="60"/>
 <line x1="410" y1="60" x2="410" y2="120"/>
 <g transform="translate(410 150) rotate(90)">
-<line x1="-26" y1="0" x2="-9" y2="0"/>
-<rect x="9" y="-6" width="18" height="12" rx="1.5" fill="none"/>
-<line x1="-9" y1="-6" x2="-9" y2="6" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
-<line x1="9" y1="0" x2="26" y2="0"/>
+<line x1="-30" y1="0" x2="-10" y2="0"/>
+<rect x="-10" y="-6" width="20" height="12" rx="1.5" fill="none"/>
+<line x1="10" y1="0" x2="30" y2="0"/>
 </g>
 <line x1="410" y1="180" x2="410" y2="190"/>
 <text x="396" y="150" text-anchor="end" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R</text>
 <text x="386" y="158" text-anchor="start" dominant-baseline="middle" font-size="9" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">L</text>
 <line x1="70" y1="190" x2="410" y2="190"/>
 <text x="318" y="208" text-anchor="end" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">b</text>
-<line x1="172" y1="60" x2="286" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#sc-z)"/>
+<line x1="236" y1="60" x2="312" y2="60" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#sc-z)"/>
 <text x="229" y="86" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-it">I</text>
 <text x="237" y="94" text-anchor="start" dominant-baseline="middle" font-size="9" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">R</text>
 <text x="240" y="224" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">I_R = I_Z + I_L：KCL 在结点 a 上成立</text>

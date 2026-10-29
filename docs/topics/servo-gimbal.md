@@ -190,68 +190,98 @@ STM32 PA7 ── tilt 舵机 信号（橙/黄线）
 
 为什么必须**共地**？舵机内部比较脉宽时，拿「高电平」和「它自己的 GND」比。接线上最容易漏的是第 4 根线：地。开发板的 LDO（Low Dropout Regulator，低压差线性稳压器）也扛不住 5 A 的堵转电流；不共地时，信号线会成为唯一的电流回路，几十毫安灌进 IO 就能烧 MCU。STM32 的地如果和舵机的地分开，两者之间可能有几百毫伏的电位差，脉宽判断跟着偏，表现是角度轻微不准、偶发乱跳、一开串口就抖。
 
-<FigBox title="云台接线：两个电源、一条共地点" kind="接线" note="红线与黑线在图上分属两个不同电源（5 V 舵机电源与 MCU 的 3.3/5 V），唯一把它们连起来的是地线。所有地必须汇聚到同一点；信号线 PA6/PA7 只送脉宽，不承载回流电流。">
+<FigBox title="云台接线：两个电源、一条共地点" kind="接线" note="红线是舵机自己的 +5 V（独立电源，≥ 3 A），黑线是地；MCU 自己的 3.3/5 V 由 USB 或开发板供给，两者唯一的连接点就是这条地线。所有地必须汇聚到同一点；信号线 PA6/PA7 只送脉宽，不承载回流电流。两只电容都跨在 +5 V 与地之间，电解电容靠近舵机、陶瓷电容紧贴舵机电源脚。">
 
-<svg viewBox="0 0 660 300" role="img" aria-label="云台接线图：5 V 独立电源经 4700 微法电容分给两只舵机的 VCC，MCU 的 PA6 与 PA7 分别送信号，所有地汇聚到一个公共接地点">
+<svg viewBox="0 0 680 360" role="img" aria-label="云台接线图：5 V 独立电源经 4700 微法与 0.1 微法电容分给 pan 与 tilt 两只舵机的 VCC；MCU 的 PA6、PA7 分别送脉宽；电源地、两只舵机地、MCU 地全部汇到同一个公共接地点">
 <defs>
   <marker id="sg-wire-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
 </defs>
 
-<g font-size="11.5" text-anchor="middle">
-  <rect x="14" y="96" width="116" height="66" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.8" />
-  <text x="72" y="122" fill="var(--vp-c-text-1)" font-weight="600">5 V 独立电源</text>
-  <text x="72" y="140" fill="var(--vp-c-text-3)">≥ 3 A</text>
-  <text x="72" y="157" fill="var(--vp-c-text-3)">与 MCU 不同源</text>
+<g font-size="11.5" fill="var(--vp-c-text-1)" text-anchor="middle">
+  <rect x="16" y="30" width="124" height="84" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.8" />
+  <text x="78" y="56" font-weight="600">5 V 独立电源</text>
+  <text x="78" y="76" fill="var(--vp-c-text-3)">≥ 3 A</text>
+  <text x="78" y="96" fill="var(--vp-c-text-3)">与 MCU 不同源</text>
 
-  <rect x="252" y="24" width="118" height="58" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.6" />
-  <text x="311" y="48" fill="var(--vp-c-text-1)" font-weight="600">pan 舵机</text>
-  <text x="311" y="67" fill="var(--vp-c-text-3)">MG996R</text>
+  <rect x="240" y="60" width="140" height="90" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.6" />
+  <text x="310" y="94" font-weight="600">pan 舵机</text>
+  <text x="310" y="114" fill="var(--vp-c-text-3)">MG996R</text>
 
-  <rect x="252" y="176" width="118" height="58" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.6" />
-  <text x="311" y="200" fill="var(--vp-c-text-1)" font-weight="600">tilt 舵机</text>
-  <text x="311" y="219" fill="var(--vp-c-text-3)">MG996R</text>
+  <rect x="420" y="60" width="140" height="90" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-divider)" stroke-width="1.6" />
+  <text x="490" y="94" font-weight="600">tilt 舵机</text>
+  <text x="490" y="114" fill="var(--vp-c-text-3)">MG996R</text>
 
-  <rect x="512" y="100" width="128" height="60" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
-  <text x="576" y="124" fill="var(--vp-c-text-1)" font-weight="600">STM32</text>
-  <text x="576" y="143" fill="var(--vp-c-text-3)">PA6 / PA7 / GND</text>
+  <rect x="16" y="180" width="124" height="110" rx="8" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-1)" stroke-width="1.8" />
+  <text x="78" y="204" font-weight="600">STM32</text>
+  <text x="78" y="226" fill="var(--vp-c-text-3)">TIM3_CH1 → PA6</text>
+  <text x="78" y="246" fill="var(--vp-c-text-3)">TIM3_CH2 → PA7</text>
+  <text x="78" y="268" fill="var(--vp-c-text-3)">GND 与舵机共地</text>
 </g>
 
-<g stroke="#ef4444" stroke-width="2.2" fill="none">
-  <path d="M 130 108 L 200 108 L 200 62 L 250 62" />
-  <path d="M 130 108 L 200 108 L 200 210 L 250 210" />
+<g font-size="9.5" fill="var(--vp-c-text-3)" text-anchor="end">
+  <text x="268" y="52">VCC</text>
+  <text x="232" y="100">SIG</text>
+  <text x="268" y="168">GND</text>
+  <text x="448" y="52">VCC</text>
+  <text x="412" y="100">SIG</text>
+  <text x="448" y="168">GND</text>
 </g>
 
-<path d="M 130 108 L 178 108 L 178 62" stroke="var(--vp-c-brand-2)" stroke-width="2.2" fill="none" />
-<rect x="166" y="48" width="24" height="40" rx="3" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-brand-2)" stroke-width="1.8" />
-<text x="178" y="40" font-size="10" fill="var(--vp-c-text-3)" text-anchor="middle">4700 µF</text>
-<line x1="196" y1="70" x2="196" y2="106" stroke="var(--vp-c-brand-2)" stroke-width="2.2" />
+<!-- 两只滤波电容跨在 +5 V 与 GND 之间 -->
+<g stroke="var(--vp-c-text-3)" stroke-width="2" fill="none">
+  <line x1="588" y1="34" x2="588" y2="118" />
+  <line x1="588" y1="131" x2="588" y2="300" />
+  <line x1="640" y1="34" x2="640" y2="118" />
+  <line x1="640" y1="126" x2="640" y2="300" />
+</g>
+<g stroke="var(--vp-c-brand-2)" fill="none" stroke-width="2.2">
+  <line x1="570" y1="118" x2="606" y2="118" />
+  <rect x="570" y="124" width="36" height="7" rx="2" fill="var(--vp-c-brand-2)" stroke="none" />
+  <line x1="622" y1="118" x2="658" y2="118" />
+  <line x1="622" y1="126" x2="658" y2="126" />
+</g>
+<text x="560" y="114" font-size="12" fill="var(--vp-c-brand-2)" text-anchor="end">+</text>
+<text x="588" y="170" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">4700 µF</text>
+<text x="640" y="196" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="middle">0.1 µF</text>
 
-<path d="M 200 108 L 200 26" stroke="var(--vp-c-brand-2)" stroke-width="2.2" fill="none" />
-<path d="M 200 108 L 200 190" stroke="var(--vp-c-brand-2)" stroke-width="2.2" fill="none" />
-
-<g stroke="var(--vp-c-brand-1)" stroke-width="2" fill="none" marker-end="url(#sg-wire-arrow)">
-  <line x1="371" y1="48" x2="466" y2="48" />
-  <line x1="371" y1="200" x2="466" y2="200" />
-  <line x1="466" y1="48" x2="466" y2="124" stroke-dasharray="0" />
+<!-- +5 V 母线：电源正极 → 两只舵机 VCC -->
+<g stroke="var(--vp-c-danger-1)" stroke-width="2.4" fill="none">
+  <path d="M 140 52 L 176 52 L 176 34 L 640 34" />
+  <line x1="280" y1="34" x2="280" y2="60" />
+  <line x1="460" y1="34" x2="460" y2="60" />
 </g>
 
-<g stroke="var(--vp-c-text-3)" stroke-width="2.4" fill="none">
-  <path d="M 130 150 L 130 268 L 576 268" />
-  <path d="M 311 82 L 311 268" />
-  <path d="M 311 234 L 311 268" />
+<!-- GND：电源地、两只舵机地、MCU 地，汇到同一条底线 -->
+<g stroke="var(--vp-c-text-2)" stroke-width="2.4" fill="none">
+  <path d="M 140 88 L 158 88 L 158 300 L 640 300" />
+  <path d="M 140 272 L 170 272 L 170 300" />
+  <line x1="280" y1="150" x2="280" y2="300" />
+  <line x1="460" y1="150" x2="460" y2="300" />
 </g>
-<circle cx="311" cy="268" r="6" fill="var(--vp-c-brand-1)" />
-<text x="330" y="290" font-size="11" fill="var(--vp-c-brand-1)">公共接地点：所有 GND 汇聚于此</text>
-<text x="576" y="290" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="end">MCU GND 接这里</text>
 
-<g font-size="10" fill="var(--vp-c-text-3)">
-  <text x="382" y="42">PA6 → pan 信号</text>
-  <text x="382" y="194">PA7 → tilt 信号</text>
-  <text x="146" y="160">红线：+5 V</text>
-  <text x="146" y="262">黑线：GND</text>
+<!-- 信号线：MCU → 舵机，只送脉宽 -->
+<g stroke="var(--vp-c-brand-1)" stroke-width="2" fill="none">
+  <path d="M 140 206 L 200 206 L 200 105 L 236 105" marker-end="url(#sg-wire-arrow)" />
+  <path d="M 140 236 L 268 236 A 12 12 0 0 0 292 236 L 400 236 L 400 105 L 416 105" marker-end="url(#sg-wire-arrow)" />
 </g>
+
+<g fill="var(--vp-c-danger-1)">
+  <circle cx="280" cy="34" r="4" />
+  <circle cx="460" cy="34" r="4" />
+  <circle cx="588" cy="34" r="4" />
+</g>
+<g fill="var(--vp-c-text-2)">
+  <circle cx="170" cy="300" r="4.5" />
+  <circle cx="280" cy="300" r="4" />
+  <circle cx="460" cy="300" r="4" />
+  <circle cx="588" cy="300" r="4" />
+</g>
+
+<text x="330" y="24" font-size="10.5" fill="var(--vp-c-danger-1)" text-anchor="middle">红线：+5 V（两路舵机电流都从这里出）</text>
+<text x="60" y="326" font-size="10.5" fill="var(--vp-c-text-2)">公共接地点：所有 GND 只在这里汇一次</text>
+<text x="470" y="326" font-size="10.5" fill="var(--vp-c-text-2)" text-anchor="middle">黑线：GND</text>
 </svg>
 
 </FigBox>
@@ -294,29 +324,36 @@ $$
 
 <FigBox title="舵机启动电流冲击与电源跌落" kind="波形" note="上：舵机从静止启动到 45° 的电流包络（峰值可达堵转电流的 60%–80%）。下：5 V 模块输出端的电压。若模块额定电流小于冲击电流，电压会掉进舵机的最低工作电压区（虚线），舵机内部 MCU 复位，表现为「抖一下再重新定位」。">
 
-<svg viewBox="0 0 640 220" role="img" aria-label="舵机启动电流冲击波形与电源电压跌落曲线">
+<svg viewBox="0 0 660 250" role="img" aria-label="舵机启动电流冲击波形与 5 V 输出跌落曲线：上图为电流包络，峰值约 2 A，下图为电压从 5.0 V 跌到 4.85 V，仍在 4.8 V 最低工作电压之上">
 <g stroke="var(--vp-c-divider)" stroke-width="1">
-  <line x1="60" y1="100" x2="600" y2="100" />
-  <line x1="60" y1="180" x2="600" y2="180" />
-  <line x1="60" y1="20" x2="60" y2="180" />
+  <line x1="70" y1="110" x2="600" y2="110" />
+  <line x1="70" y1="110" x2="70" y2="44" />
+  <line x1="70" y1="210" x2="600" y2="210" />
+  <line x1="70" y1="150" x2="600" y2="150" />
 </g>
+
 <g font-size="10.5" fill="var(--vp-c-text-3)">
-  <text x="20" y="104">i / A</text>
-  <text x="20" y="186">u / V</text>
-  <text x="580" y="200">t / ms</text>
-  <text x="62" y="92">3</text>
-  <text x="62" y="172">5.0</text>
+  <text x="34" y="72" text-anchor="end">i / A</text>
+  <text x="34" y="166" text-anchor="end">u / V</text>
+  <text x="64" y="48" text-anchor="end">3</text>
+  <text x="64" y="114" text-anchor="end">0</text>
+  <text x="64" y="154" text-anchor="end">5.0</text>
+  <text x="64" y="199" text-anchor="end">4.8</text>
 </g>
-<path d="M 60 100 L 140 100 Q 170 40 210 34 L 240 44 L 300 60 L 380 80 L 460 92 L 600 98"
+
+<path d="M 70 104 L 120 104 Q 160 62 210 60 L 250 68 L 320 82 L 400 94 L 470 100 L 600 104"
       stroke="var(--vp-c-brand-1)" stroke-width="2.4" fill="none" />
-<path d="M 60 168 L 140 168 Q 170 140 210 146 L 300 160 L 380 166 L 460 168 L 600 168"
+<path d="M 70 150 L 120 150 Q 160 170 210 170 L 250 166 L 320 161 L 400 156 L 470 152 L 600 150"
       stroke="var(--vp-c-brand-2)" stroke-width="2.4" fill="none" />
-<line x1="60" y1="158" x2="600" y2="158" stroke="#ef4444" stroke-width="1.4" stroke-dasharray="5 3" />
-<text x="610" y="161" font-size="10" fill="#ef4444" text-anchor="end">4.8 V 最低工作</text>
+
+<line x1="70" y1="176" x2="600" y2="176" stroke="var(--vp-c-danger-1)" stroke-width="1.4" stroke-dasharray="5 3" />
+
 <g font-size="10.5" fill="var(--vp-c-text-2)">
-  <text x="220" y="26">冲击电流峰值约 2 A</text>
-  <text x="220" y="140">电压跌到 4.85 V（勉强）</text>
+  <text x="252" y="46">冲击电流峰值约 2 A（堵转的 80%）</text>
+  <text x="252" y="142">电压最低跌到 4.85 V：还在 4.8 V 之上，勉强</text>
 </g>
+<text x="104" y="196" font-size="10" fill="var(--vp-c-danger-1)">虚线：4.8 V 最低工作电压，跌穿它舵机内部就复位</text>
+<text x="600" y="226" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="end">t / ms</text>
 </svg>
 
 </FigBox>
@@ -401,55 +438,51 @@ $$
 
 用 `atan2` 而不是 `atan(h/R)`，为的是同时处理四个象限，而且 `R = 0` 时不会除零（`atan2(h, 0)` 直接给 ±90°）。
 
-<FigBox title="坐标到两个角度的几何关系" kind="几何" note="水平面里，目标的方位角 α 就是 (x, y) 平面上的辐角；俯仰角 β 则是竖直剖面里的角，等价于把水平距离 R 与高度 h 当成直角三角形的两条直角边。图上 R = √(x²+y²) 是一条「投影」而不是一根真实的线。">
+<FigBox title="坐标到两个角度的几何关系" kind="几何" note="左：(x, y) 水平面的俯视图，方位角 α 是「向前（+y）」转到目标投影所扫过的角，α = atan2(x, y)。右：沿水平方向竖起来的剖面，底边就是水平距离 R = √(x²+y²)，竖边是高度 h，仰角 β 是视线与底边的夹角，β = atan2(h, R)。两张图合起来才是一个点：α 只看 x 与 y 的比值，β 只看 h 与 R 的比值。">
 
-<svg viewBox="0 0 640 300" role="img" aria-label="云台坐标几何图：底座为原点，目标点坐标为 x 向右、y 向前、h 向上，水平距离 R 等于 x 与 y 的欧氏范数，方位角 alpha 与俯仰角 beta 标注在两个直角三角形中">
-<g stroke="var(--vp-c-divider)" stroke-width="1">
-  <line x1="90" y1="250" x2="600" y2="250" />
-  <line x1="90" y1="30" x2="90" y2="250" />
-  <line x1="90" y1="250" x2="90" y2="96" />
-</g>
-
-<g font-size="11.5" fill="var(--vp-c-text-1)">
-  <text x="90" y="272" text-anchor="middle" font-weight="600">O 底座原点</text>
-</g>
-
-<path d="M 90 96 L 430 96" stroke="var(--vp-c-brand-2)" stroke-width="2" stroke-dasharray="6 4" fill="none" />
-<line x1="90" y1="96" x2="90" y2="96" stroke="var(--vp-c-text-3)" stroke-width="1" />
-
-<path d="M 430 96 L 430 250" stroke="var(--vp-c-brand-1)" stroke-width="2" fill="none" marker-end="url(#sg-geo-arrow)" />
-<path d="M 90 250 L 430 250" stroke="var(--vp-c-brand-2)" stroke-width="2" fill="none" />
-
-<circle cx="430" cy="96" r="5" fill="var(--vp-c-brand-1)" />
-<text x="440" y="90" font-size="12" fill="var(--vp-c-text-1)" font-weight="600">目标 (x, y, h)</text>
-
-<path d="M 118 250 A 28 28 0 0 0 112 236" stroke="var(--vp-c-text-3)" stroke-width="1.6" fill="none" />
-<text x="150" y="238" font-size="12" fill="var(--vp-c-text-2)">α = atan2(x, y)</text>
-<text x="150" y="222" font-size="10.5" fill="var(--vp-c-text-3)">水平面内的方位角（pan）</text>
-
-<path d="M 400 128 A 30 30 0 0 0 386 118" stroke="var(--vp-c-text-3)" stroke-width="1.6" fill="none" />
-<text x="300" y="142" font-size="12" fill="var(--vp-c-text-2)">β = atan2(h, R)</text>
-<text x="236" y="158" font-size="10.5" fill="var(--vp-c-text-3)">竖直剖面内的仰角（tilt）</text>
-
-<g font-size="11" fill="var(--vp-c-text-2)">
-  <text x="250" y="270" text-anchor="middle">R = √(x² + y²)</text>
-  <text x="266" y="236" text-anchor="middle">y（向前）</text>
-  <text x="446" y="176" text-anchor="middle">h（向上）</text>
-</g>
-
-<g font-size="10.5" fill="var(--vp-c-text-3)">
-  <text x="500" y="214">两个角度相互独立：</text>
-  <text x="500" y="232">α 只看 x 与 y 的比值，</text>
-  <text x="500" y="250">β 只看 h 与 R 的比值。</text>
-  <text x="500" y="274">因此 R 与 (α, β) 一起把</text>
-  <text x="500" y="292">目标点唯一确定。</text>
-</g>
-
+<svg viewBox="0 0 660 300" role="img" aria-label="云台坐标几何图：左图是水平面俯视，(x, y) 平面上方位角 alpha 从 y 轴量到目标投影；右图是竖直剖面，横边为水平距离 R、竖边为高度 h，仰角 beta 从 R 量到视线">
 <defs>
   <marker id="sg-geo-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
   </marker>
 </defs>
+
+<!-- (a) 水平面 -->
+<text x="170" y="24" font-size="11.5" fill="var(--vp-c-text-1)" text-anchor="middle" font-weight="700">(a) 水平面俯视：方位角 α（pan）</text>
+<g stroke="var(--vp-c-text-3)" stroke-width="1.4" fill="none">
+  <line x1="90" y1="220" x2="290" y2="220" marker-end="url(#sg-geo-arrow)" />
+  <line x1="90" y1="220" x2="90" y2="70" marker-end="url(#sg-geo-arrow)" />
+</g>
+<path d="M 90 220 L 210 110" stroke="var(--vp-c-brand-1)" stroke-width="2" stroke-dasharray="6 4" fill="none" />
+<circle cx="210" cy="110" r="5" fill="var(--vp-c-brand-1)" />
+<text x="216" y="104" font-size="11" fill="var(--vp-c-text-1)">P′(x, y)</text>
+<path d="M 90 186 A 34 34 0 0 1 115 197" stroke="var(--vp-c-text-2)" stroke-width="1.6" fill="none" />
+<text x="120" y="208" font-size="11" fill="var(--vp-c-text-2)">α = atan2(x, y)</text>
+<g font-size="10.5" fill="var(--vp-c-text-3)">
+  <text x="97" y="88">y（向前）</text>
+  <text x="286" y="238" text-anchor="end">x（向右）</text>
+  <text x="90" y="252" text-anchor="middle" font-size="10.5">O（云台底座）</text>
+</g>
+
+<!-- (b) 竖直剖面 -->
+<text x="490" y="24" font-size="11.5" fill="var(--vp-c-text-1)" text-anchor="middle" font-weight="700">(b) 竖直剖面：仰角 β（tilt）</text>
+<g stroke="var(--vp-c-text-3)" stroke-width="1.4" fill="none">
+  <line x1="380" y1="220" x2="612" y2="220" marker-end="url(#sg-geo-arrow)" />
+  <line x1="380" y1="220" x2="380" y2="70" marker-end="url(#sg-geo-arrow)" />
+</g>
+<path d="M 380 220 L 540 110" stroke="var(--vp-c-brand-1)" stroke-width="2" fill="none" />
+<line x1="540" y1="110" x2="540" y2="220" stroke="var(--vp-c-text-2)" stroke-width="1.6" stroke-dasharray="6 4" />
+<circle cx="540" cy="110" r="5" fill="var(--vp-c-brand-1)" />
+<text x="546" y="104" font-size="11" fill="var(--vp-c-text-1)">P(x, y, h)</text>
+<path d="M 420 220 A 40 40 0 0 1 413 197.4" stroke="var(--vp-c-text-2)" stroke-width="1.6" fill="none" />
+<text x="430" y="200" font-size="11" fill="var(--vp-c-text-2)">β = atan2(h, R)</text>
+<g font-size="10.5" fill="var(--vp-c-text-3)">
+  <text x="452" y="238" text-anchor="middle">R = √(x² + y²)</text>
+  <text x="548" y="172">h（向上）</text>
+  <text x="380" y="252" text-anchor="middle">O（云台底座）</text>
+</g>
+
+<text x="40" y="282" font-size="10.5" fill="var(--vp-c-text-3)">α 只看 x 与 y 的比值，β 只看 h 与 R 的比值；R 与这两个角一起把目标点唯一确定</text>
 </svg>
 
 </FigBox>
@@ -558,26 +591,36 @@ int Gimbal_AimAt(Point3 target)
 
 <FigBox title="一个典型云台的电流—电压时序" kind="时序" note="斜坡加速到 45° 的整个过程中，舵机电流从 100 mA 升到 1.5 A。如果 5 V 模块只有 1 A 额定能力，电压会在第 2 个 PWM 周期开始塌陷；3 A 的模块则仅在峰值处轻微下凹。">
 
-<svg viewBox="0 0 640 200" role="img" aria-label="舵机电流与电压随时间的时序：电流斜坡上升，电压对应下凹">
+<svg viewBox="0 0 660 250" role="img" aria-label="舵机电流与 5 V 电压随时间的时序：电流从 100 毫安升到 1.5 安再回落，电压在峰值处轻微下凹但始终高于 4.8 V">
 <g stroke="var(--vp-c-divider)" stroke-width="1">
-  <line x1="60" y1="90" x2="600" y2="90" />
-  <line x1="60" y1="170" x2="600" y2="170" />
-  <line x1="60" y1="20" x2="60" y2="170" />
+  <line x1="70" y1="110" x2="600" y2="110" />
+  <line x1="70" y1="110" x2="70" y2="50" />
+  <line x1="70" y1="170" x2="600" y2="170" />
+  <line x1="70" y1="214" x2="600" y2="214" />
 </g>
+
 <g font-size="10.5" fill="var(--vp-c-text-3)">
-  <text x="20" y="94">i / A</text>
-  <text x="20" y="176">u / V</text>
-  <text x="62" y="82">2.0</text>
-  <text x="62" y="162">5.0</text>
+  <text x="34" y="72" text-anchor="end">i / A</text>
+  <text x="34" y="184" text-anchor="end">u / V</text>
+  <text x="64" y="54" text-anchor="end">2.0</text>
+  <text x="64" y="114" text-anchor="end">0</text>
+  <text x="64" y="174" text-anchor="end">5.0</text>
+  <text x="64" y="199" text-anchor="end">4.8</text>
 </g>
-<path d="M 60 78 L 100 78 Q 200 62 260 48 Q 360 44 440 64 Q 520 80 600 82" stroke="var(--vp-c-brand-1)" stroke-width="2.4" fill="none" />
-<path d="M 60 168 L 100 168 Q 200 160 260 172 Q 360 166 440 169 Q 520 168 600 168" stroke="var(--vp-c-brand-2)" stroke-width="2.4" fill="none" />
-<line x1="60" y1="158" x2="600" y2="158" stroke="#ef4444" stroke-width="1.3" stroke-dasharray="5 3" />
+
+<path d="M 70 97 L 110 97 Q 200 70 260 65 Q 360 62 440 78 Q 520 92 600 94"
+      stroke="var(--vp-c-brand-1)" stroke-width="2.4" fill="none" />
+<path d="M 70 170 L 110 170 Q 200 182 260 184 Q 360 180 440 173 Q 520 170 600 170"
+      stroke="var(--vp-c-brand-2)" stroke-width="2.4" fill="none" />
+
+<line x1="70" y1="195" x2="600" y2="195" stroke="var(--vp-c-danger-1)" stroke-width="1.3" stroke-dasharray="5 3" />
+
 <g font-size="10.5" fill="var(--vp-c-text-2)">
-  <text x="180" y="40">加速段：电流接近堵转</text>
-  <text x="330" y="158">4.8 V</text>
-  <text x="440" y="120">稳态：电压回升</text>
+  <text x="176" y="44">加速段：电流接近堵转</text>
+  <text x="420" y="138">稳态：电压回升</text>
 </g>
+<text x="104" y="212" font-size="10" fill="var(--vp-c-danger-1)">4.8 V 最低工作电压：本图全程在它之上</text>
+<text x="600" y="236" font-size="10.5" fill="var(--vp-c-text-3)" text-anchor="end">t / ms</text>
 </svg>
 
 </FigBox>

@@ -87,7 +87,7 @@ $$
   <text x="215" y="220" text-anchor="middle">3</text>
   <text x="335" y="220" text-anchor="middle">5</text>
   <text x="420" y="220" text-anchor="middle" fill="var(--vp-c-text-3)">k（谐波次数）</text>
-  <text x="48" y="236" text-anchor="middle" fill="var(--vp-c-text-3)">偶次谐波（2、4）均为零</text>
+  <text x="48" y="236" text-anchor="start" fill="var(--vp-c-text-3)">偶次谐波（2、4）均为零</text>
   <rect x="48" y="10" width="14" height="10" fill="var(--vp-c-brand-1)" opacity="0.85" />
   <text x="68" y="19" fill="var(--vp-c-text-3)">方波（按 1/k 衰减）</text>
   <rect x="200" y="10" width="14" height="10" fill="var(--vp-c-warning-1, #f59e0b)" opacity="0.85" />
@@ -180,9 +180,9 @@ $$
   <line x1="40" y1="190" x2="450" y2="190" stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="4 3" />
   <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" points="40,50 130,50 130,190 220,190 220,50 310,50 310,190 400,190 400,50" />
   <polyline fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" stroke-dasharray="6 4" points="40.0,120.0 45.0,104.5 50.0,89.5 55.0,75.4 60.0,62.7 65.0,51.7 70.0,42.8 75.0,36.3 80.0,32.2 85.0,30.9 90.0,32.2 95.0,36.3 100.0,42.8 105.0,51.7 110.0,62.7 115.0,75.4 120.0,89.5 125.0,104.5 130.0,120.0 135.0,135.5 140.0,150.5 145.0,164.6 150.0,177.3 155.0,188.3 160.0,197.2 165.0,203.7 170.0,207.8 175.0,209.1 180.0,207.8 185.0,203.7 190.0,197.2 195.0,188.3 200.0,177.3 205.0,164.6 210.0,150.5 215.0,135.5 220.0,120.0 225.0,104.5 230.0,89.5 235.0,75.4 240.0,62.7 245.0,51.7 250.0,42.8 255.0,36.3 260.0,32.2 265.0,30.9 270.0,32.2 275.0,36.3 280.0,42.8 285.0,51.7 290.0,62.7 295.0,75.4 300.0,89.5 305.0,104.5 310.0,120.0 315.0,135.5 320.0,150.5 325.0,164.6 330.0,177.3 335.0,188.3 340.0,197.2 345.0,203.7 350.0,207.8 355.0,209.1 360.0,207.8 365.0,203.7 370.0,197.2 375.0,188.3 380.0,177.3 385.0,164.6 390.0,150.5 395.0,135.5 400.0,120.0" />
-  <text x="34" y="54" text-anchor="end" fill="var(--vp-c-text-3)">+100 V</text>
+  <text x="44" y="44" fill="var(--vp-c-text-3)">+100 V</text>
   <text x="34" y="124" text-anchor="end" fill="var(--vp-c-text-3)">0</text>
-  <text x="34" y="194" text-anchor="end" fill="var(--vp-c-text-3)">−100 V</text>
+  <text x="44" y="206" fill="var(--vp-c-text-3)">−100 V</text>
   <text x="448" y="36" text-anchor="end" fill="var(--vp-c-text-2)">基波（虚线）峰值 127.3 V</text>
   <text x="448" y="70" text-anchor="end" fill="var(--vp-c-brand-1)">方波（实线）±100 V</text>
   <text x="40" y="226" text-anchor="middle" fill="var(--vp-c-text-3)">0</text>

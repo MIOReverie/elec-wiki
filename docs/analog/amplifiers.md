@@ -96,7 +96,7 @@ description: 三极管怎么先站住一个直流工作点、再把小信号放�
 </g>
 <line x1="352" y1="90" x2="352" y2="100"/>
 <circle cx="352" cy="100" r="4" class="sf-dot"/>
-<text x="370" y="70" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_C = 2 kΩ</text>
+<text x="344" y="70" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_C = 2 kΩ</text>
 <line x1="352" y1="100" x2="414" y2="100"/>
 <line x1="414" y1="86" x2="414" y2="114" stroke-width="2.6"/>
 <line x1="426" y1="86" x2="426" y2="114" stroke-width="2.6"/>
@@ -185,11 +185,10 @@ $C_1$、$C_2$ 是耦合电容（coupling capacitor）。它的职责是挡住前
 <text x="176" y="150" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">V_B = 4 V</text>
 
 <line x1="160" y1="160" x2="250" y2="160"/>
-<text x="205" y="146" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">I_BQ</text>
+<text x="205" y="130" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">I_BQ</text>
 <path d="M 236 154 L 246 160 L 236 166 Z" fill="var(--vp-c-text-1)" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
 
 <path d="M 250 118 L 250 202" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
-<line x1="240" y1="150" x2="250" y2="160" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
 <path d="M 250 156 L 290 178 L 290 154 Z" fill="var(--vp-c-text-1)" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
 <path d="M 250 162 L 290 182 L 290 166 Z" fill="var(--vp-c-text-1)" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
 <text x="246" y="104" text-anchor="middle" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">B</text>
@@ -208,9 +207,9 @@ $C_1$、$C_2$ 是耦合电容（coupling capacitor）。它的职责是挡住前
 <text x="310" y="126" text-anchor="end" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">2 kΩ</text>
 <text x="352" y="104" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">I_CQ</text>
 
-<line x1="330" y1="160" x2="330" y2="200" stroke="var(--vp-c-text-1)" stroke-width="2.6"/>
-<line x1="330" y1="182" x2="298" y2="174" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
-<path d="M 292 172 L 300.7 167.2 L 301.5 175.9 Z" fill="var(--vp-c-text-1)" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
+<line x1="290" y1="176" x2="330" y2="200"/>
+
+<path d="M 328 198.8 L 317.9 198 L 321.9 190.2 Z" fill="var(--vp-c-text-1)" stroke="var(--vp-c-text-1)" stroke-width="1.6"/>
 <text x="284" y="166" text-anchor="end" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">E</text>
 <text x="352" y="196" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">I_EQ</text>
 <line x1="330" y1="200" x2="330" y2="216"/>
@@ -266,7 +265,7 @@ $C_1$、$C_2$ 是耦合电容（coupling capacitor）。它的职责是挡住前
 <rect x="-10" y="-6" width="20" height="12" rx="1.5" fill="none"/>
 <line x1="10" y1="0" x2="26" y2="0"/>
 </g>
-<text x="218" y="56" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_C = 2 k</text>
+<text x="276" y="52" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_C = 2 k</text>
 <line x1="240" y1="96" x2="240" y2="118"/>
 <line x1="150" y1="118" x2="240" y2="118"/>
 <line x1="240" y1="118" x2="240" y2="152" stroke="var(--vp-c-text-1)" stroke-width="2"/>
@@ -287,7 +286,7 @@ $C_1$、$C_2$ 是耦合电容（coupling capacitor）。它的职责是挡住前
 <text x="174" y="200" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_E = 2 k</text>
 <line x1="196" y1="234" x2="196" y2="250"/>
 <path d="M 192 246 L 192 214" stroke="var(--vp-c-brand-1)" stroke-width="2" marker-end="url(#q1)"/>
-<text x="168" y="200" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700 sf-it">I_EQ = 1.65 mA</text>
+<text x="168" y="220" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700 sf-it">I_EQ = 1.65 mA</text>
 <text x="212" y="196" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700">② V_E = 3.3 V</text>
 <line x1="70" y1="250" x2="330" y2="250"/>
 <line x1="70" y1="40" x2="70" y2="262"/>
@@ -418,7 +417,7 @@ $V_T\approx26$ mV 是热电压（$V_T=kT/q$，由温度决定）。这个式子�
 <text x="510" y="140" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">C</text>
 <line x1="500" y1="184" x2="500" y2="200"/>
 <line x1="340" y1="200" x2="500" y2="200"/>
-<text x="420" y="222" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">线性二端口：一个输入电阻 + 一个受控电流源</text>
+<text x="516" y="222" text-anchor="end" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">线性二端口：一个输入电阻 + 一个受控电流源</text>
 </svg>
 
 </FigBox>
@@ -455,7 +454,7 @@ $R_L'$ 读作**交流负载**，凡是说到增益，用到的都是它。$R_C$ 
 <line x1="9" y1="0" x2="22" y2="0"/>
 </g>
 <line x1="104" y1="220" x2="104" y2="250"/>
-<text x="80" y="200" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">r_be = 1.26 kΩ</text>
+<text x="6" y="232" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">r_be = 1.26 kΩ</text>
 <line x1="104" y1="126" x2="166" y2="126"/>
 <line x1="166" y1="112" x2="166" y2="140" stroke="var(--vp-c-text-1)" stroke-width="2"/>
 <line x1="166" y1="126" x2="240" y2="126"/>
@@ -597,12 +596,12 @@ $$
 <line x1="208" y1="230" x2="208" y2="34" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 3"/>
 <text x="208" y="248" text-anchor="middle" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">V_CEQ = 5.4</text>
 <line x1="70" y1="152" x2="390" y2="152" stroke="var(--vp-c-text-3)" stroke-width="1.2" stroke-dasharray="4 3"/>
-<text x="62" y="152" text-anchor="end" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">I_CQ = 1.65</text>
+<text x="74" y="140" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">I_CQ = 1.65</text>
 <circle cx="208" cy="152" r="5.5" fill="var(--vp-c-brand-1)" stroke="none"/>
 <text x="220" y="140" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700">Q</text>
 <line x1="208" y1="152" x2="392" y2="86" stroke="var(--vp-c-brand-1)" stroke-width="2"/>
 <text x="356" y="70" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700">交流负载线</text>
-<text x="356" y="88" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">斜率由 R_L′ = 1.2 kΩ</text>
+<text x="330" y="88" text-anchor="start" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">斜率由 R_L′ = 1.2 kΩ</text>
 <line x1="208" y1="152" x2="376" y2="152" stroke="var(--vp-c-brand-1)" stroke-width="2"/>
 <line x1="376" y1="230" x2="376" y2="212" stroke="var(--vp-c-text-3)" stroke-width="1.2"/>
 <text x="300" y="222" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">截止侧余量</text>
@@ -848,7 +847,7 @@ $$
 <text x="98" y="112" text-anchor="start" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">居中 Q</text>
 <line x1="88" y1="120" x2="142" y2="94" stroke="var(--vp-c-text-3)" stroke-width="1.6"/>
 <text x="88" y="196" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">两侧余量不等</text>
-<text x="88" y="214" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">→ 截止侧先到</text>
+<text x="88" y="208" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">→ 截止侧先到</text>
 
 <text x="260" y="26" text-anchor="middle" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">(b) 增益随负载变</text>
 <rect x="188" y="40" width="144" height="160" rx="8" stroke-dasharray="5 4"/>
@@ -967,7 +966,7 @@ $$
 <text x="444" y="120" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t sf-w700 sf-it">v</text>
 <text x="449" y="128" text-anchor="start" dominant-baseline="middle" font-size="8.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">gs</text>
 <line x1="350" y1="70" x2="430" y2="96" stroke="var(--vp-c-brand-1)" stroke-width="1.2" stroke-dasharray="4 3"/>
-<text x="430" y="224" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">线性二端口：栅极开路 + 一个受控电流源</text>
+<text x="516" y="224" text-anchor="end" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">线性二端口：栅极开路 + 一个受控电流源</text>
 </svg>
 
 </FigBox>
@@ -1087,7 +1086,7 @@ $1/g_m$ 只有几百 Ω，所以 $r_o$ 很低，与射极输出器「输入高�
 <line x1="6" y1="0" x2="20" y2="0"/>
 </g>
 <line x1="330" y1="240" x2="330" y2="300"/>
-<text x="348" y="220" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_L = 4 kΩ</text>
+<text x="352" y="240" text-anchor="start" dominant-baseline="middle" font-size="11.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-it">R_L = 4 kΩ</text>
 <text x="342" y="160" text-anchor="start" dominant-baseline="middle" font-size="12.5" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700 sf-it">u</text>
 <text x="351" y="169" text-anchor="start" dominant-baseline="middle" font-size="9" stroke="none" fill="var(--vp-c-text-1)" class="sf-t">o</text>
 <line x1="250" y1="206" x2="250" y2="220"/>
@@ -1153,7 +1152,7 @@ $$
 
 <FigBox title="例 7 的电路：输出改从源极取" kind="电路" note="漏极直接接 V_DD（交流接地），输出改从源极经 C_2 耦合到负载 R_L；R_S 兼做偏置电阻与源极负载。栅极仍是高阻抗输入端。" >
 
-<svg viewBox="0 0 560 320" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
+<svg viewBox="0 0 560 340" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img">
 <line x1="70" y1="40" x2="430" y2="40"/>
 <text x="78" y="24" text-anchor="start" dominant-baseline="middle" font-size="12" stroke="none" fill="var(--vp-c-text-1)" class="sf-t sf-w700">+V_DD = 12 V</text>
 <line x1="40" y1="300" x2="500" y2="300"/>

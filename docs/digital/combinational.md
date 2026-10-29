@@ -180,7 +180,7 @@ $$
 
 <FigBox title="74LS138 直接拼出任意三变量函数" kind="结构" note="左边三根地址选出一个最小项，右边八根输出里只有一根是低电平（画小圆圈表示低有效）。把需要的那几根引出来，送进一个与非门，输出就是这几个最小项之和，不需要化简。">
 
-<svg viewBox="0 0 480 312" role="img" aria-label="74LS138 接线示意：三根地址输入、八根低有效输出，其中五根送进一个五输入与非门得到函数输出">
+<svg viewBox="0 0 520 312" role="img" aria-label="74LS138 接线示意：三根地址输入、八根低有效输出，其中五根送进一个五输入与非门得到函数输出">
 <defs>
   <marker id="cb-d1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
     <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--vp-c-brand-1)" />
@@ -195,50 +195,45 @@ $$
   <text x="142" y="78" text-anchor="middle" font-size="10" fill="var(--vp-c-text-3)">3-8 译码器</text>
 
   <text x="12" y="105">A</text>
-  <line x1="30" y1="101" x2="82" y2="101" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#cb-d1)" />
+  <line x1="30" y1="101" x2="86" y2="101" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#cb-d1)" />
   <text x="12" y="135">B</text>
-  <line x1="30" y1="131" x2="82" y2="131" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#cb-d1)" />
+  <line x1="30" y1="131" x2="86" y2="131" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#cb-d1)" />
   <text x="12" y="165">C</text>
-  <line x1="30" y1="161" x2="82" y2="161" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#cb-d1)" />
+  <line x1="30" y1="161" x2="86" y2="161" stroke="var(--vp-c-brand-1)" stroke-width="1.6" marker-end="url(#cb-d1)" />
   <text x="10" y="212" font-size="10.5" fill="var(--vp-c-text-3)">使能</text>
-  <line x1="30" y1="230" x2="82" y2="230" stroke="var(--vp-c-text-3)" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#cb-d2)" />
+  <line x1="30" y1="230" x2="86" y2="230" stroke="var(--vp-c-text-3)" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#cb-d2)" />
 
-  <circle cx="203" cy="66" r="3" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
-  <line x1="198" y1="66" x2="246" y2="66" stroke="var(--vp-c-text-3)" stroke-width="1.3" />
-  <text x="252" y="70" fill="var(--vp-c-text-3)">Y₀</text>
-  <circle cx="203" cy="92" r="3" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
-  <line x1="198" y1="92" x2="246" y2="92" stroke="var(--vp-c-brand-1)" stroke-width="1.7" />
-  <text x="252" y="96" fill="var(--vp-c-brand-1)" font-weight="700">Y₁</text>
-  <circle cx="203" cy="118" r="3" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
-  <line x1="198" y1="118" x2="246" y2="118" stroke="var(--vp-c-text-3)" stroke-width="1.3" />
-  <text x="252" y="122" fill="var(--vp-c-text-3)">Y₂</text>
-  <circle cx="203" cy="144" r="3" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
-  <line x1="198" y1="144" x2="246" y2="144" stroke="var(--vp-c-brand-1)" stroke-width="1.7" />
-  <text x="252" y="148" fill="var(--vp-c-brand-1)" font-weight="700">Y₃</text>
-  <circle cx="203" cy="170" r="3" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
-  <line x1="198" y1="170" x2="246" y2="170" stroke="var(--vp-c-text-3)" stroke-width="1.3" />
-  <text x="252" y="174" fill="var(--vp-c-text-3)">Y₄</text>
-  <circle cx="203" cy="196" r="3" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
-  <line x1="198" y1="196" x2="246" y2="196" stroke="var(--vp-c-brand-1)" stroke-width="1.7" />
-  <text x="252" y="200" fill="var(--vp-c-brand-1)" font-weight="700">Y₅</text>
-  <circle cx="203" cy="222" r="3" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
-  <line x1="198" y1="222" x2="246" y2="222" stroke="var(--vp-c-brand-1)" stroke-width="1.7" />
-  <text x="252" y="226" fill="var(--vp-c-brand-1)" font-weight="700">Y₆</text>
-  <circle cx="203" cy="248" r="3" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
-  <line x1="198" y1="248" x2="246" y2="248" stroke="var(--vp-c-brand-1)" stroke-width="1.7" />
-  <text x="252" y="252" fill="var(--vp-c-brand-1)" font-weight="700">Y₇</text>
+  <circle cx="201" cy="66" r="3.4" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+  <line x1="204" y1="66" x2="246" y2="66" stroke="var(--vp-c-text-3)" stroke-width="1.3" />
+  <text x="252" y="60" fill="var(--vp-c-text-3)">Y₀</text>
+  <circle cx="201" cy="92" r="3.4" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
+  <text x="252" y="86" fill="var(--vp-c-brand-1)" font-weight="700">Y₁</text>
+  <circle cx="201" cy="118" r="3.4" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+  <line x1="204" y1="118" x2="246" y2="118" stroke="var(--vp-c-text-3)" stroke-width="1.3" />
+  <text x="252" y="112" fill="var(--vp-c-text-3)">Y₂</text>
+  <circle cx="201" cy="144" r="3.4" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
+  <text x="252" y="138" fill="var(--vp-c-brand-1)" font-weight="700">Y₃</text>
+  <circle cx="201" cy="170" r="3.4" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.2" />
+  <line x1="204" y1="170" x2="246" y2="170" stroke="var(--vp-c-text-3)" stroke-width="1.3" />
+  <text x="252" y="164" fill="var(--vp-c-text-3)">Y₄</text>
+  <circle cx="201" cy="196" r="3.4" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
+  <text x="252" y="190" fill="var(--vp-c-brand-1)" font-weight="700">Y₅</text>
+  <circle cx="201" cy="222" r="3.4" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
+  <text x="252" y="216" fill="var(--vp-c-brand-1)" font-weight="700">Y₆</text>
+  <circle cx="201" cy="248" r="3.4" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.5" />
+  <text x="252" y="242" fill="var(--vp-c-brand-1)" font-weight="700">Y₇</text>
 
-  <path d="M 286 92 H 340 V 104 H 400" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <path d="M 286 144 H 350 V 118 H 400" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <path d="M 286 196 H 360 V 132 H 400" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <path d="M 286 222 H 370 V 146 H 400" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
-  <path d="M 286 248 H 380 V 160 H 400" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <path d="M 204 92 H 340 V 104 H 400" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <path d="M 204 144 H 350 V 118 H 400" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <path d="M 204 196 H 360 V 132 H 400" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <path d="M 204 222 H 370 V 146 H 400" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <path d="M 204 248 H 380 V 160 H 400" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
 
   <path d="M 400 96 L 424 96 A 47 47 0 0 1 424 190 L 400 190 Z" fill="var(--vp-c-bg-soft)" stroke="var(--vp-c-text-3)" stroke-width="1.6" />
-  <circle cx="458" cy="143" r="4" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
-  <line x1="462" y1="143" x2="474" y2="143" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
+  <circle cx="475" cy="143" r="4" fill="none" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
+  <line x1="479" y1="143" x2="500" y2="143" stroke="var(--vp-c-text-3)" stroke-width="1.4" />
   <text x="406" y="150" font-size="10.5" fill="var(--vp-c-text-3)">与非</text>
-  <text x="474" y="132" text-anchor="end" fill="var(--vp-c-brand-1)" font-weight="700">F</text>
+  <text x="504" y="147" fill="var(--vp-c-brand-1)" font-weight="700">F</text>
 
   <text x="12" y="282" font-size="10.5" fill="var(--vp-c-text-3)">使能端必须有效：G₁ 接高、Ḡ₂ₐ 与 Ḡ₂ᵦ 接低</text>
   <text x="12" y="298" font-size="10.5" fill="var(--vp-c-text-3)">灰线是本题用不到的 Y₀ Y₂ Y₄，悬空即可</text>
@@ -469,8 +464,8 @@ $$
   <text x="105" y="198" text-anchor="middle" fill="var(--vp-c-text-3)">0</text>
   <text x="195" y="198" text-anchor="middle" fill="var(--vp-c-text-3)">0</text>
 
-  <ellipse cx="150" cy="158" rx="94" ry="24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 4" />
-  <ellipse cx="195" cy="92" rx="46" ry="44" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6 4" />
+  <ellipse cx="150" cy="158" rx="94" ry="24" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="6 4" />
+  <ellipse cx="195" cy="92" rx="46" ry="44" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6 4" />
   <ellipse cx="195" cy="132" rx="46" ry="44" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6 4" />
 
   <text x="276" y="60" fill="#34d399" font-size="11">AB：圈住 m₆ m₇</text>

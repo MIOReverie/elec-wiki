@@ -85,16 +85,19 @@ const threePhase = computed(() => {
 const rc = computed(() => {
   const tau = 0.08 * props.p
   const f = (t: number) => 1 - Math.exp(-t / tau)
-  const marks = [1, 3, 5].map((k, i) => ({ x: Math.min(0.98, (k * tau) / 0.5), label: `${k}τ`, color: [C.a, C.b, C.v][i] }))
+  // 横轴要盖住 5τ：xMax 缺省是 1，曲线只画到 0.5 时右半张画布会空着，5τ 标注也会跑出画布
+  const xMax = Math.max(0.5, 5.4 * tau)
+  const marks = [1, 3, 5].map((k, i) => ({ x: k * tau, label: `${k}τ`, color: [C.a, C.b, C.v][i] }))
   return {
     series: [
-      { label: 'u_C', color: C.a, width: 2.2, points: curve(f, 0, 0.5, 240) },
-      { label: 'E', color: C.n, width: 1.3, dash: true, points: curve(() => 1, 0, 0.5, 3) }
+      { label: 'u_C', color: C.a, width: 2.2, points: curve(f, 0, xMax, 240) },
+      { label: 'E', color: C.n, width: 1.3, dash: true, points: curve(() => 1, 0, xMax, 3) }
     ],
     marks,
     yLabel: 'u_C/E',
     yMin: 0,
     yMax: 1.25,
+    xMax,
     xTickFmt: (v: number) => `${(v / tau).toFixed(1)}τ`,
     note: 'τ = RC。t = τ 时完成 63%，3τ 时 95%，5τ 后基本认为完成'
   }
@@ -103,29 +106,32 @@ const rc = computed(() => {
 /** RL 接通：电流爬升 + 电感电压衰减 */
 const rl = computed(() => {
   const tau = 0.08 * props.p
+  const xMax = Math.max(0.5, 5.4 * tau)
   return {
     series: [
-      { label: 'i(t)', color: C.b, width: 2.2, points: curve(x => 1 - Math.exp(-x / tau), 0, 0.5, 240) },
-      { label: 'u_L(t)', color: C.a, width: 2, dash: true, points: curve(x => Math.exp(-x / tau), 0, 0.5, 240) }
+      { label: 'i(t)', color: C.b, width: 2.2, points: curve(x => 1 - Math.exp(-x / tau), 0, xMax, 240) },
+      { label: 'u_L(t)', color: C.a, width: 2, dash: true, points: curve(x => Math.exp(-x / tau), 0, xMax, 240) }
     ],
     yLabel: 'i/I∞ , u_L/E',
     yMin: 0,
     yMax: 1.25,
+    xMax,
     xTickFmt: (v: number) => `${(v / tau).toFixed(1)}τ`,
     note: 'L 两端在接通瞬间相当于开路（u_L = E），稳态相当于短路（u_L = 0）'
   }
 })
 
-/** 串联谐振：|Z|、U_R、I 随频率（横轴对数） */
+/** 串联谐振：|Z|、U_L、I 随频率（横轴对数） */
 const resonance = computed(() => {
   const Q = props.q
   const f0 = props.p
   const z = (f: number) => Math.sqrt(1 + Q * Q * ((f / f0 - f0 / f) ** 2))
   const I = (f: number) => 1 / z(f)
-  const U = (f: number) => Q / z(f)
+  // 电感电压 U_L/U = X_L/|Z| = Q·(f/f₀)/z，谐振处正好等于 Q；电容电压同值反相
+  const U = (f: number) => (Q * (f / f0)) / z(f)
   return {
     series: [
-      { label: 'U_R/U', color: C.v, width: 2.2, points: curve(U, 0.05, 4, 300) },
+      { label: 'U_L/U（谐振时 = Q）', color: C.v, width: 2.2, points: curve(U, 0.05, 4, 300) },
       { label: 'I/I₀', color: C.a, width: 2, points: curve(I, 0.05, 4, 300) },
       { label: '|Z|/R', color: C.n, width: 1.4, dash: true, points: curve(z, 0.05, 4, 300) }
     ],
@@ -138,7 +144,7 @@ const resonance = computed(() => {
     xMax: 4,
     yMin: 0,
     yMax: Math.max(1.35, Q * 1.15),
-    note: `Q = ${Q}：谐振时电阻电压被放大 Q 倍，电抗电压相互抵消，所以 ${Q} > 1 时总电压反而变小`
+    note: `Q = ${Q}：谐振时 |Z| 掉到 R、电流最大；电感与电容上的电压在 f₀ 处大小相等、相位相反，各为电源电压的 ${Q} 倍——元件要按 QU 选耐压，总电压仍是 U。图中画的是 U_L/U，U_C/U 只在 f₀ 处与它相等`
   }
 })
 
@@ -495,7 +501,7 @@ const vadjust = computed(() => {
   return {
     series: [
       { label: '感性（φ > 0）', color: C.a, width: 2.4, points: curve(d, 0, 80, 160) },
-      { label: '容性（φ < 0）', color: C.c, width: 2.4, points: curve((deg: number) => d(-deg), 0, 80, 160) }
+      { label: '容性（φ < 0）', color: C.c, width: 2.4, points: curve(d, -80, 0, 160) }
     ],
     marks: [{ x: 0, label: '纯电阻负载', color: C.n }],
     dots: [{ x: 0, y: 2, label: '只有铜压降', color: C.n, dx: 8, dy: -8 }],
@@ -513,7 +519,8 @@ const vadjust = computed(() => {
 
 /**
  * 旋转磁场：三相绕组磁动势的空间分布，取 4 个瞬间。
- * F(θ,t) = 1.5·Fm·sin(θ − ωt)，整条曲线随时间向 θ 正方向平移。
+ * F(θ,t) = 1.5·Fm·cos(θ − ωt)：t = 0 时峰值正好落在 A 相轴线（θ = 0），
+ * 随后整体向 θ 正方向平移，这就是旋转磁场。
  */
 const rotfield = computed(() => {
   const inst = [0, 30, 60, 90]
@@ -523,10 +530,10 @@ const rotfield = computed(() => {
       label: `ωt = ${deg}°`,
       color: colors[i],
       width: 2.2,
-      points: curve((th: number) => 1.5 * Math.sin(((th - deg) * Math.PI) / 180), 0, 360, 240)
+      points: curve((th: number) => 1.5 * Math.cos(((th - deg) * Math.PI) / 180), 0, 360, 240)
     })),
-    marks: [{ x: 120, label: 'A 相轴线', color: C.n }],
-    dots: inst.map(deg => ({ x: 90 + deg, y: 1.5, label: deg === 90 ? '峰值向前移动 → 旋转' : '', color: C.v, dx: 0, dy: -8 })),
+    marks: [{ x: 0, label: 'A 相轴线', color: C.n }],
+    dots: inst.map(deg => ({ x: deg, y: 1.5, label: deg === 90 ? '峰值向前移动 → 旋转' : '', color: C.v, dx: 0, dy: -8 })),
     xLabel: '空间角度 θ（度）',
     yLabel: 'F / Fm',
     xMin: 0,
@@ -604,7 +611,7 @@ const startcurve = computed(() => {
 
 /** 直流电机机械特性：他励硬特性 vs 串励软特性 */
 const dcmotor = computed(() => {
-  const sep = (t: number) => 1 - 0.06 * t
+  const sep = (t: number) => 1 - 0.05 * t // 额定点掉 5%
   const sser = (t: number) => 0.85 / t
   return {
     series: [
@@ -647,7 +654,7 @@ const magnetize = computed(() => {
     xMax: 1,
     yMin: -1.2,
     yMax: 1.2,
-    note: '剩磁 Br 与矫顽力 Hc 的大小，决定了铁磁材料适不适合做变压器（要求 Br 大、Hc 小）'
+    note: '回线围出的面积就是一个周期的磁滞损耗。变压器铁心要软磁材料：剩磁 Br 小、矫顽力 Hc 小，回线细窄，损耗才低；永磁体反过来，要 Br 大、Hc 大，回线又宽又胖'
   }
 })
 
@@ -668,18 +675,21 @@ const damped = computed(() => {
 const logic = computed(() => {
   const n = 8
   const mk = (f: (i: number) => number) => curve(x => f(Math.floor(x)), 0, n, n * 10)
+  const b0 = (i: number) => (i >> 1) & 1 // 低位：每个时钟沿翻转
+  const b1 = (i: number) => (i >> 2) & 1 // 次低位：每两个时钟沿翻转
   return {
     series: [
       { label: 'CLK', color: C.a, width: 2, points: mk(i => i % 2) },
-      { label: 'Q1', color: C.b, width: 2, points: mk(i => (i >> 1) & 1) },
-      { label: 'Q2', color: C.c, width: 2, points: mk(i => (i >> 2) & 1) },
-      { label: '进位 C', color: C.g, width: 2, points: mk(i => (i % 4 >= 2 ? 1 : 0)) }
+      { label: 'Q1', color: C.b, width: 2, points: mk(b0) },
+      { label: 'Q2', color: C.c, width: 2, points: mk(b1) },
+      // 进位 = Q1·Q2：只有低两位同时为 1 才有效，宽度正好一个时钟周期
+      { label: '进位 C', color: C.g, width: 2, points: mk(i => (b0(i) && b1(i) ? 1 : 0)) }
     ],
     yLabel: '',
     yMin: -0.15,
     yMax: 1.15,
     xTicks: Array.from({ length: n + 1 }, (_, i) => i),
-    note: '边沿在哪、输出就在哪变——数电的所有问题最后都要落到这张时序图上看'
+    note: '每个时钟沿 Q1 翻转一次、Q2 每两个沿翻转一次，所以高位频率是低位的一半；进位 C = Q1·Q2，只在低两位同时为 1 的那一个周期有效'
   }
 })
 
@@ -732,31 +742,29 @@ const source = computed(() => {
 /**
  * 电位阶梯：一条串联分压链，各节点电位随「末端负载」变化。
  *
- * 模型：E = 1V，n 节等值电阻 R（每节阻值 1/n），末端接负载 RL。
- *   空载：  V_i = 1 - i·R/ΣR = 1 - i/n            （等差下降的直线）
- *   带载：  末节被 RL 并联，等效阻值变成 R∥RL，于是后面每一级都被"压"下去。
- *          逐点用分压公式算，不做近似 —— 这样末端电位掉得最明显。
+ * 模型：E = 1V，n 节等值电阻 R（每节 1/n），末端节点经负载 RL 接地。
+ *   空载（RL → ∞）：没有电流，整条支路等电位，V_i = 1
+ *   带载：         I = E / (n·R + RL)，每节降 R·I，等阻值就是一条直线，
+ *                  末端 V_n = RL·I = RL/(n·R + RL)
+ * 两者一对照就看出负载效应：一接负载，末端从 1 掉到分压值，换负载就是换分压比。
  */
 const ladder = computed(() => {
   const n = 5
   const R = 1 / n // 每节电阻
   const RL = 0.6 * props.p // 负载越大电位掉得越多
 
-  // 从末端倒推：负载节点电位 = E·(R∥RL) / (R + R∥RL)
-  const Req = (R * RL) / (R + RL)
-  const vLast = Req / (R + Req)
-  const v = [1]
-  for (let i = 1; i < n; i++) v.push(v[i - 1] - R * vLast)
-  v.push(vLast)
+  const I = 1 / (n * R + RL)
+  const v = Array.from({ length: n + 1 }, (_, i) => 1 - i * R * I)
 
-  const ideal = Array.from({ length: n + 1 }, (_, i) => [i, 1 - i / n] as [number, number])
+  const ideal = Array.from({ length: n + 1 }, (_, i) => [i, 1] as [number, number])
   const loaded = v.map((val, i) => [i, val] as [number, number])
 
   return {
     series: [
-      { label: '空载电位', color: C.n, width: 1.6, dash: true, points: ideal },
-      { label: '带负载电位', color: C.a, width: 2.2, points: loaded }
+      { label: '空载（无电流，整串等电位）', color: C.n, width: 1.6, dash: true, points: ideal },
+      { label: `带载 R_L = ${RL.toFixed(2)}·nR`, color: C.a, width: 2.2, points: loaded }
     ],
+    dots: [{ x: n, y: v[n], label: `末端只剩 ${v[n].toFixed(2)}`, color: C.a, dx: -96, dy: -8 }],
     xLabel: '节点序号 i（共 n 节）',
     yLabel: 'V',
     xMin: 0,
@@ -764,7 +772,7 @@ const ladder = computed(() => {
     yMin: 0,
     yMax: 1.15,
     xTicks: Array.from({ length: n + 1 }, (_, i) => i),
-    note: '空载时电位是等差直线；接上负载后，负载两端那一节被并联短路掉一部分，电位曲线整体下弯、末端掉得最多 —— 这就是分压器不能当电源用的原因'
+    note: '空载时支路里没有电流，整串电阻上没有压降，各点电位都等于电源电压；一接上负载，电流沿路流过每一节，电位逐段等量下降（等阻值就是一条直线），末端电压由负载与整串电阻的分压比决定 —— 换个负载，这个比就变了，所以分压器不能当电源用'
   }
 })
 
@@ -812,7 +820,8 @@ const nodepot = computed(() => {
 const maxpower = computed(() => {
   const R0 = 1, U = 1
   const r = 0.05 + (19.95 - 0.05) * props.p
-  const P = (x: number) => (U * x) / ((R0 + x) * (R0 + x))
+  const Pmax = U * U / (4 * R0) // R_L = R₀ 时的最大功率
+  const P = (x: number) => (U * x) / ((R0 + x) * (R0 + x)) / Pmax
   const eta = (x: number) => x / (R0 + x)
   return {
     series: [
@@ -826,7 +835,7 @@ const maxpower = computed(() => {
     xMax: 20,
     yMin: 0,
     yMax: 1.1,
-    note: '功率最大时效率恰好 50%：R_L = R₀ 时负载拿到的功率是被浪费掉功率的一半，所以电力系统绝不这样匹配'
+    note: '功率最大时效率恰好 50%：R_L = R₀ 时负载拿到的功率等于电源内阻上白白烧掉的那一份，所以电力系统绝不这样匹配'
   }
 })
 
@@ -1028,7 +1037,7 @@ const rectify3 = computed(() => {
     xMax: 1,
     yMin: -0.2,
     yMax: 1.45,
-    yTicks: [-1, -0.5, 0, 0.5, 1],
+    yTicks: [0, 0.5, 1],
     note: '半波均值 0.32U_m ≈ 0.45U₂（负半周全丢了）；桥式 0.64U_m ≈ 0.9U₂；加电容滤波后升到 ≈0.89U_m ≈ 1.2U₂，但纹波仍看得出——C 越大放电越慢，空载时甚至逼近 √2·U₂ = 1.41U₂'
 }
 })

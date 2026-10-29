@@ -329,13 +329,13 @@ $$
   <circle cx="112" cy="130" r="3.5" fill="var(--vp-c-text-1)" />
   <line x1="112" y1="130" x2="112" y2="100.9" stroke="var(--vp-c-text-1)" stroke-width="1.6" />
   <line x1="112" y1="68.9" x2="112" y2="48" stroke="var(--vp-c-text-1)" stroke-width="1.6" />
-  <rect x="99" y="78.9" width="26" height="12" rx="2" transform="rotate(-90 112 84.9)" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <rect x="96" y="78.9" width="32" height="12" rx="2" transform="rotate(-90 112 84.9)" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
   <line x1="112" y1="130" x2="87.5" y2="148" stroke="var(--vp-c-text-1)" stroke-width="1.6" />
   <line x1="61.7" y1="167" x2="44" y2="180" stroke="var(--vp-c-text-1)" stroke-width="1.6" />
-  <rect x="61.6" y="151.5" width="26" height="12" rx="2" transform="rotate(143.7 74.6 157.5)" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <rect x="58.6" y="151.5" width="32" height="12" rx="2" transform="rotate(143.7 74.6 157.5)" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
   <line x1="112" y1="130" x2="136.5" y2="148" stroke="var(--vp-c-text-1)" stroke-width="1.6" />
   <line x1="162.3" y1="167" x2="180" y2="180" stroke="var(--vp-c-text-1)" stroke-width="1.6" />
-  <rect x="136.4" y="151.5" width="26" height="12" rx="2" transform="rotate(36.3 149.4 157.5)" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <rect x="133.4" y="151.5" width="32" height="12" rx="2" transform="rotate(36.3 149.4 157.5)" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
   <text x="112" y="42" text-anchor="middle">A</text>
   <text x="34" y="194" text-anchor="middle">B</text>
   <text x="190" y="194" text-anchor="middle">C</text>
@@ -345,13 +345,13 @@ $$
   <text x="350" y="18" text-anchor="middle" font-weight="700">△ 接：每相 380 V</text>
   <line x1="310" y1="52" x2="282.5" y2="101.8" stroke="var(--vp-c-text-1)" stroke-width="1.6" />
   <line x1="267.1" y1="129.8" x2="246" y2="168" stroke="var(--vp-c-text-1)" stroke-width="1.6" />
-  <rect x="261.8" y="109.8" width="26" height="12" rx="2" transform="rotate(118.9 274.8 115.8)" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <rect x="258.8" y="109.8" width="32" height="12" rx="2" transform="rotate(118.9 274.8 115.8)" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
   <line x1="374" y1="168" x2="346.5" y2="118.2" stroke="var(--vp-c-text-1)" stroke-width="1.6" />
   <line x1="331.1" y1="90.2" x2="310" y2="52" stroke="var(--vp-c-text-1)" stroke-width="1.6" />
-  <rect x="325.8" y="98.2" width="26" height="12" rx="2" transform="rotate(-118.9 338.8 104.2)" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <rect x="322.8" y="98.2" width="32" height="12" rx="2" transform="rotate(-118.9 338.8 104.2)" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
   <line x1="246" y1="168" x2="300.4" y2="168" stroke="var(--vp-c-text-1)" stroke-width="1.6" />
   <line x1="332.4" y1="168" x2="374" y2="168" stroke="var(--vp-c-text-1)" stroke-width="1.6" />
-  <rect x="303.4" y="162" width="26" height="12" rx="2" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
+  <rect x="300.4" y="162" width="32" height="12" rx="2" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
   <text x="310" y="40" text-anchor="middle">A</text>
   <text x="234" y="184" text-anchor="middle">B</text>
   <text x="386" y="184" text-anchor="middle">C</text>
@@ -539,8 +539,8 @@ $$
   <text x="216" y="146" fill="var(--vp-c-brand-1)">İ_A = 11∠0°</text>
   <text x="128" y="244" fill="var(--vp-c-text-2)">İ_B = 11∠−90°</text>
   <text x="128" y="58" fill="var(--vp-c-text-2)">İ_C = 11∠+90°</text>
-  <text x="20" y="196" fill="var(--vp-c-text-3)">İ_N = İ_A + İ_B + İ_C</text>
-  <text x="20" y="214" fill="var(--vp-c-brand-1)">　　 = İ_A = 11 A（与 İ_A 重合）</text>
+  <text x="150" y="206" fill="var(--vp-c-text-3)">İ_N = İ_A + İ_B + İ_C</text>
+  <text x="150" y="224" fill="var(--vp-c-brand-1)">= İ_A = 11 A（与 İ_A 重合）</text>
   <text x="220" y="276" text-anchor="middle" fill="var(--vp-c-text-3)">竖直方向两条等长、反向，抵消为零；只剩水平那条</text>
 </g>
 </svg>

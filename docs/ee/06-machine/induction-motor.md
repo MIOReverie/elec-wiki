@@ -110,8 +110,66 @@ $$
 
 四条曲线其实是一张图：转速一降，$s$ 变大，$E_{2s}$ 跟着大、$f_2$ 变高、$X_{2s}$ 变大、$\cos\varphi_2$ 变低。
 
-<FigBox title="转子电流与功率因数随转差率变化" kind="曲线" note="起动（s=1）时电流冲到额定的 6 倍多，但功率因数只有 0.24。电流大，无功分量占了大头，所以起动转矩并不大。">
-<WavePreset kind="torslip" />
+<FigBox title="转子电流与功率因数随转差率变化" kind="曲线" note="横轴是转差率 s，左轴读转子电流 I₂（A），右轴读功率因数 cosφ₂；数据取本节例 2 的转子参数（E₂₀ = 20 V、R₂ = 0.02 Ω、X₂₀ = 0.08 Ω）。s 从 0.04 拉到 1，电流从 39.4 A 涨到 242 A（6.1 倍），功率因数却从 0.985 掉到 0.24：电流大，无功分量占了大头，所以起动转矩并不大。">
+
+<svg viewBox="0 0 450 262" class="sf " xmlns="http://www.w3.org/2000/svg" fill="none" stroke="var(--vp-c-text-1)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="转子电流与功率因数随转差率的变化：起动时电流约为额定 6 倍、功率因数只有 0.24">
+<line x1="78" y1="200" x2="384" y2="200" stroke="var(--vp-c-text-2)" stroke-width="1.6"/>
+<line x1="78" y1="34" x2="78" y2="200" stroke="var(--vp-c-brand-1)" stroke-width="1.6"/>
+<line x1="384" y1="34" x2="384" y2="200" stroke="var(--vp-c-danger-1)" stroke-width="1.6"/>
+<line x1="74" y1="200" x2="78" y2="200" stroke="var(--vp-c-brand-1)"/>
+<text x="70" y="200" text-anchor="end" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">0</text>
+<line x1="74" y1="161.7" x2="78" y2="161.7" stroke="var(--vp-c-brand-1)"/>
+<text x="70" y="161.7" text-anchor="end" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">60</text>
+<line x1="74" y1="123.4" x2="78" y2="123.4" stroke="var(--vp-c-brand-1)"/>
+<text x="70" y="123.4" text-anchor="end" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">120</text>
+<line x1="74" y1="85.1" x2="78" y2="85.1" stroke="var(--vp-c-brand-1)"/>
+<text x="70" y="85.1" text-anchor="end" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">180</text>
+<line x1="74" y1="46.8" x2="78" y2="46.8" stroke="var(--vp-c-brand-1)"/>
+<text x="70" y="46.8" text-anchor="end" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">240</text>
+<line x1="384" y1="200" x2="390" y2="200" stroke="var(--vp-c-danger-1)"/>
+<text x="394" y="200" text-anchor="start" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-danger-1)" class="sf-t">0</text>
+<line x1="384" y1="158.5" x2="390" y2="158.5" stroke="var(--vp-c-danger-1)"/>
+<text x="394" y="158.5" text-anchor="start" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-danger-1)" class="sf-t">0.25</text>
+<line x1="384" y1="117" x2="390" y2="117" stroke="var(--vp-c-danger-1)"/>
+<text x="394" y="117" text-anchor="start" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-danger-1)" class="sf-t">0.5</text>
+<line x1="384" y1="75.5" x2="390" y2="75.5" stroke="var(--vp-c-danger-1)"/>
+<text x="394" y="75.5" text-anchor="start" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-danger-1)" class="sf-t">0.75</text>
+<line x1="384" y1="34" x2="390" y2="34" stroke="var(--vp-c-danger-1)"/>
+<text x="394" y="34" text-anchor="start" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-danger-1)" class="sf-t">1</text>
+<line x1="78" y1="200" x2="78" y2="204" stroke="var(--vp-c-text-2)"/>
+<text x="78" y="216" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">0</text>
+<line x1="139.2" y1="200" x2="139.2" y2="204" stroke="var(--vp-c-text-2)"/>
+<text x="139.2" y="216" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">0.2</text>
+<line x1="200.4" y1="200" x2="200.4" y2="204" stroke="var(--vp-c-text-2)"/>
+<text x="200.4" y="216" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">0.4</text>
+<line x1="261.6" y1="200" x2="261.6" y2="204" stroke="var(--vp-c-text-2)"/>
+<text x="261.6" y="216" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">0.6</text>
+<line x1="322.8" y1="200" x2="322.8" y2="204" stroke="var(--vp-c-text-2)"/>
+<text x="322.8" y="216" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">0.8</text>
+<line x1="384" y1="200" x2="384" y2="204" stroke="var(--vp-c-text-2)"/>
+<text x="384" y="216" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-3)" class="sf-t">1</text>
+<text x="231" y="232" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-text-2)" class="sf-t">转差率 s</text>
+<text x="30" y="117" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t" transform="rotate(-90 30 117)">I₂ / A</text>
+<text x="428" y="117" text-anchor="middle" dominant-baseline="middle" font-size="11" stroke="none" fill="var(--vp-c-danger-1)" class="sf-t" transform="rotate(90 428 117)">cosφ₂</text>
+<polyline points="78,34 81.1,34.1 84.1,34.5 87.2,35.2 90.2,36.1 93.3,37.2 96.4,38.6 99.4,40.1 102.5,41.9 105.5,43.8 108.6,45.9 111.7,48.1 114.7,50.3 117.8,52.7 120.8,55.2 123.9,57.7 127,60.2 130,62.7 133.1,65.3 136.1,67.8 139.2,70.4 142.3,72.9 145.3,75.4 148.4,77.8 151.4,80.2 154.5,82.6 157.6,84.9 160.6,87.2 163.7,89.4 166.7,91.6 169.8,93.7 172.9,95.8 175.9,97.8 179,99.8 182,101.7 185.1,103.5 188.2,105.3 191.2,107.1 194.3,108.8 197.3,110.4 200.4,112 203.5,113.6 206.5,115.1 209.6,116.6 212.6,118 215.7,119.4 218.8,120.7 221.8,122 224.9,123.3 227.9,124.6 231,125.8 234.1,126.9 237.1,128.1 240.2,129.2 243.2,130.3 246.3,131.3 249.4,132.3 252.4,133.3 255.5,134.3 258.5,135.2 261.6,136.2 264.7,137 267.7,137.9 270.8,138.8 273.8,139.6 276.9,140.4 280,141.2 283,142 286.1,142.7 289.1,143.5 292.2,144.2 295.3,144.9 298.3,145.6 301.4,146.2 304.4,146.9 307.5,147.5 310.6,148.1 313.6,148.7 316.7,149.3 319.7,149.9 322.8,150.5 325.9,151 328.9,151.6 332,152.1 335,152.6 338.1,153.2 341.2,153.7 344.2,154.2 347.3,154.6 350.3,155.1 353.4,155.6 356.5,156 359.5,156.5 362.6,156.9 365.6,157.3 368.7,157.8 371.8,158.2 374.8,158.6 377.9,159 380.9,159.4 384,159.7" fill="none" stroke="var(--vp-c-danger-1)" stroke-width="2.2"/>
+<polyline points="78,200 81.1,193.6 84.1,187.3 87.2,181 90.2,174.8 93.3,168.7 96.4,162.8 99.4,157 102.5,151.4 105.5,145.9 108.6,140.7 111.7,135.7 114.7,130.9 117.8,126.4 120.8,122 123.9,117.9 127,114 130,110.2 133.1,106.7 136.1,103.4 139.2,100.3 142.3,97.3 145.3,94.6 148.4,91.9 151.4,89.5 154.5,87.1 157.6,84.9 160.6,82.9 163.7,80.9 166.7,79.1 169.8,77.4 172.9,75.8 175.9,74.2 179,72.8 182,71.4 185.1,70.1 188.2,68.9 191.2,67.7 194.3,66.7 197.3,65.6 200.4,64.6 203.5,63.7 206.5,62.8 209.6,62 212.6,61.2 215.7,60.5 218.8,59.8 221.8,59.1 224.9,58.4 227.9,57.8 231,57.2 234.1,56.7 237.1,56.1 240.2,55.6 243.2,55.2 246.3,54.7 249.4,54.2 252.4,53.8 255.5,53.4 258.5,53 261.6,52.7 264.7,52.3 267.7,52 270.8,51.6 273.8,51.3 276.9,51 280,50.7 283,50.5 286.1,50.2 289.1,49.9 292.2,49.7 295.3,49.4 298.3,49.2 301.4,49 304.4,48.8 307.5,48.6 310.6,48.4 313.6,48.2 316.7,48 319.7,47.8 322.8,47.7 325.9,47.5 328.9,47.3 332,47.2 335,47 338.1,46.9 341.2,46.7 344.2,46.6 347.3,46.5 350.3,46.3 353.4,46.2 356.5,46.1 359.5,46 362.6,45.9 365.6,45.7 368.7,45.6 371.8,45.5 374.8,45.4 377.9,45.3 380.9,45.2 384,45.2" fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2.4"/>
+<line x1="90.2" y1="34" x2="90.2" y2="200" stroke="var(--vp-c-text-3)" stroke-dasharray="5 4" stroke-width="1.2"/>
+<circle cx="90.2" cy="174.8" r="3.4" fill="var(--vp-c-brand-1)" stroke="none"/>
+<circle cx="384" cy="45.2" r="3.4" fill="var(--vp-c-brand-1)" stroke="none"/>
+<circle cx="90.2" cy="36.1" r="3.4" fill="var(--vp-c-danger-1)" stroke="none"/>
+<circle cx="384" cy="159.7" r="3.4" fill="var(--vp-c-danger-1)" stroke="none"/>
+<text x="94.2" y="26" text-anchor="start" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-2)" class="sf-t">额定 s = 0.04</text>
+<text x="378" y="38" text-anchor="end" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-2)" class="sf-t">起动 s = 1</text>
+<text x="376" y="86" text-anchor="end" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">242 A ≈ 6.1 I_N</text>
+<text x="376" y="173.7" text-anchor="end" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-danger-1)" class="sf-t">0.24</text>
+<text x="98.2" y="190.8" text-anchor="start" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-brand-1)" class="sf-t">39.4 A</text>
+<text x="268" y="26" text-anchor="middle" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-danger-1)" class="sf-t">cosφ₂ = 0.985</text>
+<line x1="78" y1="246" x2="100" y2="226" stroke="var(--vp-c-brand-1)" stroke-width="2.4"/>
+<text x="106" y="246" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-2)" class="sf-t">转子电流 I₂（左轴，A）</text>
+<line x1="268" y1="246" x2="290" y2="226" stroke="var(--vp-c-danger-1)" stroke-width="2.4"/>
+<text x="296" y="246" dominant-baseline="middle" font-size="10.5" stroke="none" fill="var(--vp-c-text-2)" class="sf-t">功率因数 cosφ₂（右轴）</text>
+</svg>
+
 </FigBox>
 
 ## 四、转矩从哪来
@@ -195,16 +253,23 @@ $s = (n_0-n)/n$（分母用 $n$）是错的。分母永远是 $n_0$。若按错�
 
 <FigBox title="转子等效电路：频率被转差率 s 收进电路" kind="概念" note="转子侧等效为 $R_2$ 串 $sX_{20}$，感应电动势 $sE_{20}$。起动时 $s=1$，电抗最大；额定 $s=0.04$，电抗缩到 1/25，功率因数随之从 0.24 升到 0.985。">
 
-<svg viewBox="0 0 340 110" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <text x="20" y="20" fill="currentColor" stroke="none" font-size="11">转子等效电路</text>
-  <line x1="60" y1="55" x2="280" y2="55" stroke="currentColor"/>
-  <rect x="110" y="40" width="50" height="30" rx="4" fill="none" stroke="currentColor"/>
-  <text x="135" y="60" fill="currentColor" stroke="none" font-size="11" text-anchor="middle">R₂</text>
-  <rect x="190" y="40" width="50" height="30" rx="4" fill="none" stroke="currentColor"/>
-  <text x="215" y="60" fill="currentColor" stroke="none" font-size="11" text-anchor="middle">sX₂₀</text>
-  <circle cx="60" cy="55" r="4" fill="none" stroke="currentColor"/>
-  <circle cx="280" cy="55" r="4" fill="none" stroke="currentColor"/>
-  <text x="60" y="78" fill="currentColor" stroke="none" font-size="10" text-anchor="middle">sE₂₀</text>
+<svg viewBox="0 0 340 130" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <text x="16" y="18" fill="currentColor" stroke="none" font-size="11">转子等效电路</text>
+  <line x1="62" y1="40" x2="110" y2="40" stroke="currentColor"/>
+  <rect x="110" y="25" width="50" height="30" rx="4" fill="none" stroke="currentColor"/>
+  <text x="135" y="40" fill="currentColor" stroke="none" font-size="11" text-anchor="middle" dominant-baseline="middle">R₂</text>
+  <line x1="160" y1="40" x2="190" y2="40" stroke="currentColor"/>
+  <rect x="190" y="25" width="50" height="30" rx="4" fill="none" stroke="currentColor"/>
+  <text x="215" y="40" fill="currentColor" stroke="none" font-size="11" text-anchor="middle" dominant-baseline="middle">sX₂₀</text>
+  <line x1="240" y1="40" x2="286" y2="40" stroke="currentColor"/>
+  <line x1="286" y1="40" x2="286" y2="96" stroke="currentColor"/>
+  <line x1="62" y1="96" x2="286" y2="96" stroke="currentColor"/>
+  <line x1="62" y1="40" x2="62" y2="48" stroke="currentColor"/>
+  <circle cx="62" cy="58" r="10" fill="none" stroke="currentColor"/>
+  <path d="M56 58 q3 -5 6 0 q3 5 6 0" fill="none" stroke="currentColor"/>
+  <line x1="62" y1="68" x2="62" y2="96" stroke="currentColor"/>
+  <text x="44" y="58" fill="currentColor" stroke="none" font-size="10" text-anchor="end" dominant-baseline="middle">sE₂₀</text>
+  <text x="174" y="84" fill="currentColor" stroke="none" font-size="10" text-anchor="middle" dominant-baseline="middle">I₂ = sE₂₀ / √(R₂² + (sX₂₀)²)</text>
 </svg>
 
 </FigBox>

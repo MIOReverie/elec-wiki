@@ -53,33 +53,33 @@ SPI（Serial Peripheral Interface，串行外设接口）四线全双工，由�
 
 <FigBox title="SPI 四种模式的时序：采样点在哪里一眼看清" kind="时序" note="每个子图里，MOSI 上的数据在下降的竖虚线（采样边沿）处被从机读走。模式 0 在上升沿采样；模式 1 改为下降沿；模式 2 时钟空闲为高、仍是上升沿采样但方向相反；模式 3 空闲为高、下降沿后第二沿（上升沿）采样。主从配置不同模式时，从机会在数据翻转的瞬间采样，采到的永远是错位的一位。">
 
-<svg viewBox="0 0 700 340" role="img" aria-label="SPI 四种模式时序对比：CPOL 决定空闲电平，CPHA 决定采样边沿">
+<svg viewBox="0 0 700 340" role="img" aria-label="SPI 四种模式时序对比：CPOL 决定空闲电平，CPHA 决定在第几个边沿采样">
 <g font-size="11" fill="var(--vp-c-text-1)">
-  <text x="30" y="26" font-weight="700">模式 0（CPOL=0, CPHA=1 个边沿前采样…空闲低、上升沿采样）</text>
-  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" points="240,46 280,46 280,66 360,66 360,46 440,46 440,66 520,66 520,46 600,46" />
-  <polyline fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" points="240,100 280,100 280,86 360,86 360,100 440,100 440,86 520,86 520,100 600,100" />
+  <text x="30" y="26" font-weight="700">模式 0（CPOL=0, CPHA=0）：空闲低，第一个边沿（上升沿）采样</text>
+  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" points="240,66 280,66 280,46 340,46 340,66 400,66 400,46 460,46 460,66 520,66 520,46 580,46 580,66 600,66" />
+  <polyline fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" points="240,86 340,86 340,100 460,100 460,86 600,86" />
   <g stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3">
-    <line x1="280" y1="40" x2="280" y2="106" /><line x1="360" y1="40" x2="360" y2="106" />
-    <line x1="440" y1="40" x2="440" y2="106" /><line x1="520" y1="40" x2="520" y2="106" />
+    <line x1="280" y1="40" x2="280" y2="106" /><line x1="400" y1="40" x2="400" y2="106" />
+    <line x1="520" y1="40" x2="520" y2="106" />
   </g>
   <text x="612" y="52" fill="var(--vp-c-text-3)">SCK</text>
   <text x="612" y="96" fill="var(--vp-c-text-3)">MOSI</text>
-  <text x="248" y="60" fill="var(--vp-c-text-3)">空闲低</text>
-  <text x="300" y="128" fill="var(--vp-c-text-3)">虚线 = 采样边沿（上升沿）；数据在边沿前已稳定</text>
+  <text x="242" y="60" fill="var(--vp-c-text-3)">空闲低</text>
+  <text x="300" y="128" fill="var(--vp-c-text-3)">虚线 = 采样边沿（上升沿）；数据在上一个下降沿就已换好，到边沿时已稳定</text>
 
-  <text x="30" y="166" font-weight="700">模式 3（CPOL=1, CPHA=1）</text>
-  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" points="240,186 260,186 260,206 340,206 340,186 420,186 420,206 500,206 500,186 600,186" />
-  <polyline fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" points="240,240 280,240 280,226 360,226 360,240 440,240 440,226 520,226 520,240 600,240" />
+  <text x="30" y="166" font-weight="700">模式 3（CPOL=1, CPHA=1）：空闲高，第二个边沿（上升沿）采样</text>
+  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="2" points="240,186 260,186 260,206 320,206 320,186 380,186 380,206 440,206 440,186 500,186 500,206 560,206 560,186 600,186" />
+  <polyline fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.6" points="240,226 260,226 260,240 380,240 380,226 500,226 500,240 600,240" />
   <g stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3">
-    <line x1="300" y1="180" x2="300" y2="246" /><line x1="380" y1="180" x2="380" y2="246" />
-    <line x1="460" y1="180" x2="460" y2="246" /><line x1="540" y1="180" x2="540" y2="246" />
+    <line x1="320" y1="180" x2="320" y2="246" /><line x1="440" y1="180" x2="440" y2="246" />
+    <line x1="560" y1="180" x2="560" y2="246" />
   </g>
   <text x="612" y="192" fill="var(--vp-c-text-3)">SCK</text>
   <text x="612" y="236" fill="var(--vp-c-text-3)">MOSI</text>
-  <text x="248" y="200" fill="var(--vp-c-text-3)">空闲高</text>
-  <text x="300" y="268" fill="var(--vp-c-text-3)">虚线 = 采样边沿（上升沿）；与模式 0 的差别只是空闲电平</text>
+  <text x="242" y="178" fill="var(--vp-c-text-3)">空闲高</text>
+  <text x="300" y="268" fill="var(--vp-c-text-3)">虚线 = 采样边沿（第二个边沿，上升沿）；数据在第一个边沿（下降沿）更新</text>
 
-  <text x="30" y="306" font-weight="700">模式 1 / 模式 3 的差异记忆法：CPOL 定空闲电平，CPHA 定「第几个沿」采样</text>
+  <text x="30" y="306" font-weight="700">四种模式的记忆法：CPOL 定空闲电平，CPHA 定「第几个沿」采样</text>
   <text x="30" y="326" fill="var(--vp-c-text-3)">CPHA=0 → 第一个边沿采样（模式 0/2）；CPHA=1 → 第二个边沿采样（模式 1/3）</text>
 </g>
 </svg>
@@ -184,30 +184,29 @@ START → 地址字节(写) → ACK → 寄存器地址 → ACK → 数据 → A
 
 <FigBox title="一次 I²C 写寄存器的完整时序（含三个 ACK）" kind="时序" note="从左到右：START 之后主机发出地址字节（7 位地址 + 方向位 0 表示写），从机在第 9 个时钟把 SDA 拉低作 ACK；随后主机发寄存器地址、数据，每 8 位后各有一个 ACK；最后 SCL 高电平期间 SDA 出现上升沿，STOP 结束本次传输。所有位都在 SCL 低电平期间翻转——SCL 高电平期间动 SDA 会被解释成 START 或 STOP。">
 
-<svg viewBox="0 0 720 250" role="img" aria-label="I2C 写寄存器时序：START、地址字节、ACK、数据、ACK、STOP">
+<svg viewBox="0 0 720 250" role="img" aria-label="I2C 写寄存器时序：START、地址字节 + ACK、寄存器地址 + ACK、数据 + ACK、STOP，SCL 高电平期间 SDA 不得翻转">
 <g font-size="11" fill="var(--vp-c-text-1)">
-  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" points="20,80 80,80 80,110 250,110 250,80 700,80" />
-  <polyline fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.8" points="20,40 80,40 80,70 70,70 70,110 250,110 250,80 380,80 380,110 420,110 420,80 560,80 560,110 600,110 600,80 640,80 640,40 700,40" />
-  <text x="700" y="36" text-anchor="end" fill="var(--vp-c-text-3)">SCL</text>
-  <text x="700" y="76" text-anchor="end" fill="var(--vp-c-text-3)">SDA</text>
+  <polyline fill="none" stroke="var(--vp-c-brand-1)" stroke-width="1.8" points="20,80 80,80 80,110 80,110 100,80 100,80 120,110 120,110 140,80 140,80 160,110 160,110 180,80 180,80 200,110 200,110 220,80 220,80 240,110 240,110 260,80 260,80 280,110 280,110 300,80 300,80 320,110 320,110 340,80 340,80 360,110 360,110 380,80 380,80 400,110 400,110 420,80 420,80 440,110 440,110 460,80 460,80 480,110 480,110 500,80 500,80 520,110 520,110 540,80 540,80 560,110 560,110 580,80 580,80 700,80" />
+  <polyline fill="none" stroke="var(--vp-c-text-2)" stroke-width="1.8" points="20,40 60,40 60,70 80,70 80,40 120,40 120,70 160,70 160,40 200,40 200,70 260,70 260,40 320,40 320,70 360,70 360,40 400,40 400,70 420,70 420,40 480,40 480,70 520,70 520,40 560,40 560,70 600,70 600,40 700,40" />
+  <text x="700" y="34" text-anchor="end" fill="var(--vp-c-text-3)">SDA</text>
+  <text x="700" y="74" text-anchor="end" fill="var(--vp-c-text-3)">SCL</text>
   <g font-size="11" fill="var(--vp-c-text-2)" text-anchor="middle">
-    <text x="165" y="136">地址字节（7 位地址+写 0）</text>
-    <text x="470" y="136">寄存器地址</text>
-    <text x="620" y="136">数据</text>
+    <text x="150" y="136">地址字节（7 位地址 + 写 0）</text>
+    <text x="330" y="136">寄存器地址</text>
+    <text x="490" y="136">数据</text>
   </g>
   <g stroke="var(--vp-c-text-3)" stroke-width="1" stroke-dasharray="3 3">
-    <line x1="250" y1="70" x2="250" y2="120" />
-    <line x1="380" y1="70" x2="380" y2="120" />
-    <line x1="560" y1="70" x2="560" y2="120" />
+    <line x1="250" y1="34" x2="250" y2="120" />
+    <line x1="410" y1="34" x2="410" y2="120" />
+    <line x1="570" y1="34" x2="570" y2="120" />
   </g>
   <g font-size="10.5" fill="var(--vp-c-brand-1)" text-anchor="middle">
-    <text x="255" y="162">ACK（从机拉低）</text>
-    <text x="385" y="162">ACK</text>
-    <text x="565" y="162">ACK</text>
+    <text x="250" y="162">ACK（从机拉低）</text>
+    <text x="410" y="162">ACK</text>
+    <text x="570" y="162">ACK</text>
   </g>
-  <path d="M 20 40 L 12 40" stroke="var(--vp-c-brand-1)" stroke-width="1.6" />
   <text x="14" y="28" fill="var(--vp-c-brand-1)">START：SCL 高、SDA 降</text>
-  <text x="640" y="30" fill="var(--vp-c-brand-1)">STOP：SCL 高、SDA 升</text>
+  <text x="700" y="16" text-anchor="end" fill="var(--vp-c-brand-1)">STOP：SCL 高、SDA 升</text>
   <text x="360" y="200" text-anchor="middle" fill="var(--vp-c-text-3)">读写同构：读操作只是方向位为 1，其后由从机驱动 SDA，每 8 位后主机回 ACK</text>
   <text x="360" y="222" text-anchor="middle" fill="var(--vp-c-text-3)">若第 9 位读到高电平（无 ACK）= 地址不存在 / 器件没上电 / 总线被拉死</text>
 </g>
